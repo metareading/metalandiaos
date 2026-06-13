@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>maitapp · играта, която се играе в реалния живот</title>
+<meta name="description" content="maitapp = MyAI Tactics App. Снимаш това, което те побърква. Казваш maitapp. Започва приказка. Игри · Изкуство · ИИ.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Forum&family=Spectral:ital,wght@0,400;0,600;1,400&display=swap&subset=cyrillic" rel="stylesheet">
+<style>
+:root{
+  --gold:#c9a86a; --gold-lt:#E8C77E; --gold-dk:#8a6a1e;
+  --bronze:#7a5a2c; --bronze-dk:#3d2c14;
+  --parch:#f4ecd8; --parch-dk:#eaddc0;
+  --ink:#3A2E22; --forest:#2C4A3B; --stone:#16100a; --stone-2:#241a10;
+  /* 8-сценен цветови канон */
+  --sc-cel:#E8C77E; --sc-chud:#D4895E; --sc-vodach:#4A7FA8; --sc-plan:#6FB59A;
+  --sc-prag:#E89556; --sc-izpit:#8B5E3C; --sc-elixir:#7B5EA8;
+  --ally:#4A7FA8; --foe:#D4895E;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Spectral',Georgia,serif; color:#f2e7cf;
+  background:
+    radial-gradient(120% 80% at 50% -10%, #3a2b18 0%, rgba(58,43,24,0) 60%),
+    radial-gradient(100% 120% at 50% 120%, #1e1610 0%, rgba(30,22,16,0) 55%),
+    linear-gradient(160deg,#16100a 0%, #241a10 50%, #16100a 100%);
+  background-attachment:scroll; min-height:100vh; line-height:1.5;
+}
+html,body{overflow-x:hidden}                 /* МОБИЛЕН ФИКС 1 · запазен */
+img{max-width:100%;height:auto;display:block}
+h1,h2,h3,.disp{font-family:'Forum',Georgia,serif;letter-spacing:.04em}
+.wrap{max-width:1080px;margin:0 auto;padding:16px}
+a{color:var(--gold-lt)}
+
+/* ── ornate panel ── */
+.panel{
+  position:relative; background:linear-gradient(155deg,var(--parch) 0%,var(--parch-dk) 100%);
+  color:var(--ink); border-radius:6px; padding:22px 18px;
+  border:2px solid var(--gold-dk);
+  box-shadow:0 0 0 4px var(--bronze-dk), 0 0 0 6px var(--gold), 0 14px 34px rgba(0,0,0,.55), inset 0 0 40px rgba(122,90,44,.25);
+}
+.panel::before,.panel::after{content:"◆";position:absolute;color:var(--gold-dk);font-size:14px;opacity:.8}
+.panel::before{top:6px;left:8px} .panel::after{bottom:6px;right:8px}
+.dark{
+  background:linear-gradient(155deg,#241a10 0%,#120c07 100%); color:#f2e7cf;
+  border:2px solid var(--gold-dk);
+  box-shadow:0 0 0 4px #0c0805, 0 0 0 6px var(--bronze), 0 14px 34px rgba(0,0,0,.6), inset 0 0 50px rgba(0,0,0,.5);
+}
+
+/* ── image placeholder (САМО за genuinely липсващи кадри) ── */
+.img-ph{position:relative;width:100%;border-radius:6px;border:2px dashed var(--gold-dk);
+  background:repeating-linear-gradient(45deg,#1d150d,#1d150d 14px,#231a0f 14px,#231a0f 28px);
+  display:flex;align-items:center;justify-content:center;text-align:center;
+  color:#caa86a;font-family:'Forum';font-size:12px;line-height:1.4;padding:14px;
+  min-height:130px;box-shadow:inset 0 0 40px rgba(0,0,0,.5)}
+.img-ph .ph-tag{position:absolute;top:8px;left:10px;font-size:10px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--gold);opacity:.8}
+
+/* ═══════════════════ HERO · GAME-BOARD ═══════════════════ */
+.hero{position:relative;overflow:hidden;border-bottom:3px solid var(--gold-dk);padding:30px 14px 26px}
+.hero .bg{position:absolute;inset:0;z-index:0}
+.hero .bg img{width:100%;height:100%;object-fit:cover;opacity:.30;filter:saturate(.85)}
+.hero .bg::after{content:"";position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(22,16,10,.55) 0%,rgba(22,16,10,.45) 40%,rgba(22,16,10,.88) 100%)}
+.hero>*{position:relative;z-index:1}
+.crest{font-size:12px;letter-spacing:.3em;color:var(--gold-lt);text-transform:uppercase;opacity:.9;text-align:center}
+.hero h1{font-size:clamp(32px,9vw,60px);color:var(--gold-lt);margin:.12em 0 .06em;text-align:center;
+  text-shadow:0 2px 0 #4a3408, 0 0 26px rgba(212,175,55,.35)}
+.hero .sub{font-size:clamp(15px,4.4vw,21px);font-style:italic;color:#f0e2bb;text-align:center;max-width:560px;margin:6px auto 0}
+
+/* board: ляво=съюзници · център=VS · дясно=сенки */
+.board{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center;
+  max-width:560px;margin:20px auto 0}
+.board .side-lbl{grid-column:1/4;display:grid;grid-template-columns:1fr auto 1fr;gap:8px;
+  font-family:'Forum';font-size:11px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:2px}
+.board .side-lbl .l{text-align:center;color:var(--ally)}
+.board .side-lbl .r{text-align:center;color:var(--foe)}
+.board .side-lbl .m{width:34px}
+.tok{position:relative;border-radius:7px;overflow:hidden;border:2px solid;
+  box-shadow:0 4px 14px rgba(0,0,0,.55);background:#120c07}
+.tok img{width:100%;aspect-ratio:1/1;object-fit:cover}
+.tok.ally{border-color:var(--ally);box-shadow:0 0 0 1px rgba(74,127,168,.4),0 4px 14px rgba(0,0,0,.55)}
+.tok.foe{border-color:var(--foe);box-shadow:0 0 0 1px rgba(212,137,94,.4),0 4px 14px rgba(0,0,0,.55)}
+.tok .nm{position:absolute;left:0;right:0;bottom:0;text-align:center;font-family:'Forum';
+  font-size:12px;padding:14px 4px 4px;color:#fff;text-shadow:0 1px 3px #000;
+  background:linear-gradient(180deg,transparent,rgba(0,0,0,.8))}
+.tok.q{display:flex;align-items:center;justify-content:center;aspect-ratio:1/1;
+  font-family:'Forum';font-size:34px;color:var(--foe);
+  background:repeating-linear-gradient(45deg,#1e0f0c,#1e0f0c 10px,#241210 10px,#241210 20px)}
+.vs{font-family:'Forum';font-size:15px;color:var(--gold-lt);text-align:center;
+  background:rgba(12,8,5,.7);border:1px solid var(--gold-dk);border-radius:50%;
+  width:34px;height:34px;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 0 12px rgba(232,199,126,.4)}
+.board .pairnote{grid-column:1/4;text-align:center;font-style:italic;font-size:12.5px;
+  color:#d8c9a0;margin-top:8px}
+.hero-cta{margin-top:22px;display:flex;flex-direction:column;gap:10px;align-items:stretch;max-width:340px;margin-left:auto;margin-right:auto}
+.scrollcue{text-align:center;color:var(--gold-lt);font-size:24px;margin-top:14px;opacity:.7;animation:bob 2s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
+
+/* ── btn ── */
+.btn{display:block;text-align:center;font-family:'Forum';font-size:18px;letter-spacing:.05em;
+  color:#2a1d0d;text-decoration:none;padding:14px 26px;border-radius:5px;
+  background:linear-gradient(160deg,var(--gold-lt),var(--gold) 55%,var(--gold-dk));
+  border:1px solid #5a4408;box-shadow:0 4px 0 #5a4408,0 8px 18px rgba(0,0,0,.4);transition:transform .1s;cursor:pointer;width:100%}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 #5a4408}
+.btn.secondary{background:transparent;color:var(--gold-lt);border:1.5px solid var(--gold);box-shadow:none;font-size:15px;padding:12px 20px}
+
+/* ── sections ── */
+.section{margin-top:38px}
+.section>h2{text-align:center;font-size:clamp(24px,6.5vw,36px);color:var(--gold-lt);
+  text-shadow:0 2px 0 #3a2808,0 0 20px rgba(212,175,55,.3);margin-bottom:6px}
+.section>.cap{text-align:center;font-style:italic;color:#d8c9a0;margin-bottom:18px;font-size:14.5px;max-width:560px;margin-left:auto;margin-right:auto}
+.lead{font-size:16px;max-width:600px;margin:0 auto 12px;text-align:center;color:#f0e2bb}
+.lead.ink{color:var(--ink)}
+.block.center{text-align:center}
+.block.center p{max-width:600px;margin:0 auto 10px;font-size:15.5px}
+.decode{font-family:'Forum';font-size:clamp(19px,5vw,26px);color:var(--gold-lt);text-align:center;margin:4px 0 14px}
+.decode small{display:block;font-family:'Spectral';font-style:italic;font-size:14px;color:#d8c9a0;margin-top:4px}
+
+/* ═══════════════════ USER-AS-HERO ВХОД ═══════════════════ */
+.enter{margin-top:34px}
+.enter .panel.dark{padding:22px 18px}
+.estep{display:none}
+.estep.on{display:block;animation:fade .3s}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.estep h3{font-family:'Forum';color:var(--gold-lt);font-size:20px;text-align:center;margin-bottom:4px}
+.estep .who{text-align:center;font-size:12.5px;font-style:italic;color:#bca;margin-bottom:14px}
+.estep .who b{color:var(--gold-lt);font-style:normal}
+.opts{display:grid;gap:10px}
+.opt{background:rgba(201,168,106,.08);border:1px solid var(--gold-dk);border-radius:6px;
+  padding:13px 15px;font-size:14.5px;color:#f0e2bb;cursor:pointer;text-align:left;transition:.14s}
+.opt:hover,.opt:active{background:rgba(232,199,126,.16);border-color:var(--gold-lt);transform:translateX(3px)}
+.opt b{color:var(--gold-lt)}
+.opt-own{display:flex;gap:8px;margin-top:4px}
+.opt-own input{flex:1;padding:12px 13px;background:#0f0a06;border:1px solid var(--bronze);
+  border-radius:5px;color:#f2e7cf;font-family:'Spectral';font-size:14.5px}
+.opt-own button{flex:0 0 auto;padding:0 18px;font-family:'Forum';font-size:15px;color:#2a1d0d;
+  background:var(--gold);border:1px solid #5a4408;border-radius:5px;cursor:pointer}
+.estep .mentor{display:flex;align-items:center;gap:13px;background:rgba(74,127,168,.10);
+  border:1px solid var(--sc-vodach);border-radius:6px;padding:13px;margin-top:14px}
+.estep .mentor img{width:60px;height:60px;border-radius:6px;object-fit:cover;border:2px solid var(--sc-vodach);flex:0 0 auto}
+.estep .mentor .mt{font-family:'Forum';color:#9cc3e0;font-size:15px}
+.estep .mentor .md{font-size:13px;color:#d8c9a0;margin-top:2px}
+.echosen{font-size:13px;color:#bca;font-style:italic;margin:10px 0 0;text-align:center}
+.echosen b{color:var(--gold-lt);font-style:normal}
+.estep .e-back{display:inline-block;margin-top:14px;font-size:13px;color:#bca;cursor:pointer;background:none;border:none}
+.allies-row{display:flex;justify-content:center;gap:7px;margin:16px 0 4px;flex-wrap:wrap}
+.allies-row img{width:46px;height:46px;border-radius:6px;object-fit:cover;border:2px solid var(--sc-vodach);box-shadow:0 3px 9px rgba(0,0,0,.5)}
+
+/* ── PROBLEM (груба нежност) ── */
+.foe-block{border:2px solid var(--sc-chud);border-radius:6px;
+  background:linear-gradient(155deg,#2a1612 0%,#160c0a 100%);
+  box-shadow:0 0 0 3px #0c0805,0 12px 30px rgba(0,0,0,.55);padding:22px 18px}
+.foe-block h3{font-family:'Forum';color:#e6a878;font-size:20px;text-align:center;margin-bottom:14px}
+.stat-row{display:grid;grid-template-columns:1fr;gap:12px;margin:14px 0}
+.stat-card{text-align:center;background:rgba(216,137,94,.10);border:1px solid rgba(216,137,94,.4);border-radius:5px;padding:14px 12px}
+.stat-card .big{font-family:'Forum';font-size:clamp(28px,8vw,40px);color:#e8a878;line-height:1}
+.stat-card .lab{font-size:13px;color:#d8c4a8;margin-top:6px}
+.foe-block .turn{font-style:italic;color:#f0d8c0;text-align:center;max-width:560px;margin:14px auto 0;font-size:15px}
+.bridge{text-align:center;font-style:italic;color:#d8c9a0;margin:20px auto 0;max-width:520px}
+
+/* ── FLOW снимка→игра ── */
+.flow{display:grid;grid-template-columns:1fr;gap:14px;margin-top:8px}
+.flow .step{position:relative;display:flex;flex-direction:column}
+.flow .shot{position:relative;border-radius:6px;overflow:hidden;border:1px solid var(--gold-dk);margin-bottom:10px}
+.flow .shot img{width:100%;aspect-ratio:16/10;object-fit:cover}
+.flow .num{position:absolute;top:-10px;left:-6px;font-family:'Forum';font-size:20px;
+  color:var(--ink);background:var(--gold-lt);border:1px solid var(--gold-dk);
+  width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;z-index:3;box-shadow:0 2px 8px rgba(0,0,0,.5)}
+.flow .st-card{flex:1;background:linear-gradient(155deg,#241a10,#120c07);border:1px solid var(--gold-dk);
+  border-radius:5px;padding:12px 14px;box-shadow:inset 0 0 20px rgba(0,0,0,.45)}
+.flow .st-card h4{font-family:'Forum';color:var(--gold-lt);font-size:16px;margin-bottom:4px}
+.flow .st-card p{font-size:13.5px;color:#e0d2b2;line-height:1.4}
+.flow-finale{text-align:center;font-style:italic;color:#e8d9b0;margin:20px auto 0;max-width:560px;font-size:15px}
+
+/* ── UNLOCK ladder ── */
+.ladder{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.lad{position:relative;border-radius:6px;overflow:hidden;border:2px solid var(--gold-dk);
+  box-shadow:0 0 0 2px #0c0805,0 6px 16px rgba(0,0,0,.5);background:#120c07;display:flex;flex-direction:column}
+.lad img{width:100%;display:block;aspect-ratio:1/1;object-fit:cover}
+.lad .body{padding:10px 11px 12px;flex:1;display:flex;flex-direction:column}
+.lad .lname{font-family:'Forum';color:var(--gold-lt);font-size:16px}
+.lad .unlock{font-size:12.5px;color:#e8d9b0;margin:4px 0 6px;flex:1}
+.lad .unlock b{color:var(--gold-lt)}
+.lad .law{font-size:11px;color:#b9a884;font-style:italic;border-top:1px dashed rgba(201,168,106,.35);padding-top:5px}
+.lad.locked{filter:grayscale(.6) brightness(.6)}
+.lad.locked .lk{position:absolute;top:8px;right:8px;font-size:20px;text-shadow:0 1px 4px #000;z-index:2}
+.lad .badge{position:absolute;top:7px;left:7px;font-family:'Forum';font-size:10.5px;background:rgba(12,8,5,.78);
+  color:var(--gold-lt);border:1px solid var(--gold-dk);border-radius:3px;padding:2px 6px;z-index:2}
+.metatron-after{margin-top:16px}
+.metatron-after .panel.dark{display:flex;gap:14px;align-items:center;padding:16px}
+.metatron-after img{width:84px;height:84px;object-fit:cover;border-radius:5px;border:2px solid var(--gold);box-shadow:0 0 0 2px var(--bronze-dk);flex:0 0 auto}
+.metatron-after h3{font-family:'Forum';color:var(--gold-lt);font-size:19px;margin-bottom:3px}
+.metatron-after p{font-size:13.5px;color:#e8d9b0}
+.dopamine{text-align:center;font-style:italic;color:#d8c9a0;margin:18px auto 0;max-width:520px;font-size:14.5px}
+
+/* ── ANTI-AGENTS ── */
+.shadow-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.shadow{cursor:pointer;border-radius:6px;border:2px solid #7a2e2e;background:linear-gradient(155deg,#1e0f0c,#160c0c);
+  box-shadow:0 0 0 2px #0c0805,0 6px 16px rgba(0,0,0,.5);overflow:hidden;transition:transform .14s,box-shadow .14s}
+.shadow:active{transform:translateY(-2px)}
+.shadow .face{position:relative}
+.shadow .face img{width:100%;aspect-ratio:1/1;object-fit:cover}
+.shadow .face.noimg{aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;
+  font-family:'Forum';font-size:40px;color:var(--foe);
+  background:repeating-linear-gradient(45deg,#1e0f0c,#1e0f0c 9px,#241210 9px,#241210 18px)}
+.shadow .o-tag{position:absolute;top:6px;left:7px;font-family:'Forum';font-size:10.5px;color:#fff;
+  background:rgba(122,46,46,.85);border-radius:3px;padding:2px 6px;letter-spacing:.05em}
+.shadow .body{padding:11px 12px 13px}
+.shadow .a-name{font-family:'Forum';font-size:18px;color:#e6a878}
+.shadow .a-desc{font-size:13px;color:#d8c4a8;line-height:1.35;margin-top:3px}
+.shadow .a-ex{display:none;margin-top:8px;border-top:1px dashed rgba(185,132,106,.4);padding-top:7px}
+.shadow.open .a-ex{display:block;animation:fade .25s}
+.shadow .a-ex li{list-style:none;font-size:12px;color:#cdb8a0;padding:3px 0 3px 15px;position:relative}
+.shadow .a-ex li::before{content:"▸";position:absolute;left:0;color:#b9846a}
+.shadow .hint{font-size:10.5px;color:#a07868;margin-top:7px;font-style:italic;opacity:.85}
+
+.dopamine-meter{margin-top:18px;border:1px solid rgba(201,168,106,.4);border-radius:6px;
+  background:linear-gradient(155deg,#241a10,#160f08);padding:16px 16px}
+.dopamine-meter .pth{font-family:'Forum';color:var(--gold-lt);font-size:14.5px;letter-spacing:.05em;margin-bottom:12px;text-align:center}
+.ptrow{display:flex;align-items:center;gap:9px;margin-bottom:9px}
+.ptn{flex:0 0 44%;font-size:12.5px;color:#e0d2b2}
+.ptbar{flex:1;height:12px;background:rgba(201,168,106,.14);border:1px solid rgba(201,168,106,.4);border-radius:6px;overflow:hidden}
+.ptbar i{display:block;height:100%;background:linear-gradient(90deg,var(--gold-dk),var(--gold-lt));box-shadow:0 0 10px rgba(232,199,126,.6)}
+.ptv{flex:0 0 44px;text-align:right;font-family:'Forum';font-size:17px;color:var(--gold-lt)}
+
+/* battle map (реален map.jpg) */
+.battlemap{margin-top:18px;position:relative;border-radius:6px;overflow:hidden;
+  border:2px solid var(--gold-dk);box-shadow:0 0 0 3px var(--bronze-dk),0 0 0 5px var(--gold),0 10px 28px rgba(0,0,0,.55)}
+.battlemap img{width:100%;display:block}
+.battlemap .cap-in{position:absolute;left:0;right:0;bottom:0;padding:12px 14px;text-align:center;
+  background:linear-gradient(180deg,transparent,rgba(12,8,5,.85));text-shadow:0 1px 3px #000}
+.battlemap .cap-in .crest{font-size:11px;letter-spacing:.2em}
+
+/* final boss */
+.boss{margin-top:20px;border:2px solid var(--sc-chud);border-radius:6px;
+  background:linear-gradient(155deg,#1c0e0a 0%,#0e0706 100%);
+  box-shadow:0 0 0 3px #0c0805,0 0 40px rgba(216,137,94,.18);padding:20px 18px;
+  display:flex;flex-direction:column;gap:14px;align-items:center;text-align:center}
+.boss img{width:120px;height:120px;object-fit:cover;border-radius:6px;border:2px solid #7a2e2e;box-shadow:0 0 0 3px #0c0805;flex:0 0 auto}
+.boss .order{font-size:11.5px;color:#b89a86;letter-spacing:.1em;text-transform:uppercase}
+.boss h3{font-family:'Forum';color:#e6a878;font-size:24px;margin:4px 0 6px}
+.boss p{font-size:14px;color:#e0d2b2;line-height:1.45}
+.boss .ladder-up{font-style:italic;color:#c9a896;margin-top:8px;font-size:13px}
+
+/* ── CTA / waitlist ── */
+.cta{margin:44px 0 22px}
+.cta .panel{padding:26px 18px}
+.cta h2{font-family:'Forum';font-size:clamp(24px,6vw,34px);color:var(--bronze-dk);margin-bottom:8px;text-align:center}
+.cta .lead.ink{color:var(--ink)}
+.cta .first-step{text-align:center;font-style:italic;color:#5a4423;margin:4px auto 16px;max-width:460px}
+.gifts{display:grid;grid-template-columns:1fr;gap:12px;margin:16px 0 20px}
+.gift{display:flex;align-items:center;gap:12px;text-align:left;background:rgba(122,90,44,.10);border:1px solid var(--gold-dk);border-radius:5px;padding:13px 14px}
+.gift .gi{font-size:26px;flex:0 0 auto}
+.gift .gt{font-family:'Forum';color:var(--bronze-dk);font-size:15px}
+.gift .gd{font-size:12.5px;color:#5a4423}
+.audiences{display:grid;grid-template-columns:1fr;gap:10px;margin:6px 0 4px}
+.aud{background:rgba(122,90,44,.12);border:1px solid var(--gold-dk);border-radius:5px;padding:12px 14px;text-align:center}
+.aud .at{font-family:'Forum';color:var(--gold-lt);font-size:15px}
+.aud .ad{font-size:12.5px;color:#cdbf9c;margin-top:3px;line-height:1.4}
+.aud .wave{font-size:10px;color:var(--gold);letter-spacing:.12em;text-transform:uppercase;opacity:.85;margin-bottom:4px}
+.privacy-teen{font-size:12px;color:#cdbf9c;font-style:italic;text-align:center;margin-top:10px}
+.roadmap-hint{text-align:center;font-size:12px;color:#8a795a;font-style:italic;margin-top:16px}
+.form-card{max-width:480px;margin:20px auto 0;background:linear-gradient(155deg,#241a10,#120c07);
+  border:1px solid var(--gold-dk);border-radius:6px;padding:20px 16px;box-shadow:inset 0 0 30px rgba(0,0,0,.45)}
+.form-card label{display:block;font-family:'Forum';color:var(--gold-lt);font-size:14px;margin:0 0 5px}
+.form-card input[type=text],.form-card input[type=email],.form-card select{width:100%;padding:12px 13px;margin-bottom:14px;
+  background:#0f0a06;border:1px solid var(--bronze);border-radius:4px;color:#f2e7cf;font-family:'Spectral';font-size:15px}
+.form-card .consent{display:flex;gap:9px;align-items:flex-start;font-size:12px;color:#cdbf9c;margin-bottom:16px}
+.form-card .consent input{margin-top:3px}
+.form-card .consent a{color:var(--gold-lt)}
+.btn-row{display:flex;flex-direction:column;gap:10px}
+
+/* ── scene banners ── */
+.scene{position:relative;margin:0 auto;border-radius:6px;overflow:hidden;
+  border:2px solid var(--gold-dk);
+  box-shadow:0 0 0 3px var(--bronze-dk),0 0 0 5px var(--gold),0 10px 28px rgba(0,0,0,.55)}
+.scene img{display:block;width:100%;height:auto}
+.scene::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(180deg,rgba(22,16,10,.42) 0%,rgba(22,16,10,.10) 28%,rgba(22,16,10,.12) 72%,rgba(22,16,10,.52) 100%)}
+.scene .cap-in{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:12px 16px;text-align:center;text-shadow:0 1px 3px rgba(0,0,0,.9)}
+.scene .cap-in .crest{font-size:11px;letter-spacing:.3em}
+.scene-wrap{margin-top:16px}
+
+.foot{text-align:center;color:#8a795a;font-size:12.5px;padding:22px 16px;font-style:italic}
+.foot a{color:var(--gold)}
+
+/* ═══════════════════ DESKTOP (вторичен · надграждане) ═══════════════════ */
+@media(min-width:760px){
+  .wrap{padding:18px}
+  .hero{padding:48px 18px 30px}
+  .board{max-width:760px;gap:12px}
+  .tok .nm{font-size:13px}
+  .hero-cta{flex-direction:row;justify-content:center;max-width:none}
+  .hero-cta .btn{width:auto}
+  .enter .mentor img{width:72px;height:72px}
+  .stat-row{grid-template-columns:repeat(3,1fr)}
+  .flow{grid-template-columns:repeat(5,1fr)}
+  .flow .shot img{aspect-ratio:4/5}
+  .ladder{grid-template-columns:repeat(4,1fr)}
+  .metatron-after .panel.dark img{width:120px;height:120px}
+  .shadow-grid{grid-template-columns:repeat(4,1fr)}
+  .gifts{grid-template-columns:repeat(3,1fr)}
+  .gift{flex-direction:column;text-align:center}
+  .audiences{grid-template-columns:repeat(3,1fr)}
+  .boss{flex-direction:row;text-align:left;padding:26px 24px;gap:22px}
+  .boss img{width:150px;height:150px}
+  .btn-row{flex-direction:row;justify-content:center}
+  .btn-row .btn{width:auto}
+}
+</style>
+</head>
+<body>
+
+<!-- ════════════ 1 · HERO · GAME-BOARD ════════════ -->
+<header class="hero">
+  <div class="bg"><img src="img/scene-map-fog.jpg" alt=""></div>
+  <div class="crest">✦ играта, която се играе в реалния живот ✦</div>
+  <h1>Искате ли да се събудите?</h1>
+  <p class="sub">Роди се maitapp — стратегическа игра по картата на собствения Ви живот.</p>
+
+  <!-- стратегическата дъска: съюзници ляво · сенки дясно -->
+  <div class="board">
+    <div class="side-lbl"><span class="l">Вашите водачи</span><span class="m"></span><span class="r">Вашите сенки</span></div>
+
+    <div class="tok ally"><img src="img/любка.jpg" alt="Любка"><span class="nm">Любка</span></div>
+    <div class="vs">VS</div>
+    <div class="tok foe q" title="Его">?</div>
+
+    <div class="tok ally"><img src="img/екопътечко.jpg" alt="Екопътечко"><span class="nm">Екопътечко</span></div>
+    <div class="vs">VS</div>
+    <div class="tok foe q" title="Бега">?</div>
+
+    <div class="tok ally"><img src="img/куражку.jpg" alt="Куражку"><span class="nm">Куражку</span></div>
+    <div class="vs">VS</div>
+    <div class="tok foe"><img src="img/ant-станка.jpg" alt="Станка"><span class="nm">Станка</span></div>
+
+    <div class="pairnote">Всеки Ваш водач застава срещу една сянка. Скролни — историята продължава ↓</div>
+  </div>
+
+  <div class="hero-cta">
+    <a class="btn" href="#enter">влез в играта</a>
+    <a class="btn secondary" href="#flow">виж как работи maitapp →</a>
+  </div>
+  <div class="scrollcue">⌄</div>
+</header>
+
+<div class="wrap">
+
+  <!-- ════════════ 2 · USER-AS-HERO ВХОД ════════════ -->
+  <section class="enter" id="enter">
+    <div class="panel dark">
+
+      <!-- стъпка 0 · събуждане -->
+      <div class="estep on" data-step="0">
+        <div class="crest" style="color:var(--gold-lt)">✦ главният герой сте Вие ✦</div>
+        <h3>Искате ли да се събудите?</h3>
+        <p class="who">Първата стъпка е срамно малка. Един избор.</p>
+        <div class="opts">
+          <button class="opt" onclick="go(1)"><b>Да, искам да се събудя.</b> → започваме заедно</button>
+        </div>
+        <div class="mentor">
+          <img src="img/доверка.jpg" alt="Доверка">
+          <div><div class="mt">Доверка Ви посреща</div><div class="md">Не натиска. Държи спокойствието, докато избирате целта си.</div></div>
+        </div>
+      </div>
+
+      <!-- стъпка 1 · ЦЕЛ (Доверка) -->
+      <div class="estep" data-step="1">
+        <div class="crest" style="color:var(--sc-cel)">стъпка 1 · целта</div>
+        <h3>Накъде искате?</h3>
+        <p class="who">Изберете цел — или въведете своя. <b>Доверка</b> грилва Колелото на живота.</p>
+        <div class="opts">
+          <button class="opt" onclick="pickGoal('Детето ми спокойно пред изпита')">🎯 <b>Детето ми</b> спокойно пред изпита</button>
+          <button class="opt" onclick="pickGoal('По-малко изтощение, повече присъствие')">🎯 <b>По-малко изтощение</b>, повече присъствие</button>
+          <button class="opt" onclick="pickGoal('Да завърша нещо, което все отлагам')">🎯 Да завърша нещо, което <b>все отлагам</b></button>
+          <div class="opt-own">
+            <input id="goalOwn" type="text" placeholder="…или въведете своята цел">
+            <button onclick="pickGoalOwn()">→</button>
+          </div>
+        </div>
+        <button class="e-back" onclick="go(0)">← назад</button>
+      </div>
+
+      <!-- стъпка 2 · ПРОБЛЕМ (Екопътечко → Куражку) -->
+      <div class="estep" data-step="2">
+        <div class="crest" style="color:var(--sc-chud)">стъпка 2 · сянката</div>
+        <h3>Кое Ви спира?</h3>
+        <p class="echosen">Целта Ви: <b id="goalEcho">—</b></p>
+        <p class="who"><b>Екопътечко</b> отваря пътеките. Изберете сянката — или назовете своята.</p>
+        <div class="opts">
+          <button class="opt" onclick="pickProb('Отлагане','Бега')">🌫 <b>Отлагам</b> — все „утре"</button>
+          <button class="opt" onclick="pickProb('Обмисляне','Ума')">🌫 <b>Анализирам</b> до парализа</button>
+          <button class="opt" onclick="pickProb('Ора-ум-ора','Страхил')">🌫 <b>Прегарям</b> — изтощен/а съм</button>
+          <div class="opt-own">
+            <input id="probOwn" type="text" placeholder="…или назовете своя проблем">
+            <button onclick="pickProbOwn()">→</button>
+          </div>
+        </div>
+        <button class="e-back" onclick="go(1)">← назад</button>
+      </div>
+
+      <!-- стъпка 3 · менторите идват (Куражку + будечители) -->
+      <div class="estep" data-step="3">
+        <div class="crest" style="color:var(--sc-vodach)">стъпка 3 · водачите идват</div>
+        <h3>Не сте сам/а.</h3>
+        <p class="echosen">Цел: <b id="goalEcho2">—</b> · Сянка: <b id="probEcho">—</b></p>
+        <div class="mentor">
+          <img src="img/куражку.jpg" alt="Куражку">
+          <div><div class="mt">Куражку се появява като ментор</div><div class="md">Излъчва увереност — не убеждава. Зад него идваме и ние, останалите водачи.</div></div>
+        </div>
+        <div class="allies-row">
+          <img src="img/любка.jpg" alt="Любка"><img src="img/екопътечко.jpg" alt="Екопътечко">
+          <img src="img/доверка.jpg" alt="Доверка"><img src="img/обемко.jpg" alt="Обемко">
+          <img src="img/хола.jpg" alt="Хола"><img src="img/фибоначко.jpg" alt="Фибоначко">
+          <img src="img/творея.jpg" alt="Творея">
+        </div>
+        <div class="opts" style="margin-top:8px">
+          <button class="opt" style="text-align:center" onclick="location.href='#cta'"><b>Заяви поканата си →</b></button>
+        </div>
+        <button class="e-back" onclick="go(2)">← назад</button>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ════════════ 3 · ПРОБЛЕМЪТ (груба нежност) ════════════ -->
+  <section class="section" id="problem">
+    <h2>Казахте „да". Сега — истината.</h2>
+    <p class="cap">С груба нежност, защото Ви уважаваме.</p>
+    <div class="foe-block">
+      <h3>Това, което не казваме на глас</h3>
+      <div class="stat-row">
+        <div class="stat-card"><div class="big">9 от 10</div><div class="lab">деца с болки в стомаха, лош сън и страх преди изпит</div></div>
+        <div class="stat-card"><div class="big">57%</div><div class="lab">от момичетата</div></div>
+        <div class="stat-card"><div class="big">62%</div><div class="lab">от хората — хронично изтощени и разпилени *</div></div>
+      </div>
+      <p class="turn">Това не са врагове за убиване. Това са <b style="color:#e8a878">Слугите на Времетрон</b> — навиците, които крадат вниманието. Навикът се преодолява, не се убива — с по едно реално действие на ден.</p>
+    </div>
+    <p class="bridge">Затова идваме като ментори — с опит и план. Хем приказно, хем практично.</p>
+  </section>
+
+  <!-- ════════════ 4 · КАКВО Е maitapp ════════════ -->
+  <section class="section" id="kakvo">
+    <h2>Какво е maitapp</h2>
+    <div class="decode">maitapp = MyAI Tactics App<small>играта по картата на собствения Ви живот</small></div>
+    <div class="scene scene-wrap" style="margin-bottom:16px">
+      <img src="img/scene-wheel.jpg" alt="Колелото на 12-те сфери">
+      <div class="cap-in"><div class="crest">✦ Колелото на 12-те сфери ✦</div></div>
+    </div>
+    <div class="block center">
+      <p class="lead">Превръща нещата, които Ви дразнят, в смешни приказни истории — по мета-езика.</p>
+      <p><b>Избираш цел → даваш на героя си мета → снимаш чудовището → преодоляваш го с КЕФ</b> чрез <b>Игри · Изкуство · ИИ</b>.</p>
+      <p style="color:#cdbf9c;font-size:14.5px">По 8 минути на ден. Останалото се случва в живота Ви, не в телефона.</p>
+    </div>
+  </section>
+
+  <!-- ════════════ 5 · ПОТОКЪТ снимка→игра ════════════ -->
+  <section class="section" id="flow">
+    <h2>Как една снимка става игра</h2>
+    <p class="cap">Снимаш това, което те побърква. Казваш maitapp. Играта започва.</p>
+    <div class="flow">
+      <div class="step">
+        <span class="num">1</span>
+        <div class="shot"><img src="img/art-въпрос.jpg" alt="снимаш дразнещото"></div>
+        <div class="st-card"><h4>Снимаш</h4><p>Таблица · тийн, който не учи · кантар. 1 изречение + думата <b>maitapp</b>.</p></div>
+      </div>
+      <div class="step">
+        <span class="num">2</span>
+        <div class="shot"><img src="img/scene-wheel.jpg" alt="Доверка грилва Колелото"></div>
+        <div class="st-card"><h4>Доверка грилва</h4><p>Започва с Вашето колело: 12-те сфери — от тялото през душата до духа.</p></div>
+      </div>
+      <div class="step">
+        <span class="num">3</span>
+        <div class="shot"><img src="img/art-отговор.jpg" alt="топ-3 силни и предизвикателни"></div>
+        <div class="st-card"><h4>Връща огледало</h4><p>Топ-3 силни сфери — и топ-3 предизвикателни. Виждаш накъде.</p></div>
+      </div>
+      <div class="step">
+        <span class="num">4</span>
+        <div class="shot"><img src="img/art-метамозък.jpg" alt="Любка създава личен асистент"></div>
+        <div class="st-card"><h4>Любка помага</h4><p>Създава първия Ви личен асистент — съюзникът за уменията.</p></div>
+      </div>
+      <div class="step">
+        <span class="num">5</span>
+        <div class="shot"><img src="img/art-задача.jpg" alt="дейността става ниво"></div>
+        <div class="st-card"><h4>Става ниво</h4><p>Дразнещата дейност изгрява на картата като ниво — с антагониста си.</p></div>
+      </div>
+    </div>
+    <p class="flow-finale">И най-смешното идва после: разказваш как преди си бил тухан, а сега се кефиш. <b>Споделяш победата.</b></p>
+  </section>
+
+  <!-- ════════════ 6 · БУДЕЧИТЕЛ UNLOCK-СТЪЛБА ════════════ -->
+  <section class="section" id="vodachi">
+    <h2>Вашите водачи — Вашият план</h2>
+    <p class="cap">Картата се разбулва с реални действия. 8 дни, по 8 минути — раждат се 8 водача.</p>
+    <div class="scene scene-wrap" style="margin-bottom:16px">
+      <img src="img/scene-agent-cards.jpg" alt="Картите на водачите">
+    </div>
+    <div class="ladder" id="ladder"></div>
+
+    <div class="metatron-after">
+      <div class="panel dark">
+        <img src="img/метатрон.jpg" alt="Метатрон">
+        <div>
+          <h3>Метатрон — режисьорът</h3>
+          <p>Идва <b>след</b> будечителите. Не контролира — държи целостта. Вика правилния водач в правилния момент.</p>
+        </div>
+      </div>
+    </div>
+    <p class="dopamine">Първата стъпка е срамно малка нарочно. 20 секунди с фоумролера = цяла точка.</p>
+  </section>
+
+  <!-- ════════════ 7 · АНТИ-АГЕНТИ ════════════ -->
+  <section class="section" id="shadows">
+    <h2>Сенките Ви имат имена</h2>
+    <p class="cap">Не са врагове за убиване — Вашите сенки, главни герои в собствените си истории. Разцъкай карта.</p>
+    <div class="shadow-grid" id="shadowGrid"></div>
+
+    <div class="dopamine-meter">
+      <div class="pth">✦ Допаминомер · реалните дейности дават точки</div>
+      <div class="ptrow"><span class="ptn">20 секунди с фоумролера</span><span class="ptbar"><i style="width:1%"></i></span><span class="ptv">1</span></div>
+      <div class="ptrow"><span class="ptn">Атом · 1 минута кеф</span><span class="ptbar"><i style="width:3%"></i></span><span class="ptv">+3</span></div>
+      <div class="ptrow"><span class="ptn">100 мин въпроси-отговори</span><span class="ptbar"><i style="width:69%"></i></span><span class="ptv">100</span></div>
+      <div class="ptrow"><span class="ptn">Плуване · колело</span><span class="ptbar"><i style="width:69%"></i></span><span class="ptv">+100</span></div>
+    </div>
+
+    <!-- карта-с-точки · реален map.jpg -->
+    <div class="battlemap">
+      <img src="img/map.jpg" alt="Картата на битката — водачи срещу сенки">
+      <div class="cap-in"><div class="crest">✦ Водачи ляво · сенки дясно · Метатрон срещу Времетрон ✦</div></div>
+    </div>
+
+    <div class="boss">
+      <img src="img/ant-времетрон.jpg" alt="Времетрон">
+      <div>
+        <div class="order">последният бос · най-долу</div>
+        <h3>Времетрон</h3>
+        <p>Един враг управлява всички сенки. Храни се с времето Ви, когато не присъствате. Вместо сърце — часовник.</p>
+        <p class="ladder-up">Боссове в ред на изкачване: Станка → Страхил → Умчо → Ума → <b>Времетрон</b>.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════ 8 · CTA ════════════ -->
+  <section class="cta" id="cta">
+    <div class="scene scene-wrap" style="margin-bottom:16px">
+      <img src="img/scene-premiere.jpg" alt="Премиерата">
+      <div class="cap-in"><div class="crest">✦ Премиерата наближава ✦</div></div>
+    </div>
+    <div class="panel">
+      <h2>Заяви покана</h2>
+      <p class="lead ink">Подготвяме maitapp — играта, която подрежда чудовищата Ви в приключение с реални резултати.</p>
+      <p class="first-step">Първата стъпка е срамно малка. Това е тя — един клик.</p>
+
+      <div class="gifts">
+        <div class="gift"><span class="gi">📜</span><div><div class="gt">Резюме · 1 страница</div><div class="gd">същината, без шум</div></div></div>
+        <div class="gift"><span class="gi">🎧</span><div><div class="gt">Аудио · 1-3 мин</div><div class="gd">чуй приказката</div></div></div>
+        <div class="gift"><span class="gi">🎲</span><div><div class="gt">5 игри / техники</div><div class="gd">започни още днес</div></div></div>
+      </div>
+
+      <div class="audiences">
+        <div class="aud"><div class="wave">вълна 1</div><div class="at">Родители</div><div class="ad">за родителя пред изпита на детето</div></div>
+        <div class="aud"><div class="wave">вълна 2</div><div class="at">Тийнейджъри</div><div class="ad">другар във вътрешното Ви пространство</div></div>
+        <div class="aud"><div class="wave">вълна 3</div><div class="at">Развиващи се</div><div class="ad">за всеки, който иска повече</div></div>
+      </div>
+      <p class="privacy-teen">Каквото споделиш с maitapp, остава вътре.</p>
+
+      <form class="form-card" onsubmit="return false;">
+        <label for="wl-name">Име</label>
+        <input type="text" id="wl-name" name="name" placeholder="Как да Ви наричаме?" autocomplete="name">
+        <label for="wl-email">Имейл</label>
+        <input type="email" id="wl-email" name="email" placeholder="вашият@имейл.bg" autocomplete="email" required>
+        <label for="wl-aud">Кой сте Вие?</label>
+        <select id="wl-aud" name="audience">
+          <option value="">— изберете —</option>
+          <option value="parent">Родител</option>
+          <option value="teen">Тийнейджър</option>
+          <option value="growth">Развиваща се личност</option>
+        </select>
+        <div class="consent">
+          <input type="checkbox" id="wl-gdpr" name="gdpr" required>
+          <label for="wl-gdpr" style="font-family:'Spectral';font-weight:400;color:#cdbf9c;margin:0">Съгласен/на съм maitapp да съхранява имейла ми, за да получа поканата и трите подаръка. <a href="#" data-flag="privacy-link">[⚠️ чака политика за поверителност]</a></label>
+        </div>
+        <div class="btn-row">
+          <button type="submit" class="btn">заяви покана</button>
+          <a class="btn secondary" href="#flow">виж как работи maitapp →</a>
+        </div>
+      </form>
+
+      <p class="privacy-teen" style="margin-top:16px" data-flag="screening-funnel">Всеки епизод от сериала е като скрининг — след него можете да кандидатствате в програмите. <span style="opacity:.7">[⚠️ час на премиерата чака]</span></p>
+      <p class="roadmap-hint">скоро · реалната мобилна игра, в която отключвате артефакти с действия от живота</p>
+    </div>
+  </section>
+
+</div>
+
+<div class="foot">maitapp · MyAI Tactics App · построено в <a href="https://metalandia.com">Металандия</a> · от MetaReading<br><span style="opacity:.7">* статистиката 62% се верифицира преди публикуване</span></div>
+
+<script>
+/* ════════ USER-AS-HERO ВХОД ════════ */
+function go(n){
+  document.querySelectorAll('.estep').forEach(s=>s.classList.toggle('on', +s.dataset.step===n));
+  document.getElementById('enter').scrollIntoView({behavior:'smooth',block:'start'});
+}
+function pickGoal(g){
+  document.getElementById('goalEcho').textContent=g;
+  document.getElementById('goalEcho2').textContent=g;
+  go(2);
+}
+function pickGoalOwn(){
+  const v=document.getElementById('goalOwn').value.trim();
+  if(v) pickGoal(v);
+}
+function pickProb(o,name){
+  document.getElementById('probEcho').textContent=name+' · '+o;
+  go(3);
+}
+function pickProbOwn(){
+  const v=document.getElementById('probOwn').value.trim();
+  if(v){document.getElementById('probEcho').textContent=v;go(3);}
+}
+
+/* ════════ БУДЕЧИТЕЛ UNLOCK-СТЪЛБА ════════ */
+const VODACHI=[
+  {id:"доверка",name:"Доверка",unlock:"грилва пръв · Колелото → топ-3 силни / предизвикателни",law:"Присъствие",unlocked:true,badge:"стартов"},
+  {id:"любка",name:"Любка",unlock:"първият Ви <b>личен асистент</b>",law:"Закон 1 · Любов",unlocked:true,badge:"стартов"},
+  {id:"екопътечко",name:"Екопътечко",unlock:"първото Ви <b>умение</b>",law:"Закон 2 · Свобода",unlocked:true,badge:"стартов"},
+  {id:"куражку",name:"Куражку",unlock:"първи <b>комуникационен агент</b>",law:"Закон 3 · Убеденост",unlocked:true,badge:"стартов"},
+  {id:"обемко",name:"Обемко",unlock:"първи <b>тракер / измервач</b>",law:"Закон 4 · Умножен материал",unlocked:false},
+  {id:"хола",name:"Хола",unlock:"цели <b>проекти · видео · аудио</b>",law:"Закон 5 · Цяло-Част-Цяло",unlocked:false},
+  {id:"фибоначко",name:"Фибоначко",unlock:"първи <b>ревюер</b>",law:"Закон 6 · Златна пропорция",unlocked:false},
+  {id:"творея",name:"Творея",unlock:"първи <b>създател</b>",law:"Закон 7 · Класическо изкуство",unlocked:false}
+];
+const ladder=document.getElementById('ladder');
+VODACHI.forEach(v=>{
+  const c=document.createElement('div');
+  c.className='lad'+(v.unlocked?'':' locked');
+  c.innerHTML=(v.badge?'<div class="badge">'+v.badge+'</div>':'')+
+    (v.unlocked?'':'<div class="lk">🔒</div>')+
+    '<img src="img/'+v.id+'.jpg" alt="'+v.name+'" loading="lazy">'+
+    '<div class="body"><div class="lname">'+v.name+'</div>'+
+    '<div class="unlock">🔓 '+v.unlock+'</div>'+
+    '<div class="law">'+v.law+'</div></div>';
+  ladder.appendChild(c);
+});
+
+/* ════════ АНТИ-АГЕНТИ (реални образи + ? за липсващите) ════════ */
+const SHADOWS=[
+  {o:"Обсъждане",name:"Его",img:null,desc:"търси външно одобрение",ex:["крие целта зад децата","нуждата от чуждото „браво“"]},
+  {o:"Отлагане",name:"Бега",img:null,desc:"бягство от настоящето",ex:["отлага учене / кариера","метаотлагане"]},
+  {o:"Оплакване",name:"Емо",img:null,desc:"емоционалните бури",ex:["оплаква изтощението","гняв / напук"]},
+  {o:"Обясняване",name:"Нема",img:null,desc:"обяснява вместо да действа",ex:["„нямам време“","маски вместо ход"]},
+  {o:"Осъждане",name:"Умчо",img:"ant-умчо",desc:"студената самокритика",ex:["неувереност","осъжда себе си и другите"]},
+  {o:"Обмисляне",name:"Ума",img:"ant-ума",desc:"анализ-парализата",ex:["анализ без действие","перфекционизъм"]},
+  {o:"Оценяване",name:"Станка",img:"ant-станка",desc:"инспекторът на оценките",ex:["учебна невроза","страх от оценки"]},
+  {o:"Ора-ум-ора",name:"Страхил",img:"ant-страхил",desc:"прегарянето",ex:["хроничен стрес","родителско изтощение"]}
+];
+const sg=document.getElementById('shadowGrid');
+SHADOWS.forEach(s=>{
+  const c=document.createElement('div');
+  c.className='shadow';
+  const face = s.img
+    ? '<div class="face"><span class="o-tag">'+s.o+'</span><img src="img/'+s.img+'.jpg" alt="'+s.name+'" loading="lazy"></div>'
+    : '<div class="face noimg"><span class="o-tag">'+s.o+'</span>?</div>';
+  c.innerHTML=face+
+    '<div class="body"><div class="a-name">'+s.name+'</div>'+
+    '<div class="a-desc">'+s.desc+'</div>'+
+    '<ul class="a-ex">'+s.ex.map(e=>'<li>'+e+'</li>').join('')+'</ul>'+
+    '<div class="hint">▸ разцъкай</div></div>';
+  c.addEventListener('click',()=>c.classList.toggle('open'));
+  sg.appendChild(c);
+});
+</script>
+</body>
+</html>

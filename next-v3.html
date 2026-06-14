@@ -31,6 +31,9 @@ body{background:#0b1114;color:#e9e1d4;font-family:Inter,sans-serif;-webkit-font-
 .kicker{letter-spacing:.3em;font-size:12px;text-transform:uppercase;font-weight:500;color:#e2a458}
 .cta{background:linear-gradient(120deg,#ffe1a0,#e2a458);color:#2a1908;font-weight:500;transition:.35s;box-shadow:0 10px 40px -12px rgba(226,164,88,.7)}
 .cta:hover{transform:translateY(-2px)}
+/* mobile sticky CTA (#24 · къс път до формата) */
+.sticky-cta{position:fixed;left:50%;bottom:14px;transform:translateX(-50%) translateY(140%);z-index:60;background:linear-gradient(120deg,#ffe1a0,#e2a458);color:#2a1908;font-weight:500;padding:13px 30px;border-radius:30px;box-shadow:0 12px 32px -8px rgba(226,164,88,.75);transition:transform .45s cubic-bezier(.2,.7,.2,1),opacity .45s;opacity:0;white-space:nowrap;text-decoration:none;font-size:15px;border:1px solid rgba(90,68,8,.5)}
+.sticky-cta.show{transform:translateX(-50%) translateY(0);opacity:1}
 .bounce{animation:bounce 2.4s ease-in-out infinite}
 @keyframes bounce{0%,100%{transform:translateY(0);opacity:.5}50%{transform:translateY(8px);opacity:1}}
 .dawnbg{background:radial-gradient(80% 50% at 50% 0%,rgba(226,164,88,.10),rgba(11,17,20,0) 70%)}
@@ -265,6 +268,8 @@ body{background:#0b1114;color:#e9e1d4;font-family:Inter,sans-serif;-webkit-font-
   </div>
 </section>
 
+<a href="#cta" id="stickyCta" class="sticky-cta">✦ Заяви покана</a>
+
 <footer class="text-center text-parch/40 text-xs py-10 px-6 font-light border-t border-white/5">
   maitapp · MyAI Tactics App · построено в <a href="https://metalandia.com" class="text-gold">Металандия</a> · от MetaReading
 </footer>
@@ -304,6 +309,10 @@ HEROES.forEach((h,i)=>{
 (function(){
   var pc=document.getElementById('particles');
   for(var i=0;i<14;i++){var p=document.createElement('div');p.className='particle';var s=(Math.random()*2+1).toFixed(1);p.style.width=p.style.height=s+'px';p.style.left=(Math.random()*100)+'%';p.style.bottom=(Math.random()*30)+'%';p.style.animationDuration=(Math.random()*7+7)+'s';p.style.animationDelay=(Math.random()*8)+'s';pc.appendChild(p);}
+  // sticky CTA · показва се след hero · крие се при формата
+  var sc=document.getElementById('stickyCta'),ctaSec=document.getElementById('cta');
+  function updSticky(){if(!sc||!ctaSec)return;var past=window.scrollY>window.innerHeight*0.85;var nearForm=ctaSec.getBoundingClientRect().top<window.innerHeight*1.05;sc.classList.toggle('show',past&&!nearForm);}
+  window.addEventListener('scroll',updSticky,{passive:true});updSticky();
   if(window.gsap){
     gsap.registerPlugin(ScrollTrigger);
     gsap.set(['#h-kick','#h-title','#h-sub','#h-cta'],{opacity:0,y:30});

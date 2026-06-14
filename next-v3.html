@@ -59,6 +59,16 @@ body{background:#0b1114;color:#e9e1d4;font-family:Inter,sans-serif;overflow-x:hi
 .vslot{position:relative;width:100%;aspect-ratio:16/9;border-radius:8px;overflow:hidden;border:1.5px solid #7a2e2e;background:radial-gradient(120% 120% at 50% 30%,#241a10,#0e0906);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px}
 .vslot .play{width:42px;height:42px;border-radius:50%;border:2px solid #b9846a;color:#e6a878;display:flex;align-items:center;justify-content:center;font-size:16px;background:rgba(12,8,5,.6)}
 .vslot .vlab{font-family:'Cormorant Garamond',serif;font-size:13px;color:#e6a878}
+/* v1 карти (card-deck · златна рамка · образ + панел) */
+.vcard{border:1px solid rgba(242,200,120,.22);border-radius:16px;overflow:hidden;background:rgba(255,255,255,.035);box-shadow:0 14px 38px -18px rgba(0,0,0,.7);transition:transform .4s,border-color .4s,box-shadow .4s}
+.vcard:hover{transform:translateY(-6px);border-color:rgba(242,200,120,.5);box-shadow:0 22px 48px -18px var(--cc,#f2c878)}
+.vcard .vimg{position:relative;width:100%;aspect-ratio:4/3;overflow:hidden}
+.vcard .vimg img{width:100%;height:100%;object-fit:cover;display:block}
+.vcard .vimg::after{content:"";position:absolute;inset:0;box-shadow:inset 0 -30px 40px -20px rgba(11,17,20,.6)}
+.vcard .vbody{padding:16px 16px 20px}
+.vcard h3{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:600;color:#f2c878;margin-bottom:5px}
+.vcard p,.vcard small{color:rgba(244,236,216,.72);font-weight:300;font-size:.95rem;line-height:1.5;display:block}
+.missarrow{font-size:30px;color:#e2a458;display:flex;align-items:center;justify-content:center}
 /* нишка-чипове */
 .thread{display:flex;flex-wrap:wrap;gap:7px;justify-content:center}
 .tchip{display:flex;align-items:center;gap:7px;font-size:13px;color:#e9e1d4}
@@ -69,7 +79,7 @@ body{background:#0b1114;color:#e9e1d4;font-family:Inter,sans-serif;overflow-x:hi
 <body>
 
 <!-- ════════════ Глава I · ЖЕЛАНИЕТО · hero видео ════════════ -->
-<section class="relative h-screen w-full overflow-hidden flex items-end">
+<section class="relative h-screen w-full overflow-hidden flex items-center">
   <video class="herovid" autoplay loop muted playsinline poster="img/hero-mother.jpg">
     <source src="video/hero-loop-720p.webm" type="video/webm">
     <source src="video/hero-loop-720p.mp4" type="video/mp4">
@@ -77,11 +87,10 @@ body{background:#0b1114;color:#e9e1d4;font-family:Inter,sans-serif;overflow-x:hi
   <div class="sweep"></div>
   <div id="particles" class="absolute inset-0"></div>
   <div class="scrim"></div>
-  <div class="relative z-10 w-full max-w-3xl mx-auto px-6 pb-20 text-center">
-    <p class="kicker mb-5" id="h-kick">Металандия · maitapp · Глава I · Желанието</p>
-    <h1 class="font-serif font-semibold leading-[1.04] text-5xl md:text-7xl mb-6" id="h-title">Искате ли да се<br><span class="gradtext italic">събудите?</span></h1>
-    <p class="text-base md:text-lg text-parch/80 max-w-xl mx-auto mb-7 font-light" id="h-sub">Спокойствие. Радост. Вдъхновение. Една майка, едно дете пред изпита — и тихото желание зад умората.</p>
-    <div id="h-bubble" class="bubble mx-auto mb-9" style="max-width:340px">„Искам да се събудя — спокойна, радостна, вдъхновена. За мен и за детето ми."</div>
+  <div class="relative z-10 w-full max-w-2xl mx-auto px-6 text-center">
+    <p class="kicker mb-5" id="h-kick">Металандия · maitapp</p>
+    <h1 class="font-serif font-semibold leading-[1.1] text-3xl sm:text-4xl md:text-5xl mb-5" id="h-title">Искате ли да се събудите и да си припомните <span class="gradtext italic">как се учи</span> на maitapp?</h1>
+    <p class="text-lg md:text-2xl text-parch font-light mb-9" id="h-sub">Не е нужно време, а внимание.</p>
     <a href="#mission" class="cta inline-block rounded-full px-9 py-4 text-[15px]" id="h-cta">Започни приказката</a>
   </div>
   <div class="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 text-gold/70 bounce"><span style="font-size:24px">⌄</span></div>
@@ -107,6 +116,38 @@ body{background:#0b1114;color:#e9e1d4;font-family:Inter,sans-serif;overflow-x:hi
       <p class="text-[15px] leading-relaxed mx-auto mb-3" style="color:#5a4423;max-width:430px">Една игра. Едно реално действие на ден. <b>maitapp</b> = MyAI Tactics App — играта по картата на собствения Ви живот, през Игри · Изкуство · ИИ.</p>
       <a href="#enter" class="cta inline-block rounded-full px-9 py-4 text-[15px] mt-2">Приеми мисията · влез в играта</a>
       <p class="text-xs mt-4 font-light" style="color:#7a5a2c">понеделник вечер, 22 юни <span style="opacity:.7">[⚠️ час чака]</span> · онлайн</p>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════ КОЙ · ЗАЩО · КАК (v1 карти) ════════════ -->
+<section class="py-24 px-6 border-t border-white/5">
+  <div class="max-w-5xl mx-auto">
+    <div class="text-center mb-12 reveal">
+      <p class="kicker mb-5">Какво е maitapp</p>
+      <h2 class="font-serif text-4xl md:text-5xl mb-4">Твоят екип от ИИ герои</h2>
+      <p class="text-lg text-parch/70 font-light max-w-2xl mx-auto">На човешки език, на български. Без код.</p>
+    </div>
+    <div class="grid sm:grid-cols-3 gap-5">
+      <div class="vcard reveal" style="--cc:#f2c878"><div class="vimg"><img src="img/art-въпрос.jpg" alt="Кой"></div><div class="vbody"><h3>Кой</h3><p>За родители и деца, които искат ИИ да е <b class="text-parch/90">разширение на ума</b> — радост от ученето, не разсейване.</p></div></div>
+      <div class="vcard reveal" style="--cc:#6fb59a"><div class="vimg"><img src="img/art-отговор.jpg" alt="Защо"></div><div class="vbody"><h3>Защо</h3><p>Светът се мени по-бързо, отколкото усещаме. Сто души с екип агенти вършат работата на сто хиляди — <b class="text-parch/90">спокойно</b>.</p></div></div>
+      <div class="vcard reveal" style="--cc:#5ba0e6"><div class="vimg"><img src="img/art-метамозък.jpg" alt="Как"></div><div class="vbody"><h3>Как</h3><p>Метамозък (твоята папка-памет) + екип будечители. По <b class="text-parch/90">5 минути на ден</b>, като тамагочи. Без код.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════ СЪКРОВИЩАТА · УЧЕНЕ · РАБОТА · ЗАБАВЛЕНИЕ ════════════ -->
+<section class="dawnbg py-24 px-6 border-t border-white/5">
+  <div class="max-w-5xl mx-auto">
+    <div class="text-center mb-12 reveal">
+      <p class="kicker mb-5">Съкровищата</p>
+      <h2 class="font-serif text-4xl md:text-5xl mb-4">Три неща стават по-леки</h2>
+      <p class="text-lg text-parch/70 font-light max-w-2xl mx-auto">Едно и също внимание — три дарби.</p>
+    </div>
+    <div class="grid sm:grid-cols-3 gap-5">
+      <div class="vcard reveal" style="--cc:#f2c878"><div class="vimg"><img src="img/art-резултат.jpg" alt="Учене"></div><div class="vbody"><h3>Учене</h3><small>разбирам по-дълбоко</small></div></div>
+      <div class="vcard reveal" style="--cc:#e2a458"><div class="vimg"><img src="img/art-задача.jpg" alt="Работа"></div><div class="vbody"><h3>Работа</h3><small>свършвам по-леко</small></div></div>
+      <div class="vcard reveal" style="--cc:#9c7fc8"><div class="vimg"><img src="img/art-еликсир.jpg" alt="Забавление"></div><div class="vbody"><h3>Забавление</h3><small>играя и творя</small></div></div>
     </div>
   </div>
 </section>
@@ -195,6 +236,22 @@ body{background:#0b1114;color:#e9e1d4;font-family:Inter,sans-serif;overflow-x:hi
   </div>
 </section>
 
+<!-- ════════════ ПРИМЕРНА МИСИЯ · ЗАДАЧА → РЕЗУЛТАТ ════════════ -->
+<section class="dawnbg py-24 px-6 border-t border-white/5">
+  <div class="max-w-4xl mx-auto">
+    <div class="text-center mb-12 reveal">
+      <p class="kicker mb-5">Примерна мисия</p>
+      <h2 class="font-serif text-4xl md:text-5xl mb-4">Една задача → готов резултат</h2>
+      <p class="text-lg text-parch/70 font-light max-w-2xl mx-auto">За пет минути. Без код. На български.</p>
+    </div>
+    <div class="grid sm:grid-cols-[1fr_auto_1fr] gap-5 items-center">
+      <div class="vcard reveal" style="--cc:#d8693a"><div class="vimg"><img src="img/art-задача.jpg" alt="Задачата"></div><div class="vbody"><h3>Задачата</h3><p>Питаш Метатрон: „Имам досаден повтарящ се процес — кои пет агента биха ми помогнали и какво прави всеки?"</p></div></div>
+      <div class="missarrow reveal">➜</div>
+      <div class="vcard reveal" style="--cc:#6fb59a"><div class="vimg"><img src="img/art-резултат.jpg" alt="Резултатът"></div><div class="vbody"><h3>Резултатът</h3><p>За пет минути — жива карта с роли, Куражку пише чернова, Фибоначко намира три пропуска. Без код, на български.</p></div></div>
+    </div>
+  </div>
+</section>
+
 <!-- ════════════ Еликсир + CTA ════════════ -->
 <section id="cta" class="relative py-32 px-6 border-t border-white/5 overflow-hidden">
   <div class="sweep" style="opacity:.4"></div>
@@ -226,12 +283,12 @@ body{background:#0b1114;color:#e9e1d4;font-family:Inter,sans-serif;overflow-x:hi
   for(var i=0;i<16;i++){var p=document.createElement('div');p.className='particle';var s=(Math.random()*2+1).toFixed(1);p.style.width=p.style.height=s+'px';p.style.left=(Math.random()*100)+'%';p.style.bottom=(Math.random()*30)+'%';p.style.animationDuration=(Math.random()*7+7)+'s';p.style.animationDelay=(Math.random()*8)+'s';pc.appendChild(p);}
   if(window.gsap){
     gsap.registerPlugin(ScrollTrigger);
-    gsap.set(['#h-kick','#h-title','#h-sub','#h-bubble','#h-cta'],{opacity:0,y:30});
-    gsap.timeline({delay:.25}).to('#h-kick',{opacity:1,y:0,duration:.9,ease:'power3.out'}).to('#h-title',{opacity:1,y:0,duration:1.1,ease:'power3.out'},'-=.6').to('#h-sub',{opacity:1,y:0,duration:1,ease:'power3.out'},'-=.7').to('#h-bubble',{opacity:1,y:0,duration:.9,ease:'power3.out'},'-=.7').to('#h-cta',{opacity:1,y:0,duration:.9,ease:'power3.out'},'-=.6');
+    gsap.set(['#h-kick','#h-title','#h-sub','#h-cta'],{opacity:0,y:30});
+    gsap.timeline({delay:.25}).to('#h-kick',{opacity:1,y:0,duration:.9,ease:'power3.out'}).to('#h-title',{opacity:1,y:0,duration:1.1,ease:'power3.out'},'-=.6').to('#h-sub',{opacity:1,y:0,duration:1,ease:'power3.out'},'-=.7').to('#h-cta',{opacity:1,y:0,duration:.9,ease:'power3.out'},'-=.6');
     gsap.utils.toArray('.reveal').forEach(function(el){gsap.to(el,{opacity:1,y:0,filter:'blur(0px)',duration:1.1,ease:'power3.out',scrollTrigger:{trigger:el,start:'top 86%'}});});
   } else {
     document.querySelectorAll('.reveal').forEach(function(e){e.style.opacity=1;e.style.transform='none';e.style.filter='none';});
-    ['#h-kick','#h-title','#h-sub','#h-bubble','#h-cta'].forEach(function(s){var e=document.querySelector(s);if(e){e.style.opacity=1;e.style.transform='none';}});
+    ['#h-kick','#h-title','#h-sub','#h-cta'].forEach(function(s){var e=document.querySelector(s);if(e){e.style.opacity=1;e.style.transform='none';}});
   }
 })();
 </script>

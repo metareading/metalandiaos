@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>maitapp · Картата на играта</title>
+<meta name="description" content="Цялата игра на maitapp · 8 нива (будечители) · нишката учебник→агент→знание→история→игри→изпит · героят расте, сенките се свиват.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Forum&family=Spectral:ital,wght@0,400;0,600;1,400&display=swap&subset=cyrillic" rel="stylesheet">
+<style>
+:root{--gold:#c9a86a;--gold-lt:#E8C77E;--gold-dk:#8a6a1e;--bronze-dk:#3d2c14;--parch:#f4ecd8;--parch-dk:#eaddc0;--ink:#3A2E22;--forest:#2C4A3B;--ally:#4A7FA8;--foe:#D4895E;--stone:#16100a;}
+*{margin:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Spectral',Georgia,serif;color:#f2e7cf;line-height:1.5;overflow-x:hidden;
+  background:radial-gradient(120% 70% at 50% -5%,#3a2b18 0%,rgba(58,43,24,0) 55%),linear-gradient(160deg,#16100a,#241a10 50%,#16100a)}
+h1,h2,h3,.disp{font-family:'Forum',Georgia,serif;letter-spacing:.03em}
+img{max-width:100%;display:block}
+.wrap{max-width:680px;margin:0 auto;padding:18px 16px 60px}
+a{color:var(--gold-lt)}
+
+/* ── header ── */
+.top{text-align:center;padding:30px 14px 10px}
+.crest{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold-lt);opacity:.9}
+.top h1{font-size:clamp(28px,8vw,46px);color:var(--gold-lt);margin:.1em 0;text-shadow:0 2px 8px #000,0 0 24px rgba(212,175,55,.35)}
+.top p{color:#d8c9a0;font-style:italic;max-width:460px;margin:6px auto 0;font-size:15px}
+.back{display:inline-block;margin-top:14px;font-family:'Forum';font-size:13px;border:1px solid var(--gold-dk);border-radius:5px;padding:7px 16px;text-decoration:none;color:var(--gold-lt);background:rgba(12,8,5,.4)}
+
+/* ── core-loop легенда ── */
+.loop{margin:18px auto 6px;max-width:600px;border:1px solid rgba(201,168,106,.4);border-radius:8px;
+  background:linear-gradient(155deg,#241a10,#160f08);padding:14px 14px 16px;box-shadow:inset 0 0 26px rgba(0,0,0,.45)}
+.loop .lh{font-family:'Forum';color:var(--gold-lt);text-align:center;font-size:14px;letter-spacing:.08em;margin-bottom:10px}
+.loop .row{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:6px}
+.loop .b{display:flex;align-items:center;gap:6px;font-size:12.5px;color:#e9e1d4}
+.loop .b b{font-family:'Forum';font-size:15px;color:var(--gold-lt);font-weight:400}
+.loop .ar{color:var(--forest);filter:brightness(1.6)}
+.legend2{text-align:center;font-size:12.5px;color:#cdbf9c;font-style:italic;margin:8px auto 0;max-width:480px}
+.legend2 b{color:var(--gold-lt);font-style:normal}
+
+/* ── серпентина път ── */
+.path{position:relative;margin-top:26px}
+.path::before{content:"";position:absolute;left:50%;top:0;bottom:120px;width:3px;transform:translateX(-50%);
+  background:repeating-linear-gradient(180deg,var(--gold) 0 8px,transparent 8px 18px);opacity:.5}
+.lvl{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:center;margin-bottom:22px}
+.lvl:nth-child(even){direction:rtl}
+.lvl:nth-child(even) .card{direction:ltr}
+.lvl .node{display:flex;justify-content:center}
+.tok{position:relative;width:118px;border-radius:10px;overflow:hidden;border:2px solid var(--ally);
+  background:#0d1417;box-shadow:0 0 0 3px var(--bronze-dk),0 8px 20px rgba(0,0,0,.55)}
+.tok img{width:100%;aspect-ratio:1/1;object-fit:cover}
+.tok .nm{position:absolute;left:0;right:0;bottom:0;text-align:center;font-family:'Forum';font-size:13px;
+  padding:16px 4px 5px;color:#fff;text-shadow:0 1px 3px #000;background:linear-gradient(180deg,transparent,rgba(0,0,0,.85))}
+.tok .rom{position:absolute;top:7px;left:8px;font-family:'Forum';font-size:13px;background:rgba(12,8,5,.82);
+  color:var(--gold-lt);border:1px solid var(--gold-dk);border-radius:4px;padding:1px 8px;z-index:2}
+.tok.fog img{filter:grayscale(.72) brightness(.4)}
+.tok.fog .lk{position:absolute;top:7px;right:8px;font-size:18px;text-shadow:0 1px 4px #000;z-index:2}
+.card{background:linear-gradient(155deg,#241a10,#130d07);border:1px solid var(--gold-dk);border-radius:8px;
+  padding:12px 13px;box-shadow:inset 0 0 20px rgba(0,0,0,.4)}
+.card .law{font-family:'Forum';color:var(--gold-lt);font-size:16px;line-height:1.15}
+.card .law small{display:block;font-family:'Spectral';font-style:italic;font-size:12px;color:#b9a884;margin-top:2px}
+.card .foe{font-size:12px;color:#e6a878;margin-top:7px;border-top:1px dashed rgba(216,137,94,.4);padding-top:6px}
+.card .foe b{color:#f0b890}
+.meter{display:flex;align-items:center;gap:8px;margin-top:8px;font-size:10px;letter-spacing:.04em;text-transform:uppercase}
+.meter .hero{color:var(--gold-lt)}.meter .ant{color:#c98a78;margin-left:auto}
+.dot{display:inline-block;border-radius:50%;vertical-align:middle;margin-left:5px}
+.dot.h{background:var(--gold-lt);box-shadow:0 0 8px rgba(232,199,126,.6)}
+.dot.a{background:#9a5a4a}
+.card.fogc{opacity:.62}
+.card.fogc .law{color:#cbb894}
+
+/* ── финален бос ── */
+.boss{position:relative;margin:6px auto 0;max-width:520px;border:2px solid var(--foe);border-radius:10px;
+  background:linear-gradient(155deg,#1c0e0a,#0e0706);box-shadow:0 0 0 3px #0c0805,0 0 44px rgba(216,137,94,.2);
+  padding:20px 18px;text-align:center}
+.boss img{width:128px;height:128px;object-fit:cover;border-radius:8px;border:2px solid #7a2e2e;box-shadow:0 0 0 3px #0c0805;margin:0 auto 12px;filter:grayscale(.4) brightness(.55)}
+.boss .lk{position:absolute;top:12px;right:14px;font-size:22px}
+.boss .order{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#b89a86}
+.boss h2{color:#e6a878;font-size:30px;margin:5px 0 8px}
+.boss p{font-size:14px;color:#e0d2b2;max-width:400px;margin:0 auto;line-height:1.45}
+
+.foot{text-align:center;margin-top:34px}
+.foot a.cta{display:inline-block;font-family:'Forum';font-size:17px;color:#2a1d0d;text-decoration:none;padding:13px 30px;border-radius:6px;
+  background:linear-gradient(160deg,var(--gold-lt),var(--gold) 55%,var(--gold-dk));border:1px solid #5a4408;box-shadow:0 4px 0 #5a4408,0 8px 18px rgba(0,0,0,.4)}
+.foot .note{color:#8a795a;font-size:12px;font-style:italic;margin-top:16px}
+
+@media(min-width:620px){.tok{width:140px}.top h1{font-size:46px}}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div class="crest">✦ maitapp · картата на играта ✦</div>
+  <h1>Цялото пътуване</h1>
+  <p>Осем нива. Една нишка. Героят (Вие) расте — сенките се свиват. Картата се разбулва с реални действия.</p>
+  <a class="back" href="next-v3.html">← обратно към входа</a>
+</div>
+
+<div class="wrap">
+
+  <!-- core-loop нишка (повтаря се на ВСЯКО ниво) -->
+  <div class="loop">
+    <div class="lh">Нишката на всяко ниво</div>
+    <div class="row">
+      <span class="b">📖 <b>Учебник</b></span><span class="ar">→</span>
+      <span class="b">🤖 <b>Агент</b></span><span class="ar">→</span>
+      <span class="b">💡 <b>Знание</b></span><span class="ar">→</span>
+      <span class="b">📜 <b>История</b></span><span class="ar">→</span>
+      <span class="b">🎲 <b>Игри</b></span><span class="ar">→</span>
+      <span class="b">🏅 <b>Изпит</b></span>
+    </div>
+  </div>
+  <p class="legend2">🟡 <b>Ярки</b> = водачите, които те чакат · 🌫 <b>в мъгла</b> = изгряват с действия (Heroes-3 fog-of-war).</p>
+
+  <!-- 8 нива · серпентина · I-IV ярки · V-VIII мъгла -->
+  <div class="path">
+
+    <div class="lvl">
+      <div class="node"><div class="tok ally"><span class="rom">I</span><img src="img/доверка.jpg" alt="Доверка"><span class="nm">Доверка</span></div></div>
+      <div class="card"><div class="law">Присъствие<small>стартът · Колелото на живота</small></div>
+        <div class="foe">сянка: <b>Отлагане · Бега</b></div>
+        <div class="meter"><span class="hero">герой<span class="dot h" style="width:7px;height:7px"></span></span><span class="ant">сянка<span class="dot a" style="width:16px;height:16px"></span></span></div></div>
+    </div>
+
+    <div class="lvl">
+      <div class="node"><div class="tok ally"><span class="rom">II</span><img src="img/любка.jpg" alt="Любка"><span class="nm">Любка</span></div></div>
+      <div class="card"><div class="law">Любов<small>първият личен асистент</small></div>
+        <div class="foe">сянка: <b>Оплакване · Емо</b></div>
+        <div class="meter"><span class="hero">герой<span class="dot h" style="width:9px;height:9px"></span></span><span class="ant">сянка<span class="dot a" style="width:15px;height:15px"></span></span></div></div>
+    </div>
+
+    <div class="lvl">
+      <div class="node"><div class="tok ally"><span class="rom">III</span><img src="img/екопътечко.jpg" alt="Екопътечко"><span class="nm">Екопътечко</span></div></div>
+      <div class="card"><div class="law">Свобода<small>първото умение</small></div>
+        <div class="foe">сянка: <b>Оценяване · Станка</b></div>
+        <div class="meter"><span class="hero">герой<span class="dot h" style="width:11px;height:11px"></span></span><span class="ant">сянка<span class="dot a" style="width:13px;height:13px"></span></span></div></div>
+    </div>
+
+    <div class="lvl">
+      <div class="node"><div class="tok ally"><span class="rom">IV</span><img src="img/куражку.jpg" alt="Куражку"><span class="nm">Куражку</span></div></div>
+      <div class="card"><div class="law">Убеденост<small>първи комуникационен агент</small></div>
+        <div class="foe">сянка: <b>Обсъждане · Его</b></div>
+        <div class="meter"><span class="hero">герой<span class="dot h" style="width:13px;height:13px"></span></span><span class="ant">сянка<span class="dot a" style="width:12px;height:12px"></span></span></div></div>
+    </div>
+
+    <div class="lvl">
+      <div class="node"><div class="tok ally fog"><span class="rom">V</span><span class="lk">🔒</span><img src="img/обемко.jpg" alt="заключено"><span class="nm">Обемко</span></div></div>
+      <div class="card fogc"><div class="law">Умножен материал<small>тракер · измервач</small></div>
+        <div class="foe">сянка: <b>Осъждане · Умчо</b></div>
+        <div class="meter"><span class="hero">герой<span class="dot h" style="width:15px;height:15px"></span></span><span class="ant">сянка<span class="dot a" style="width:10px;height:10px"></span></span></div></div>
+    </div>
+
+    <div class="lvl">
+      <div class="node"><div class="tok ally fog"><span class="rom">VI</span><span class="lk">🔒</span><img src="img/хола.jpg" alt="заключено"><span class="nm">Хола</span></div></div>
+      <div class="card fogc"><div class="law">Цяло-Част-Цяло<small>проекти · видео · аудио</small></div>
+        <div class="foe">сянка: <b>Обясняване · Нема</b></div>
+        <div class="meter"><span class="hero">герой<span class="dot h" style="width:17px;height:17px"></span></span><span class="ant">сянка<span class="dot a" style="width:9px;height:9px"></span></span></div></div>
+    </div>
+
+    <div class="lvl">
+      <div class="node"><div class="tok ally fog"><span class="rom">VII</span><span class="lk">🔒</span><img src="img/фибоначко.jpg" alt="заключено"><span class="nm">Фибоначко</span></div></div>
+      <div class="card fogc"><div class="law">Златна пропорция<small>първи ревюер</small></div>
+        <div class="foe">сянка: <b>Обмисляне · Ума</b></div>
+        <div class="meter"><span class="hero">герой<span class="dot h" style="width:19px;height:19px"></span></span><span class="ant">сянка<span class="dot a" style="width:8px;height:8px"></span></span></div></div>
+    </div>
+
+    <div class="lvl">
+      <div class="node"><div class="tok ally fog"><span class="rom">VIII</span><span class="lk">🔒</span><img src="img/творея.jpg" alt="заключено"><span class="nm">Творея</span></div></div>
+      <div class="card fogc"><div class="law">Класическо изкуство<small>първи създател</small></div>
+        <div class="foe">сянка: <b>Ора-ум-ора · Страхил</b></div>
+        <div class="meter"><span class="hero">герой<span class="dot h" style="width:22px;height:22px"></span></span><span class="ant">сянка<span class="dot a" style="width:7px;height:7px"></span></span></div></div>
+    </div>
+
+  </div>
+
+  <!-- финален бос -->
+  <div class="boss">
+    <span class="lk">🔒</span>
+    <img src="img/ant-времетрон.jpg" alt="Времетрон · последен бос">
+    <div class="order">последният бос · отвъд осемте нива</div>
+    <h2>Времетрон</h2>
+    <p>Един враг управлява всички сенки. Храни се с времето Ви, когато не присъствате. Вместо сърце — часовник. Среща се едва когато героят е пораснал през всичките осем нива.</p>
+  </div>
+
+  <div class="foot">
+    <a class="cta" href="next-v3.html#cta">Започни от Ниво I →</a>
+    <p class="note">Картата е тийзър · нивата се разбулват с реални действия от живота. По 8 минути на ден.</p>
+  </div>
+
+</div>
+</body>
+</html>

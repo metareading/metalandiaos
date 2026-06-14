@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>maitapp · Искате ли да се събудите?</title>
+<meta name="description" content="maitapp = MyAI Tactics App. Снимаш това, което те побърква. Започва приказка-игра по картата на собствения ти живот. Игри · Изкуство · ИИ.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Inter:wght@300;400;500&display=swap&subset=cyrillic" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config={theme:{extend:{
+  colors:{ink:'#0b1114',ink2:'#11191d',amber:'#e2a458',gold:'#f2c878',lgold:'#ffe1a0',parch:'#f4ecd8',coral:'#d8693a',teal:'#6fb59a',ally:'#4A7FA8'},
+  fontFamily:{serif:['"Cormorant Garamond"','serif'],sans:['Inter','sans-serif']}}}}
+</script>
+<style>
+*{margin:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:#0b1114;color:#e9e1d4;font-family:Inter,sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.sweep{position:absolute;inset:0;background:radial-gradient(120% 70% at 50% 80%,rgba(255,221,138,.5),rgba(255,221,138,0) 60%);mix-blend-mode:screen;animation:sweep 7s ease-in-out infinite;pointer-events:none}
+@keyframes sweep{0%,100%{opacity:.22}50%{opacity:.75}}
+.scrim{position:absolute;inset:0;background:linear-gradient(to top,#0b1114 5%,rgba(11,17,20,.42) 42%,rgba(11,17,20,.22) 70%,rgba(11,17,20,.55))}
+.particle{position:absolute;border-radius:50%;background:#ffe7bd;pointer-events:none;opacity:0;animation:rise linear infinite}
+@keyframes rise{0%{transform:translateY(0);opacity:0}16%{opacity:.7}100%{transform:translateY(-200px);opacity:0}}
+.gradtext{background:linear-gradient(118deg,#ffe9c2,#e2a458 55%,#d8693a);-webkit-background-clip:text;background-clip:text;color:transparent}
+.kicker{letter-spacing:.32em;font-size:12px;text-transform:uppercase;color:#e2a458;font-weight:500}
+.glass{background:rgba(255,255,255,.035);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(242,200,120,.13)}
+.gcard{transition:transform .5s cubic-bezier(.2,.7,.2,1),box-shadow .5s,border-color .5s}
+.gcard:hover{transform:translateY(-7px);box-shadow:0 18px 50px -16px var(--c,#f2c878);border-color:var(--c,#f2c878)}
+.reveal{opacity:0;transform:translateY(42px);filter:blur(7px)}
+.cta{background:linear-gradient(120deg,#ffe1a0,#e2a458);color:#2a1908;font-weight:500;transition:.35s;box-shadow:0 10px 40px -12px rgba(226,164,88,.7)}
+.cta:hover{transform:translateY(-2px);box-shadow:0 16px 54px -10px rgba(226,164,88,.9)}
+.bounce{animation:bounce 2.4s ease-in-out infinite}
+@keyframes bounce{0%,100%{transform:translateY(0);opacity:.5}50%{transform:translateY(8px);opacity:1}}
+.dawnbg{background:radial-gradient(80% 50% at 50% 0%,rgba(226,164,88,.10),rgba(11,17,20,0) 70%)}
+/* hero video plate */
+.herovid{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+#h-kick,#h-title,#h-sub{text-shadow:0 2px 16px rgba(8,10,12,.72),0 1px 3px rgba(0,0,0,.6)}
+/* комикс speech bubble (приказен графичен роман) */
+.bubble{position:relative;background:var(--parch,#f4ecd8);color:#3A2E22;border:2.5px solid #0c0805;border-radius:14px;padding:12px 16px;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:17px;line-height:1.35;box-shadow:0 6px 16px rgba(0,0,0,.5)}
+.bubble::after{content:"";position:absolute;left:26px;bottom:-13px;border:7px solid transparent;border-top-color:#0c0805;border-bottom:0}
+.bubble::before{content:"";position:absolute;left:28px;bottom:-8px;z-index:1;border:5px solid transparent;border-top-color:#f4ecd8;border-bottom:0}
+/* мисия-свитък · моментът на получаване */
+.mission{position:relative;background:linear-gradient(160deg,#f4ecd8,#eaddc0);color:#3A2E22;border:3px solid #0c0805;border-radius:8px;padding:30px 22px 24px;box-shadow:0 0 0 2px #c9a86a,0 0 0 5px #0c0805,0 18px 44px rgba(0,0,0,.6)}
+.mission .seal{position:absolute;top:-19px;left:50%;transform:translateX(-50%);width:56px;height:56px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#e8c77e,#8a6a1e);border:2px solid #5a4408;display:flex;align-items:center;justify-content:center;font-size:24px;color:#3a2808;box-shadow:0 4px 12px rgba(0,0,0,.5)}
+/* токени (board + нива) */
+.tok{position:relative;border-radius:9px;overflow:hidden;border:2px solid;background:#0d1417}
+.tok img{width:100%;aspect-ratio:1/1;object-fit:cover;display:block}
+.tok .nm{position:absolute;left:0;right:0;bottom:0;text-align:center;font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:600;padding:16px 4px 5px;color:#fff;text-shadow:0 1px 3px #000;background:linear-gradient(180deg,transparent,rgba(0,0,0,.82))}
+.tok.ally{border-color:#4A7FA8;box-shadow:0 0 0 1px rgba(74,127,168,.4),0 6px 16px rgba(0,0,0,.5)}
+.tok.foe{border-color:#d8693a;box-shadow:0 0 0 1px rgba(216,105,58,.4),0 6px 16px rgba(0,0,0,.5)}
+.tok.q{display:flex;align-items:center;justify-content:center;aspect-ratio:1/1;font-family:'Cormorant Garamond',serif;font-size:40px;color:#d8693a;background:repeating-linear-gradient(45deg,#1e0f0c,#1e0f0c 10px,#241210 10px,#241210 20px)}
+.tok.fog img{filter:grayscale(.7) brightness(.42)}
+.tok .lk{position:absolute;top:8px;right:9px;font-size:19px;text-shadow:0 1px 4px #000;z-index:2}
+.tok .lvl{position:absolute;top:7px;left:8px;font-family:'Cormorant Garamond',serif;font-weight:700;font-size:12px;background:rgba(12,8,5,.8);color:#f2c878;border:1px solid #8a6a1e;border-radius:4px;padding:1px 7px;z-index:2}
+.vs{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:16px;color:#f2c878;background:rgba(12,8,5,.7);border:1px solid #8a6a1e;border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center}
+/* video-slot (антагонист · видео скоро) */
+.vslot{position:relative;width:100%;aspect-ratio:16/9;border-radius:8px;overflow:hidden;border:1.5px solid #7a2e2e;background:radial-gradient(120% 120% at 50% 30%,#241a10,#0e0906);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px}
+.vslot .play{width:42px;height:42px;border-radius:50%;border:2px solid #b9846a;color:#e6a878;display:flex;align-items:center;justify-content:center;font-size:16px;background:rgba(12,8,5,.6)}
+.vslot .vlab{font-family:'Cormorant Garamond',serif;font-size:13px;color:#e6a878}
+/* нишка-чипове */
+.thread{display:flex;flex-wrap:wrap;gap:7px;justify-content:center}
+.tchip{display:flex;align-items:center;gap:7px;font-size:13px;color:#e9e1d4}
+.tchip b{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:600;color:#f2c878}
+.tarrow{color:#6fb59a;opacity:.7}
+</style>
+</head>
+<body>
+
+<!-- ════════════ Глава I · ЖЕЛАНИЕТО · hero видео ════════════ -->
+<section class="relative h-screen w-full overflow-hidden flex items-end">
+  <video class="herovid" autoplay loop muted playsinline poster="img/hero-mother.jpg">
+    <source src="video/hero-loop-720p.webm" type="video/webm">
+    <source src="video/hero-loop-720p.mp4" type="video/mp4">
+  </video>
+  <div class="sweep"></div>
+  <div id="particles" class="absolute inset-0"></div>
+  <div class="scrim"></div>
+  <div class="relative z-10 w-full max-w-3xl mx-auto px-6 pb-20 text-center">
+    <p class="kicker mb-5" id="h-kick">Металандия · maitapp · Глава I · Желанието</p>
+    <h1 class="font-serif font-semibold leading-[1.04] text-5xl md:text-7xl mb-6" id="h-title">Искате ли да се<br><span class="gradtext italic">събудите?</span></h1>
+    <p class="text-base md:text-lg text-parch/80 max-w-xl mx-auto mb-7 font-light" id="h-sub">Спокойствие. Радост. Вдъхновение. Една майка, едно дете пред изпита — и тихото желание зад умората.</p>
+    <div id="h-bubble" class="bubble mx-auto mb-9" style="max-width:340px">„Искам да се събудя — спокойна, радостна, вдъхновена. За мен и за детето ми."</div>
+    <a href="#mission" class="cta inline-block rounded-full px-9 py-4 text-[15px]" id="h-cta">Започни приказката</a>
+  </div>
+  <div class="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 text-gold/70 bounce"><span style="font-size:24px">⌄</span></div>
+</section>
+
+<!-- ════════════ Глава II · ЧУДОВИЩЕТО ════════════ -->
+<section class="dawnbg py-24 md:py-32 px-6">
+  <div class="max-w-3xl mx-auto text-center reveal">
+    <p class="kicker mb-5">Глава II · ЧудоВище</p>
+    <h2 class="font-serif text-4xl md:text-5xl mb-6 leading-tight">Осем сенки крадат<br>вниманието ви</h2>
+    <p class="text-lg text-parch/70 font-light leading-relaxed mb-8">Отлагане. Оплакване. Обясняване „нямам време". Технологичната невроза не е лична слабост — тя е чудовище. А чудовищата в Металандия не се побеждават. <span class="text-gold">Преодоляват се.</span></p>
+    <div class="max-w-md mx-auto"><div class="vslot"><span class="play">▶</span><span class="vlab">срещата със сенките · видео скоро</span></div></div>
+  </div>
+</section>
+
+<!-- ════════════ Глава III · МИСИЯТА · моментът на получаване (онбординг-вход) ════════════ -->
+<section id="mission" class="py-24 px-6 border-t border-white/5">
+  <div class="max-w-xl mx-auto reveal">
+    <div class="mission text-center">
+      <div class="seal">✦</div>
+      <p class="font-serif font-semibold tracking-[.18em] uppercase text-sm mt-2" style="color:#8a6a1e">получавате мисия</p>
+      <h2 class="font-serif text-3xl md:text-4xl font-semibold mt-2 mb-3" style="color:#3d2c14">Снимаш. Казваш maitapp.<br>Започва приказка.</h2>
+      <p class="text-[15px] leading-relaxed mx-auto mb-3" style="color:#5a4423;max-width:430px">Една игра. Едно реално действие на ден. <b>maitapp</b> = MyAI Tactics App — играта по картата на собствения Ви живот, през Игри · Изкуство · ИИ.</p>
+      <a href="#enter" class="cta inline-block rounded-full px-9 py-4 text-[15px] mt-2">Приеми мисията · влез в играта</a>
+      <p class="text-xs mt-4 font-light" style="color:#7a5a2c">понеделник вечер, 22 юни <span style="opacity:.7">[⚠️ час чака]</span> · онлайн</p>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════ ОНБОРДИНГ-ВХОД · книга-игра (3 стъпки тийзър) ════════════ -->
+<section id="enter" class="dawnbg py-24 px-6 border-t border-white/5">
+  <div class="max-w-4xl mx-auto">
+    <div class="text-center mb-12 reveal">
+      <p class="kicker mb-5">📖 Книга-игра · Вие сте героят</p>
+      <h2 class="font-serif text-4xl md:text-5xl mb-5">Влизането е три избора</h2>
+      <p class="text-lg text-parch/70 font-light max-w-2xl mx-auto">Профил → чудовища → умения. Доверка Ви посреща и грилва Колелото на живота; Любка ражда първия Ви личен асистент.</p>
+    </div>
+    <div class="grid sm:grid-cols-3 gap-4">
+      <div class="reveal glass rounded-2xl p-6 text-center" style="--c:#d8bd84"><div class="font-serif text-5xl mb-3" style="color:#d8bd84">1</div><h3 class="font-serif text-2xl mb-2">Целта Ви</h3><p class="text-sm text-parch/60 font-light">Избирате накъде — или въвеждате своя цел. <b class="text-parch/80">Доверка</b> грилва Колелото.</p></div>
+      <div class="reveal glass rounded-2xl p-6 text-center" style="--c:#d8693a"><div class="font-serif text-5xl mb-3" style="color:#e08552">2</div><h3 class="font-serif text-2xl mb-2">Сянката Ви</h3><p class="text-sm text-parch/60 font-light">Кое Ви спира? Избирате чудовището — или го назовавате. <b class="text-parch/80">Екопътечко</b> отваря пътеки.</p></div>
+      <div class="reveal glass rounded-2xl p-6 text-center" style="--c:#4A7FA8"><div class="font-serif text-5xl mb-3" style="color:#5ba0e6">3</div><h3 class="font-serif text-2xl mb-2">Водачите</h3><p class="text-sm text-parch/60 font-light">Не сте сам/а. <b class="text-parch/80">Куражку</b> идва като ментор; зад него — останалите водачи.</p></div>
+    </div>
+    <div class="text-center mt-10 reveal"><a href="#cta" class="cta inline-block rounded-full px-9 py-4 text-[15px]">Влез в играта →</a></div>
+  </div>
+</section>
+
+<!-- ════════════ БОЙНА ДЪСКА · водачи срещу сенки (богатият визуал) ════════════ -->
+<section class="py-24 px-6 border-t border-white/5">
+  <div class="max-w-4xl mx-auto">
+    <div class="text-center mb-12 reveal">
+      <p class="kicker mb-5">Водачи · Източници</p>
+      <h2 class="font-serif text-4xl md:text-5xl mb-4">Вашите водачи срещу<br>вашите сенки</h2>
+      <p class="text-lg text-parch/70 font-light max-w-2xl mx-auto">Всеки водач застава срещу една сянка. До последния бос — <span class="text-coral">Времетрон</span>.</p>
+    </div>
+    <div class="grid grid-cols-[1fr_auto_1fr] gap-3 sm:gap-5 items-center max-w-xl mx-auto reveal">
+      <div class="text-center kicker !text-ally">водачи</div><div></div><div class="text-center kicker !text-coral">сенки</div>
+      <div class="tok ally"><img src="img/куражку.jpg" alt="Куражку"><span class="nm">Куражку</span></div>
+      <div class="vs">⚔</div>
+      <div class="tok foe q" title="Обсъждане · Его"><span class="nm">Его</span>?</div>
+      <div class="tok ally"><img src="img/обемко.jpg" alt="Обемко"><span class="nm">Обемко</span></div>
+      <div class="vs">⚔</div>
+      <div class="tok foe"><img src="img/ant-умчо.jpg" alt="Умчо · Осъждане"><span class="nm">Умчо</span></div>
+      <div class="tok ally"><img src="img/творея.jpg" alt="Творея"><span class="nm">Творея</span></div>
+      <div class="vs">⚔</div>
+      <div class="tok foe"><img src="img/ant-страхил.jpg" alt="Барон Страхил · Ора-ум-ора"><span class="nm">Страхил</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════ НИШКАТА · как се играе (core loop · учебник→изпит) ════════════ -->
+<section class="dawnbg py-24 px-6 border-t border-white/5">
+  <div class="max-w-3xl mx-auto text-center">
+    <div class="mb-10 reveal">
+      <p class="kicker mb-5">План + Зов · нишката</p>
+      <h2 class="font-serif text-4xl md:text-5xl mb-5">Всяко ниво е една нишка</h2>
+      <p class="text-lg text-parch/70 font-light max-w-2xl mx-auto">Един и същ ритъм на всяко ниво — учебникът оживява и накрая го владееш с кеф.</p>
+    </div>
+    <div class="glass rounded-2xl p-7 reveal thread">
+      <span class="tchip">📖 <b>Учебник</b></span><span class="tarrow">→</span>
+      <span class="tchip">🤖 <b>Агент</b></span><span class="tarrow">→</span>
+      <span class="tchip">💡 <b>Знание</b></span><span class="tarrow">→</span>
+      <span class="tchip">📜 <b>История</b></span><span class="tarrow">→</span>
+      <span class="tchip">🎲 <b>Игри</b></span><span class="tarrow">→</span>
+      <span class="tchip">🏅 <b>Изпит</b></span>
+    </div>
+    <p class="text-sm text-parch/55 font-light mt-5 reveal">Скучната страница → личен ИИ → приказка по Парето → 8-сценни игри (памет · креативност · text-adventure) → 10 въпроса. По 8 минути на ден.</p>
+  </div>
+</section>
+
+<!-- ════════════ 8-ТЕ НИВА · тийзър (4 ярки + 4 в мъгла) → /map ════════════ -->
+<section class="py-24 px-6 border-t border-white/5">
+  <div class="max-w-5xl mx-auto">
+    <div class="text-center mb-12 reveal">
+      <p class="kicker mb-5">Картата · 8 нива</p>
+      <h2 class="font-serif text-4xl md:text-5xl mb-4">Осем будечители<br>се раждат с действия</h2>
+      <p class="text-lg text-parch/70 font-light max-w-2xl mx-auto">Картата се разбулва, докато играеш. Първите четири водача те чакат — останалите изгряват от мъглата.</p>
+    </div>
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 reveal">
+      <div class="tok ally"><span class="lvl">I</span><img src="img/доверка.jpg" alt="Доверка"><span class="nm">Доверка · присъствие</span></div>
+      <div class="tok ally"><span class="lvl">II</span><img src="img/любка.jpg" alt="Любка"><span class="nm">Любка · любов</span></div>
+      <div class="tok ally"><span class="lvl">III</span><img src="img/екопътечко.jpg" alt="Екопътечко"><span class="nm">Екопътечко · свобода</span></div>
+      <div class="tok ally"><span class="lvl">IV</span><img src="img/куражку.jpg" alt="Куражку"><span class="nm">Куражку · убеденост</span></div>
+      <div class="tok ally fog"><span class="lvl">V</span><span class="lk">🔒</span><img src="img/обемко.jpg" alt="заключено"><span class="nm">Обемко · ?</span></div>
+      <div class="tok ally fog"><span class="lvl">VI</span><span class="lk">🔒</span><img src="img/хола.jpg" alt="заключено"><span class="nm">Хола · ?</span></div>
+      <div class="tok ally fog"><span class="lvl">VII</span><span class="lk">🔒</span><img src="img/фибоначко.jpg" alt="заключено"><span class="nm">Фибоначко · ?</span></div>
+      <div class="tok ally fog"><span class="lvl">VIII</span><span class="lk">🔒</span><img src="img/творея.jpg" alt="заключено"><span class="nm">Творея · ?</span></div>
+    </div>
+    <div class="text-center mt-10 reveal">
+      <a href="map.html" class="inline-block rounded-full px-9 py-4 text-[15px] glass" style="border-color:#f2c878;color:#f2c878">🗺 Виж цялата карта на играта →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════ Еликсир + CTA ════════════ -->
+<section id="cta" class="relative py-32 px-6 border-t border-white/5 overflow-hidden">
+  <div class="sweep" style="opacity:.4"></div>
+  <div class="relative z-10 max-w-2xl mx-auto text-center reveal">
+    <p class="kicker mb-6">Еликсир</p>
+    <h2 class="font-serif text-4xl md:text-6xl mb-6 leading-[1.05]">Първата стъпка е<br><span class="gradtext italic">срамно малка</span></h2>
+    <p class="text-lg text-parch/70 font-light mb-9">Не курс. Не домашни. Осем минути и една игра — и нещо, което днес ви тежи, утре ще ви носи радост.</p>
+    <form class="glass rounded-2xl p-6 max-w-md mx-auto text-left" onsubmit="return false">
+      <label class="block font-serif text-gold text-sm mb-1">Име</label>
+      <input type="text" placeholder="Как да Ви наричаме?" class="w-full mb-4 rounded-lg px-4 py-3 bg-black/30 border border-amber/30 text-parch text-[15px]" autocomplete="name">
+      <label class="block font-serif text-gold text-sm mb-1">Имейл</label>
+      <input type="email" placeholder="вашият@имейл.bg" class="w-full mb-4 rounded-lg px-4 py-3 bg-black/30 border border-amber/30 text-parch text-[15px]" autocomplete="email" required>
+      <label class="flex gap-2 items-start text-xs text-parch/55 mb-5"><input type="checkbox" required class="mt-1">Съгласен/на съм maitapp да съхранява имейла ми, за да получа поканата. <a href="#" class="text-gold">[⚠️ чака политика]</a></label>
+      <button type="submit" class="cta w-full rounded-full px-10 py-4 text-base">Заяви поканата си</button>
+    </form>
+    <p class="text-xs text-parch/40 mt-7 font-light">Каквото споделиш с maitapp, остава вътре. · Металандия · спокойствие · радост · вдъхновение</p>
+  </div>
+</section>
+
+<footer class="text-center text-parch/40 text-xs py-10 px-6 font-light border-t border-white/5">
+  maitapp · MyAI Tactics App · построено в <a href="https://metalandia.com" class="text-gold">Металандия</a> · от MetaReading
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+(function(){
+  var pc=document.getElementById('particles');
+  for(var i=0;i<16;i++){var p=document.createElement('div');p.className='particle';var s=(Math.random()*2+1).toFixed(1);p.style.width=p.style.height=s+'px';p.style.left=(Math.random()*100)+'%';p.style.bottom=(Math.random()*30)+'%';p.style.animationDuration=(Math.random()*7+7)+'s';p.style.animationDelay=(Math.random()*8)+'s';pc.appendChild(p);}
+  if(window.gsap){
+    gsap.registerPlugin(ScrollTrigger);
+    gsap.set(['#h-kick','#h-title','#h-sub','#h-bubble','#h-cta'],{opacity:0,y:30});
+    gsap.timeline({delay:.25}).to('#h-kick',{opacity:1,y:0,duration:.9,ease:'power3.out'}).to('#h-title',{opacity:1,y:0,duration:1.1,ease:'power3.out'},'-=.6').to('#h-sub',{opacity:1,y:0,duration:1,ease:'power3.out'},'-=.7').to('#h-bubble',{opacity:1,y:0,duration:.9,ease:'power3.out'},'-=.7').to('#h-cta',{opacity:1,y:0,duration:.9,ease:'power3.out'},'-=.6');
+    gsap.utils.toArray('.reveal').forEach(function(el){gsap.to(el,{opacity:1,y:0,filter:'blur(0px)',duration:1.1,ease:'power3.out',scrollTrigger:{trigger:el,start:'top 86%'}});});
+  } else {
+    document.querySelectorAll('.reveal').forEach(function(e){e.style.opacity=1;e.style.transform='none';e.style.filter='none';});
+    ['#h-kick','#h-title','#h-sub','#h-bubble','#h-cta'].forEach(function(s){var e=document.querySelector(s);if(e){e.style.opacity=1;e.style.transform='none';}});
+  }
+})();
+</script>
+</body>
+</html>

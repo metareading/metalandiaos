@@ -34,6 +34,7 @@ body{background:#0b1114;color:#e9e1d4;font-family:Inter,sans-serif;-webkit-font-
 /* mobile sticky CTA (#24 · къс път до формата) */
 .sticky-cta{position:fixed;left:50%;bottom:14px;transform:translateX(-50%) translateY(140%);z-index:60;background:linear-gradient(120deg,#ffe1a0,#e2a458);color:#2a1908;font-weight:500;padding:13px 30px;border-radius:30px;box-shadow:0 12px 32px -8px rgba(226,164,88,.75);transition:transform .45s cubic-bezier(.2,.7,.2,1),opacity .45s;opacity:0;white-space:nowrap;text-decoration:none;font-size:15px;border:1px solid rgba(90,68,8,.5)}
 .sticky-cta.show{transform:translateX(-50%) translateY(0);opacity:1}
+@media(min-width:760px){.sticky-cta{display:none}}
 .bounce{animation:bounce 2.4s ease-in-out infinite}
 @keyframes bounce{0%,100%{transform:translateY(0);opacity:.5}50%{transform:translateY(8px);opacity:1}}
 .dawnbg{background:radial-gradient(80% 50% at 50% 0%,rgba(226,164,88,.10),rgba(11,17,20,0) 70%)}
@@ -256,7 +257,8 @@ body{background:#0b1114;color:#e9e1d4;font-family:Inter,sans-serif;-webkit-font-
     <p class="kicker mb-6" style="color:#9c7fc8">Еликсир · поканата</p>
     <h2 class="font-serif text-4xl md:text-5xl mb-5 leading-tight">Будечителите чакат.<br>Как да ви наричаме?</h2>
     <p class="text-lg text-parch/70 font-light mb-9">Не курс. Не домашни. Осем минути и една игра — и нещо, което днес ви тежи, утре ще правите с кеф.</p>
-    <form class="rounded-2xl p-6 max-w-md mx-auto text-left" style="background:rgba(255,255,255,.04);border:1px solid rgba(242,200,120,.2)" onsubmit="return false">
+    <p id="wlOk" style="display:none" class="rounded-2xl p-6 max-w-md mx-auto text-parch font-serif text-xl">✦ Благодарим! Поканите тръгват скоро — пазим мястото ти.</p>
+    <form class="rounded-2xl p-6 max-w-md mx-auto text-left" style="background:rgba(255,255,255,.04);border:1px solid rgba(242,200,120,.2)" onsubmit="this.style.display='none';document.getElementById('wlOk').style.display='block';return false">
       <label class="block font-serif text-gold text-sm mb-1">Име</label>
       <input type="text" placeholder="Как да Ви наричаме?" class="w-full mb-4 rounded-lg px-4 py-3 bg-black/30 border border-amber/30 text-parch text-[15px]" autocomplete="name">
       <label class="block font-serif text-gold text-sm mb-1">Имейл</label>
@@ -288,7 +290,7 @@ const HEROES=[
  {id:"фибоначко",lvl:"VII",law:"Златна пропорция",hc:"#33b88c",role:"Ревизор · часовникар на ритъма",bio:"Казва честно какво не е наред — с мярка.",skills:["Ритъм","30-сек ревю","Баланс"],quest:["Кажи ми честно","План → 3 забележки + 1 подобрение."],un:false},
  {id:"творея",lvl:"VIII",law:"Класическо изкуство",hc:"#9c7fc8",role:"Разрешител · естет",bio:"Дава финала. Пречиства през изкуство и ясно решение.",skills:["2 въпроса","1 ход","Естетика"],quest:["Реши за мен","Задънена улица → 1 конкретен ход."],un:false}
 ];
-const ANTI={доверка:"Разсейко",любка:"Емо",екопътечко:"Станка",куражку:"Его",обемко:"Умчо",хола:"Нема",фибоначко:"Ума",творея:"Бега"};
+const ANTI={доверка:"Бега",любка:"Емо",екопътечко:"Станка",куражку:"Его",обемко:"Умчо",хола:"Нема",фибоначко:"Ума",творея:"Страхил"};
 const g=document.getElementById('heroGrid');
 HEROES.forEach((h,i)=>{
   const c=document.createElement('div');

@@ -31,6 +31,8 @@ body{background:#0b1114;color:#e9e1d4;font-family:Inter,sans-serif;-webkit-font-
 @keyframes rise{0%{transform:translateY(0);opacity:0}16%{opacity:.7}100%{transform:translateY(-200px);opacity:0}}
 .gradtext{background:linear-gradient(118deg,#ffe9c2,#e2a458 55%,#d8693a);-webkit-background-clip:text;background-clip:text;color:transparent}
 .kicker{letter-spacing:.3em;font-size:12px;text-transform:uppercase;font-weight:500;color:#e2a458}
+.t-word{display:inline-block;transition:transform .42s cubic-bezier(.5,0,.3,1),opacity .42s;transform-origin:center;backface-visibility:hidden;color:#ffe7bd;font-weight:700}
+.t-word.out{transform:rotateX(-92deg);opacity:0}
 .cta{background:linear-gradient(120deg,#ffe1a0,#e2a458);color:#2a1908;font-weight:500;transition:.35s;box-shadow:0 10px 40px -12px rgba(226,164,88,.7)}
 .cta:hover{transform:translateY(-2px)}
 /* mobile sticky CTA (#24 · къс път до формата) */
@@ -123,7 +125,7 @@ body{background:#0b1114;color:#e9e1d4;font-family:Inter,sans-serif;-webkit-font-
   <img class="herovid-d" src="img/hero-mother-wide.jpg" alt="майка и дете пред картата на пътя">
   <div class="sweep"></div><div id="particles" class="absolute inset-0"></div><div class="scrim"></div>
   <div class="relative z-10 w-full max-w-2xl mx-auto px-6 text-center pt-[9vh]">
-    <p class="kicker mb-4" id="h-kick" style="color:#E8C77E">My AI Tactic App</p>
+    <p class="kicker mb-4" id="h-kick" style="color:#E8C77E;perspective:500px">My AI <span id="t-word" class="t-word">Tactic</span> App</p>
     <h1 class="font-serif font-semibold leading-[1.1] text-3xl sm:text-4xl md:text-5xl mb-4" id="h-title">Искате ли да се събудите и да си припомните <span class="italic" style="color:#ffe7bd">как се учи</span> на maitapp?</h1>
     <p class="text-lg md:text-2xl text-parch font-light mb-1" id="h-sub">Не е нужно време, а внимание.</p>
     <p class="text-base text-gold font-light mb-7" id="h-min">8 минути на ден.</p>
@@ -342,6 +344,10 @@ if(fg)ANTAGS.forEach(function(a){
   var sc=document.getElementById('stickyCta'),ctaSec=document.getElementById('cta');
   function updSticky(){if(!sc||!ctaSec)return;var past=window.scrollY>window.innerHeight*0.85;var nearForm=ctaSec.getBoundingClientRect().top<window.innerHeight*1.05;sc.classList.toggle('show',past&&!nearForm);}
   window.addEventListener('scroll',updSticky,{passive:true});updSticky();
+  // въртяща дума · Tactic→Trust→Tech→True→Transformation (калибър flip · 3s)
+  var tw=document.getElementById('t-word');
+  if(tw){var twords=['Tactic','Trust','Tech','True','Transformation'],twi=0;
+    setInterval(function(){tw.classList.add('out');setTimeout(function(){twi=(twi+1)%twords.length;tw.textContent=twords[twi];tw.classList.remove('out');},420);},3000);}
   if(window.gsap){
     gsap.registerPlugin(ScrollTrigger);
     gsap.set(['#h-kick','#h-title','#h-sub','#h-min','#h-cta'],{opacity:0,y:30});

@@ -103,6 +103,41 @@ pre{background:#06090b;border:1px solid rgba(242,200,120,.18);border-radius:8px;
 </div>
 
 <div class="wrap">
+  <!-- ПРЕЗЕНТАЦИЯ · 20-слайдов плеър -->
+  <div class="scene"><div class="sc" style="color:#b89ad8">Презентацията</div><h2>20 кадъра · историята на деня</h2></div>
+  <div id="deck" style="border:1px solid rgba(242,200,120,.24);border-radius:18px;overflow:hidden;background:#0d1417">
+    <div style="position:relative;aspect-ratio:16/10;background:#06090b">
+      <img id="dimg" src="" alt="" style="width:100%;height:100%;object-fit:cover;display:block">
+      <div style="position:absolute;left:0;right:0;bottom:0;padding:34px 18px 14px;background:linear-gradient(180deg,transparent,rgba(6,9,11,.92))">
+        <div id="dword" style="font-family:'Cormorant Garamond',serif;font-size:1.9rem;color:#f2c878;line-height:1.05"></div>
+        <div id="dsent" style="font-size:1rem;color:#e9e1d4;margin-top:5px"></div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;padding:12px 16px">
+      <button id="dprev" style="background:rgba(242,200,120,.14);border:1px solid #8a6a1e;color:#f2c878;border-radius:8px;padding:9px 16px;font-size:18px;cursor:pointer">‹</button>
+      <div style="flex:1;height:6px;background:rgba(255,255,255,.08);border-radius:6px;overflow:hidden"><div id="dfill" style="height:100%;width:5%;background:linear-gradient(90deg,#6FB59A,#E8C77E)"></div></div>
+      <span id="dnum" style="font-size:.85rem;color:#9fb0a0;white-space:nowrap">1 / 20</span>
+      <button id="dnext" style="background:rgba(242,200,120,.14);border:1px solid #8a6a1e;color:#f2c878;border-radius:8px;padding:9px 16px;font-size:18px;cursor:pointer">›</button>
+    </div>
+  </div>
+  <script>
+  (function(){
+    var S=[{"w": "Сцена", "s": "Светът на Металандия отваря сцена — местата по нея чакат.", "img": "https://maitapp.com/img/scene-premiere.jpg"}, {"w": "Покана", "s": "Ти не си зрител на тази история — ти си поканен в нея.", "img": "https://maitapp.com/img/scene-letter.jpg"}, {"w": "Радост", "s": "Тук учим различно: с радост и спокойствие, не с натиск.", "img": "https://maitapp.com/img/hero-mother-wide.jpg"}, {"w": "Чудовище", "s": "Учебната невроза е чудовище, не слабост на детето.", "img": "https://maitapp.com/img/art-%D1%81%D0%BF%D0%B8%D1%80%D0%B0%D1%87%D0%BA%D0%B0.jpg"}, {"w": "Времетрон", "s": "Времетрон бърза детето — часовник вместо сърце.", "img": "https://maitapp.com/img/ant-%D0%B2%D1%80%D0%B5%D0%BC%D0%B5%D1%82%D1%80%D0%BE%D0%BD.jpg"}, {"w": "Страх", "s": "Страхът на изпита заключва наученото отвътре.", "img": "https://maitapp.com/img/ant-%D1%81%D1%82%D1%80%D0%B0%D1%85%D0%B8%D0%BB.jpg"}, {"w": "Водачи", "s": "Осем будечители застават до всеки герой.", "img": "https://maitapp.com/img/scene-agent-cards.jpg"}, {"w": "Метод", "s": "Сугестопедията на проф. Лозанов е наследство на ЮНЕСКО.", "img": "https://maitapp.com/img/art-%D0%BC%D0%B5%D1%82%D0%B0%D0%BC%D0%BE%D0%B7%D1%8A%D0%BA.jpg"}, {"w": "Шампиони", "s": "Учим с подходи на световни шампиони по памет.", "img": "https://maitapp.com/img/ep3-champions.png"}, {"w": "Скрининг", "s": "Днешната среща е скрининг — първата крачка по пътя.", "img": "https://maitapp.com/img/scene-map-fog.jpg"}, {"w": "Кастинг", "s": "След скрининга идва кастингът за продукциите.", "img": "https://maitapp.com/img/ep3-casting.png"}, {"w": "Актьори", "s": "Участниците са актьори и помощник-сценаристи, не публика.", "img": "https://maitapp.com/img/ep3-actors.png"}, {"w": "Продукция", "s": "Пет дни продукция в Металандия — на живо и заедно.", "img": "https://maitapp.com/img/scene-os-realm.jpg"}, {"w": "Концентрация", "s": "Спокойна концентрация — по осем минути на ден.", "img": "https://maitapp.com/img/loop-%D0%B8%D0%B3%D1%80%D0%B8.jpg"}, {"w": "Четене", "s": "Скоростно четене: повече за същото време, без умора.", "img": "https://maitapp.com/img/loop-%D1%83%D1%87%D0%B5%D0%B1%D0%BD%D0%B8%D0%BA.jpg"}, {"w": "Памет", "s": "Памет, която помни — защото знанието става разказ.", "img": "https://maitapp.com/img/loop-%D0%B8%D1%81%D1%82%D0%BE%D1%80%D0%B8%D1%8F.jpg"}, {"w": "Приложение", "s": "Ражда се maitapp — играта, която се играе в живота.", "img": "https://maitapp.com/img/map.jpg"}, {"w": "Епизоди", "s": "Два сериала, два епизода — за децата и за възрастните.", "img": "https://maitapp.com/img/%D1%81%D0%B5%D1%80%D0%B8%D1%8F.jpg"}, {"w": "Спокойствие", "s": "Изпитът вече се посреща спокойно.", "img": "https://maitapp.com/img/art-%D1%80%D0%B5%D0%B7%D1%83%D0%BB%D1%82%D0%B0%D1%82.jpg"}, {"w": "Еликсир", "s": "Ученето става игра — а знанието остава за цял живот.", "img": "https://maitapp.com/img/art-%D0%B5%D0%BB%D0%B8%D0%BA%D1%81%D0%B8%D1%80.jpg"}],i=0;
+    var img=document.getElementById('dimg'),w=document.getElementById('dword'),s=document.getElementById('dsent'),
+        f=document.getElementById('dfill'),n=document.getElementById('dnum');
+    function show(){var d=S[i];img.src=d.img;img.alt=d.w;w.textContent=d.w;s.textContent=d.s;
+      f.style.width=((i+1)/S.length*100)+'%';n.textContent=(i+1)+' / '+S.length;}
+    document.getElementById('dprev').onclick=function(){i=(i-1+S.length)%S.length;show();};
+    document.getElementById('dnext').onclick=function(){i=(i+1)%S.length;show();};
+    var dk=document.getElementById('deck'),x0=null;
+    dk.addEventListener('touchstart',function(e){x0=e.touches[0].clientX;},{passive:true});
+    dk.addEventListener('touchend',function(e){if(x0===null)return;var dx=e.changedTouches[0].clientX-x0;
+      if(dx<-40){i=(i+1)%S.length;show();}else if(dx>40){i=(i-1+S.length)%S.length;show();}x0=null;},{passive:true});
+    document.addEventListener('keydown',function(e){if(e.key==='ArrowRight'){i=(i+1)%S.length;show();}if(e.key==='ArrowLeft'){i=(i-1+S.length)%S.length;show();}});
+    show();
+  })();
+  </script>
+
 
   <!-- ПЛАН ЗА ДЕЙСТВИЕ (горе · първи екран) -->
   <div class="scene" id="plan"><div class="sc" style="color:#6FB59A">Планът за действие</div><h2>Първата стъпка — сега</h2><p>Отмятайте — лентата горе расте, точките се трупат.</p></div>

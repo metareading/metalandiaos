@@ -77,7 +77,7 @@ body{background:#0b1114;color:#e9e1d4;font-family:Inter,sans-serif;-webkit-font-
 .hcard.lock .hi img{filter:grayscale(.7) brightness(.45)}
 .hcard .lvl{position:absolute;top:6px;left:7px;font-family:'Cormorant Garamond',serif;font-weight:700;font-size:11px;background:rgba(12,8,5,.82);color:#f2c878;border:1px solid #8a6a1e;border-radius:4px;padding:0 6px;z-index:2}
 .hcard .lk{position:absolute;top:6px;right:7px;font-size:15px;z-index:2}
-.hcard .hn{position:absolute;left:0;right:0;bottom:0;padding:16px 6px 6px;text-align:center;font-family:'Cormorant Garamond',serif;font-size:1.22rem;font-weight:600;color:#fff;text-shadow:0 1px 4px #000;background:linear-gradient(180deg,transparent,rgba(0,0,0,.9))}
+.hcard .hn{position:absolute;left:0;right:0;bottom:0;padding:20px 6px 8px;text-align:center;font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:700;line-height:1.05;color:#fff;text-shadow:0 1px 5px #000;background:linear-gradient(180deg,transparent,rgba(0,0,0,.92))}
 .hcard .hr{font-size:12px;color:#e2c89a;display:block;font-family:Inter;margin-top:2px}
 .hdetail{display:none;grid-column:1/3;border:1px solid rgba(242,200,120,.3);border-radius:12px;background:linear-gradient(155deg,#15202a,#0b1114);padding:16px;animation:fade .25s}
 .hdetail.on{display:block}
@@ -328,7 +328,7 @@ const ANTAGS=[
 const fg=document.getElementById('foeGrid');
 if(fg)ANTAGS.forEach(function(a){
   var c=document.createElement('div');c.className='hcard'+(a.un?'':' lock');c.style.setProperty('--hc','#d8693a');
-  c.innerHTML='<div class="hi">'+(a.un?'':'<span class="lk">🔒</span>')+'<img src="img/'+a.img+'.jpg" alt="'+a.name+'" loading="lazy"><span class="hn">'+a.name+'<span class="hr">за: '+a.fn+'</span></span></div>';
+  c.innerHTML='<div class="hi">'+(a.un?'':'<span class="lk">🔒</span>')+'<img src="img/'+a.img+'.jpg" alt="'+a.name+'" loading="lazy"><span class="hn">'+a.name+'<span class="hr">'+a.fn+'</span></span></div>';
   var d=document.createElement('div');d.className='hdetail';d.style.setProperty('--hc','#d8693a');
   d.innerHTML='<h4>'+a.name+'</h4><div class="cls" style="color:#e6a878">саботира · '+a.fn+' · '+a.g+'</div><div class="bio">'+a.sab+'</div><div class="quest">🛡️ Назовете я — губи силата си.</div>';
   c.addEventListener('click',function(){var was=d.classList.contains('on');document.querySelectorAll('.hdetail').forEach(function(x){x.classList.remove('on');});if(!was)d.classList.add('on');});

@@ -21,6 +21,8 @@ html{scroll-behavior:smooth}
 html,body{overflow-x:hidden;max-width:100%}
 body{background:#0b1114;color:#e9e1d4;font-family:Inter,sans-serif;-webkit-font-smoothing:antialiased}
 .herovid{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.herovid-d{display:none}
+@media(min-width:760px){.herovid{display:none}.herovid-d{display:block;position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 30%}}
 #h-kick,#h-title,#h-sub{text-shadow:0 2px 16px rgba(8,10,12,.72),0 1px 3px rgba(0,0,0,.6)}
 .sweep{position:absolute;inset:0;background:radial-gradient(120% 70% at 50% 80%,rgba(255,221,138,.5),rgba(255,221,138,0) 60%);mix-blend-mode:screen;animation:sweep 7s ease-in-out infinite;pointer-events:none}
 @keyframes sweep{0%,100%{opacity:.22}50%{opacity:.75}}
@@ -76,7 +78,7 @@ body{background:#0b1114;color:#e9e1d4;font-family:Inter,sans-serif;-webkit-font-
 .hcard .lvl{position:absolute;top:6px;left:7px;font-family:'Cormorant Garamond',serif;font-weight:700;font-size:11px;background:rgba(12,8,5,.82);color:#f2c878;border:1px solid #8a6a1e;border-radius:4px;padding:0 6px;z-index:2}
 .hcard .lk{position:absolute;top:6px;right:7px;font-size:15px;z-index:2}
 .hcard .hn{position:absolute;left:0;right:0;bottom:0;padding:16px 6px 6px;text-align:center;font-family:'Cormorant Garamond',serif;font-size:1.22rem;font-weight:600;color:#fff;text-shadow:0 1px 4px #000;background:linear-gradient(180deg,transparent,rgba(0,0,0,.9))}
-.hcard .hr{font-size:9.5px;color:#cdbf9c;display:block;font-family:Inter}
+.hcard .hr{font-size:12px;color:#e2c89a;display:block;font-family:Inter;margin-top:2px}
 .hdetail{display:none;grid-column:1/3;border:1px solid rgba(242,200,120,.3);border-radius:12px;background:linear-gradient(155deg,#15202a,#0b1114);padding:16px;animation:fade .25s}
 .hdetail.on{display:block}
 @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1}}
@@ -118,6 +120,7 @@ body{background:#0b1114;color:#e9e1d4;font-family:Inter,sans-serif;-webkit-font-
   <video class="herovid" autoplay loop muted playsinline poster="img/hero-mother.jpg">
     <source src="video/hero-loop-720p.webm" type="video/webm"><source src="video/hero-loop-720p.mp4" type="video/mp4">
   </video>
+  <img class="herovid-d" src="img/hero-mother-wide.jpg" alt="майка и дете пред картата на пътя">
   <div class="sweep"></div><div id="particles" class="absolute inset-0"></div><div class="scrim"></div>
   <div class="relative z-10 w-full max-w-2xl mx-auto px-6 text-center pt-[9vh]">
     <p class="kicker mb-4" id="h-kick" style="color:#E8C77E">Металандия · maitapp</p>
@@ -139,7 +142,7 @@ body{background:#0b1114;color:#e9e1d4;font-family:Inter,sans-serif;-webkit-font-
   </div>
   <div class="max-w-4xl mx-auto mt-8"><div class="hero-grid reveal" id="foeGrid"></div></div>
   <p class="text-center text-sm font-light mt-5 reveal" style="color:#b89a86">Разцъкайте всяка сянка — вижте за какво отговаря. <span style="color:#e6a878">Времетрон</span> командва (вместо сърце — часовник).</p>
-  <p class="text-center text-base font-light mt-5 reveal" style="color:#d8c9a0">🕯️ Пещерата с най-голямото чудовище крие <span style="color:#E8C77E">най-голямото съкровище</span>.</p>
+  <p class="text-center font-serif text-2xl md:text-3xl font-medium mt-8 reveal max-w-2xl mx-auto" style="color:#e8d9b0">🕯️ Пещерата с най-голямото чудовище крие <span style="color:#E8C77E">най-голямото съкровище</span>.</p>
 </section>
 
 <!-- ════ 3 · ВОДАЧИТЕ = екипът ви ИИ-герои (синьо · ВЕДНАГА след чудовището · Фибоначко ритъм) ════ -->
@@ -148,12 +151,12 @@ body{background:#0b1114;color:#e9e1d4;font-family:Inter,sans-serif;-webkit-font-
     <div class="text-center mb-12 reveal">
       <p class="kicker mb-5" style="color:#4A7FA8">🧭 Вашите водачи · екипът ви</p>
       <h2 class="font-serif text-4xl md:text-5xl mb-4">Не сте сам/а.<br>Екип от ИИ-герои ви води.</h2>
-      <p class="text-lg text-parch/70 font-light max-w-2xl mx-auto">Осем будечители — свита интелигентни агенти на човешки език. За родители и деца, които искат ИИ да е разширение на ума: въображение и радост от творчеството, вместо евтин допамин. <span class="text-parch/50">(Разцъкайте всеки в Плана по-долу.)</span></p>
+      <p class="text-lg text-parch/70 font-light max-w-2xl mx-auto">Осем будечители — будни деца-учители, които общуват на човешки език. За родители и деца, които искат ИИ да е разширение на ума: въображение и радост от творчеството, вместо евтин допамин. <span class="text-parch/50">(Разцъкайте всеки в Плана по-долу.)</span></p>
     </div>
     <div class="grid sm:grid-cols-3 gap-5">
       <div class="vcard reveal" style="--cc:#E8C77E"><div class="vimg"><img src="img/art-въпрос.jpg" alt="Снимате"></div><div class="vbody"><h3>Снимате</h3><small>каквото ви дразни, отлагате или ви побърква</small></div><div class="bslots"><span class="bslot on"></span><span class="bslot"></span><span class="bslot"></span></div></div>
       <div class="vcard reveal" style="--cc:#6FB59A"><div class="vimg"><img src="img/scene-agent-cards.jpg" alt="Избирате герой"></div><div class="vbody"><h3>Избирате герой</h3><small>асистент, който да Ви води — на български</small></div><div class="bslots"><span class="bslot on"></span><span class="bslot on"></span><span class="bslot"></span></div></div>
-      <div class="vcard reveal" style="--cc:#9c7fc8"><div class="vimg"><img src="img/art-резултат.jpg" alt="Асистент → агент"></div><div class="vbody"><h3>Асистент → агент</h3><small>асистентът се развива до агент, който действа</small></div><div class="bslots"><span class="bslot on"></span><span class="bslot on"></span><span class="bslot on"></span></div></div>
+      <div class="vcard reveal" style="--cc:#9c7fc8"><div class="vimg"><img src="img/art-резултат.jpg" alt="Асистент → агент"></div><div class="vbody"><h3>Асистент → агент</h3><small>асистентът се развива до агент, който действа и върши реални задачи</small></div><div class="bslots"><span class="bslot on"></span><span class="bslot on"></span><span class="bslot on"></span></div></div>
     </div>
   </div>
 </section>
@@ -164,8 +167,15 @@ body{background:#0b1114;color:#e9e1d4;font-family:Inter,sans-serif;-webkit-font-
     <p class="kicker mb-5" style="color:#E8C77E">❓ Защо</p>
     <div class="vcard mx-auto mb-8" style="--cc:#E8C77E;max-width:340px"><div class="vimg"><img src="img/art-отговор.jpg" alt="Защо"></div></div>
     <p class="font-serif text-3xl md:text-4xl mb-4 leading-tight">Над <span class="gradtext">95%</span> от децата в 4. клас<br>имат симптоми на учебна невроза.</p>
-    <p class="text-base text-parch/60 font-light">Светът се мени по-бързо, отколкото усещаме. Старите начини изморяват, а времето не стига.</p>
-    <p class="text-xs text-parch/40 font-light mt-5">източник: конференция „Бъдеще за образованието", 2011</p>
+    <p class="text-base text-parch/60 font-light mb-8">Светът се мени по-бързо, отколкото усещаме. Старите начини изморяват, а времето не стига.</p>
+    <div class="grid grid-cols-3 gap-3 max-w-xl mx-auto mb-8">
+      <div><div class="font-serif text-4xl md:text-5xl" style="color:#D4895E">62%</div><div class="text-xs text-parch/55 mt-1">хронично тъжни</div></div>
+      <div><div class="font-serif text-4xl md:text-5xl" style="color:#D4895E">32%</div><div class="text-xs text-parch/55 mt-1">с мисли да посегнат на живота си</div></div>
+      <div><div class="font-serif text-4xl md:text-5xl" style="color:#D4895E">23%</div><div class="text-xs text-parch/55 mt-1">правили опит</div></div>
+    </div>
+    <p class="font-serif text-2xl md:text-4xl leading-tight mb-4" style="color:#e8d9b0">Днешното поколение е <span style="color:#D4895E">най-големият ни провал</span> като човечество.</p>
+    <p class="text-xl md:text-2xl text-gold font-serif mb-3">Как да преодолеем това?</p>
+    <p class="text-xs text-parch/40 font-light">тийнейджърки · САЩ · CDC (Youth Risk Behavior Survey) · учебна невроза: конференция „Бъдеще за образованието", 2011</p>
   </div>
 </section>
 
@@ -178,9 +188,9 @@ body{background:#0b1114;color:#e9e1d4;font-family:Inter,sans-serif;-webkit-font-
       <p class="text-lg text-parch/70 font-light max-w-2xl mx-auto">Реалните задачи, които ви тежат, чрез игри и изкуство за <b class="text-parch/90">8 минути на ден</b> ги превръщаме в игри — и после ги правите с лекота.</p>
     </div>
     <div class="grid sm:grid-cols-3 gap-5">
-      <div class="vcard reveal" style="--cc:#E8C77E"><div class="vimg"><img src="img/art-резултат.jpg" alt="Учене"></div><div class="vbody"><h3>Учене</h3><small>разбирам по-дълбоко</small></div></div>
-      <div class="vcard reveal" style="--cc:#e2a458"><div class="vimg"><img src="img/art-задача.jpg" alt="Работа"></div><div class="vbody"><h3>Работа</h3><small>свършвам по-леко</small></div></div>
-      <div class="vcard reveal" style="--cc:#9c7fc8"><div class="vimg"><img src="img/art-еликсир.jpg" alt="Забавление"></div><div class="vbody"><h3>Забавление</h3><small>играя и творя</small></div></div>
+      <div class="vcard reveal" style="--cc:#E8C77E"><div class="vimg"><img src="img/art-резултат.jpg" alt="Учене"></div><div class="vbody"><h3>Учене без учене</h3><small>разбирам по-дълбоко</small></div></div>
+      <div class="vcard reveal" style="--cc:#e2a458"><div class="vimg"><img src="img/art-задача.jpg" alt="Работа"></div><div class="vbody"><h3>Работа без работа</h3><small>свършвам по-леко и приятно</small></div></div>
+      <div class="vcard reveal" style="--cc:#9c7fc8"><div class="vimg"><img src="img/art-еликсир.jpg" alt="Творчество"></div><div class="vbody"><h3>Творчество</h3><small>забавлявам се, играя и създавам</small></div></div>
     </div>
   </div>
 </section>
@@ -196,7 +206,7 @@ body{background:#0b1114;color:#e9e1d4;font-family:Inter,sans-serif;-webkit-font-
     <div class="grid sm:grid-cols-3 gap-5">
       <div class="vcard reveal" style="--cc:#E89556"><div class="vimg"><img src="img/доверка.jpg" alt="Доверка"></div><div class="vbody"><h3>1 · Преминете Доверка</h3><small>Кратка проверка за ИИ-готовност — спокойно, без оценки.</small></div></div>
       <div class="vcard reveal" style="--cc:#E89556"><div class="vimg"><img src="img/scene-wheel.jpg" alt="Колелото"></div><div class="vbody"><h3>2 · Направете Колелото</h3><small>12-те сфери — „залата на Метатрон". Виждате накъде.</small></div></div>
-      <div class="vcard reveal" style="--cc:#E89556"><div class="vimg"><img src="img/art-метамозък.jpg" alt="Учебникът"></div><div class="vbody"><h3>3 · Подгответе учебника</h3><small>Браузър-приставка внася материала Ви в играта.</small></div></div>
+      <div class="vcard reveal" style="--cc:#E89556"><div class="vimg"><img src="img/art-метамозък.jpg" alt="Учебникът"></div><div class="vbody"><h3>3 · Подгответе учебника</h3><small>Сваляте PDF; браузър-приставка внася материала Ви в „метамозък".</small></div></div>
     </div>
   </div>
 </section>
@@ -235,13 +245,13 @@ body{background:#0b1114;color:#e9e1d4;font-family:Inter,sans-serif;-webkit-font-
       <p class="text-lg text-parch/70 font-light max-w-2xl mx-auto">За пет минути. Без код. На български.</p>
     </div>
     <div class="grid sm:grid-cols-[1fr_auto_1fr] gap-5 items-center mb-20">
-      <div class="vcard reveal" style="--cc:#d8693a"><div class="vimg"><img src="img/art-задача.jpg" alt="Задачата"></div><div class="vbody"><h3>Задачата</h3><p>Питате Метатрон: „Имам досаден повтарящ се процес или задача. Кой агент и кое умение да развия?"</p></div></div>
+      <div class="vcard reveal" style="--cc:#d8693a"><div class="vimg"><img src="img/art-задача.jpg" alt="Задачата"></div><div class="vbody"><h3>Задачата</h3><p>Питате maitapp: „Имам досаден повтарящ се процес или задача. Кой агент и кое умение да развия?"</p></div></div>
       <div class="missarrow reveal">➜</div>
       <div class="vcard reveal" style="--cc:#6fb59a"><div class="vimg"><img src="img/art-резултат.jpg" alt="Резултатът"></div><div class="vbody"><h3>Резултатът</h3><p>Жива карта с роли, Куражку пише чернова, Фибоначко намира три пропуска. Без код, на български.</p></div></div>
     </div>
     <div class="text-center reveal">
       <p class="kicker mb-5" style="color:#E8C77E">💎 Съкровището</p>
-      <h2 class="font-serif text-4xl md:text-5xl mb-4">Учене без учене.<br>Работа без работа.<br><span class="gradtext italic">От забавление до вдъхновение.</span></h2>
+      <h2 class="font-serif text-3xl md:text-4xl leading-snug mb-4">Пеем, докато говорим.<br>Танцуваме, докато се движим.<br>Рисуваме, докато пишем.<br>Играем, докато учим и работим.<br><span class="gradtext italic">От забавление до вдъхновение.</span></h2>
     </div>
   </div>
 </section>
@@ -251,26 +261,17 @@ body{background:#0b1114;color:#e9e1d4;font-family:Inter,sans-serif;-webkit-font-
   <div class="sweep" style="opacity:.4"></div>
   <div class="relative z-10 max-w-2xl mx-auto text-center reveal">
     <p class="kicker mb-6" style="color:#9c7fc8">Еликсир · поканата</p>
-    <h2 class="font-serif text-4xl md:text-5xl mb-5 leading-tight">Будечителите чакат.<br>Как да ви наричаме?</h2>
+    <h2 class="font-serif text-4xl md:text-5xl mb-5 leading-tight">Будечителите Ви чакат.<br>Как да Ви наричаме?</h2>
     <p class="text-lg text-parch/70 font-light mb-9">Не курс. Не домашни. Осем минути и една игра — и нещо, което днес ви тежи, утре ще правите с кеф.</p>
     <p id="wlOk" style="display:none" class="rounded-2xl p-6 max-w-md mx-auto text-parch font-serif text-xl">✦ Благодарим! Поканите тръгват скоро — пазим мястото ти.</p>
-    <form id="wlForm" class="rounded-2xl p-6 max-w-md mx-auto text-left" style="background:rgba(255,255,255,.04);border:1px solid rgba(242,200,120,.2)" onsubmit="return maitappWaitlist(event)">
+    <form class="rounded-2xl p-6 max-w-md mx-auto text-left" style="background:rgba(255,255,255,.04);border:1px solid rgba(242,200,120,.2)" onsubmit="this.style.display='none';document.getElementById('wlOk').style.display='block';return false">
       <label class="block font-serif text-gold text-sm mb-1">Име</label>
-      <input id="wlName" type="text" placeholder="Как да Ви наричаме?" class="w-full mb-4 rounded-lg px-4 py-3 bg-black/30 border border-amber/30 text-parch text-[15px]" autocomplete="name">
+      <input type="text" placeholder="Как да Ви наричаме?" class="w-full mb-4 rounded-lg px-4 py-3 bg-black/30 border border-amber/30 text-parch text-[15px]" autocomplete="name">
       <label class="block font-serif text-gold text-sm mb-1">Имейл</label>
-      <input id="wlEmail" type="email" placeholder="вашият@имейл.bg" class="w-full mb-4 rounded-lg px-4 py-3 bg-black/30 border border-amber/30 text-parch text-[15px]" autocomplete="email" required>
-      <label class="block font-serif text-gold text-sm mb-1">Телефон <span class="text-parch/40">(по избор)</span></label>
-      <input id="wlPhone" type="tel" placeholder="08..." class="w-full mb-4 rounded-lg px-4 py-3 bg-black/30 border border-amber/30 text-parch text-[15px]" autocomplete="tel">
-      <input type="text" name="company" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px">
-      <label class="flex gap-2 items-start text-xs text-parch/55 mb-5"><input type="checkbox" required class="mt-1">Съгласен/на съм maitapp да съхранява данните ми, за да получа поканата. <a href="https://metareading.com/terms" target="_blank" class="text-gold">Условия</a></label>
+      <input type="email" placeholder="вашият@имейл.bg" class="w-full mb-4 rounded-lg px-4 py-3 bg-black/30 border border-amber/30 text-parch text-[15px]" autocomplete="email" required>
+      <label class="flex gap-2 items-start text-xs text-parch/55 mb-5"><input type="checkbox" required class="mt-1">Съгласен/на съм maitapp да съхранява имейла ми, за да получа поканата. <a href="#" class="text-gold">(политика за поверителност · скоро)</a></label>
       <button type="submit" class="cta w-full rounded-full px-10 py-4 text-base">Заяви поканата си</button>
     </form>
-    <script>
-    function maitappWaitlist(e){e.preventDefault();var f=e.target;
-      fetch('https://comfortable-reflection-production.up.railway.app/maitapp/waitlist',{method:'POST',headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({name:document.getElementById('wlName').value,email:document.getElementById('wlEmail').value,phone:document.getElementById('wlPhone').value,company:f.company.value})});
-      f.style.display='none';document.getElementById('wlOk').style.display='block';return false;}
-    </script>
     <p class="text-xs text-parch/40 mt-7 font-light">Каквото споделиш с maitapp, остава вътре. · Металандия · спокойствие · радост · вдъхновение</p>
   </div>
 </section>
@@ -295,7 +296,7 @@ const HEROES=[
  {id:"фибоначко",lvl:"VII",law:"Златна пропорция",hc:"#33b88c",role:"Ревизор · часовникар на ритъма",bio:"Казва честно какво не е наред — с мярка.",skills:["Ритъм","30-сек ревю","Баланс"],quest:["Кажи ми честно","План → 3 забележки + 1 подобрение."],un:false},
  {id:"творея",lvl:"VIII",law:"Класическо изкуство",hc:"#9c7fc8",role:"Разрешител · естет",bio:"Дава финала. Пречиства през изкуство и ясно решение.",skills:["2 въпроса","1 ход","Естетика"],quest:["Реши за мен","Задънена улица → 1 конкретен ход."],un:false}
 ];
-const ANTI={доверка:"Бега",любка:"Емо",екопътечко:"Станка",куражку:"Его",обемко:"Умчо",хола:"Нема",фибоначко:"Ума",творея:"Страхил"};
+const ANTI={доверка:"Страхил",любка:"Его",екопътечко:"Бега",куражку:"Емо",обемко:"Нема",хола:"Умчо",фибоначко:"Ума",творея:"Станка"};
 const g=document.getElementById('heroGrid');
 HEROES.forEach((h,i)=>{
   const c=document.createElement('div');
@@ -315,14 +316,14 @@ HEROES.forEach((h,i)=>{
 
 /* антагонисти · 8 слуги · същия кликаем контрол · 3 заключени (без видим образ) */
 const ANTAGS=[
- {img:"ant-его",name:"Его",fn:"обсъждане",g:"жена",sab:"търси външно одобрение",un:true},
- {img:"ant-бега",name:"Бега",fn:"отлагане",g:"жена",sab:"бягство от настоящето",un:true},
- {img:"ant-емо",name:"Емо",fn:"оплакване",g:"мъж",sab:"емоционални бури",un:true},
- {img:"ant-нема",name:"Нема",fn:"обясняване",g:"жена",sab:"отсъствие · нямам време · маски",un:true},
- {img:"ant-станка",name:"Станка Ученеврозова",fn:"оценяване",g:"жена",sab:"инспекторът · учебна невроза",un:true},
- {img:"ant-ума",name:"Ума Лисева",fn:"обмисляне",g:"жена",sab:"анализ-парализа · хитрост без сърце",un:false},
- {img:"ant-умчо",name:"Умчо Вълчев",fn:"осъждане",g:"мъж",sab:"студена логика · самокритика",un:false},
- {img:"ant-страхил",name:"Барон Страхил Прегорялконен",fn:"прегаряне",g:"мъж",sab:"бърнаут · изтощение",un:false}
+ {img:"ant-его",name:"Его",fn:"Обсъждане",g:"мъж",sab:"Гонитбата на чуждото одобрение, която изяжда твоето.",un:true},
+ {img:"ant-бега",name:"Бега",fn:"Отлагане",g:"жена",sab:"Вечното отлагане — бягство от това, което е сега.",un:true},
+ {img:"ant-емо",name:"Емо",fn:"Оплакване",g:"мъж",sab:"Бури от чувства, които те носят, вместо ти да носиш тях.",un:true},
+ {img:"ant-нема",name:"Нема",fn:"Обясняване",g:"жена",sab:"Маските и извиненията, зад които изчезваш.",un:true},
+ {img:"ant-станка",name:"Станка Ученеврозова",fn:"Оценяване",g:"жена",sab:"Инспекторът, който мери всичко с оценка — ражда учебна невроза.",un:true},
+ {img:"ant-ума",name:"Ума Лисева",fn:"Обмисляне",g:"жена",sab:"Анализът без край, който никога не стига до действие.",un:false},
+ {img:"ant-умчо",name:"Умчо Вълчев",fn:"Осъждане",g:"мъж",sab:"Студената присъда, обърната първо срещу теб самия.",un:false},
+ {img:"ant-страхил",name:"Барон Страхил Прегорялконен",fn:"Прегаряне",g:"мъж",sab:"Прегарянето, което гори резервите ти до пепел.",un:false}
 ];
 const fg=document.getElementById('foeGrid');
 if(fg)ANTAGS.forEach(function(a){

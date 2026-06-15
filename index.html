@@ -123,7 +123,7 @@ body{background:#0b1114;color:#e9e1d4;font-family:Inter,sans-serif;-webkit-font-
   <img class="herovid-d" src="img/hero-mother-wide.jpg" alt="майка и дете пред картата на пътя">
   <div class="sweep"></div><div id="particles" class="absolute inset-0"></div><div class="scrim"></div>
   <div class="relative z-10 w-full max-w-2xl mx-auto px-6 text-center pt-[9vh]">
-    <p class="kicker mb-4" id="h-kick" style="color:#E8C77E">Металандия · maitapp</p>
+    <p class="kicker mb-4" id="h-kick" style="color:#E8C77E">My AI Tactic App</p>
     <h1 class="font-serif font-semibold leading-[1.1] text-3xl sm:text-4xl md:text-5xl mb-4" id="h-title">Искате ли да се събудите и да си припомните <span class="italic" style="color:#ffe7bd">как се учи</span> на maitapp?</h1>
     <p class="text-lg md:text-2xl text-parch font-light mb-1" id="h-sub">Не е нужно време, а внимание.</p>
     <p class="text-base text-gold font-light mb-7" id="h-min">8 минути на ден.</p>
@@ -264,23 +264,14 @@ body{background:#0b1114;color:#e9e1d4;font-family:Inter,sans-serif;-webkit-font-
     <h2 class="font-serif text-4xl md:text-5xl mb-5 leading-tight">Будечителите Ви чакат.<br>Как да Ви наричаме?</h2>
     <p class="text-lg text-parch/70 font-light mb-9">Не курс. Не домашни. Осем минути и една игра — и нещо, което днес ви тежи, утре ще правите с кеф.</p>
     <p id="wlOk" style="display:none" class="rounded-2xl p-6 max-w-md mx-auto text-parch font-serif text-xl">✦ Благодарим! Поканите тръгват скоро — пазим мястото ти.</p>
-    <form id="wlForm" class="rounded-2xl p-6 max-w-md mx-auto text-left" style="background:rgba(255,255,255,.04);border:1px solid rgba(242,200,120,.2)" onsubmit="return maitappWaitlist(event)">
+    <form class="rounded-2xl p-6 max-w-md mx-auto text-left" style="background:rgba(255,255,255,.04);border:1px solid rgba(242,200,120,.2)" onsubmit="this.style.display='none';document.getElementById('wlOk').style.display='block';return false">
       <label class="block font-serif text-gold text-sm mb-1">Име</label>
-      <input id="wlName" type="text" placeholder="Как да Ви наричаме?" class="w-full mb-4 rounded-lg px-4 py-3 bg-black/30 border border-amber/30 text-parch text-[15px]" autocomplete="name">
+      <input type="text" placeholder="Как да Ви наричаме?" class="w-full mb-4 rounded-lg px-4 py-3 bg-black/30 border border-amber/30 text-parch text-[15px]" autocomplete="name">
       <label class="block font-serif text-gold text-sm mb-1">Имейл</label>
-      <input id="wlEmail" type="email" placeholder="вашият@имейл.bg" class="w-full mb-4 rounded-lg px-4 py-3 bg-black/30 border border-amber/30 text-parch text-[15px]" autocomplete="email" required>
-      <label class="block font-serif text-gold text-sm mb-1">Телефон <span class="text-parch/40">(по избор)</span></label>
-      <input id="wlPhone" type="tel" placeholder="08..." class="w-full mb-4 rounded-lg px-4 py-3 bg-black/30 border border-amber/30 text-parch text-[15px]" autocomplete="tel">
-      <input type="text" name="company" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px">
-      <label class="flex gap-2 items-start text-xs text-parch/55 mb-5"><input type="checkbox" required class="mt-1">Съгласен/на съм maitapp да съхранява данните ми, за да получа поканата. <a href="https://metareading.com/terms" target="_blank" class="text-gold">Условия</a></label>
+      <input type="email" placeholder="вашият@имейл.bg" class="w-full mb-4 rounded-lg px-4 py-3 bg-black/30 border border-amber/30 text-parch text-[15px]" autocomplete="email" required>
+      <label class="flex gap-2 items-start text-xs text-parch/55 mb-5"><input type="checkbox" required class="mt-1">Съгласен/на съм maitapp да съхранява имейла ми, за да получа поканата. <a href="#" class="text-gold">(политика за поверителност · скоро)</a></label>
       <button type="submit" class="cta w-full rounded-full px-10 py-4 text-base">Заяви поканата си</button>
     </form>
-    <script>
-    function maitappWaitlist(e){e.preventDefault();var f=e.target;
-      fetch('https://comfortable-reflection-production.up.railway.app/maitapp/waitlist',{method:'POST',headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({name:document.getElementById('wlName').value,email:document.getElementById('wlEmail').value,phone:document.getElementById('wlPhone').value,company:f.company.value})});
-      f.style.display='none';document.getElementById('wlOk').style.display='block';return false;}
-    </script>
     <p class="text-xs text-parch/40 mt-7 font-light">Каквото споделиш с maitapp, остава вътре. · Металандия · спокойствие · радост · вдъхновение</p>
   </div>
 </section>

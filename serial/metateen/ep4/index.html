@@ -80,6 +80,29 @@ summary small{margin-left:auto;font-family:Inter;font-size:.72rem;color:#9fb0a0;
 .prog .t{font-family:'Cormorant Garamond',serif;color:#ffe1a0;font-size:.82rem;letter-spacing:.06em;min-width:64px;padding-top:2px}
 .prog .d b{color:#f4ecd8}
 .prog .d span{display:block;color:#9fb0a0;font-size:.88rem;margin-top:1px}
+.prog .lead-by{display:inline-flex;align-items:center;gap:5px;margin-top:4px;font-size:.78rem;color:#bcd0c2}
+.prog .lead-by img{width:22px;height:22px;border-radius:50%;object-fit:cover;object-position:center 20%;border:1px solid rgba(242,200,120,.4)}
+.prog .lead-by b{color:#f2c878}
+/* 6 games on the page */
+.games{display:grid;grid-template-columns:1fr;gap:13px;margin:8px 0}
+.game{background:rgba(255,255,255,.035);border:1px solid rgba(242,200,120,.2);border-radius:16px;padding:15px 15px 16px;position:relative}
+.game .ghead{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.game .gico{width:48px;height:48px;border-radius:11px;object-fit:cover;border:1px solid rgba(242,200,120,.3);background:rgba(0,0,0,.25);flex-shrink:0}
+.game .gtitle{flex:1}
+.game .gtitle .gnum{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:#9fb0a0}
+.game .gtitle .gname{font-family:'Cormorant Garamond',serif;font-size:1.35rem;color:#f2c878;line-height:1.05}
+.game .anchor{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:#ffe1a0;white-space:nowrap;align-self:flex-start;padding-top:3px}
+.game .leadby{display:flex;align-items:center;gap:8px;background:rgba(111,181,154,.08);border:1px solid rgba(111,181,154,.25);border-radius:10px;padding:7px 10px;margin-bottom:10px}
+.game .leadby img{width:34px;height:34px;border-radius:50%;object-fit:cover;object-position:center 20%;border:1px solid rgba(242,200,120,.4);flex-shrink:0}
+.game .leadby .lt{font-size:.84rem;color:#bcd0c2;line-height:1.3}
+.game .leadby .lt b{color:#6FB59A}
+.game .do{font-size:.92rem;color:#ddd2bc;margin:0 0 9px}
+.game .do b{color:#f4ecd8}
+.game .frac{display:flex;gap:5px;flex-wrap:wrap;font-size:.74rem;color:#9fb0a0;margin:0 0 9px}
+.game .frac span{background:rgba(242,200,120,.1);border:1px solid rgba(242,200,120,.18);border-radius:14px;padding:2px 9px;white-space:nowrap}
+.game .frac span.minutes{background:rgba(232,199,126,.18);color:#ffe1a0;font-weight:600}
+.game .gdu{font-size:.82rem;color:#bcd0c2;border-top:1px dashed rgba(242,200,120,.16);padding-top:8px}
+.game .gdu b{color:#f2c878}
 /* team roster */
 .gal{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:0 0 4px}
 .tile{border-radius:12px;overflow:hidden;border:1px solid rgba(242,200,120,.2);background:#0d1417}
@@ -91,6 +114,13 @@ summary small{margin-left:auto;font-family:Inter;font-size:.72rem;color:#9fb0a0;
 .scard img{width:80px;height:80px;object-fit:cover;border-radius:10px;flex-shrink:0}
 .scard h4{font-family:'Cormorant Garamond',serif;font-size:1.25rem;margin:0 0 3px}
 .scard p{margin:0;color:#cdbfa6;font-size:.9rem}
+.prep{list-style:none;padding:0;margin:8px 0}
+.prep li{display:flex;gap:13px;align-items:flex-start;background:rgba(255,255,255,.035);border:1px solid rgba(242,200,120,.2);border-radius:14px;padding:13px 15px;margin:0 0 10px}
+.prep .pi{font-size:1.5rem;line-height:1;flex-shrink:0}
+.prep .pt b{color:#f4ecd8;font-size:1rem}
+.prep .pt span{display:block;color:#bcd0c2;font-size:.88rem;margin-top:2px}
+.prep .must{font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:#2a1908;background:linear-gradient(120deg,#ffe1a0,#e2a458);border-radius:5px;padding:1px 7px;margin-left:6px;white-space:nowrap}
+.prep .nice{font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:#9fb0a0;background:rgba(159,176,160,.15);border-radius:5px;padding:1px 7px;margin-left:6px;white-space:nowrap}
 .soon{text-align:center;border:1px dashed rgba(242,200,120,.3);border-radius:14px;padding:18px 16px;margin:14px 0;color:#9fb0a0;font-size:.92rem;background:rgba(0,0,0,.18)}
 .soon b{color:#f2c878;font-family:'Cormorant Garamond',serif;font-size:1.1rem}
 .finalcta{text-align:center;background:linear-gradient(135deg,rgba(232,199,126,.16),rgba(111,181,154,.12));border:1px solid #E8C77E;border-radius:16px;padding:24px 18px;margin:26px 0}
@@ -146,6 +176,16 @@ summary small{margin-left:auto;font-family:Inter;font-size:.72rem;color:#9fb0a0;
       <div class="note"><b>Залогът днес.</b> 2 часа спокоен фокус днес → <b>4+ часа спестени</b> тази седмица. А оттам — 3 месеца Металандия, в които същите умения се задълбочават.</div>
     </div>
   </div>
+
+  <!-- 📋 ПРИГОТВЕТЕ СЕ -->
+  <div class="scene"><div class="sc" style="color:#E89556">Преди да започнем</div><h2>📋 Пригответе се</h2><p>За да участвате пълноценно — не просто да гледате, а да отиграете уменията със своя истинска задача.</p></div>
+  <ul class="prep">
+    <li><span class="pi">💻</span><div class="pt"><b>На компютър<span class="must">важно</span></b><span>Не на телефон — игрите се играят с инструмент, удобно е на голям екран.</span></div></li>
+    <li><span class="pi">🤖</span><div class="pt"><b>Claude Code, инсталиран<span class="must">важно</span></b><span>Поне него — основният инструмент, с който отиграваме уменията на живо.</span></div></li>
+    <li><span class="pi">📓</span><div class="pt"><b>Obsidian<span class="nice">добре е</span></b><span>За вашия метамозък — папката, която помни вместо вас.</span></div></li>
+    <li><span class="pi">🎧</span><div class="pt"><b>Слушалки<span class="nice">добре е</span></b><span>За метаслушането — спокойния сеанс на попиване, в който идеите легат периферно.</span></div></li>
+  </ul>
+  <div class="note">Нямате нещо подръка? Елате така — ще ви насочим стъпка по стъпка. По-важно е да сте тук, отколкото всичко да е готово.</div>
 
   <!-- ТРЕЙЛЪР / ПРЕДВАРИТЕЛНО СЛУШАНЕ -->
   <div class="scene"><div class="sc" style="color:#b89ad8">Преди да влезете</div><h2>Една минута настройка</h2><p>Пуснете я, докато си наливате чай — да влезете в стаята вече в тон.</p></div>
@@ -228,15 +268,94 @@ summary small{margin-left:auto;font-family:Inter;font-size:.72rem;color:#9fb0a0;
     <summary><span class="ar">▸</span> 🌿 4 етапа · около 90 минути <small>отворете за плана</small></summary>
     <div class="dd">
       <ul class="prog">
-        <li><span class="t">0–15′</span><div class="d"><b>Влизаме в стаята</b><span>Приказно име, камера включена, една дума: коя минута ви открадна Времетрон тази седмица.</span></div></li>
-        <li><span class="t">15–30′</span><div class="d"><b>6-те умения, просто</b><span>Кратка история — защо тези шест, и кои двама водачи стоят зад тях (Лозанов · Карпати).</span></div></li>
-        <li><span class="t">30–80′</span><div class="d"><b>Отиграваме шестте</b><span>Шест песъчника по 8 минути — с ваша истинска задача. Тук е сърцето: 60% правене, не слушане.</span></div></li>
-        <li><span class="t">80–90′</span><div class="d"><b>Затваряне · следващата крачка</b><span>Кое умение отигравате пръв утре · и накъде водят 3-те месеца Металандия.</span></div></li>
+        <li><span class="t">0–15′</span><div class="d"><b>Откриване · влизаме в стаята</b><span>Приказно име, камера включена, една дума: коя минута ви открадна Времетрон тази седмица.</span><span class="lead-by"><img src="https://maitapp.com/img/%D0%B4%D0%BE%D0%B2%D0%B5%D1%80%D0%BA%D0%B0.jpg" alt="">Води <b>Доверка</b> · присъствието</span></div></li>
+        <li><span class="t">15–80′</span><div class="d"><b>Отиграваме шестте умения</b><span>Шест песъчника — с ваша истинска задача. Тук е сърцето: 60% правене, не слушане. Всяка игра води свой будечител (вижте по-долу).</span><span class="lead-by">🎮 6 игри · 48 минути · вижте „Програмата на живо"</span></div></li>
+        <li><span class="t">80–90′</span><div class="d"><b>Затваряне · следващата крачка</b><span>Кое умение отигравате пръв утре · и накъде водят 3-те месеца Металандия.</span><span class="lead-by"><img src="https://maitapp.com/img/%D1%84%D0%B8%D0%B1%D0%BE%D0%BD%D0%B0%D1%87%D0%BA%D0%BE.jpg" alt="">Води <b>Фибоначко</b> · ритъм и мяра</span></div></li>
       </ul>
-      <div class="note warn"><b>Заедно, не паралелно.</b> Няма отделни стаи — единното поле е инструментът. Камерата включена = участвате в играта.</div>
+      <div class="note warn"><b>Заедно, не паралелно.</b> Няма отделни стаи — единното поле е инструментът. Камерата включена = участвате в играта. <b>Метатрон</b> е полето между всички будечители.</div>
     </div>
   </details>
   <div class="joinrow"><a class="cta" href="https://us06web.zoom.us/j/83214345575?pwd=4JT1emTLIFcOMnKB50heaQPnqa0vsr.1">Влезте в стаята · 16:00 ч. →</a></div>
+
+  <!-- 🎮 ПРОГРАМАТА НА ЖИВО · 6-ТЕ ИГРИ -->
+  <div class="scene"><div class="sc" style="color:#E8C77E">Подреденият продукт</div><h2>🎮 Програмата на живо · 6-те игри</h2><p>Всяка игра е 8 минути (две са по-дълги — там е преобразата). Един будечител води всяка. Вие играете със своя истинска задача — заедно, родител и дете.</p></div>
+  <div class="games">
+
+    <div class="game">
+      <div class="ghead">
+        <img class="gico" src="https://maitapp.com/img/skill-1.png" alt="">
+        <div class="gtitle"><div class="gnum">Игра 1 · Човек + AI</div><div class="gname">Водачът</div></div>
+        <div class="anchor">„Водя"</div>
+      </div>
+      <div class="leadby"><img src="https://maitapp.com/img/%D0%BA%D1%83%D1%80%D0%B0%D0%B6%D0%BA%D1%83.jpg" alt=""><div class="lt">Води <b>Куражку</b> · убедеността, която излъчва</div></div>
+      <p class="do"><b>Какво правите:</b> Дайте на агент една реална задача с думите „Аз решавам, ти изпълняваш. Ето задачата: …" — и усетете как се сменя посоката: вие водите, не гоните.</p>
+      <div class="frac"><span class="minutes">8 мин</span><span>1 четете</span><span>3 гледате</span><span>3 правите</span><span>1 споделяте</span></div>
+      <p class="gdu"><b>Дуал:</b> детето пише задачата, родителят гледа — после сменяте ролите.</p>
+    </div>
+
+    <div class="game">
+      <div class="ghead">
+        <img class="gico" src="https://maitapp.com/img/skill-2.png" alt="">
+        <div class="gtitle"><div class="gnum">Игра 2 · Вкус · преценка</div><div class="gname">Вкусникът</div></div>
+        <div class="anchor">„Усещам"</div>
+      </div>
+      <div class="leadby"><img src="https://maitapp.com/img/%D1%82%D0%B2%D0%BE%D1%80%D0%B5%D1%8F.jpg" alt=""><div class="lt">Води <b>Творея</b> · красотата като тих учител</div></div>
+      <p class="do"><b>Какво правите:</b> Поискайте 2 варианта на едно нещо. Изберете по-добрия и кажете защо с едно изречение — това „защо" е вашият вкус, проговорил.</p>
+      <div class="frac"><span class="minutes">8 мин</span><span>1 четете</span><span>3 гледате</span><span>3 правите</span><span>1 споделяте</span></div>
+      <p class="gdu"><b>Дуал:</b> родител и дете гласуват поотделно, после сравняват вкуса си.</p>
+    </div>
+
+    <div class="game">
+      <div class="ghead">
+        <img class="gico" src="https://maitapp.com/img/skill-3.png" alt="">
+        <div class="gtitle"><div class="gnum">Игра 3 · Контекст-инженер</div><div class="gname">Гласът на волята</div></div>
+        <div class="anchor">„Казвам точно"</div>
+      </div>
+      <div class="leadby"><img src="https://maitapp.com/img/%D0%B5%D0%BA%D0%BE%D0%BF%D1%8A%D1%82%D0%B5%D1%87%D0%BA%D0%BE.jpg" alt=""><div class="lt">Води <b>Екопътечко</b> · свободата сами да изберете пътя</div></div>
+      <p class="do"><b>Какво правите:</b> Вземете слаб резултат и добавете 3 неща — за КОГО, в какъв ТОН, и един ПРИМЕР. Пуснете пак и усетете разликата.</p>
+      <div class="frac"><span class="minutes">8 мин</span><span>1 четете</span><span>3 гледате</span><span>3 правите</span><span>1 споделяте</span></div>
+      <p class="gdu"><b>Дуал:</b> детето описва за кого е, родителят добавя тона — заедно строят контекста.</p>
+    </div>
+
+    <div class="game">
+      <div class="ghead">
+        <img class="gico" src="https://maitapp.com/img/skill-4.png" alt="">
+        <div class="gtitle"><div class="gnum">Игра 4 · Скорост · „готово"</div><div class="gname">Стигна!</div></div>
+        <div class="anchor">„Стига"</div>
+      </div>
+      <div class="leadby"><img src="https://maitapp.com/img/%D0%BE%D0%B1%D0%B5%D0%BC%D0%BA%D0%BE.jpg" alt=""><div class="lt">Води <b>Обемко</b> · повече за същото време, без умора</div></div>
+      <p class="do"><b>Какво правите:</b> Вземете нещо отлагано. Задайте 1 критерий „готово е, когато…". Пуснете веднъж, проверете срещу критерия и СПРЕТЕ — не пипайте повече.</p>
+      <div class="frac"><span class="minutes">7 мин</span><span>1 четете</span><span>3 гледате</span><span>2 правите</span><span>1 споделяте</span></div>
+      <p class="gdu"><b>Дуал:</b> родителят казва критерия, детето натиска „стоп" — пазач на „стига".</p>
+    </div>
+
+    <div class="game">
+      <div class="ghead">
+        <img class="gico" src="https://maitapp.com/img/skill-5.png" alt="">
+        <div class="gtitle"><div class="gnum">Игра 5 · Кога НЕ AI · Джарвис</div><div class="gname">Кога Джарвис мълчи</div></div>
+        <div class="anchor">„Присъствам"</div>
+      </div>
+      <div class="leadby"><img src="https://maitapp.com/img/%D0%BB%D1%8E%D0%B1%D0%BA%D0%B0.jpg" alt=""><div class="lt">Води <b>Любка</b> · грижата, която подкрепя невидимо</div></div>
+      <p class="do"><b>Какво правите:</b> Два списъка — „тук AI помага" / „тук AI пречи" (разговор, разходка, домашно на ръка). Изберете 1 момент седмично, в който екранът остава настрана — заедно.</p>
+      <div class="frac"><span class="minutes">10 мин · преобразата</span><span>1 четете</span><span>4 гледате</span><span>4 правите</span><span>1 споделяте</span></div>
+      <p class="gdu"><b>Дуал:</b> семейно решение — родител и дете се договарят за общ „екран-свободен" момент.</p>
+    </div>
+
+    <div class="game">
+      <div class="ghead">
+        <img class="gico" src="https://maitapp.com/img/skill-6.png" alt="">
+        <div class="gtitle"><div class="gnum">Игра 6 · Застраховка · много потоци</div><div class="gname">Многото мостове</div></div>
+        <div class="anchor">„Спокоен съм"</div>
+      </div>
+      <div class="leadby"><img src="https://maitapp.com/img/%D1%85%D0%BE%D0%BB%D0%B0.jpg" alt=""><div class="lt">Води <b>Хола</b> · всяка част носи цялото</div></div>
+      <p class="do"><b>Какво правите:</b> Назовете 1 нещо, на което залагате само 1 начин. Измислете с агента 2-ри мост — не за да го направите днес, а за да знаете, че го има.</p>
+      <div class="frac"><span class="minutes">7 мин</span><span>1 четете</span><span>3 гледате</span><span>2 правите</span><span>1 споделяте</span></div>
+      <p class="gdu"><b>Дуал:</b> детето пита „ами ако това падне?", родителят отговаря с втория мост.</p>
+    </div>
+
+  </div>
+  <div class="note"><b>48 минути игра · 60% от срещата.</b> Две игри са по-дълги — там, където навикът най-трудно се сменя (присъствие · скорост). Това е Фибоначи-теглото: повече време там, където е преобразата.</div>
+  <div class="joinrow"><a class="cta" href="https://us06web.zoom.us/j/83214345575?pwd=4JT1emTLIFcOMnKB50heaQPnqa0vsr.1">Отиграйте ги с нас · 16:00 ч. →</a></div>
 
   <!-- ИЗПИТАНИЕТО · СЛУГИТЕ НА ВРЕМЕТРОН (разгъваща се) -->
   <div class="scene"><div class="sc" style="color:#E89556">Изпитанието</div><h2>Кои крадат вниманието</h2><p>Времетрон не идва сам — праща слугите си. Същите сенки нападат и възрастния пред новия инструмент, и детето пред екрана.</p></div>
@@ -275,6 +394,14 @@ summary small{margin-left:auto;font-family:Inter;font-size:.72rem;color:#9fb0a0;
     ▶️ пълният запис · 🔊 аудио обобщение в 4 гласа · 🎒 стартов комплект с вашите първи агенти.<br>
     <span style="display:block;margin-top:8px;font-size:.86rem">Запазете тази страница — попълва се същата вечер.</span>
   </div>
+
+  <!-- 📚 РЕСУРСИ (рефреймнати за родители+тийн) -->
+  <div class="scene"><div class="sc" style="color:#6FB59A">За да започнете спокойно</div><h2>📚 5 ресурса · с ползата за вас</h2><p>Подбрани за родител и дете — започвате с инструментите, после защо точно сега.</p></div>
+  <div class="scard"><div style="width:80px;height:80px;border-radius:10px;background:rgba(111,181,154,.12);display:flex;align-items:center;justify-content:center;font-size:2rem;flex-shrink:0">🤖</div><div><h4 style="color:#6FB59A">1 · Claude Code — безплатно начало</h4><p>Как да започнете без разход — основният инструмент, с който отиграваме уменията. <a href="https://www.youtube.com/watch?v=U6gg_bi1I70" target="_blank" rel="noopener">Гледайте →</a></p></div></div>
+  <div class="scard"><div style="width:80px;height:80px;border-radius:10px;background:rgba(184,154,216,.12);display:flex;align-items:center;justify-content:center;font-size:2rem;flex-shrink:0">📓</div><div><h4 style="color:#b89ad8">2 · Obsidian — вашият метамозък</h4><p>Папката, която помни вместо вас — домът на знанието, което расте с детето. <a href="https://obsidian.md" target="_blank" rel="noopener">Вижте →</a></p></div></div>
+  <div class="scard"><div style="width:80px;height:80px;border-radius:10px;background:rgba(232,199,126,.12);display:flex;align-items:center;justify-content:center;font-size:2rem;flex-shrink:0">✨</div><div><h4 style="color:#E8C77E">3 · Кое си струва в Claude Code</h4><p>Най-полезните функции на прост език — кое да ползвате спокойно, без да се претоварвате. <a href="https://www.youtube.com/watch?v=vfWTyEreOEc" target="_blank" rel="noopener">Гледайте →</a></p></div></div>
+  <div class="scard"><div style="width:80px;height:80px;border-radius:10px;background:rgba(111,181,154,.12);display:flex;align-items:center;justify-content:center;font-size:2rem;flex-shrink:0">🧩</div><div><h4 style="color:#6FB59A">4 · Система от агенти — визията</h4><p>Как помощниците работят като екип по ваши думи — спокойно, на човешки език. <a href="https://www.youtube.com/watch?v=0WDkwMxj13s" target="_blank" rel="noopener">Гледайте →</a></p></div></div>
+  <div class="scard"><div style="width:80px;height:80px;border-radius:10px;background:rgba(232,149,86,.12);display:flex;align-items:center;justify-content:center;font-size:2rem;flex-shrink:0">⏳</div><div><h4 style="color:#E89556">5 · Защо точно сега</h4><p>Разговор за бързата промяна — за да изберете да я водите спокойно, не уплашено. <a href="https://www.youtube.com/watch?v=RwlgFC6S-OE" target="_blank" rel="noopener">Гледайте →</a></p></div></div>
 
   <!-- ИЗПИТАНИЕ · СЪКРОВИЩЕ · ЕЛИКСИР -->
   <div class="scene"><div class="sc" style="color:#E89556">Какво си тръгвате</div><h2>Изпитание · Съкровище · Еликсир</h2></div>

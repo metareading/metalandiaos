@@ -4,40 +4,61 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex,nofollow">
-<title>6-те AI умения, преди играта да се смени — клубна на живо</title>
+<title>6-те AI умения · приказна карта на приключението</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap&subset=cyrillic" rel="stylesheet">
 <style>
 *{margin:0;box-sizing:border-box}
 body{background:#0b1114;color:#e9e1d4;font-family:Inter,sans-serif;-webkit-font-smoothing:antialiased;line-height:1.6}
-.wrap{max-width:720px;margin:0 auto;padding:0 16px}
+.wrap{max-width:760px;margin:0 auto;padding:0 16px}
 img{max-width:100%;display:block}
 a{color:#f2c878}
 b,strong{color:#f4ecd8;font-weight:600}
+
+/* sticky quest bar */
 #bar{position:sticky;top:0;z-index:50;background:rgba(11,17,20,.95);backdrop-filter:blur(8px);border-bottom:1px solid rgba(242,200,120,.25);padding:9px 16px}
-.barrow{max-width:720px;margin:0 auto;display:flex;align-items:center;gap:11px;justify-content:center}
-.barrow .when{font-family:'Cormorant Garamond',serif;font-weight:700;color:#f2c878;font-size:1.02rem;white-space:nowrap}
+.barrow{max-width:760px;margin:0 auto;display:flex;align-items:center;gap:11px}
 .barrow .live{font-size:.74rem;color:#bcd0c2;background:rgba(111,181,154,.14);border:1px solid rgba(111,181,154,.4);border-radius:20px;padding:3px 11px;white-space:nowrap}
-.barrow .go{margin-left:auto;background:linear-gradient(120deg,#ffe1a0,#e2a458);color:#2a1908;font-weight:600;padding:7px 16px;border-radius:20px;text-decoration:none;font-size:.86rem;white-space:nowrap}
+.barrow .when{font-family:'Cormorant Garamond',serif;font-weight:700;color:#f2c878;font-size:1rem;white-space:nowrap}
+.barrow .xp{margin-left:auto;display:flex;align-items:center;gap:8px}
+.barrow .track{width:74px;height:9px;background:rgba(255,255,255,.08);border-radius:6px;overflow:hidden;border:1px solid rgba(242,200,120,.25)}
+.barrow .fill{height:100%;width:0;background:linear-gradient(90deg,#6FB59A,#E8C77E);transition:width .5s cubic-bezier(.2,.7,.2,1)}
+.barrow .xpn{font-family:'Cormorant Garamond',serif;font-weight:700;color:#f2c878;font-size:.95rem;white-space:nowrap}
+.barrow .go{background:linear-gradient(120deg,#ffe1a0,#e2a458);color:#2a1908;font-weight:600;padding:6px 13px;border-radius:20px;text-decoration:none;font-size:.82rem;white-space:nowrap}
+
+/* hero */
 .hero{position:relative;text-align:center;padding:0 0 22px;overflow:hidden}
-.hero .heroimg{position:relative;width:100%;aspect-ratio:16/9;max-height:300px;overflow:hidden}
-.hero .heroimg img{width:100%;height:100%;object-fit:cover;object-position:center 38%;opacity:.78}
-.hero .heroimg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,17,20,.25) 0%,rgba(11,17,20,.55) 55%,#0b1114 100%)}
-.hero .ov{position:relative;margin-top:-92px;padding:0 16px;z-index:2}
+.hero .heroimg{position:relative;width:100%;aspect-ratio:16/9;max-height:320px;overflow:hidden}
+.hero .heroimg img{width:100%;height:100%;object-fit:cover;object-position:center 36%;opacity:.78}
+.hero .heroimg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,17,20,.2) 0%,rgba(11,17,20,.55) 55%,#0b1114 100%)}
+.hero .ov{position:relative;margin-top:-96px;padding:0 16px;z-index:2}
 .kicker{letter-spacing:.22em;font-size:11px;text-transform:uppercase;color:#e2a458;font-weight:600}
-h1{font-family:'Cormorant Garamond',serif;font-size:2.2rem;line-height:1.14;margin:10px 0 8px;color:#f4ecd8;text-shadow:0 2px 14px #000}
-.lead{font-size:1.02rem;color:#cdbfa6;font-weight:300;max-width:580px;margin:0 auto}
+h1{font-family:'Cormorant Garamond',serif;font-size:2.3rem;line-height:1.12;margin:10px 0 8px;color:#f4ecd8;text-shadow:0 2px 14px #000}
+.lead{font-size:1.04rem;color:#cdbfa6;font-weight:300;max-width:600px;margin:0 auto}
 .cta{display:inline-block;margin-top:18px;background:linear-gradient(120deg,#ffe1a0,#e2a458);color:#2a1908;font-weight:600;padding:13px 30px;border-radius:30px;text-decoration:none;box-shadow:0 10px 30px -10px rgba(226,164,88,.7)}
-.cta.ghost{background:transparent;color:#f2c878;border:1px solid #8a6a1e;box-shadow:none}
 .when-line{font-size:.95rem;color:#bcd0c2;margin-top:12px}
 .when-line b{color:#ffe1a0}
-.scene{text-align:center;margin:42px 0 6px}
-.scene .sc{letter-spacing:.16em;font-size:11px;text-transform:uppercase;font-weight:600}
-.scene h2{font-family:'Cormorant Garamond',serif;font-size:1.8rem;margin-top:4px}
-.scene p{color:#9fb0a0;font-size:.95rem;max-width:580px;margin:6px auto 0}
+
+/* meta-level chapter header */
+.chapter{text-align:center;margin:46px 0 8px;position:relative}
+.chapter .stage-no{font-family:'Cormorant Garamond',serif;font-size:.74rem;letter-spacing:.2em;text-transform:uppercase;color:#9fb0a0}
+.chapter .scn{display:inline-block;letter-spacing:.16em;font-size:11px;text-transform:uppercase;font-weight:600;margin-top:4px}
+.chapter h2{font-family:'Cormorant Garamond',serif;font-size:1.85rem;margin-top:3px;color:#f4ecd8}
+.chapter p{color:#9fb0a0;font-size:.96rem;max-width:600px;margin:6px auto 0}
+.chapter .lvlxp{display:inline-flex;align-items:center;gap:7px;margin-top:9px;font-size:.8rem;color:#bcd0c2;background:rgba(242,200,120,.08);border:1px solid rgba(242,200,120,.22);border-radius:20px;padding:4px 13px}
+.chapter .lvlxp b{color:#ffe1a0;font-family:'Cormorant Garamond',serif}
+/* big Bilibin stage-cover per meta-level */
+.cover{position:relative;width:100%;aspect-ratio:16/9;border-radius:18px;overflow:hidden;border:1px solid rgba(242,200,120,.28);margin:14px 0;box-shadow:0 12px 34px -14px rgba(0,0,0,.7)}
+.cover img{width:100%;height:100%;object-fit:cover;object-position:center 42%}
+.cover::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,17,20,.05) 0%,rgba(11,17,20,.12) 55%,rgba(11,17,20,.78) 100%)}
+.cover .clbl{position:absolute;left:18px;right:18px;bottom:13px;z-index:2}
+.cover .clbl .ck{font-family:'Cormorant Garamond',serif;font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;color:#ffe1a0;font-weight:600;text-shadow:0 1px 8px #000}
+.cover .clbl .ch{font-family:'Cormorant Garamond',serif;font-size:1.5rem;color:#fff;line-height:1.05;text-shadow:0 2px 12px #000;margin-top:1px}
+
+/* generic stage card with banner */
 .stage{background:rgba(255,255,255,.04);border:1px solid rgba(242,200,120,.24);border-radius:18px;margin:16px 0;overflow:hidden}
-.stage .banner{position:relative;height:140px;overflow:hidden}
-.stage .banner img{width:100%;height:100%;object-fit:cover;object-position:center 35%;opacity:.82}
+.stage .banner{position:relative;height:150px;overflow:hidden}
+.stage .banner img{width:100%;height:100%;object-fit:cover;object-position:center 38%;opacity:.82}
 .stage .banner .lbl{position:absolute;left:18px;bottom:10px;right:18px}
 .stage .num{font-family:'Cormorant Garamond',serif;font-size:.8rem;letter-spacing:.13em;text-transform:uppercase;color:#ffe1a0;font-weight:600;text-shadow:0 1px 6px #000}
 .stage h3{font-family:'Cormorant Garamond',serif;font-size:1.55rem;color:#fff;margin:2px 0 0;text-shadow:0 2px 10px #000}
@@ -46,117 +67,145 @@ h1{font-family:'Cormorant Garamond',serif;font-size:2.2rem;line-height:1.14;marg
 .note{font-size:.9rem;color:#bcd0c2;background:rgba(111,181,154,.09);border-left:3px solid #6FB59A;border-radius:6px;padding:11px 14px;margin-top:12px}
 .note.warn{border-left-color:#E89556;background:rgba(232,149,86,.1);color:#e7c4a2}
 .note b{color:#fff}
+
+/* trailer video */
 .vid{position:relative;border:1px solid rgba(242,200,120,.24);border-radius:18px;overflow:hidden;background:#06090b;margin:16px 0}
 .vid video{width:100%;display:block;aspect-ratio:16/9;object-fit:cover}
 .vid .vcap{padding:12px 16px;font-size:.9rem;color:#cdbfa6}
 .ytwrap{position:relative;width:100%;aspect-ratio:16/9;background:#06090b}
 .ytwrap iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:block}
-/* 6 skills grid */
-.skills{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:8px 0}
-.skill{background:rgba(255,255,255,.035);border:1px solid rgba(242,200,120,.2);border-radius:14px;padding:15px 14px}
-.skill{position:relative}
-.skill .badge{position:absolute;top:12px;right:12px;font-family:'Cormorant Garamond',serif;font-weight:700;font-size:.82rem;color:#2a1908;background:linear-gradient(120deg,#ffe1a0,#e2a458);border-radius:20px;padding:2px 10px;box-shadow:0 4px 12px -4px rgba(226,164,88,.7);white-space:nowrap}
-.skill .ico{width:54px;height:54px;border-radius:12px;object-fit:cover;border:1px solid rgba(242,200,120,.3);background:rgba(0,0,0,.25);margin-bottom:10px;display:block}
-.skill .kw{font-family:'Cormorant Garamond',serif;font-size:1.4rem;color:#f2c878;line-height:1}
-.skill .nm{font-size:.74rem;letter-spacing:.06em;text-transform:uppercase;color:#9fb0a0;margin:3px 0 9px}
-.skill .be{font-size:.92rem;color:#ddd2bc;margin:0 0 8px}
-.skill .ex{font-size:.86rem;color:#cdbfa6;margin:0 0 8px;padding-left:11px;border-left:2px solid rgba(232,149,86,.4)}
-.skill .du{font-size:.82rem;color:#bcd0c2;margin:0 0 8px}
-.skill .du b{color:#f2c878}
-.skill .tr{font-size:.86rem;color:#bcd0c2;border-top:1px dashed rgba(242,200,120,.18);padding-top:7px}
-.skill .tr b{color:#ffe1a0}
-@media(max-width:480px){.skills{grid-template-columns:1fr}}
-/* program details */
+
+/* MENTOR + SKILL CARD (RPG) */
+.mentors{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin:10px 0}
+.mentor{background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));border:1px solid rgba(242,200,120,.22);border-radius:18px;overflow:hidden}
+.mentor .portrait{position:relative;width:100%;aspect-ratio:1/1;overflow:hidden}
+.mentor .portrait img{width:100%;height:100%;object-fit:cover;object-position:center 18%}
+.mentor .portrait::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(13,20,23,.85) 100%)}
+.mentor .mlbl{position:absolute;left:12px;right:12px;bottom:9px;z-index:2}
+.mentor .mlbl .mrole{font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:#bcd0c2}
+.mentor .mlbl .mname{font-family:'Cormorant Garamond',serif;font-size:1.3rem;color:#fff;line-height:1;text-shadow:0 2px 8px #000}
+.skillcard{padding:13px 14px 15px;cursor:pointer;position:relative;transition:background .2s}
+.skillcard:hover{background:rgba(242,200,120,.05)}
+.skillcard .srow{display:flex;align-items:center;gap:11px}
+.skillcard .sicon{width:50px;height:50px;border-radius:12px;border:1px solid rgba(242,200,120,.32);background:radial-gradient(circle at 50% 35%,rgba(242,200,120,.18),rgba(0,0,0,.3));flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.7rem;overflow:hidden}
+.skillcard .sicon img{width:100%;height:100%;object-fit:cover;border-radius:11px}
+.skillcard .smeta{flex:1;min-width:0}
+.skillcard .sgame{font-family:'Cormorant Garamond',serif;font-size:1.15rem;color:#f2c878;line-height:1.05}
+.skillcard .sanchor{font-size:.78rem;color:#9fb0a0;font-style:italic}
+.skillcard .xpbadge{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:.8rem;color:#2a1908;background:linear-gradient(120deg,#ffe1a0,#e2a458);border-radius:18px;padding:2px 9px;white-space:nowrap}
+.skillcard .teaser{font-size:.86rem;color:#cdbfa6;margin:9px 0 0}
+.skillcard .more{display:inline-flex;align-items:center;gap:5px;margin-top:9px;font-size:.8rem;color:#f2c878;font-weight:500}
+.skillcard .more .ar{transition:transform .2s}
+.skillcard .detail{max-height:0;overflow:hidden;transition:max-height .35s ease}
+.skillcard.open .detail{max-height:460px}
+.skillcard.open .more .ar{transform:rotate(90deg)}
+.skillcard .detail .inner{padding-top:11px;margin-top:10px;border-top:1px dashed rgba(242,200,120,.18)}
+.skillcard .detail .do{font-size:.88rem;color:#ddd2bc;margin:0 0 8px}
+.skillcard .detail .do b{color:#f4ecd8}
+.skillcard .frac{display:flex;gap:4px;flex-wrap:wrap;font-size:.72rem;color:#9fb0a0;margin:0 0 8px}
+.skillcard .frac span{background:rgba(242,200,120,.1);border:1px solid rgba(242,200,120,.18);border-radius:13px;padding:2px 8px}
+.skillcard .frac span.min{background:rgba(232,199,126,.18);color:#ffe1a0;font-weight:600}
+.skillcard .gdu{font-size:.8rem;color:#bcd0c2}
+.skillcard .gdu b{color:#f2c878}
+.skillcard .tr{font-size:.82rem;color:#bcd0c2;margin-top:7px}
+.skillcard .tr b{color:#ffe1a0}
+.skillcard .claim{position:absolute;top:11px;right:12px;font-size:.7rem;color:#6FB59A;font-weight:600;opacity:0;transition:opacity .3s;display:flex;align-items:center;gap:3px}
+.skillcard.claimed{box-shadow:inset 0 0 0 2px rgba(111,181,154,.5)}
+.skillcard.claimed .claim{opacity:1}
+.skillcard.claimed .sicon{box-shadow:0 0 14px rgba(111,181,154,.5)}
+
+/* single wide mentor stage */
+.mentorwide{display:flex;gap:14px;align-items:center;background:rgba(255,255,255,.035);border:1px solid rgba(242,200,120,.2);border-radius:16px;padding:13px;margin:12px 0}
+.mentorwide img{width:90px;height:90px;border-radius:12px;object-fit:cover;object-position:center 18%;flex-shrink:0;border:1px solid rgba(242,200,120,.3)}
+.mentorwide .mw{flex:1}
+.mentorwide .mw .mrole{font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:#9fb0a0}
+.mentorwide .mw h4{font-family:'Cormorant Garamond',serif;font-size:1.35rem;color:#f2c878;margin:1px 0 4px}
+.mentorwide .mw p{margin:0;color:#cdbfa6;font-size:.9rem}
+
+/* prep */
+.prep{list-style:none;padding:0;margin:8px 0}
+.prep li{display:flex;gap:13px;align-items:flex-start;background:rgba(255,255,255,.035);border:1px solid rgba(242,200,120,.2);border-radius:14px;padding:13px 15px;margin:0 0 10px}
+.prep .pi{font-size:1.5rem;line-height:1;flex-shrink:0}
+.prep .pt b{color:#f4ecd8;font-size:1rem}
+.prep .pt span{display:block;color:#bcd0c2;font-size:.88rem;margin-top:2px}
+
+/* artefact popup */
+#artefact{position:fixed;inset:0;z-index:200;display:none;align-items:center;justify-content:center;background:rgba(6,9,11,.82);backdrop-filter:blur(4px);padding:24px}
+#artefact.show{display:flex;animation:fade .3s}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+#artefact .box{max-width:380px;text-align:center;background:linear-gradient(160deg,rgba(36,26,16,.97),rgba(18,12,7,.97));border:1px solid #E8C77E;border-radius:20px;padding:26px 22px;box-shadow:0 0 0 4px rgba(12,8,5,.6),0 20px 60px -10px rgba(232,199,126,.4);animation:pop .4s cubic-bezier(.2,.9,.3,1.3)}
+@keyframes pop{from{transform:scale(.85);opacity:0}to{transform:scale(1);opacity:1}}
+#artefact .glyph{font-size:3.2rem;margin-bottom:6px;filter:drop-shadow(0 0 14px rgba(242,200,120,.6))}
+#artefact h3{font-family:'Cormorant Garamond',serif;font-size:1.6rem;color:#ffe1a0;margin-bottom:7px}
+#artefact p{color:#ddd2bc;font-size:.95rem;margin-bottom:16px}
+#artefact button{background:linear-gradient(120deg,#ffe1a0,#e2a458);color:#2a1908;font-weight:600;border:0;border-radius:24px;padding:11px 26px;font-size:.95rem;cursor:pointer;font-family:Inter}
+
+/* treasure cards */
+.scard{display:flex;gap:13px;align-items:center;background:rgba(255,255,255,.03);border:1px solid rgba(242,200,120,.18);border-radius:14px;padding:13px;margin:11px 0}
+.scard .ti{width:74px;height:74px;border-radius:11px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.9rem}
+.scard img{width:74px;height:74px;object-fit:cover;border-radius:11px;flex-shrink:0}
+.scard h4{font-family:'Cormorant Garamond',serif;font-size:1.2rem;margin:0 0 3px}
+.scard p{margin:0;color:#cdbfa6;font-size:.9rem}
+
+/* galleries */
 details{margin:14px 0;border:1px solid rgba(242,200,120,.25);border-radius:14px;background:rgba(0,0,0,.22);overflow:hidden}
 summary{cursor:pointer;padding:15px 16px;font-family:'Cormorant Garamond',serif;font-size:1.25rem;color:#f2c878;list-style:none;display:flex;align-items:center;gap:8px}
 summary::-webkit-details-marker{display:none}
 summary .ar{color:#e2a458;transition:.2s}
 details[open] summary .ar{transform:rotate(90deg)}
 summary small{margin-left:auto;font-family:Inter;font-size:.72rem;color:#9fb0a0;font-weight:400}
-.dd{padding:0 16px 16px}
-.prog{list-style:none;padding:0;margin:4px 0 0}
-.prog li{display:flex;gap:13px;align-items:flex-start;padding:11px 0;border-bottom:1px solid rgba(242,200,120,.1)}
-.prog li:last-child{border-bottom:none}
-.prog .t{font-family:'Cormorant Garamond',serif;color:#ffe1a0;font-size:.82rem;letter-spacing:.06em;min-width:64px;padding-top:2px}
-.prog .d b{color:#f4ecd8}
-.prog .d span{display:block;color:#9fb0a0;font-size:.88rem;margin-top:1px}
-.prog .lead-by{display:inline-flex;align-items:center;gap:5px;margin-top:4px;font-size:.78rem;color:#bcd0c2}
-.prog .lead-by img{width:22px;height:22px;border-radius:50%;object-fit:cover;object-position:center 20%;border:1px solid rgba(242,200,120,.4)}
-.prog .lead-by b{color:#f2c878}
-/* 6 games on the page */
-.games{display:grid;grid-template-columns:1fr;gap:13px;margin:8px 0}
-.game{background:rgba(255,255,255,.035);border:1px solid rgba(242,200,120,.2);border-radius:16px;padding:15px 15px 16px;position:relative}
-.game .ghead{display:flex;align-items:center;gap:12px;margin-bottom:10px}
-.game .gico{width:48px;height:48px;border-radius:11px;object-fit:cover;border:1px solid rgba(242,200,120,.3);background:rgba(0,0,0,.25);flex-shrink:0}
-.game .gtitle{flex:1}
-.game .gtitle .gnum{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:#9fb0a0}
-.game .gtitle .gname{font-family:'Cormorant Garamond',serif;font-size:1.35rem;color:#f2c878;line-height:1.05}
-.game .anchor{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:#ffe1a0;white-space:nowrap;align-self:flex-start;padding-top:3px}
-.game .leadby{display:flex;align-items:center;gap:8px;background:rgba(111,181,154,.08);border:1px solid rgba(111,181,154,.25);border-radius:10px;padding:7px 10px;margin-bottom:10px}
-.game .leadby img{width:34px;height:34px;border-radius:50%;object-fit:cover;object-position:center 20%;border:1px solid rgba(242,200,120,.4);flex-shrink:0}
-.game .leadby .lt{font-size:.84rem;color:#bcd0c2;line-height:1.3}
-.game .leadby .lt b{color:#6FB59A}
-.game .do{font-size:.92rem;color:#ddd2bc;margin:0 0 9px}
-.game .do b{color:#f4ecd8}
-.game .frac{display:flex;gap:5px;flex-wrap:wrap;font-size:.74rem;color:#9fb0a0;margin:0 0 9px}
-.game .frac span{background:rgba(242,200,120,.1);border:1px solid rgba(242,200,120,.18);border-radius:14px;padding:2px 9px;white-space:nowrap}
-.game .frac span.minutes{background:rgba(232,199,126,.18);color:#ffe1a0;font-weight:600}
-.game .gdu{font-size:.82rem;color:#bcd0c2;border-top:1px dashed rgba(242,200,120,.16);padding-top:8px}
-.game .gdu b{color:#f2c878}
-/* team roster */
-.gal{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:0 0 4px}
+.gal{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:0 16px 16px}
 .tile{border-radius:12px;overflow:hidden;border:1px solid rgba(242,200,120,.2);background:#0d1417}
-.tile img{width:100%;aspect-ratio:4/5;object-fit:cover;object-position:center 22%}
+.tile img{width:100%;aspect-ratio:4/5;object-fit:cover;object-position:center 20%}
 .tile .cap{padding:8px 10px 10px}
 .tile .w{font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:#f2c878;line-height:1}
 .tile .s{font-size:.76rem;color:#b8c4ba;margin-top:3px;line-height:1.3}
-.scard{display:flex;gap:13px;align-items:center;background:rgba(255,255,255,.03);border:1px solid rgba(242,200,120,.18);border-radius:14px;padding:13px;margin:11px 0}
-.scard img{width:80px;height:80px;object-fit:cover;border-radius:10px;flex-shrink:0}
-.scard h4{font-family:'Cormorant Garamond',serif;font-size:1.25rem;margin:0 0 3px}
-.scard p{margin:0;color:#cdbfa6;font-size:.9rem}
-.prep{list-style:none;padding:0;margin:8px 0}
-.prep li{display:flex;gap:13px;align-items:flex-start;background:rgba(255,255,255,.035);border:1px solid rgba(242,200,120,.2);border-radius:14px;padding:13px 15px;margin:0 0 10px}
-.prep .pi{font-size:1.5rem;line-height:1;flex-shrink:0}
-.prep .pt b{color:#f4ecd8;font-size:1rem}
-.prep .pt span{display:block;color:#bcd0c2;font-size:.88rem;margin-top:2px}
-.prep .must{font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:#2a1908;background:linear-gradient(120deg,#ffe1a0,#e2a458);border-radius:5px;padding:1px 7px;margin-left:6px;white-space:nowrap}
-.prep .nice{font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:#9fb0a0;background:rgba(159,176,160,.15);border-radius:5px;padding:1px 7px;margin-left:6px;white-space:nowrap}
+
 .soon{text-align:center;border:1px dashed rgba(242,200,120,.3);border-radius:14px;padding:18px 16px;margin:14px 0;color:#9fb0a0;font-size:.92rem;background:rgba(0,0,0,.18)}
 .soon b{color:#f2c878;font-family:'Cormorant Garamond',serif;font-size:1.1rem}
-.finalcta{text-align:center;background:linear-gradient(135deg,rgba(232,199,126,.16),rgba(111,181,154,.12));border:1px solid #E8C77E;border-radius:16px;padding:24px 18px;margin:26px 0}
-.finalcta h3{font-family:'Cormorant Garamond',serif;font-size:1.7rem;color:#ffe1a0;margin-bottom:8px}
-.finalcta p{color:#ddd2bc;max-width:540px;margin:0 auto 6px}
-.foot{text-align:center;color:#7d8a82;font-size:.82rem;padding:40px 16px 60px;border-top:1px solid rgba(255,255,255,.06);margin-top:30px}
 .joinrow{text-align:center;margin:18px 0 4px}
 .joinrow .cta{margin-top:0}
+.finalcta{text-align:center;background:linear-gradient(135deg,rgba(232,199,126,.16),rgba(111,181,154,.12));border:1px solid #E8C77E;border-radius:16px;padding:24px 18px;margin:26px 0}
+.finalcta h3{font-family:'Cormorant Garamond',serif;font-size:1.7rem;color:#ffe1a0;margin-bottom:8px}
+.finalcta p{color:#ddd2bc;max-width:560px;margin:0 auto 6px}
+.foot{text-align:center;color:#7d8a82;font-size:.82rem;padding:40px 16px 60px;border-top:1px solid rgba(255,255,255,.06);margin-top:30px}
+
 @media(max-width:480px){
   .barrow{gap:8px}
-  .barrow .when{font-size:.92rem}
+  .barrow .when{font-size:.9rem}
+  .barrow .track{width:54px}
   .hero .heroimg{aspect-ratio:4/3;max-height:none}
-  .hero .ov{margin-top:-78px}
-  h1{font-size:1.85rem}
-  .scene h2{font-size:1.5rem}
-  .stage .banner{height:120px}
-  .tile img{aspect-ratio:1/1;object-position:center 20%}
+  .hero .ov{margin-top:-82px}
+  h1{font-size:1.9rem}
+  .chapter h2{font-size:1.55rem}
+  .mentors{grid-template-columns:1fr}
+  .mentor .portrait{aspect-ratio:4/3}
+  .stage .banner{height:128px}
+  .gal .tile img{aspect-ratio:1/1}
   .cta{padding:12px 24px}
 }
 </style>
 </head>
 <body>
 
+<!-- sticky quest bar -->
 <div id="bar"><div class="barrow">
-  <span class="live">● На живо днес</span>
+  <span class="live">● Приключение на живо</span>
   <span class="when">Събота, 16:00 ч.</span>
+  <span class="xp">
+    <span class="track"><span class="fill" id="xpfill"></span></span>
+    <span class="xpn" id="xpnum">✦ 0 XP</span>
+  </span>
   <a class="go" href="https://us06web.zoom.us/j/83214345575?pwd=4JT1emTLIFcOMnKB50heaQPnqa0vsr.1">Влез →</a>
 </div></div>
 
-<!-- HERO -->
+<!-- ════ HERO ════ -->
 <div class="hero">
-  <div class="heroimg"><img src="https://maitapp.com/img/hero-6umenia.jpg" alt=""></div>
+  <div class="heroimg"><img src="https://maitapp.com/img/deck-title.jpg" alt=""></div>
   <div class="ov">
-    <p class="kicker">Сериал МетаТийн · Клубна на живо</p>
+    <p class="kicker">Сериал МетаТийн · Карта на приключението</p>
     <h1>6-те AI умения,<br>преди играта да се смени</h1>
-    <p class="lead"><b>Не догонвайте AI. Поведете го</b> — спокойно, до детето си. 6 умения, 1 принцип: човешкото (вкус · контекст · преценка) остава вашата незаменимост.</p>
+    <p class="lead"><b>Не догонвайте AI. Поведете го</b> — спокойно, до детето си. Една карта, осем спирки, шест умения за отключване. Тръгваме заедно.</p>
     <p class="when-line">📅 <b>Днес, събота · 16:00 ч.</b> · на живо в Zoom · около 90 минути</p>
     <a class="cta" href="https://us06web.zoom.us/j/83214345575?pwd=4JT1emTLIFcOMnKB50heaQPnqa0vsr.1">Влезте в стаята →</a>
   </div>
@@ -164,204 +213,241 @@ summary small{margin-left:auto;font-family:Inter;font-size:.72rem;color:#9fb0a0;
 
 <div class="wrap">
 
-  <!-- КУКА · СВЕТЪТ СЕ МЕНИ + ВРЕМЕТРОН -->
-  <div class="scene"><div class="sc" style="color:#E89556">Защо точно сега</div><h2>Светът се мени по-бързо, отколкото усещаме</h2></div>
+  <!-- ════ I · РАЗЛИЧНОСТ ════ -->
+  <div class="chapter">
+    <div class="stage-no">Спирка I · от VIII</div>
+    <div class="scn" style="color:#E8C77E">🟡 РазЛичност · целта</div>
+    <h2>Кой влиза в картата днес</h2>
+    <p>Родител и дете, в едно поле. Целта: да станете пример за развиваща се разЛичност — спокойни сред новото.</p>
+    <span class="lvlxp">🎯 Наградата на цялото приключение · <b>+89 XP</b></span>
+  </div>
+  <div class="cover"><img src="https://maitapp.com/img/deck-razlichnost.jpg" alt="">
+    <div class="clbl"><div class="ck">Спирка I · РазЛичност</div><div class="ch">Героите тръгват заедно</div></div></div>
+
+  <!-- ════ II · ЧУДОВИЩЕ ════ -->
+  <div class="chapter">
+    <div class="stage-no">Спирка II · от VIII</div>
+    <div class="scn" style="color:#E89556">🔴 ЧудоВище · кой пази пътя</div>
+    <h2>Времетрон краде вниманието</h2>
+  </div>
+  <div class="cover"><img src="https://maitapp.com/img/deck-chudovishte.jpg" alt="">
+    <div class="clbl"><div class="ck">Чудовището · Времетрон</div><div class="ch">AI без управление е негов слуга</div></div></div>
   <div class="stage">
-    <div class="banner"><img src="https://maitapp.com/img/art-%D1%81%D0%BF%D0%B8%D1%80%D0%B0%D1%87%D0%BA%D0%B0.jpg" alt="">
-      <div class="lbl"><div class="num">Чудовището · Времетрон</div><h3>AI без управление е негов слуга</h3></div></div>
     <div class="body">
       <p><b>AI няма да замени вас</b> — ще замени онзи до вас, който отказа да го направлява. Това е истинският залог.</p>
-      <p>AI <b>без управление</b> = слуга на Времетрон: бълва бързо, замъглява вниманието, краде по една минута. AI <b>с вкус и контекст</b> = ваш съюзник, който върви по вашата воля.</p>
-      <p>Затова не говорим за изкуствен интелект — <b>отиграваме</b> 6 умения с истински, ваши задачи. Въпросът не е <i>„дали"</i>, а <i>„кой ще води — вие или Времетрон"</i>.</p>
-      <div class="note"><b>Залогът днес.</b> 2 часа спокоен фокус днес → <b>4+ часа спестени</b> тази седмица. А оттам — 3 месеца Металандия, в които същите умения се задълбочават.</div>
+      <p>AI <b>без управление</b> = слуга на Времетрон: бълва бързо, замъглява вниманието. AI <b>с вкус и контекст</b> = ваш съюзник, който върви по вашата воля.</p>
+      <div class="note"><b>Залогът днес.</b> 2 часа спокоен фокус → <b>4+ часа спестени</b> тази седмица. А оттам — 3 месеца Металандия.</div>
     </div>
   </div>
 
-  <!-- 📋 ПРИГОТВЕТЕ СЕ -->
-  <div class="scene"><div class="sc" style="color:#E89556">Преди да започнем</div><h2>📋 Пригответе се</h2><p>За да участвате пълноценно — не просто да гледате, а да отиграете уменията със своя истинска задача.</p></div>
-  <ul class="prep">
-    <li><span class="pi">💻</span><div class="pt"><b>На компютър<span class="must">важно</span></b><span>Не на телефон — игрите се играят с инструмент, удобно е на голям екран.</span></div></li>
-    <li><span class="pi">🤖</span><div class="pt"><b>Claude Code, инсталиран<span class="must">важно</span></b><span>Поне него — основният инструмент, с който отиграваме уменията на живо.</span></div></li>
-    <li><span class="pi">📓</span><div class="pt"><b>Obsidian<span class="nice">добре е</span></b><span>За вашия метамозък — папката, която помни вместо вас.</span></div></li>
-    <li><span class="pi">🎧</span><div class="pt"><b>Слушалки<span class="nice">добре е</span></b><span>За метаслушането — спокойния сеанс на попиване, в който идеите легат периферно.</span></div></li>
-  </ul>
-  <div class="note">Нямате нещо подръка? Елате така — ще ви насочим стъпка по стъпка. По-важно е да сте тук, отколкото всичко да е готово.</div>
+  <!-- ════ III · ВОДАЧ ════ -->
+  <div class="chapter">
+    <div class="stage-no">Спирка III · от VIII</div>
+    <div class="scn" style="color:#6FB59A">🔵 Водач · кой ви открива пътя</div>
+    <h2>Доверка ви посреща на прага</h2>
+    <p>Първата спирка води Доверка — присъствието, което държи всичко цяло. Тук влизате с приказно име и една дума: коя минута ви открадна Времетрон.</p>
+  </div>
+  <div class="cover"><img src="https://maitapp.com/img/deck-vodach.jpg" alt="">
+    <div class="clbl"><div class="ck">Спирка III · Водачът</div><div class="ch">Менторите застават до вас</div></div></div>
+  <div class="mentorwide">
+    <img src="https://maitapp.com/img/%D0%B4%D0%BE%D0%B2%D0%B5%D1%80%D0%BA%D0%B0.jpg" alt="">
+    <div class="mw"><div class="mrole">Менторът на откриването · 0–15′</div><h4>Доверка</h4><p>Присъствието, което държи всичко цяло. С нея влизате в полето — камерата включена, заедно, не паралелно.</p></div>
+  </div>
+  <div class="note">Зад водачите стоят и Лозанов (резервите се разгръщат) и Карпати (системата). А <b>Метатрон</b> е полето между всички ментори.</div>
 
-  <!-- ТРЕЙЛЪР / ПРЕДВАРИТЕЛНО СЛУШАНЕ -->
-  <div class="scene"><div class="sc" style="color:#b89ad8">Преди да влезете</div><h2>Една минута настройка</h2><p>Пуснете я, докато си наливате чай — да влезете в стаята вече в тон.</p></div>
+  <!-- ════ IV · ПЛАН ════ -->
+  <div class="chapter">
+    <div class="stage-no">Спирка IV · от VIII</div>
+    <div class="scn" style="color:#b89ad8">🟢 План · настройката преди тръгване</div>
+    <h2>Една минута, за да сте в тон</h2>
+    <p>Пуснете я, докато си наливате чай — и влезте в картата вече в настроение.</p>
+  </div>
+  <div class="cover"><img src="https://maitapp.com/img/deck-plan.jpg" alt="">
+    <div class="clbl"><div class="ck">Спирка IV · Планът</div><div class="ch">Шест ключа за из път</div></div></div>
   <div class="vid">
     <video src="https://maitapp.com/video/hero-loop-720p.mp4" poster="https://maitapp.com/img/hero-mother-wide.jpg" muted autoplay loop playsinline></video>
     <div class="vcap">Родител и дете водят новото спокойно — не го гонят. Точно това ще усетите днес.</div>
   </div>
-
-  <!-- 6-ТЕ УМЕНИЯ · ПОЛЗА + ПРЕОБРАЗА -->
-  <div class="scene" id="skills"><div class="sc" style="color:#E8C77E">Сърцето на срещата</div><h2>6-те умения · просто казано</h2><p>Не списък за помнене — шест навика, които отиграваме на живо. Усещате едно ясно, а другите пет — периферно.</p></div>
-  <div class="skills">
-    <div class="skill">
-      <span class="badge">✦ +21 точки</span>
-      <img class="ico" src="https://maitapp.com/img/skill-1.png" alt="">
-      <div class="kw">Водя</div><div class="nm">Човек + AI</div>
-      <p class="be">Спирате да се състезавате с машината — започвате да я <b>водите</b>.</p>
-      <p class="ex">Като счетоводителя, който отказа Excel — другите вече питат <b>него</b>, а той усеща как „изоставам". Незаменим е не онзи, който знае инструмента, а онзи, който го <b>води</b>.</p>
-      <p class="du"><b>Дуал:</b> детето е „онзи, когото питат" — родителят гледа как водачеството се учи в действие.</p>
-      <p class="tr">От „гоня влака" → <b>аз карам влака</b></p>
-    </div>
-    <div class="skill">
-      <span class="badge">✦ +13 точки</span>
-      <img class="ico" src="https://maitapp.com/img/skill-2.png" alt="">
-      <div class="kw">Усещам</div><div class="nm">Вкус · преценка</div>
-      <p class="be">Усещате кое е добро — не ви лъже всеки лъскав изход.</p>
-      <p class="ex">Издайникът са тиретата — точно като това — текст, който „става", но звучи като машина, не като вас. Вкусът решава кое заслужава <b>вашето име</b> отдолу.</p>
-      <p class="du"><b>Дуал:</b> родител и дете гласуват поотделно кой вариант е по-добър — после сравняват вкуса си.</p>
-      <p class="tr">От „става" → <b>заслужава ме</b></p>
-    </div>
-    <div class="skill">
-      <span class="badge">✦ +13 точки</span>
-      <img class="ico" src="https://maitapp.com/img/skill-3.png" alt="">
-      <div class="kw">Казвам точно</div><div class="nm">Контекст-инженер</div>
-      <p class="be">Казвате точно каквото искате — по-малко напъни, по-добър резултат.</p>
-      <p class="ex">Като да въведете лятна стажантка: промптът е <b>как</b> питате, контекстът е <b>какво</b> AI вече знае за вас. Дайте и двете — и generic става уникален.</p>
-      <p class="du"><b>Дуал:</b> детето описва за кого е, родителят добавя тона — заедно строят контекста.</p>
-      <p class="tr">От „не ме разбира" → <b>ясна воля</b></p>
-    </div>
-    <div class="skill">
-      <span class="badge">✦ +8 точки</span>
-      <img class="ico" src="https://maitapp.com/img/skill-4.png" alt="">
-      <div class="kw">Стига</div><div class="nm">Скорост · „готово"</div>
-      <p class="be">Малки стъпки, знаете кога СТИГА — край на анализ-парализата.</p>
-      <p class="ex">Като да учите дете на колело — пускате и поправяте, не чакате перфектно. Всеки опит вдига базовата линия, а грешката е <b>данни</b>, не провал.</p>
-      <p class="du"><b>Дуал:</b> родителят казва критерия „готово е, когато…", детето натиска „стоп".</p>
-      <p class="tr">От „чакам перфектно" → <b>пускам и поправям</b></p>
-    </div>
-    <div class="skill">
-      <span class="badge">✦ +21 точки</span>
-      <img class="ico" src="https://maitapp.com/img/skill-5.png" alt="">
-      <div class="kw">Присъствам</div><div class="nm">Кога НЕ AI · Джарвис</div>
-      <p class="be">Знаете кога помага и кога пречи — връщате си присъствието.</p>
-      <p class="ex">Вендинг машина, не слот машина: строите системи, които работят <b>без вас</b>, за да сте спокойни и присъстващи. От спусък, който все натиска — към архитект, който подрежда.</p>
-      <p class="du"><b>Дуал:</b> семейно решение — един общ момент в седмицата, в който екранът остава настрана.</p>
-      <p class="tr">От „спусък" → <b>архитект</b></p>
-    </div>
-    <div class="skill">
-      <span class="badge">✦ +13 точки</span>
-      <img class="ico" src="https://maitapp.com/img/skill-6.png" alt="">
-      <div class="kw">Спокоен съм</div><div class="nm">Застраховка · много потоци</div>
-      <p class="be">Не залагате на едно — спокойствие, ако нещо падне.</p>
-      <p class="ex">Много потоци около <b>една</b> ваша страст — споделяте открито пътя си, и всеки мост, който построите, ви прави по-малко зависими.</p>
-      <p class="du"><b>Дуал:</b> детето пита „ами ако това падне?", родителят отговаря с втория мост.</p>
-      <p class="tr">От „зависим" → <b>свободен</b></p>
-    </div>
-  </div>
-  <div class="note"><b>Как протича.</b> Всяко умение е <b>8 минути</b>: 1 четете · 3 гледате на живо · 3 правите сами · 1 споделяме. Без терминали, без ред код — на човешки език, на български.</div>
-  <div class="joinrow"><a class="cta" href="https://us06web.zoom.us/j/83214345575?pwd=4JT1emTLIFcOMnKB50heaQPnqa0vsr.1">Отиграйте ги с нас · 16:00 ч. →</a></div>
-
-  <!-- БОНУС · МЕТАСЛУШАНЕ · NATE -->
-  <div class="scene"><div class="sc" style="color:#6FB59A">Бонус · преди срещата</div><h2>🎧 Метаслушайте първоизточника</h2><p>Като бонус — метаслушайте видеото предварително (на английски · оригиналът на Nate Herk). Ние ще го преживеем заедно, на български.</p></div>
-  <div class="vid">
-    <div class="ytwrap"><iframe src="https://www.youtube-nocookie.com/embed/3XIGcM7VICc" title="Nate Herk · 6 AI умения (оригинал)" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
-    <div class="vcap">Не е нужно да го гледате цял — пуснете го, докато си наливате чай, и оставете идеите да легнат периферно. На срещата ги отиграваме.</div>
-  </div>
-
-  <!-- ПЪЛНА ПРОГРАМА -->
-  <div class="scene"><div class="sc" style="color:#6FB59A">Пълната програма</div><h2>Как минава срещата</h2></div>
-  <details open>
-    <summary><span class="ar">▸</span> 🌿 4 етапа · около 90 минути <small>отворете за плана</small></summary>
-    <div class="dd">
-      <ul class="prog">
-        <li><span class="t">0–15′</span><div class="d"><b>Откриване · влизаме в стаята</b><span>Приказно име, камера включена, една дума: коя минута ви открадна Времетрон тази седмица.</span><span class="lead-by"><img src="https://maitapp.com/img/%D0%B4%D0%BE%D0%B2%D0%B5%D1%80%D0%BA%D0%B0.jpg" alt="">Води <b>Доверка</b> · присъствието</span></div></li>
-        <li><span class="t">15–80′</span><div class="d"><b>Отиграваме шестте умения</b><span>Шест песъчника — с ваша истинска задача. Тук е сърцето: 60% правене, не слушане. Всяка игра води свой будечител (вижте по-долу).</span><span class="lead-by">🎮 6 игри · 48 минути · вижте „Програмата на живо"</span></div></li>
-        <li><span class="t">80–90′</span><div class="d"><b>Затваряне · следващата крачка</b><span>Кое умение отигравате пръв утре · и накъде водят 3-те месеца Металандия.</span><span class="lead-by"><img src="https://maitapp.com/img/%D1%84%D0%B8%D0%B1%D0%BE%D0%BD%D0%B0%D1%87%D0%BA%D0%BE.jpg" alt="">Води <b>Фибоначко</b> · ритъм и мяра</span></div></li>
-      </ul>
-      <div class="note warn"><b>Заедно, не паралелно.</b> Няма отделни стаи — единното поле е инструментът. Камерата включена = участвате в играта. <b>Метатрон</b> е полето между всички будечители.</div>
+  <details>
+    <summary><span class="ar">▸</span> 🎒 Какво да вземете за пътя <small>всичко по желание</small></summary>
+    <ul class="prep" style="padding:0 16px 14px">
+      <li><span class="pi">💻</span><div class="pt"><b>Най-хубаво е на компютър</b><span>На голям екран картата диша по-волно — но и от телефон се влиза, елате както ви е удобно.</span></div></li>
+      <li><span class="pi">🤖</span><div class="pt"><b>Claude — вашият спътник</b><span>Помощникът, който действа по ваши думи на български. Ако го имате инсталиран, тръгваме по-леко.</span></div></li>
+      <li><span class="pi">📓</span><div class="pt"><b>Obsidian — папката-памет</b><span>Метамозъкът, който помни вместо вас. Хубав е да го има, но не и за първата спирка.</span></div></li>
+      <li><span class="pi">🎧</span><div class="pt"><b>Слушалки — за метаслушането</b><span>Спокойният сеанс на попиване звучи най-меко в слушалки. Част от приключението, не изискване.</span></div></li>
+    </ul>
+    <p style="padding:0 16px 14px;color:#9fb0a0;font-size:.88rem;margin:0">Нямате нещо подръка? Елате така — ще ви насочим стъпка по стъпка. По-хубаво е да сте тук.</p>
+  </details>
+  <details>
+    <summary><span class="ar">▸</span> 🎧 Метаслушайте първоизточника <small>бонус · на английски</small></summary>
+    <div style="padding:0 16px 16px">
+      <p style="color:#9fb0a0;font-size:.9rem;margin:4px 0 10px">Като бонус — оставете идеите да легнат периферно (на английски · оригиналът на Nate Herk). Ние ще ги преживеем заедно, на български.</p>
+      <div class="vid" style="margin:0"><div class="ytwrap"><iframe src="https://www.youtube-nocookie.com/embed/3XIGcM7VICc" title="Nate Herk · 6 AI умения (оригинал)" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div></div>
     </div>
   </details>
-  <div class="joinrow"><a class="cta" href="https://us06web.zoom.us/j/83214345575?pwd=4JT1emTLIFcOMnKB50heaQPnqa0vsr.1">Влезте в стаята · 16:00 ч. →</a></div>
 
-  <!-- 🎮 ПРОГРАМАТА НА ЖИВО · 6-ТЕ ИГРИ -->
-  <div class="scene"><div class="sc" style="color:#E8C77E">Подреденият продукт</div><h2>🎮 Програмата на живо · 6-те игри</h2><p>Всяка игра е 8 минути (две са по-дълги — там е преобразата). Един будечител води всяка. Вие играете със своя истинска задача — заедно, родител и дете.</p></div>
-  <div class="games">
+  <!-- ════ V · ПРАГ ════ -->
+  <div class="chapter">
+    <div class="stage-no">Спирка V · от VIII</div>
+    <div class="scn" style="color:#E89556">🟠 Праг · първото съпротивление</div>
+    <h2>„Шест умения за 90 минути?!"</h2>
+    <p>Не учите шест неща. Отигравате по едно за 8 минути — усещате едно ясно, другите пет легат периферно. Малки стъпки. Започваме.</p>
+  </div>
+  <div class="cover"><img src="https://maitapp.com/img/deck-prag.jpg" alt="">
+    <div class="clbl"><div class="ck">Спирка V · Прагът</div><div class="ch">Първата крачка през съмнението</div></div></div>
 
-    <div class="game">
-      <div class="ghead">
-        <img class="gico" src="https://maitapp.com/img/skill-1.png" alt="">
-        <div class="gtitle"><div class="gnum">Игра 1 · Човек + AI</div><div class="gname">Водачът</div></div>
-        <div class="anchor">„Водя"</div>
+  <!-- ════ VI · ИЗПИТАНИЕ · 6-те умения ════ -->
+  <div class="chapter" id="games">
+    <div class="stage-no">Спирка VI · от VIII</div>
+    <div class="scn" style="color:#9c7fc8">🟣 Изпитание · сърцето на картата</div>
+    <h2>6-те умения за отключване</h2>
+    <p>Всяко умение има свой ментор и своя игра. Докоснете карта, за да я разгърнете — и я <b>отключете</b>. Отключите ли три, ви чака артефакт.</p>
+    <span class="lvlxp">🎮 6 игри · 48 минути · <b>докоснете 3 → артефакт</b></span>
+  </div>
+  <div class="cover"><img src="https://maitapp.com/img/deck-izpitanie.jpg" alt="">
+    <div class="clbl"><div class="ck">Спирка VI · Изпитанието</div><div class="ch">Арената на шестте игри</div></div></div>
+
+  <div class="mentors">
+
+    <!-- 1 · Куражку → Водачът -->
+    <div class="mentor">
+      <div class="portrait"><img src="https://maitapp.com/img/%D0%BA%D1%83%D1%80%D0%B0%D0%B6%D0%BA%D1%83.jpg" alt="">
+        <div class="mlbl"><div class="mrole">Менторът на Игра 1</div><div class="mname">Куражку</div></div></div>
+      <div class="skillcard" data-skill="1" data-xp="21">
+        <span class="claim">✓ отключено</span>
+        <div class="srow">
+          <div class="sicon"><img src="https://maitapp.com/img/skill-1.png" alt="" onerror="this.parentNode.textContent='🧭'"></div>
+          <div class="smeta"><div class="sgame">Водачът</div><div class="sanchor">„Водя" · Човек + AI</div></div>
+          <span class="xpbadge">+21 XP</span>
+        </div>
+        <p class="teaser">Спирате да гоните машината — поемате руля.</p>
+        <span class="more"><span class="ar">▸</span> Прочетете повече</span>
+        <div class="detail"><div class="inner">
+          <p class="do"><b>Какво правите:</b> Дайте на агент една реална задача с думите „Аз решавам, ти изпълняваш. Ето задачата: …" — и усетете как се сменя посоката.</p>
+          <div class="frac"><span class="min">8 мин</span><span>1 четете</span><span>3 гледате</span><span>3 правите</span><span>1 споделяте</span></div>
+          <p class="gdu"><b>Дуал:</b> детето пише задачата, родителят гледа — после сменяте ролите.</p>
+          <p class="tr">От „гоня влака" → <b>аз карам влака</b></p>
+        </div></div>
       </div>
-      <div class="leadby"><img src="https://maitapp.com/img/%D0%BA%D1%83%D1%80%D0%B0%D0%B6%D0%BA%D1%83.jpg" alt=""><div class="lt">Води <b>Куражку</b> · убедеността, която излъчва</div></div>
-      <p class="do"><b>Какво правите:</b> Дайте на агент една реална задача с думите „Аз решавам, ти изпълняваш. Ето задачата: …" — и усетете как се сменя посоката: вие водите, не гоните.</p>
-      <div class="frac"><span class="minutes">8 мин</span><span>1 четете</span><span>3 гледате</span><span>3 правите</span><span>1 споделяте</span></div>
-      <p class="gdu"><b>Дуал:</b> детето пише задачата, родителят гледа — после сменяте ролите.</p>
     </div>
 
-    <div class="game">
-      <div class="ghead">
-        <img class="gico" src="https://maitapp.com/img/skill-2.png" alt="">
-        <div class="gtitle"><div class="gnum">Игра 2 · Вкус · преценка</div><div class="gname">Вкусникът</div></div>
-        <div class="anchor">„Усещам"</div>
+    <!-- 2 · Творея → Вкусникът -->
+    <div class="mentor">
+      <div class="portrait"><img src="https://maitapp.com/img/%D1%82%D0%B2%D0%BE%D1%80%D0%B5%D1%8F.jpg" alt="">
+        <div class="mlbl"><div class="mrole">Менторът на Игра 2</div><div class="mname">Творея</div></div></div>
+      <div class="skillcard" data-skill="2" data-xp="13">
+        <span class="claim">✓ отключено</span>
+        <div class="srow">
+          <div class="sicon"><img src="https://maitapp.com/img/skill-2.png" alt="" onerror="this.parentNode.textContent='👁'"></div>
+          <div class="smeta"><div class="sgame">Вкусникът</div><div class="sanchor">„Усещам" · Вкус · преценка</div></div>
+          <span class="xpbadge">+13 XP</span>
+        </div>
+        <p class="teaser">Усещате кое е добро — не ви лъже всеки лъскав изход.</p>
+        <span class="more"><span class="ar">▸</span> Прочетете повече</span>
+        <div class="detail"><div class="inner">
+          <p class="do"><b>Какво правите:</b> Поискайте 2 варианта на едно нещо. Изберете по-добрия и кажете защо с едно изречение — това „защо" е вашият вкус, проговорил.</p>
+          <div class="frac"><span class="min">8 мин</span><span>1 четете</span><span>3 гледате</span><span>3 правите</span><span>1 споделяте</span></div>
+          <p class="gdu"><b>Дуал:</b> родител и дете гласуват поотделно, после сравняват вкуса си.</p>
+          <p class="tr">От „става" → <b>заслужава ме</b></p>
+        </div></div>
       </div>
-      <div class="leadby"><img src="https://maitapp.com/img/%D1%82%D0%B2%D0%BE%D1%80%D0%B5%D1%8F.jpg" alt=""><div class="lt">Води <b>Творея</b> · красотата като тих учител</div></div>
-      <p class="do"><b>Какво правите:</b> Поискайте 2 варианта на едно нещо. Изберете по-добрия и кажете защо с едно изречение — това „защо" е вашият вкус, проговорил.</p>
-      <div class="frac"><span class="minutes">8 мин</span><span>1 четете</span><span>3 гледате</span><span>3 правите</span><span>1 споделяте</span></div>
-      <p class="gdu"><b>Дуал:</b> родител и дете гласуват поотделно, после сравняват вкуса си.</p>
     </div>
 
-    <div class="game">
-      <div class="ghead">
-        <img class="gico" src="https://maitapp.com/img/skill-3.png" alt="">
-        <div class="gtitle"><div class="gnum">Игра 3 · Контекст-инженер</div><div class="gname">Гласът на волята</div></div>
-        <div class="anchor">„Казвам точно"</div>
+    <!-- 3 · Екопътечко → Гласът на волята -->
+    <div class="mentor">
+      <div class="portrait"><img src="https://maitapp.com/img/%D0%B5%D0%BA%D0%BE%D0%BF%D1%8A%D1%82%D0%B5%D1%87%D0%BA%D0%BE.jpg" alt="">
+        <div class="mlbl"><div class="mrole">Менторът на Игра 3</div><div class="mname">Екопътечко</div></div></div>
+      <div class="skillcard" data-skill="3" data-xp="13">
+        <span class="claim">✓ отключено</span>
+        <div class="srow">
+          <div class="sicon"><img src="https://maitapp.com/img/skill-3.png" alt="" onerror="this.parentNode.textContent='🗝'"></div>
+          <div class="smeta"><div class="sgame">Гласът на волята</div><div class="sanchor">„Казвам точно" · Контекст</div></div>
+          <span class="xpbadge">+13 XP</span>
+        </div>
+        <p class="teaser">Казвате точно каквото искате — ясна воля.</p>
+        <span class="more"><span class="ar">▸</span> Прочетете повече</span>
+        <div class="detail"><div class="inner">
+          <p class="do"><b>Какво правите:</b> Вземете слаб резултат и добавете 3 неща — за КОГО, в какъв ТОН, и един ПРИМЕР. Пуснете пак и усетете разликата.</p>
+          <div class="frac"><span class="min">8 мин</span><span>1 четете</span><span>3 гледате</span><span>3 правите</span><span>1 споделяте</span></div>
+          <p class="gdu"><b>Дуал:</b> детето описва за кого е, родителят добавя тона.</p>
+          <p class="tr">От „не ме разбира" → <b>ясна воля</b></p>
+        </div></div>
       </div>
-      <div class="leadby"><img src="https://maitapp.com/img/%D0%B5%D0%BA%D0%BE%D0%BF%D1%8A%D1%82%D0%B5%D1%87%D0%BA%D0%BE.jpg" alt=""><div class="lt">Води <b>Екопътечко</b> · свободата сами да изберете пътя</div></div>
-      <p class="do"><b>Какво правите:</b> Вземете слаб резултат и добавете 3 неща — за КОГО, в какъв ТОН, и един ПРИМЕР. Пуснете пак и усетете разликата.</p>
-      <div class="frac"><span class="minutes">8 мин</span><span>1 четете</span><span>3 гледате</span><span>3 правите</span><span>1 споделяте</span></div>
-      <p class="gdu"><b>Дуал:</b> детето описва за кого е, родителят добавя тона — заедно строят контекста.</p>
     </div>
 
-    <div class="game">
-      <div class="ghead">
-        <img class="gico" src="https://maitapp.com/img/skill-4.png" alt="">
-        <div class="gtitle"><div class="gnum">Игра 4 · Скорост · „готово"</div><div class="gname">Стигна!</div></div>
-        <div class="anchor">„Стига"</div>
+    <!-- 4 · Обемко → Стигна! -->
+    <div class="mentor">
+      <div class="portrait"><img src="https://maitapp.com/img/%D0%BE%D0%B1%D0%B5%D0%BC%D0%BA%D0%BE.jpg" alt="">
+        <div class="mlbl"><div class="mrole">Менторът на Игра 4</div><div class="mname">Обемко</div></div></div>
+      <div class="skillcard" data-skill="4" data-xp="8">
+        <span class="claim">✓ отключено</span>
+        <div class="srow">
+          <div class="sicon"><img src="https://maitapp.com/img/skill-4.png" alt="" onerror="this.parentNode.textContent='⚡'"></div>
+          <div class="smeta"><div class="sgame">Стигна!</div><div class="sanchor">„Стига" · Скорост · готово</div></div>
+          <span class="xpbadge">+8 XP</span>
+        </div>
+        <p class="teaser">Знаете кога СТИГА — край на анализ-парализата.</p>
+        <span class="more"><span class="ar">▸</span> Прочетете повече</span>
+        <div class="detail"><div class="inner">
+          <p class="do"><b>Какво правите:</b> Вземете нещо отлагано. Задайте 1 критерий „готово е, когато…". Пуснете веднъж, проверете и СПРЕТЕ.</p>
+          <div class="frac"><span class="min">7 мин</span><span>1 четете</span><span>3 гледате</span><span>2 правите</span><span>1 споделяте</span></div>
+          <p class="gdu"><b>Дуал:</b> родителят казва критерия, детето натиска „стоп".</p>
+          <p class="tr">От „чакам перфектно" → <b>пускам и поправям</b></p>
+        </div></div>
       </div>
-      <div class="leadby"><img src="https://maitapp.com/img/%D0%BE%D0%B1%D0%B5%D0%BC%D0%BA%D0%BE.jpg" alt=""><div class="lt">Води <b>Обемко</b> · повече за същото време, без умора</div></div>
-      <p class="do"><b>Какво правите:</b> Вземете нещо отлагано. Задайте 1 критерий „готово е, когато…". Пуснете веднъж, проверете срещу критерия и СПРЕТЕ — не пипайте повече.</p>
-      <div class="frac"><span class="minutes">7 мин</span><span>1 четете</span><span>3 гледате</span><span>2 правите</span><span>1 споделяте</span></div>
-      <p class="gdu"><b>Дуал:</b> родителят казва критерия, детето натиска „стоп" — пазач на „стига".</p>
     </div>
 
-    <div class="game">
-      <div class="ghead">
-        <img class="gico" src="https://maitapp.com/img/skill-5.png" alt="">
-        <div class="gtitle"><div class="gnum">Игра 5 · Кога НЕ AI · Джарвис</div><div class="gname">Кога Джарвис мълчи</div></div>
-        <div class="anchor">„Присъствам"</div>
+    <!-- 5 · Любка → Кога Джарвис мълчи -->
+    <div class="mentor">
+      <div class="portrait"><img src="https://maitapp.com/img/%D0%BB%D1%8E%D0%B1%D0%BA%D0%B0.jpg" alt="">
+        <div class="mlbl"><div class="mrole">Менторът на Игра 5 · преобразата</div><div class="mname">Любка</div></div></div>
+      <div class="skillcard" data-skill="5" data-xp="21">
+        <span class="claim">✓ отключено</span>
+        <div class="srow">
+          <div class="sicon"><img src="https://maitapp.com/img/skill-5.png" alt="" onerror="this.parentNode.textContent='🕯'"></div>
+          <div class="smeta"><div class="sgame">Кога Джарвис мълчи</div><div class="sanchor">„Присъствам" · Кога НЕ AI</div></div>
+          <span class="xpbadge">+21 XP</span>
+        </div>
+        <p class="teaser">Връщате си присъствието — стопанин, не роб на екрана.</p>
+        <span class="more"><span class="ar">▸</span> Прочетете повече</span>
+        <div class="detail"><div class="inner">
+          <p class="do"><b>Какво правите:</b> Два списъка — „тук AI помага" / „тук AI пречи". Изберете 1 момент седмично, в който екранът остава настрана — заедно.</p>
+          <div class="frac"><span class="min">10 мин · преобразата</span><span>1 четете</span><span>4 гледате</span><span>4 правите</span><span>1 споделяте</span></div>
+          <p class="gdu"><b>Дуал:</b> семейно решение — общ „екран-свободен" момент.</p>
+          <p class="tr">От „спусък" → <b>архитект</b></p>
+        </div></div>
       </div>
-      <div class="leadby"><img src="https://maitapp.com/img/%D0%BB%D1%8E%D0%B1%D0%BA%D0%B0.jpg" alt=""><div class="lt">Води <b>Любка</b> · грижата, която подкрепя невидимо</div></div>
-      <p class="do"><b>Какво правите:</b> Два списъка — „тук AI помага" / „тук AI пречи" (разговор, разходка, домашно на ръка). Изберете 1 момент седмично, в който екранът остава настрана — заедно.</p>
-      <div class="frac"><span class="minutes">10 мин · преобразата</span><span>1 четете</span><span>4 гледате</span><span>4 правите</span><span>1 споделяте</span></div>
-      <p class="gdu"><b>Дуал:</b> семейно решение — родител и дете се договарят за общ „екран-свободен" момент.</p>
     </div>
 
-    <div class="game">
-      <div class="ghead">
-        <img class="gico" src="https://maitapp.com/img/skill-6.png" alt="">
-        <div class="gtitle"><div class="gnum">Игра 6 · Застраховка · много потоци</div><div class="gname">Многото мостове</div></div>
-        <div class="anchor">„Спокоен съм"</div>
+    <!-- 6 · Хола → Многото мостове -->
+    <div class="mentor">
+      <div class="portrait"><img src="https://maitapp.com/img/%D1%85%D0%BE%D0%BB%D0%B0.jpg" alt="">
+        <div class="mlbl"><div class="mrole">Менторът на Игра 6</div><div class="mname">Хола</div></div></div>
+      <div class="skillcard" data-skill="6" data-xp="13">
+        <span class="claim">✓ отключено</span>
+        <div class="srow">
+          <div class="sicon"><img src="https://maitapp.com/img/skill-6.png" alt="" onerror="this.parentNode.textContent='🌉'"></div>
+          <div class="smeta"><div class="sgame">Многото мостове</div><div class="sanchor">„Спокоен съм" · Застраховка</div></div>
+          <span class="xpbadge">+13 XP</span>
+        </div>
+        <p class="teaser">Не залагате на едно — спокойна устойчивост.</p>
+        <span class="more"><span class="ar">▸</span> Прочетете повече</span>
+        <div class="detail"><div class="inner">
+          <p class="do"><b>Какво правите:</b> Назовете 1 нещо, на което залагате само 1 начин. Измислете с агента 2-ри мост — за да знаете, че го има.</p>
+          <div class="frac"><span class="min">7 мин</span><span>1 четете</span><span>3 гледате</span><span>2 правите</span><span>1 споделяте</span></div>
+          <p class="gdu"><b>Дуал:</b> детето пита „ами ако това падне?", родителят отговаря с втория мост.</p>
+          <p class="tr">От „зависим" → <b>свободен</b></p>
+        </div></div>
       </div>
-      <div class="leadby"><img src="https://maitapp.com/img/%D1%85%D0%BE%D0%BB%D0%B0.jpg" alt=""><div class="lt">Води <b>Хола</b> · всяка част носи цялото</div></div>
-      <p class="do"><b>Какво правите:</b> Назовете 1 нещо, на което залагате само 1 начин. Измислете с агента 2-ри мост — не за да го направите днес, а за да знаете, че го има.</p>
-      <div class="frac"><span class="minutes">7 мин</span><span>1 четете</span><span>3 гледате</span><span>2 правите</span><span>1 споделяте</span></div>
-      <p class="gdu"><b>Дуал:</b> детето пита „ами ако това падне?", родителят отговаря с втория мост.</p>
     </div>
 
   </div>
-  <div class="note"><b>48 минути игра · 60% от срещата.</b> Две игри са по-дълги — там, където навикът най-трудно се сменя (присъствие · скорост). Това е Фибоначи-теглото: повече време там, където е преобразата.</div>
+  <div class="note"><b>48 минути игра · 60% от срещата.</b> Две игри са по-дълги — там, където навикът най-трудно се сменя. Това е Фибоначи-теглото: повече време, където е преобразата.</div>
   <div class="joinrow"><a class="cta" href="https://us06web.zoom.us/j/83214345575?pwd=4JT1emTLIFcOMnKB50heaQPnqa0vsr.1">Отиграйте ги с нас · 16:00 ч. →</a></div>
 
-  <!-- ИЗПИТАНИЕТО · СЛУГИТЕ НА ВРЕМЕТРОН (разгъваща се) -->
-  <div class="scene"><div class="sc" style="color:#E89556">Изпитанието</div><h2>Кои крадат вниманието</h2><p>Времетрон не идва сам — праща слугите си. Същите сенки нападат и възрастния пред новия инструмент, и детето пред екрана.</p></div>
   <details>
-    <summary><span class="ar">▸</span> 👹 Слугите на Времетрон <small>8 сенки · отворете за по-бавен скрол</small></summary>
-    <p style="padding:0 16px;color:#9fb0a0;font-size:.9rem;margin:0 0 6px">Времетрон командва — часовник вместо сърце. Назовете ли слугите му, губят силата си.</p>
+    <summary><span class="ar">▸</span> 👹 Кои крадат вниманието по пътя <small>8 сенки</small></summary>
+    <p style="padding:0 16px;color:#9fb0a0;font-size:.9rem;margin:0 0 6px">Времетрон не идва сам — праща слугите си. Същите сенки нападат и възрастния пред новия инструмент, и детето пред екрана. Назовете ли ги, губят силата си.</p>
     <div class="gal">
       <div class="tile"><img src="https://maitapp.com/img/ant-%D1%81%D1%82%D1%80%D0%B0%D1%85%D0%B8%D0%BB.jpg"><div class="cap"><div class="w">Страхил</div><div class="s">Страхът „ще остана назад".</div></div></div>
       <div class="tile"><img src="https://maitapp.com/img/ant-%D1%83%D0%BC%D1%87%D0%BE.jpg"><div class="cap"><div class="w">Умчо</div><div class="s">Гласът „няма да се справиш".</div></div></div>
@@ -374,42 +460,55 @@ summary small{margin-left:auto;font-family:Inter;font-size:.72rem;color:#9fb0a0;
     </div>
   </details>
 
-  <!-- ЕКИП -->
-  <div class="scene"><div class="sc" style="color:#b89ad8">Вашите подбудители</div><h2>Будечителите · всеки със своя роля</h2><p>Срещу всяка сянка — будечител. Екип от помощници, които работят по ваши думи на български.</p></div>
-  <div class="gal">
-    <div class="tile"><img src="https://maitapp.com/img/%D0%BB%D1%8E%D0%B1%D0%BA%D0%B0.jpg"><div class="cap"><div class="w">Любка</div><div class="s">Грижата, която подкрепя невидимо.</div></div></div>
-    <div class="tile"><img src="https://maitapp.com/img/%D0%BA%D1%83%D1%80%D0%B0%D0%B6%D0%BA%D1%83.jpg"><div class="cap"><div class="w">Куражку</div><div class="s">Увереността, която излъчва.</div></div></div>
-    <div class="tile"><img src="https://maitapp.com/img/%D0%B5%D0%BA%D0%BE%D0%BF%D1%8A%D1%82%D0%B5%D1%87%D0%BA%D0%BE.jpg"><div class="cap"><div class="w">Екопътечко</div><div class="s">Свободата сами да изберете пътя.</div></div></div>
-    <div class="tile"><img src="https://maitapp.com/img/%D0%BE%D0%B1%D0%B5%D0%BC%D0%BA%D0%BE.jpg"><div class="cap"><div class="w">Обемко</div><div class="s">Повече за същото време, без умора.</div></div></div>
-    <div class="tile"><img src="https://maitapp.com/img/%D1%85%D0%BE%D0%BB%D0%B0.jpg"><div class="cap"><div class="w">Хола</div><div class="s">Всяка част носи цялото.</div></div></div>
-    <div class="tile"><img src="https://maitapp.com/img/%D1%84%D0%B8%D0%B1%D0%BE%D0%BD%D0%B0%D1%87%D0%BA%D0%BE.jpg"><div class="cap"><div class="w">Фибоначко</div><div class="s">Ритъм и изненада в златна мяра.</div></div></div>
-    <div class="tile"><img src="https://maitapp.com/img/%D1%82%D0%B2%D0%BE%D1%80%D0%B5%D1%8F.jpg"><div class="cap"><div class="w">Творея</div><div class="s">Красотата като тих учител.</div></div></div>
-    <div class="tile"><img src="https://maitapp.com/img/%D0%B4%D0%BE%D0%B2%D0%B5%D1%80%D0%BA%D0%B0.jpg"><div class="cap"><div class="w">Доверка</div><div class="s">Присъствието, което държи всичко цяло.</div></div></div>
+  <!-- ════ VII · СЪКРОВИЩЕ ════ -->
+  <div class="chapter">
+    <div class="stage-no">Спирка VII · от VIII</div>
+    <div class="scn" style="color:#E8C77E">🟪 Съкровище · какво печелите</div>
+    <h2>Не „чух за" — а „мога"</h2>
+    <p>Шест умения, отиграни с истински ваши задачи. И — спокойствие пред новото. Ето първите съкровища за из път:</p>
   </div>
+  <div class="cover"><img src="https://maitapp.com/img/deck-sakrovishte.jpg" alt="">
+    <div class="clbl"><div class="ck">Спирка VII · Съкровището</div><div class="ch">Каквото отнасяте у дома</div></div></div>
+  <div class="scard"><div class="ti" style="background:rgba(111,181,154,.12)">🤖</div><div><h4 style="color:#6FB59A">Claude Code — безплатно начало</h4><p>Как да започнете без разход — спътникът, с който отиграхме уменията. <a href="https://www.youtube.com/watch?v=U6gg_bi1I70" target="_blank" rel="noopener">Вижте →</a></p></div></div>
+  <div class="scard"><div class="ti" style="background:rgba(232,199,126,.12)">✨</div><div><h4 style="color:#E8C77E">Кое си струва в Claude Code</h4><p>Най-полезните функции на прост език — спокойно, без претоварване. <a href="https://www.youtube.com/watch?v=vfWTyEreOEc" target="_blank" rel="noopener">Вижте →</a></p></div></div>
+  <div class="scard"><img src="https://maitapp.com/img/art-%D1%81%D1%8A%D0%BA%D1%80%D0%BE%D0%B2%D0%B8%D1%89%D0%B5.jpg"><div><h4 style="color:#E8C77E">Системата от агенти</h4><p>Как помощниците работят като екип по ваши думи на български. <a href="https://www.youtube.com/watch?v=0WDkwMxj13s" target="_blank" rel="noopener">Вижте визията →</a></p></div></div>
 
-  <!-- МАТЕРИАЛИ · ЗАПИС · АУДИО (placeholder след срещата) -->
-  <div class="scene"><div class="sc" style="color:#6FB59A">Материалите от срещата</div><h2>Запис, аудио и стартов комплект</h2></div>
+  <!-- ════ VIII · ЕЛИКСИР ════ -->
+  <div class="chapter">
+    <div class="stage-no">Спирка VIII · от VIII</div>
+    <div class="scn" style="color:#9c7fc8">🟫 Еликсир · завръщането</div>
+    <h2>Връщате се преобразени</h2>
+    <p>Водите новото спокойно — и сте пример за развиваща се личност пред детето си. Затварянето води <b>Фибоначко</b> — ритъмът и мярата на пътя.</p>
+  </div>
+  <div class="cover"><img src="https://maitapp.com/img/deck-eliksir.jpg" alt="">
+    <div class="clbl"><div class="ck">Спирка VIII · Еликсирът</div><div class="ch">Завръщате се преобразени</div></div></div>
+  <div class="mentorwide">
+    <img src="https://maitapp.com/img/%D1%84%D0%B8%D0%B1%D0%BE%D0%BD%D0%B0%D1%87%D0%BA%D0%BE.jpg" alt="">
+    <div class="mw"><div class="mrole">Менторът на затварянето · 80–90′</div><h4>Фибоначко</h4><p>Ритъм и изненада в златна мяра. С него избирате кое умение отигравате пръв утре — и накъде водят 3-те месеца Металандия.</p></div>
+  </div>
+  <div class="scard"><div class="ti" style="background:rgba(232,149,86,.12)">⏳</div><div><h4 style="color:#E89556">Защо точно сега</h4><p>Разговор за бързата промяна — за да изберете да я водите спокойно, не уплашено. <a href="https://www.youtube.com/watch?v=RwlgFC6S-OE" target="_blank" rel="noopener">Вижте →</a></p></div></div>
+  <div class="scard"><img src="https://maitapp.com/img/art-%D0%B5%D0%BB%D0%B8%D0%BA%D1%81%D0%B8%D1%80.jpg"><div><h4 style="color:#9c7fc8">📓 Obsidian · вашият метамозък</h4><p>Папката, която помни вместо вас — съкровището, което расте с детето. <a href="https://obsidian.md" target="_blank" rel="noopener">Вижте →</a></p></div></div>
   <div class="soon">
     <b>След срещата тук пристигат:</b><br>
     ▶️ пълният запис · 🔊 аудио обобщение в 4 гласа · 🎒 стартов комплект с вашите първи агенти.<br>
-    <span style="display:block;margin-top:8px;font-size:.86rem">Запазете тази страница — попълва се същата вечер.</span>
+    <span style="display:block;margin-top:8px;font-size:.86rem">Запазете тази карта — попълва се същата вечер.</span>
   </div>
 
-  <!-- 📚 РЕСУРСИ (рефреймнати за родители+тийн) -->
-  <div class="scene"><div class="sc" style="color:#6FB59A">За да започнете спокойно</div><h2>📚 5 ресурса · с ползата за вас</h2><p>Подбрани за родител и дете — започвате с инструментите, после защо точно сега.</p></div>
-  <div class="scard"><div style="width:80px;height:80px;border-radius:10px;background:rgba(111,181,154,.12);display:flex;align-items:center;justify-content:center;font-size:2rem;flex-shrink:0">🤖</div><div><h4 style="color:#6FB59A">1 · Claude Code — безплатно начало</h4><p>Как да започнете без разход — основният инструмент, с който отиграваме уменията. <a href="https://www.youtube.com/watch?v=U6gg_bi1I70" target="_blank" rel="noopener">Гледайте →</a></p></div></div>
-  <div class="scard"><div style="width:80px;height:80px;border-radius:10px;background:rgba(184,154,216,.12);display:flex;align-items:center;justify-content:center;font-size:2rem;flex-shrink:0">📓</div><div><h4 style="color:#b89ad8">2 · Obsidian — вашият метамозък</h4><p>Папката, която помни вместо вас — домът на знанието, което расте с детето. <a href="https://obsidian.md" target="_blank" rel="noopener">Вижте →</a></p></div></div>
-  <div class="scard"><div style="width:80px;height:80px;border-radius:10px;background:rgba(232,199,126,.12);display:flex;align-items:center;justify-content:center;font-size:2rem;flex-shrink:0">✨</div><div><h4 style="color:#E8C77E">3 · Кое си струва в Claude Code</h4><p>Най-полезните функции на прост език — кое да ползвате спокойно, без да се претоварвате. <a href="https://www.youtube.com/watch?v=vfWTyEreOEc" target="_blank" rel="noopener">Гледайте →</a></p></div></div>
-  <div class="scard"><div style="width:80px;height:80px;border-radius:10px;background:rgba(111,181,154,.12);display:flex;align-items:center;justify-content:center;font-size:2rem;flex-shrink:0">🧩</div><div><h4 style="color:#6FB59A">4 · Система от агенти — визията</h4><p>Как помощниците работят като екип по ваши думи — спокойно, на човешки език. <a href="https://www.youtube.com/watch?v=0WDkwMxj13s" target="_blank" rel="noopener">Гледайте →</a></p></div></div>
-  <div class="scard"><div style="width:80px;height:80px;border-radius:10px;background:rgba(232,149,86,.12);display:flex;align-items:center;justify-content:center;font-size:2rem;flex-shrink:0">⏳</div><div><h4 style="color:#E89556">5 · Защо точно сега</h4><p>Разговор за бързата промяна — за да изберете да я водите спокойно, не уплашено. <a href="https://www.youtube.com/watch?v=RwlgFC6S-OE" target="_blank" rel="noopener">Гледайте →</a></p></div></div>
+  <details>
+    <summary><span class="ar">▸</span> 🛡️ Целият съвет на менторите <small>8 будечители</small></summary>
+    <p style="padding:0 16px;color:#9fb0a0;font-size:.9rem;margin:0 0 6px">Срещу всяка сянка — будечител. Метатрон е полето между всички.</p>
+    <div class="gal">
+      <div class="tile"><img src="https://maitapp.com/img/%D0%BB%D1%8E%D0%B1%D0%BA%D0%B0.jpg"><div class="cap"><div class="w">Любка</div><div class="s">Грижата, която подкрепя невидимо.</div></div></div>
+      <div class="tile"><img src="https://maitapp.com/img/%D0%BA%D1%83%D1%80%D0%B0%D0%B6%D0%BA%D1%83.jpg"><div class="cap"><div class="w">Куражку</div><div class="s">Увереността, която излъчва.</div></div></div>
+      <div class="tile"><img src="https://maitapp.com/img/%D0%B5%D0%BA%D0%BE%D0%BF%D1%8A%D1%82%D0%B5%D1%87%D0%BA%D0%BE.jpg"><div class="cap"><div class="w">Екопътечко</div><div class="s">Свободата сами да изберете пътя.</div></div></div>
+      <div class="tile"><img src="https://maitapp.com/img/%D0%BE%D0%B1%D0%B5%D0%BC%D0%BA%D0%BE.jpg"><div class="cap"><div class="w">Обемко</div><div class="s">Повече за същото време, без умора.</div></div></div>
+      <div class="tile"><img src="https://maitapp.com/img/%D1%85%D0%BE%D0%BB%D0%B0.jpg"><div class="cap"><div class="w">Хола</div><div class="s">Всяка част носи цялото.</div></div></div>
+      <div class="tile"><img src="https://maitapp.com/img/%D1%84%D0%B8%D0%B1%D0%BE%D0%BD%D0%B0%D1%87%D0%BA%D0%BE.jpg"><div class="cap"><div class="w">Фибоначко</div><div class="s">Ритъм и изненада в златна мяра.</div></div></div>
+      <div class="tile"><img src="https://maitapp.com/img/%D1%82%D0%B2%D0%BE%D1%80%D0%B5%D1%8F.jpg"><div class="cap"><div class="w">Творея</div><div class="s">Красотата като тих учител.</div></div></div>
+      <div class="tile"><img src="https://maitapp.com/img/%D0%B4%D0%BE%D0%B2%D0%B5%D1%80%D0%BA%D0%B0.jpg"><div class="cap"><div class="w">Доверка</div><div class="s">Присъствието, което държи всичко цяло.</div></div></div>
+    </div>
+  </details>
 
-  <!-- ИЗПИТАНИЕ · СЪКРОВИЩЕ · ЕЛИКСИР -->
-  <div class="scene"><div class="sc" style="color:#E89556">Какво си тръгвате</div><h2>Изпитание · Съкровище · Еликсир</h2></div>
-  <div class="scard"><img src="https://maitapp.com/img/art-%D1%81%D0%BF%D0%B8%D1%80%D0%B0%D1%87%D0%BA%D0%B0.jpg"><div><h4 style="color:#E89556">Изпитанието</h4><p>Старият навик: да гледате за AI и да отложите — а онзи до вас го прави. Изпитанието е малкото действие <b>днес</b> — една реална задача, отиграна за 8 минути.</p></div></div>
-  <div class="scard"><img src="https://maitapp.com/img/art-%D1%81%D1%8A%D0%BA%D1%80%D0%BE%D0%B2%D0%B8%D1%89%D0%B5.jpg"><div><h4 style="color:#E8C77E">Съкровището</h4><p>Не „чух за" — а „мога". Шест умения, отиграни с истински ваши задачи — и спокойствие пред новото.</p></div></div>
-  <div class="scard"><img src="https://maitapp.com/img/art-%D0%B5%D0%BB%D0%B8%D0%BA%D1%81%D0%B8%D1%80.jpg"><div><h4 style="color:#9c7fc8">Еликсирът</h4><p>Водите новото спокойно — и сте пример за развиваща се личност пред детето си. Времетрон губи властта си.</p></div></div>
-
-  <!-- ФИНАЛЕН CTA -->
   <div class="finalcta">
     <h3>Елате заедно — цялото семейство</h3>
     <p>Родител и дете, в едно поле. Бъдете <b>ПРИМЕР за развиваща се разЛичност</b> — не с думи, а като отиграете шестте умения рамо до рамо.</p>
@@ -418,10 +517,67 @@ summary small{margin-left:auto;font-family:Inter;font-size:.72rem;color:#9fb0a0;
 
 </div>
 
+<div id="artefact"><div class="box">
+  <div class="glyph">🗝️</div>
+  <h3 id="artefact-title">Получавате артефакт!</h3>
+  <p id="artefact-text">Отключихте три умения — пътят се отваря пред вас.</p>
+  <button onclick="document.getElementById('artefact').classList.remove('show')">Напред по картата →</button>
+</div></div>
+
 <div class="foot">
   MetaReading · Металандия · спокойствие · радост · вдъхновение<br>
-  Тази страница е лична — споделяйте я само с участниците.
+  Тази карта е лична — споделяйте я само със спътниците си.
 </div>
+
+<script>
+(function(){
+  var KEY='ep4quest';
+  var cards=[].slice.call(document.querySelectorAll('.skillcard'));
+  var xpfill=document.getElementById('xpfill'), xpnum=document.getElementById('xpnum');
+  var TOTAL=89;
+  var artefacts=[
+    {at:3, glyph:'🗝️', title:'Получавате Ключа на Волята!', text:'Отключихте три умения — Времетрон отстъпва крачка. Пътят се отваря.'},
+    {at:6, glyph:'👑', title:'Получавате Короната на разЛичността!', text:'Всичките шест умения са ваши. Вие водите новото — спокойно, до детето си.'}
+  ];
+  var saved={}; try{saved=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){}
+  var firedKey='ep4quest_fired'; var fired={}; try{fired=JSON.parse(localStorage.getItem(firedKey)||'{}')}catch(e){}
+
+  function render(){
+    var xp=0, count=0;
+    cards.forEach(function(c){
+      var id=c.getAttribute('data-skill');
+      if(saved[id]){ c.classList.add('claimed'); xp+=parseInt(c.getAttribute('data-xp'),10); count++; }
+      else c.classList.remove('claimed');
+    });
+    xpfill.style.width=Math.round(xp/TOTAL*100)+'%';
+    xpnum.textContent='✦ '+xp+' XP';
+    return count;
+  }
+  function showArtefact(a){
+    document.getElementById('artefact-title').textContent=a.title;
+    document.getElementById('artefact-text').textContent=a.text;
+    document.querySelector('#artefact .glyph').textContent=a.glyph;
+    document.getElementById('artefact').classList.add('show');
+  }
+  cards.forEach(function(c){
+    var more=c.querySelector('.more');
+    more.addEventListener('click', function(e){ e.stopPropagation(); c.classList.toggle('open'); });
+    c.addEventListener('click', function(){
+      var id=c.getAttribute('data-skill');
+      if(saved[id]){ delete saved[id]; } else { saved[id]=1; }
+      try{localStorage.setItem(KEY,JSON.stringify(saved))}catch(e){}
+      var count=render();
+      artefacts.forEach(function(a){
+        if(count>=a.at && !fired[a.at]){
+          fired[a.at]=1; try{localStorage.setItem(firedKey,JSON.stringify(fired))}catch(e){}
+          showArtefact(a);
+        }
+      });
+    });
+  });
+  render();
+})();
+</script>
 
 </body>
 </html>

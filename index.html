@@ -216,11 +216,31 @@
 (function () {
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var modal = document.getElementById('wlModal');
-  function openWl() { modal.hidden = false; modal.classList.add('on'); }
-  function closeWl() { modal.classList.remove('on'); modal.hidden = true; }
+  var mainEl = document.querySelector('main');
+  var lastFocus = null;
+  function openWl() {
+    lastFocus = document.activeElement;
+    modal.hidden = false; modal.classList.add('on');
+    if (mainEl) mainEl.setAttribute('inert', '');
+    var first = modal.querySelector('input[type="text"], input[type="email"]');
+    if (first) first.focus();
+  }
+  function closeWl() {
+    modal.classList.remove('on'); modal.hidden = true;
+    if (mainEl) mainEl.removeAttribute('inert');
+    if (lastFocus && lastFocus.focus) lastFocus.focus();
+  }
   document.querySelectorAll('[data-open-wl]').forEach(function (b) { b.addEventListener('click', openWl); });
   document.querySelectorAll('[data-close-wl]').forEach(function (b) { b.addEventListener('click', closeWl); });
   addEventListener('keydown', function (e) { if (e.key === 'Escape') closeWl(); });
+  modal.addEventListener('keydown', function (e) { // keep Tab inside the dialog
+    if (e.key !== 'Tab') return;
+    var els = modal.querySelectorAll('button, input, a[href]');
+    if (!els.length) return;
+    var first = els[0], last = els[els.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  });
 
   var sc = document.getElementById('stickyCta'), elixir = document.getElementById('elixir');
   function updSticky() {

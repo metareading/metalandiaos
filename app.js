@@ -191,18 +191,22 @@ function buildVertexShader() {
     vec3 dp = aDust;
     float tt = uTime * (1.0 - uReduced * 0.94);
     dp.x += 0.55 * sin(tt * 0.11 + aDust.y * 0.70 + seedv * 6.28)
-          + 0.20 * sin(tt * 0.23 + aDust.z * 1.30 + seedv * 12.6);
+          + 0.20 * sin(tt * 0.23 + aDust.z * 1.30 + seedv * 12.6)
+          + 0.09 * sin(tt * 0.37 + aDust.x * 2.10 + seedv * 3.3);
     dp.y += 0.42 * sin(tt * 0.13 + aDust.z * 0.80 + seedv * 4.71)
-          + 0.16 * sin(tt * 0.19 + aDust.x * 1.10 + seedv * 8.1);
-    dp.z += 0.50 * sin(tt * 0.09 + aDust.x * 0.60 + seedv * 9.42);
+          + 0.16 * sin(tt * 0.19 + aDust.x * 1.10 + seedv * 8.1)
+          + 0.08 * sin(tt * 0.31 + aDust.y * 1.90 + seedv * 5.7);
+    dp.z += 0.50 * sin(tt * 0.09 + aDust.x * 0.60 + seedv * 9.42)
+          + 0.18 * sin(tt * 0.21 + aDust.y * 1.20 + seedv * 7.3)
+          + 0.08 * sin(tt * 0.33 + aDust.z * 2.00 + seedv * 11.1);
 
     vec3 hp = position;
     float a = 0.0;
     vec3 col = uBone;
     float sizeF = 1.0, alphaF = 1.0;
 
-    if (clsv < -0.5) { a = 0.0; }
-    ${chain}
+    if (clsv < -0.5) { a = 0.0; } // parked points stay dust in EVERY exhibit
+    else ${chain}
 
     vec3 p = mix(dp, hp, a);
 
@@ -469,7 +473,8 @@ if (renderer && renderer.getContext()) {
     const idx = parseInt(peek, 10) - 1;
     if (renderer && !isNaN(idx) && idx >= 0 && idx < 8) {
       state.peekLock = idx;
-      state.progressLock = qs.get('prog') !== null ? parseFloat(qs.get('prog')) : 0.5;
+      const pv = parseFloat(qs.get('prog'));
+      state.progressLock = Number.isFinite(pv) ? pv : 0.5;
       loadHome(idx);
       updateCounter(idx);
       state.exhibit = idx;

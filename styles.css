@@ -32,7 +32,7 @@ body {
 /* fixed WebGL stage behind everything */
 #stage { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; display: block; }
 .no-webgl #stage { display: none; }
-main, header.hud, footer { position: relative; z-index: 1; }
+main, footer { position: relative; z-index: 1; }
 
 /* ── HUD: wordmark + counter ── */
 .hud { position: fixed; top: 0; left: 0; right: 0; z-index: 40; display: flex; justify-content: space-between; align-items: center; padding: 16px 18px; pointer-events: none; }
@@ -99,7 +99,6 @@ main, header.hud, footer { position: relative; z-index: 1; }
 .plaque .pl-text + .pl-text { margin-top: -6px; }
 .plaque .pl-stamp { font-size: 9.5px; letter-spacing: .22em; text-transform: uppercase; color: rgba(244, 236, 216, .4); border-top: 1px solid rgba(242, 200, 120, .14); padding-top: 10px; }
 .plaque .pl-extra { margin-top: 14px; }
-.plaque.visible { }
 
 /* section copy that lives OUTSIDE the plaque (hero-band copy, CTA rows) */
 .ex-copy { max-width: 430px; margin: 26px auto 0; text-align: center; }

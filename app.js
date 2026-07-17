@@ -299,14 +299,30 @@ function initGL() {
   window.__museum = { camera, renderer, uniforms, state };
 }
 
-function loadHome(idx) {
+function loadHome(idx, gen) {
   const rand = mulberry32(1000 + idx * 7919);
-  GENERATORS[idx](home, cls, data, COUNT, rand);
+  (gen || GENERATORS[idx])(home, cls, data, COUNT, rand);
   const g = points.geometry;
   g.attributes.position.needsUpdate = true;
   g.attributes.aClass.needsUpdate = true;
   g.attributes.aData.needsUpdate = true;
   uniforms.uExhibit.value = idx;
+}
+
+/* mid-section geometry swap (hall VI: cocoon -> wings at the dissolution trough).
+   VARIANTS[idx] = { alt: generatorFn, threshold: 0..1 } — wired at integration. */
+const VARIANTS = {};
+let variantOn = false;
+function driveVariants() {
+  const v = VARIANTS[state.exhibit];
+  if (!v) { variantOn = false; return; }
+  if (REDUCED) { // static path: show the after-state directly (Д3)
+    if (!variantOn) { loadHome(state.exhibit, v.alt); variantOn = true; }
+    return;
+  }
+  const p = state.progress;
+  if (!variantOn && p > v.threshold) { loadHome(state.exhibit, v.alt); variantOn = true; }
+  else if (variantOn && p < v.threshold - 0.12) { loadHome(state.exhibit); variantOn = false; }
 }
 
 /* ═══ SCROLL / SECTION DRIVER ═════════════════════════════════ */
@@ -338,8 +354,10 @@ function driveSections() {
   if (best >= 0 && best !== state.exhibit) {
     state.exhibit = best;
     loadHome(best);
+    variantOn = false; // fresh section always starts on its base geometry
     state.assembly = Math.min(state.assembly, 0.22); // inhale from dust after rewrite
     updateCounter(best);
+    if (best === 4 && !state.demoPlayed) { state.demo = 1; state.demoPlayed = true; } // hall V auto-demo: one visible crossing
   }
   const target = heroC > bestC ? 0 : Math.pow(bestC, 1.35);
   state.assemblyT = REDUCED ? (bestC > 0.05 ? 1 : 0) : target;
@@ -411,6 +429,7 @@ function frame(now) {
   state.time += dt;
 
   driveSections();
+  driveVariants();
   driveOffset();
 
   const k = 1 - Math.pow(0.0018, dt); // frame-rate independent ease
@@ -420,6 +439,7 @@ function frame(now) {
   state.swirlT *= Math.pow(0.25, dt); // swirl decays when the mouse rests
   state.swirl += (state.swirlT - state.swirl) * k;
   state.offset.lerp(state.offsetT, k);
+  if (state.demo > 0) state.demo = Math.max(0, state.demo - dt * 0.4); // uDemo pulse 1 -> 0 (~2.5s)
 
   uniforms.uTime.value = REDUCED ? 12.0 : state.time;
   uniforms.uAssembly.value = state.assembly;

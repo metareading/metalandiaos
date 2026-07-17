@@ -1,0 +1,87 @@
+/* maitapp v3 hybrid · transition-band layer over the v1 page
+   v1 visuals live inline in index.html; this file owns: canvas chrome,
+   the 8 transition bands, the ambient-dust scrim, waitlist messages. */
+:root {
+  --ink: #0b1114;
+  --parch: #f4ecd8;
+  --gold: #f2c878;
+  --scene: #E8C77E; /* set by JS per active exhibit */
+  --c1: #E8C77E; --c2: #D4895E; --c3: #4A7FA8; --c4: #6FB59A;
+  --c5: #E89556; --c6: #8B5E3C; --c7: #E8C77E; --c8: #7B5EA8;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto !important; }
+}
+
+/* fixed WebGL stage behind everything */
+#stage { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; display: block; }
+.no-webgl #stage { display: none; }
+.no-webgl .trans { display: none; } /* without WebGL the bands are empty dark strips — drop them */
+
+main, footer { position: relative; z-index: 1; }
+
+/* v1 sections: near-opaque scrim → the dust stays a barely-visible ambient layer,
+   v1 content stays fully legible (live-v2 lesson: long dark zones read as "nothing") */
+.v1s { background-color: rgba(11, 17, 20, .88); }
+
+/* ── transition bands: cloud ≈60% of the screen on top · story card ≤40% below ── */
+.trans {
+  min-height: 100vh; /* fallback for browsers without svh */
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 22px 8vh;
+  padding: 0 22px 8svh;
+  position: relative;
+}
+/* hall VIII rides uProgress through 3 beats — extra runway lets the exhale complete */
+#ex-8 { min-height: 135vh; min-height: 135svh; }
+/* hall VI swaps cocoon→wings mid-band — a little more room for the dissolve trough */
+#ex-6 { min-height: 115vh; min-height: 115svh; }
+
+.tr-story {
+  max-width: 560px;
+  width: 100%;
+  text-align: center;
+  background: rgba(7, 9, 11, .58);
+  border: 1px solid rgba(242, 200, 120, .18);
+  border-radius: 14px;
+  padding: 18px 22px 20px;
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity .9s ease, transform .9s ease;
+}
+.tr-story.visible { opacity: 1; transform: translateY(0); }
+@media (prefers-reduced-motion: reduce) {
+  .tr-story { opacity: 1; transform: none; transition: none; }
+}
+.tr-story .tr-k {
+  font-size: 11px;
+  letter-spacing: .26em;
+  text-transform: uppercase;
+  font-weight: 500;
+  color: var(--ex, var(--gold));
+  margin-bottom: 8px;
+}
+.tr-story .tr-t {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.35rem;
+  line-height: 1.35;
+  color: rgba(244, 236, 216, .92);
+}
+@media (min-width: 760px) {
+  .tr-story .tr-t { font-size: 1.6rem; }
+}
+
+/* ── waitlist messages (real wiring) ── */
+.wl-msg { display: none; border-radius: 12px; padding: 14px 16px; font-size: .95rem; margin-top: 14px; }
+.wl-msg.on { display: block; }
+.wl-msg.ok { background: rgba(111, 181, 154, .12); border: 1px solid rgba(111, 181, 154, .4); color: #b8e6d2; }
+.wl-msg.err { background: rgba(212, 137, 94, .1); border: 1px solid rgba(212, 137, 94, .45); color: #eec4ad; }
+#wlOk { max-width: 28rem; margin-left: auto; margin-right: auto; text-align: left; }
+.hp-field { position: absolute; left: -9999px; top: auto; width: 1px; height: 1px; overflow: hidden; }

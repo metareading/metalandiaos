@@ -987,7 +987,7 @@ function buildVertexShader() {
   attribute float aSeed;
   attribute float aClass;
   attribute float aData;
-  uniform float uTime, uAssembly, uProgress, uFocus, uSwirl, uExhibit, uReduced, uFlash, uDemo, uSizeBase, uPx;
+  uniform float uTime, uAssembly, uProgress, uFocus, uSwirl, uExhibit, uReduced, uFlash, uDemo, uSizeBase, uPx, uScale;
   uniform vec3 uOffset, uPointer, uBone;
   uniform vec3 uPal[8];
   varying vec3 vColor;
@@ -1034,7 +1034,7 @@ function buildVertexShader() {
     p.xy += tang * g * mix(0.9, 0.14, a);
     sizeF *= 1.0 + g * 1.4;
 
-    p += uOffset;
+    p = p * uScale + uOffset; // mobile: shortened amplitudes — the whole cloud scales into the clean top band
     vec4 mv = modelViewMatrix * vec4(p, 1.0);
     float ps = uSizeBase * mix(0.55, 1.35, seedv) * sizeF * mix(0.55, 1.15, a) * (uPx * 16.0 / max(1.0, -mv.z));
     gl_PointSize = clamp(ps, 0.75, 6.5);
@@ -1093,6 +1093,7 @@ function initGL() {
     uFocus: { value: 0 }, uSwirl: { value: 0 }, uExhibit: { value: 0 },
     uReduced: { value: REDUCED ? 1 : 0 }, uFlash: { value: 0 }, uDemo: { value: 0 },
     uSizeBase: { value: IS_MOBILE ? 0.85 : 0.95 }, uPx: { value: DPR },
+    uScale: { value: 1 },
     uOffset: { value: state.offset }, uPointer: { value: state.pointer },
     uBone: { value: new THREE.Vector3(BONE.r, BONE.g, BONE.b) },
     uPal: { value: PALETTE.map(c => new THREE.Vector3(c.r, c.g, c.b)) },
@@ -1112,7 +1113,11 @@ function initGL() {
   scene.add(points);
 
   // debug handle (guide lesson: when nothing draws, print camera.position first)
-  window.__museum = { camera, renderer, uniforms, state };
+  // step(y): synchronous scroll+drive tick for state sweeps (verification only, no render needed)
+  window.__museum = {
+    camera, renderer, uniforms, state,
+    step(y) { window.scrollTo(0, y); driveSections(); driveVariants(); driveOffset(); },
+  };
 }
 
 function loadHome(idx, gen) {
@@ -1156,6 +1161,8 @@ function driveSections() {
     state.assembly = 1;
     state.progressT = state.progressLock;
     state.progress = state.progressLock;
+    driveOffset();
+    state.offset.copy(state.offsetT);
     return;
   }
   const vh = innerHeight;
@@ -1214,7 +1221,8 @@ function pointerToLocal(clientX, clientY) {
   if (Math.abs(dir.z) < 1e-4) return;
   const t = (0 - camera.position.z) / dir.z;
   const world = camera.position.clone().add(dir.multiplyScalar(t));
-  state.pointer.copy(world.sub(state.offset)); // cloud-local coords
+  const s = mqMobile.matches ? 0.74 : 1.0; // undo the mobile cloud scale → true cloud-local coords
+  state.pointer.copy(world.sub(state.offset).divideScalar(s));
 }
 
 addEventListener('pointermove', (e) => {
@@ -1240,11 +1248,22 @@ addEventListener('pointercancel', cancelHold, { passive: true });
 
 /* ═══ MAIN LOOP ═══════════════════════════════════════════════ */
 let lastFrame = performance.now();
+let sizeCheck = 0;
 function frame(now) {
   requestAnimationFrame(frame);
   const dt = Math.min(0.05, (now - lastFrame) / 1000);
   lastFrame = now;
   state.time += dt;
+
+  if (++sizeCheck >= 30) { // guard against missed resize events (embedded viewports): CSS stretches a stale buffer
+    sizeCheck = 0;
+    const sz = renderer.getSize(new THREE.Vector2());
+    if ((sz.x !== innerWidth || sz.y !== innerHeight) && innerWidth > 0 && innerHeight > 0) {
+      renderer.setSize(innerWidth, innerHeight);
+      camera.aspect = innerWidth / innerHeight;
+      camera.updateProjectionMatrix();
+    }
+  }
 
   driveSections();
   driveVariants();
@@ -1259,6 +1278,7 @@ function frame(now) {
   state.offset.lerp(state.offsetT, k);
   if (state.demo > 0) state.demo = Math.max(0, state.demo - dt * 0.4); // uDemo pulse 1 -> 0 (~2.5s)
 
+  uniforms.uScale.value = mqMobile.matches ? 0.74 : 1.0;
   uniforms.uTime.value = REDUCED ? 12.0 : state.time;
   uniforms.uAssembly.value = state.assembly;
   uniforms.uProgress.value = state.progress;
@@ -1318,6 +1338,23 @@ if (renderer && renderer.getContext()) {
       state.exhibit = idx;
       state.assembly = 1;
     }
+  }
+  if (qs.get('sweep') && renderer) { // verification: walk the scroll in-page, dump the drama sequence into the DOM
+    const d = document.createElement('div');
+    d.id = 'sweepOut';
+    d.style.cssText = 'position:fixed;left:8px;bottom:8px;z-index:99;background:#111;color:#ff0;font:10px monospace;padding:4px;max-width:90vw;white-space:normal';
+    document.body.appendChild(d);
+    requestAnimationFrame(() => {
+      document.documentElement.style.scrollBehavior = 'auto';
+      const H = document.body.scrollHeight - innerHeight;
+      const out = [];
+      for (let s = 0; s <= 40; s++) {
+        window.__museum.step(Math.round(H * s / 40));
+        out.push(state.exhibit + ':' + state.assemblyT.toFixed(2) + ':' + state.progressT.toFixed(2));
+      }
+      window.__museum.step(0);
+      d.textContent = 'SWEEP H=' + H + ' vh=' + innerHeight + ' :: ' + out.join(' ');
+    });
   }
   if (qs.get('diag')) {
     const d = document.createElement('div');

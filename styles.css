@@ -79,6 +79,10 @@ main, footer { position: relative; z-index: 1; }
 /* ── EXHIBIT SECTIONS ── */
 .exhibit { min-height: 178vh; position: relative; padding: 0 18px; }
 .ex-inner { display: flex; flex-direction: column; min-height: 178vh; max-width: 1200px; margin: 0 auto; }
+/* hall VIII needs scroll runway: the three beats (return→resurrection→gift) ride uProgress,
+   and a terminal section can never reach progress 1 — extra height lets the exhale complete */
+#ex-8 { min-height: 240vh; }
+#ex-8 .ex-inner { min-height: 240vh; }
 .ex-space { height: 50vh; flex: none; } /* clean upper band for the cloud on mobile */
 
 /* plaque = museum wall label · ALWAYS an opaque card on mobile (never over the artifact) */

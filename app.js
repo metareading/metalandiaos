@@ -536,12 +536,113 @@ function genWings(home, cls, data, N, rand) {
   }
 }
 
-/* Stub: park everything in dust (exhibits VII-VIII arrive in ticket 12). */
-function genDustOnly(home, cls, data, N) {
-  for (let i = 0; i < N; i++) { cls[i] = -1; data[i] = 0; }
+/* Exhibit VII · Чашата, преляла — THE RHYME with Exhibit I: same lathe profile, gold instead of water
+   classes: 0 wall (identical sampling) · 1 gold volume (baked fill height) · 2 overflow drop */
+const CUP_GOLD_Y0 = 0.90;                 // bowl floor (raw profile-y)
+const CUP_GOLD_Y1 = 2.28;                 // just under the rim
+const CUP_GOLD_RFAC = 0.91;               // inward clearance vs the wall radius
+const CUP_RIM_R = 0.97, CUP_RIM_Y = 2.30; // rim lip — identical terminal point of cupProfile()
+
+function cupBowlRadius(yRaw, prof) { // interior wall radius at a raw y (bowl is single-valued in y here)
+  for (let i = 0; i < prof.length - 1; i++) {
+    const [r0, y0] = prof[i], [r1, y1] = prof[i + 1];
+    if (yRaw <= y1 || i === prof.length - 2) {
+      const f = y1 > y0 ? Math.max(0, Math.min(1, (yRaw - y0) / (y1 - y0))) : 0;
+      return r0 + (r1 - r0) * f;
+    }
+  }
+  return prof[prof.length - 1][0];
 }
 
-const GENERATORS = [genCup, genHeart, genConstellation, genStairs, genPortal, genCocoon, genDustOnly, genDustOnly];
+function genGoldCup(home, cls, data, N, rand) {
+  const nWall = Math.floor(N * 0.772), nGold = Math.floor(N * 0.21);
+  const nDrop = N - nWall - nGold;
+  const prof = cupProfile();
+  const wallSamples = sampleProfileArc(prof, nWall, rand);
+
+  let i = 0;
+  for (let k = 0; k < nWall; k++, i++) { // wall: IDENTICAL sampling to genCup — zero geometry drift, the rhyme
+    const p = wallSamples[k], th = rand() * TAU;
+    const r = p.r + (rand() - 0.5) * 0.012;
+    home[i * 3] = r * Math.cos(th);
+    home[i * 3 + 1] = p.y - CUP_Y0 + (rand() - 0.5) * 0.008;
+    home[i * 3 + 2] = r * Math.sin(th);
+    cls[i] = 0;
+    data[i] = Math.max(0, Math.min(1, (p.y - 0.9) / 1.4)); // same rim-proximity encoding as Exhibit I
+  }
+  for (let k = 0; k < nGold; k++, i++) { // gold: uniform VOLUMETRIC fill r·cbrt(rand) (PRD formula), floor→rim
+    const yRaw = CUP_GOLD_Y0 + rand() * (CUP_GOLD_Y1 - CUP_GOLD_Y0);
+    const Rlocal = cupBowlRadius(yRaw, prof) * CUP_GOLD_RFAC;
+    const r = Rlocal * Math.cbrt(rand());
+    const th = rand() * TAU;
+    home[i * 3] = r * Math.cos(th);
+    home[i * 3 + 1] = yRaw - CUP_Y0;
+    home[i * 3 + 2] = r * Math.sin(th);
+    cls[i] = 1;
+    data[i] = (yRaw - CUP_GOLD_Y0) / (CUP_GOLD_Y1 - CUP_GOLD_Y0); // baked fill height — gated vs the level uniform
+  }
+  for (let k = 0; k < nDrop; k++, i++) { // overflow drops parked at the rim lip; shader launches them
+    const th = rand() * TAU;
+    const rr = CUP_RIM_R * CUP_GOLD_RFAC;
+    home[i * 3] = rr * Math.cos(th);
+    home[i * 3 + 1] = CUP_RIM_Y - CUP_Y0;
+    home[i * 3 + 2] = rr * Math.sin(th);
+    cls[i] = 2;
+    data[i] = rand();
+  }
+}
+
+/* Exhibit VIII · Сърцето, върнато у дома — THE RHYME with Exhibit II: same curve, NO gears, NO arrow
+   classes: 0 envelope (identical recipe) · 1 inner warm core */
+function genHomeHeart(home, cls, data, N, rand) {
+  const nEnvelope = Math.floor(N * 0.90);
+  const nCore = N - nEnvelope;
+
+  const table = heartArcTable(500);
+  const WALL_JITTER = 0.028;
+  const Z_DEPTH = 0.22;
+
+  let i = 0;
+  for (let k = 0; k < nEnvelope; k++, i++) { // identical envelope recipe to genHeart
+    const d = rand() * table.total;
+    const seg = arcLookup(table.pts, d);
+    const t = seg.t;
+    const [x0, y0] = heartRaw(t);
+    const [tx, ty] = heartTangent(t);
+    const tl = Math.hypot(tx, ty) || 1;
+    const nx = -ty / tl, ny = tx / tl;
+    const shell = (rand() - 0.5) * (WALL_JITTER * 4.0 / HEART_SCALE);
+    const inward = -Math.pow(rand(), 2.1) * (0.52 / HEART_SCALE);
+    const j = shell + (rand() < 0.55 ? inward : 0);
+    const x = x0 + nx * j, y = y0 + ny * j;
+    home[i * 3] = x * HEART_SCALE;
+    home[i * 3 + 1] = y * HEART_SCALE + HEART_YOFF;
+    const zu = rand();
+    home[i * 3 + 2] = zu < 0.72
+      ? (rand() < 0.5 ? -1 : 1) * Z_DEPTH * (0.30 + 0.20 * rand())
+      : (rand() - 0.5) * Z_DEPTH;
+    cls[i] = 0;
+    data[i] = t / TAU;
+  }
+  for (let k = 0; k < nCore; k++, i++) { // warm inner core: same curve, deeper inward reach
+    const d = rand() * table.total;
+    const seg = arcLookup(table.pts, d);
+    const t = seg.t;
+    const [x0, y0] = heartRaw(t);
+    const [tx, ty] = heartTangent(t);
+    const tl = Math.hypot(tx, ty) || 1;
+    const nx = -ty / tl, ny = tx / tl;
+    const inward = -Math.pow(rand(), 1.4) * (0.90 / HEART_SCALE);
+    const x = x0 + nx * inward, y = y0 + ny * inward;
+    home[i * 3] = x * HEART_SCALE;
+    home[i * 3 + 1] = y * HEART_SCALE + HEART_YOFF;
+    home[i * 3 + 2] = (rand() - 0.5) * Z_DEPTH * 0.5;
+    cls[i] = 1;
+    data[i] = t / TAU;
+  }
+}
+
+const GENERATORS = [genCup, genHeart, genConstellation, genStairs, genPortal, genCocoon, genGoldCup, genHomeHeart];
 
 /* ═══ SHADERS ═════════════════════════════════════════════════
    Exhibit blocks live in EX_BLOCKS[i]; each block reads
@@ -638,7 +739,7 @@ const EX3_GLSL = /* glsl */`
   if (clsv < 0.5) {
     a = asm2(uAssembly, seedv, 0.0);
     vec2 toPtr = hp.xy - uPointer.xy;
-    float near = exp(-dot(toPtr, toPtr) * 3.2);
+    float near = exp(-dot(toPtr, toPtr) * 3.2) * ptrAct;
     col = mix(uPal[2] * 1.1, uPal[2] * 1.6, near);
     sizeF = mix(2.4, 3.2, datv) * (1.0 + near * 1.0);
     alphaF = 1.0;
@@ -650,7 +751,7 @@ const EX3_GLSL = /* glsl */`
   } else if (clsv < 2.5) {
     a = asm2(uAssembly, seedv, 0.05);
     vec2 toPtr = hp.xy - uPointer.xy;
-    float near = exp(-dot(toPtr, toPtr) * 2.4);
+    float near = exp(-dot(toPtr, toPtr) * 2.4) * ptrAct;
     float shimmer = 0.55 + 0.45 * sin(uTime * 2.0 - datv * 9.0);
     col = uPal[2] * mix(0.7, 1.5, near * shimmer);
     alphaF = 0.8;
@@ -737,7 +838,7 @@ const EX5_GLSL = /* glsl */`
     float gate = exp(-dot(toCentre, toCentre) * 2.0);
     float flare = exp(-z * z * 8.0);                       // decision-flare peaks exactly at z=0
     vec2 toPointer = hp.xy - uPointer.xy;
-    float pointerBoost = exp(-dot(toPointer, toPointer) * 1.6) * order;
+    float pointerBoost = exp(-dot(toPointer, toPointer) * 1.6) * order * ptrAct;
     col = mix(uBone * 0.75, uPal[4] * 1.35, order) + uPal[4] * (flare * 0.55 + pointerBoost * 0.5);
     alphaF = gate * nearFade * (0.35 + 0.55 * order + 0.6 * flare + 0.3 * pointerBoost) * mix(1.0, order, uReduced);
     sizeF = (0.85 + 0.9 * flare + 0.4 * pointerBoost) * nearFade;
@@ -793,9 +894,90 @@ const EX6_GLSL = /* glsl */`
   }
 `;
 
-const EX_STUB_GLSL = /* glsl */`a = 0.0;`;
+const EX7_GLSL = /* glsl */`
+  // cls: 0 wall (same profile as Exhibit I) · 1 gold (level rises with uProgress) · 2 overflow drop
+  float level = mix(0.35, 1.0, uProgress);
+  if (clsv < 0.5) {                            // wall: STILL — the payoff of Exhibit I's tremble
+    a = asm2(uAssembly, seedv, 0.0);
+    col = mix(uBone, uPal[0], 0.30 + datv * 0.55);
+    alphaF = 0.85;
+  } else if (clsv < 1.5) {                     // gold: lights only below the level (stateless)
+    float lit = 1.0 - smoothstep(level - 0.06, level + 0.06, datv);
+    a = asm2(uAssembly, seedv, 0.0) * mix(0.12, 1.0, lit);
+    float ds = (datv - level) * 10.0;
+    float surface = exp(-ds * ds);              // near-surface band (никога pow(neg,2) — NaN на ANGLE/mobile)
+    vec2 toPtr = hp.xy - uPointer.xy;
+    float gp = exp(-dot(toPtr, toPtr) * 2.5) * ptrAct;
+    hp.y += surface * gp * 0.05 * sin(uTime * 3.0 + seedv * 20.0) * (1.0 - uReduced); // ripples on the gold surface only
+    float glow = mix(1.0, 1.5, uFocus);         // hold → full radiance, hue-capped
+    col = uPal[0] * glow * mix(0.85, 1.15, lit);
+    sizeF = mix(1.0, 1.3, lit);
+    alphaF = 0.9;
+  } else {                                     // overflow drops: same parabola family as the III grains, capped
+    float overflowGate = clamp(smoothstep(0.55, 0.85, uProgress) + uFocus * 0.30, 0.0, 1.0);
+    float rare = smoothstep(0.90, 0.94, datv);  // only the top seeds ever launch — rare drops, not a pour
+    float period = 6.5;
+    float ttG = mod(uTime * 0.35 + datv * period, period);
+    float vOut = 0.10 + 0.08 * fract(seedv * 41.0);
+    float vy0 = -0.02 - 0.05 * fract(seedv * 17.0);
+    float gG = 0.9, tFlight = 1.4;
+    float te = min(ttG, tFlight);
+    vec2 dirOut = normalize(hp.xy + vec2(1e-4));
+    hp.xy += dirOut * vOut * te;
+    hp.y += vy0 * te - 0.5 * gG * te * te;
+    float life = 1.0 - smoothstep(0.0, tFlight, te); // dissolves into a glint near the base
+    a = asm2(uAssembly, seedv, 0.30) * overflowGate;
+    col = uPal[0] * (1.3 + 0.4 * life);
+    sizeF = mix(0.6, 1.3, life) * rare;
+    alphaF = life * rare * overflowGate * 0.9;
+  }
+`;
 
-const EX_BLOCKS = [EX1_GLSL, EX2_GLSL, EX3_GLSL, EX4_GLSL, EX5_GLSL, EX6_GLSL, EX_STUB_GLSL, EX_STUB_GLSL];
+const EX8_GLSL = /* glsl */`
+  // cls: 0 envelope · 1 inner core — same heart curve as II, no gears, no arrow
+  // 3 beats over uProgress: <0.30 ЗАВРЪЩАНЕ · 0.30-0.55 ВЪЗКРЕСВАНЕ · >0.55 ДАРЪТ
+  float aBase = asm2(uAssembly, seedv, 0.0);
+
+  if (uProgress < 0.30) {                                // ЗАВРЪЩАНЕ · slow calm breathe, whole body
+    float breathe = 1.0 + 0.05 * sin(uTime * 0.30 + seedv * 2.1);
+    a = aBase;
+    hp *= breathe;
+    if (clsv < 0.5) { col = mix(uPal[7] * 0.55, uPal[7] * 1.05, datv); alphaF = 0.85; sizeF = 1.0; }
+    else            { col = mix(uPal[7] * 0.80, uPal[0] * 1.10, 0.45); alphaF = 0.9; sizeF = 1.1; }
+
+  } else if (uProgress < 0.55) {                         // ВЪЗКРЕСВАНЕ · bounded implosion + short 8-color flash
+    float p2 = clamp((uProgress - 0.30) / 0.25, 0.0, 1.0);
+    float implodeFactor = 0.55 * sin(p2 * 3.14159265) * (1.0 - uReduced); // reduced: still heart, no collapse
+    a = aBase;
+    hp = mix(hp, vec3(0.0), implodeFactor);
+    float fp = (p2 - 0.5) * 6.0;
+    float flashWin = exp(-fp * fp) * (1.0 - uReduced);   // short window around the peak; skipped under reduced motion
+    // GLSL ES 1.0: no dynamic indexing of uniform arrays — constant-count loop fakes it
+    vec3 flashCol = uPal[0];
+    float idxF = floor(seedv * 8.0);                     // STATIC per-point index (PRD: floor(aSeed·8) · не диско)
+    for (int c8 = 0; c8 < 8; c8++) { if (abs(float(c8) - idxF) < 0.5) flashCol = uPal[c8]; }
+    vec3 base = (clsv < 0.5) ? mix(uPal[7] * 0.55, uPal[7] * 1.05, datv) : mix(uPal[7] * 0.80, uPal[0] * 1.10, 0.45);
+    col = mix(base, flashCol * 1.15, flashWin * 0.75); // 8 hues must survive additive stacking — never blow to white
+    alphaF = 0.9;
+    sizeF = 1.0 + implodeFactor * 0.4;
+
+  } else {                                                // ДАРЪТ · exhale — the ring closes into the opening dust
+    float p3 = clamp((uProgress - 0.55) / 0.25, 0.0, 1.0); // completes by uProgress≈0.80 (terminal-section runway)
+    float stagger = seedv * 0.6;
+    float aDown = smoothstep(stagger, stagger + 0.4, p3);
+    a = aBase * (1.0 - aDown);
+    vec2 toPtr = hp.xy - uPointer.xy;
+    float g = exp(-dot(toPtr, toPtr) * 1.5) * ptrAct;
+    hp.xy -= toPtr * g * 0.35;                             // soft mirror parallax — attraction, no scatter, only for a live pointer
+    vec2 dirOut = normalize(hp.xy + vec2(1e-4));
+    hp.xy += dirOut * uFocus * 0.5 * (1.0 - uReduced);     // hold DISPERSES (the inverse gesture of every hall)
+    col = (clsv < 0.5) ? mix(uPal[7] * 0.45, uPal[7] * 0.85, datv) : uPal[7] * 0.70 + uPal[0] * 0.25;
+    alphaF = 0.8 * (0.3 + 0.7 * a);
+    sizeF = 1.0;
+  }
+`;
+
+const EX_BLOCKS = [EX1_GLSL, EX2_GLSL, EX3_GLSL, EX4_GLSL, EX5_GLSL, EX6_GLSL, EX7_GLSL, EX8_GLSL];
 
 function buildVertexShader() {
   const chain = EX_BLOCKS.map((body, i) =>
@@ -835,6 +1017,9 @@ function buildVertexShader() {
     float a = 0.0;
     vec3 col = uBone;
     float sizeF = 1.0, alphaF = 1.0;
+    // pointer effects only while the pointer is actually alive (swirl decays at rest; focus = deliberate hold)
+    // — an idle uPointer at (0,0,0) must never act like a phantom cursor (the template's sentinel lesson)
+    float ptrAct = clamp(uSwirl * 2.0 + uFocus, 0.0, 1.0);
 
     if (clsv < -0.5) { a = 0.0; } // parked points stay dust in EVERY exhibit
     else ${chain}
@@ -966,9 +1151,11 @@ function centeredness(rect, vh) {
 }
 
 function driveSections() {
-  if (state.peekLock != null) { // verification harness: pinned exhibit
+  if (state.peekLock != null) { // verification harness: pinned exhibit, snapped (headless gets few rAF frames)
     state.assemblyT = 1;
+    state.assembly = 1;
     state.progressT = state.progressLock;
+    state.progress = state.progressLock;
     return;
   }
   const vh = innerHeight;
@@ -1138,7 +1325,7 @@ if (renderer && renderer.getContext()) {
     document.body.appendChild(d);
     const paint = () => {
       d.textContent = 'y=' + Math.round(scrollY) + ' ex=' + state.exhibit + ' asm=' + state.assembly.toFixed(2)
-        + ' tgt=' + state.assemblyT.toFixed(2)
+        + ' tgt=' + state.assemblyT.toFixed(2) + ' prog=' + state.progress.toFixed(2) + ' red=' + (REDUCED ? 1 : 0)
         + (renderer ? ' calls=' + renderer.info.render.calls + ' pts=' + renderer.info.render.points : ' nogl')
         + ' vw=' + innerWidth + 'x' + innerHeight;
       requestAnimationFrame(paint);

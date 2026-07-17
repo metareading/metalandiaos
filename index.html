@@ -5,359 +5,240 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>maitapp · Искате ли да се събудите?</title>
 <meta name="description" content="maitapp = MyAI Tactics App. Твоят екип от ИИ герои на български. Игри · Изкуство · ИИ. По 8 минути на ден.">
+<meta property="og:title" content="maitapp · Искате ли да се събудите?">
+<meta property="og:description" content="Музей на осемте нива. Не е нужно време, а внимание — 8 минути на ден. Игри · Изкуство · ИИ, на български.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://maitapp.com/">
+<meta property="og:locale" content="bg_BG">
+<meta property="og:site_name" content="maitapp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Inter:wght@300;400;500&display=swap&subset=cyrillic" rel="stylesheet">
-<script src="https://cdn.tailwindcss.com"></script>
-<script>
-tailwind.config={theme:{extend:{
-  colors:{ink:'#0b1114',ink2:'#11191d',amber:'#e2a458',gold:'#f2c878',lgold:'#ffe1a0',parch:'#f4ecd8',
-    cel:'#E8C77E',chud:'#D4895E',vod:'#4A7FA8',plan:'#6FB59A',prag:'#E89556',izpit:'#8B5E3C',elixir:'#9c7fc8'},
-  fontFamily:{serif:['"Cormorant Garamond"','serif'],sans:['Inter','sans-serif']}}}}
-</script>
-<style>
-*{margin:0;box-sizing:border-box}
-html{scroll-behavior:smooth}
-html,body{overflow-x:hidden;max-width:100%}
-body{background:#0b1114;color:#e9e1d4;font-family:Inter,sans-serif;-webkit-font-smoothing:antialiased}
-.herovid{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.herovid-d{display:none}
-@media(min-width:760px){.herovid{display:none}.herovid-d{display:block;position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 30%}}
-#h-kick,#h-title,#h-sub{text-shadow:0 2px 16px rgba(8,10,12,.72),0 1px 3px rgba(0,0,0,.6)}
-.sweep{position:absolute;inset:0;background:radial-gradient(120% 70% at 50% 80%,rgba(255,221,138,.5),rgba(255,221,138,0) 60%);mix-blend-mode:screen;animation:sweep 7s ease-in-out infinite;pointer-events:none}
-@keyframes sweep{0%,100%{opacity:.22}50%{opacity:.75}}
-.scrim{position:absolute;inset:0;background:linear-gradient(to top,#0b1114 5%,rgba(11,17,20,.42) 42%,rgba(11,17,20,.22) 70%,rgba(11,17,20,.55))}
-.particle{position:absolute;border-radius:50%;background:#ffe7bd;pointer-events:none;opacity:0;animation:rise linear infinite}
-@keyframes rise{0%{transform:translateY(0);opacity:0}16%{opacity:.7}100%{transform:translateY(-200px);opacity:0}}
-.gradtext{background:linear-gradient(118deg,#ffe9c2,#e2a458 55%,#d8693a);-webkit-background-clip:text;background-clip:text;color:transparent}
-.kicker{letter-spacing:.3em;font-size:12px;text-transform:uppercase;font-weight:500;color:#e2a458}
-.t-word{display:inline-block;transition:transform .42s cubic-bezier(.5,0,.3,1),opacity .42s;transform-origin:center;backface-visibility:hidden;color:#ffe7bd;font-weight:700}
-.t-word.out{transform:rotateX(-92deg);opacity:0}
-.cta{background:linear-gradient(120deg,#ffe1a0,#e2a458);color:#2a1908;font-weight:500;transition:.35s;box-shadow:0 10px 40px -12px rgba(226,164,88,.7)}
-.cta:hover{transform:translateY(-2px)}
-/* mobile sticky CTA (#24 · къс път до формата) */
-.sticky-cta{position:fixed;left:50%;bottom:14px;transform:translateX(-50%) translateY(140%);z-index:60;background:linear-gradient(120deg,#ffe1a0,#e2a458);color:#2a1908;font-weight:500;padding:13px 30px;border-radius:30px;box-shadow:0 12px 32px -8px rgba(226,164,88,.75);transition:transform .45s cubic-bezier(.2,.7,.2,1),opacity .45s;opacity:0;white-space:nowrap;text-decoration:none;font-size:15px;border:1px solid rgba(90,68,8,.5)}
-.sticky-cta.show{transform:translateX(-50%) translateY(0);opacity:1}
-@media(min-width:760px){.sticky-cta{display:none}}
-.bounce{animation:bounce 2.4s ease-in-out infinite}
-@keyframes bounce{0%,100%{transform:translateY(0);opacity:.5}50%{transform:translateY(8px);opacity:1}}
-.dawnbg{background:radial-gradient(80% 50% at 50% 0%,rgba(226,164,88,.10),rgba(11,17,20,0) 70%)}
-.reveal{opacity:0;transform:translateY(40px);filter:blur(7px)}
-
-/* ── card-deck (badge-slot рамки · trading-card) ── */
-.vcard{position:relative;border:1px solid rgba(242,200,120,.22);border-radius:16px;overflow:hidden;background:rgba(255,255,255,.035);box-shadow:0 14px 38px -18px rgba(0,0,0,.7);transition:transform .4s,border-color .4s,box-shadow .4s}
-.vcard:hover{transform:translateY(-6px);border-color:rgba(242,200,120,.5);box-shadow:0 22px 48px -18px var(--cc,#f2c878)}
-.vcard .vimg{position:relative;width:100%;aspect-ratio:4/3;overflow:hidden}
-.vcard .vimg img{width:100%;height:100%;object-fit:cover;display:block}
-.vcard .vbody{padding:15px 16px 18px}
-.vcard h3{font-family:'Cormorant Garamond',serif;font-size:1.85rem;font-weight:600;color:var(--cc,#f2c878);margin-bottom:5px;line-height:1.1}
-.vcard p,.vcard small{color:rgba(244,236,216,.72);font-weight:300;font-size:.93rem;line-height:1.5;display:block}
-/* badge-slots = загатнати нива (запълнени=отключени · празни=„има още") */
-.bslots{display:flex;gap:5px;justify-content:center;padding:0 0 12px}
-.bslot{width:13px;height:13px;border-radius:50%;border:1px solid rgba(242,200,120,.4);background:rgba(0,0,0,.35)}
-.bslot.on{background:radial-gradient(circle at 38% 35%,#ffe9c2,#8a6a1e);border-color:#f2c878;box-shadow:0 0 7px rgba(242,200,120,.6)}
-.missarrow{font-size:30px;color:#e2a458;display:flex;align-items:center;justify-content:center}
-
-/* ── чудовище-кръг (6 Илюзоркови) ── */
-.foe-ring{position:relative;width:min(72vw,330px);aspect-ratio:1;margin:64px auto 64px}
-.foe-ring .center{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:40%;text-align:center}
-.foe-ring .center .vt{font-family:'Cormorant Garamond',serif;font-size:1.5rem;color:#e6a878;line-height:1}
-.foe-ring .center .vd{font-size:10.5px;color:#b89a86;margin-top:3px}
-.fo{position:absolute;left:50%;top:50%;width:30%;transform:translate(-50%,-50%) rotate(var(--a)) translate(0,-120%) rotate(calc(-1*var(--a)))}
-.fo .fimg{position:relative;border-radius:10px;overflow:hidden;border:2px solid #7a2e2e;box-shadow:0 0 0 2px #0c0805,0 6px 14px rgba(0,0,0,.5);aspect-ratio:1}
-.fo .fimg img{width:100%;height:100%;object-fit:cover}
-.fo .fimg.q{display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:1.7rem;color:#d8693a;background:repeating-linear-gradient(45deg,#1e0f0c,#1e0f0c 8px,#241210 8px,#241210 16px)}
-.fo .fn{text-align:center;font-family:'Cormorant Garamond',serif;font-size:.95rem;color:#e6a878;margin-top:3px;line-height:1}
-.fo .fs{text-align:center;font-size:9px;color:#a8897a;line-height:1.1}
-
-/* ── будечител-карти (кликаеми · активни) ── */
-.hero-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:11px}
-.hcard{position:relative;border-radius:13px;overflow:hidden;border:2px solid var(--hc,#4A7FA8);background:#0d1417;box-shadow:0 0 0 2px #07101a,0 8px 18px rgba(0,0,0,.5);cursor:pointer;transition:transform .25s}
-.hcard:active{transform:scale(.98)}
-.hcard .hi{position:relative;aspect-ratio:1}
-.hcard .hi img{width:100%;height:100%;object-fit:cover}
-.hcard.lock .hi img{filter:grayscale(.7) brightness(.45)}
-.hcard .lvl{position:absolute;top:6px;left:7px;font-family:'Cormorant Garamond',serif;font-weight:700;font-size:11px;background:rgba(12,8,5,.82);color:#f2c878;border:1px solid #8a6a1e;border-radius:4px;padding:0 6px;z-index:2}
-.hcard .lk{position:absolute;top:6px;right:7px;font-size:15px;z-index:2}
-.hcard .hn{position:absolute;left:0;right:0;bottom:0;padding:20px 6px 8px;text-align:center;font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:700;line-height:1.05;color:#fff;text-shadow:0 1px 5px #000;background:linear-gradient(180deg,transparent,rgba(0,0,0,.92))}
-.hcard .hr{font-size:12px;color:#e2c89a;display:block;font-family:Inter;margin-top:2px}
-.hdetail{display:none;grid-column:1/3;border:1px solid rgba(242,200,120,.3);border-radius:12px;background:linear-gradient(155deg,#15202a,#0b1114);padding:16px;animation:fade .25s}
-.hdetail.on{display:block}
-@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1}}
-.hdetail h4{font-family:'Cormorant Garamond',serif;font-size:1.5rem;color:var(--hc,#f2c878)}
-.hdetail .cls{font-size:11px;color:#9fb8c8;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}
-.hdetail .bio{font-size:.9rem;color:rgba(244,236,216,.78);font-weight:300;line-height:1.5;margin-bottom:8px}
-.hdetail .badges{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
-.hdetail .bdg{font-size:11px;border:1px solid rgba(242,200,120,.35);border-radius:20px;padding:2px 10px;color:#f2c878}
-.hdetail .quest{font-size:.85rem;color:#cdbf9c;border-top:1px dashed rgba(242,200,120,.25);padding-top:8px}
-.hdetail .quest b{color:#f2c878;font-weight:600}
-
-/* ── праг-карта (онбординг) ── */
-.gate{border:1px solid rgba(232,149,86,.5);border-radius:18px;background:linear-gradient(160deg,rgba(232,149,86,.10),rgba(11,17,20,.4));padding:22px 18px;box-shadow:0 0 40px -20px #E89556}
-.gstep{display:flex;gap:13px;align-items:flex-start;padding:11px 0;border-bottom:1px dashed rgba(232,149,86,.25)}
-.gstep:last-child{border-bottom:none}
-.gstep .gn{flex:0 0 36px;height:36px;border-radius:50%;border:1px solid #E89556;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:#E89556}
-.gstep h4{font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:#f0b27a}
-.gstep p{font-size:.85rem;color:rgba(244,236,216,.7);font-weight:300}
-
-/* ── токени (план · водачи⚔анти) ── */
-.tok{position:relative;border-radius:9px;overflow:hidden;border:2px solid;background:#0d1417}
-.tok img{width:100%;aspect-ratio:1;object-fit:cover;display:block}
-.tok .nm{position:absolute;left:0;right:0;bottom:0;text-align:center;font-family:'Cormorant Garamond',serif;font-size:13px;padding:14px 4px 4px;color:#fff;text-shadow:0 1px 3px #000;background:linear-gradient(180deg,transparent,rgba(0,0,0,.82))}
-.tok.ally{border-color:#4A7FA8}.tok.foe{border-color:#d8693a}
-.tok.q{display:flex;align-items:center;justify-content:center;aspect-ratio:1;font-family:'Cormorant Garamond',serif;font-size:34px;color:#d8693a;background:repeating-linear-gradient(45deg,#1e0f0c,#1e0f0c 9px,#241210 9px,#241210 18px)}
-.vs{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:15px;color:#f2c878;background:rgba(12,8,5,.7);border:1px solid #8a6a1e;border-radius:50%;width:30px;height:30px;display:flex;align-items:center;justify-content:center}
-.thread{display:flex;flex-wrap:wrap;gap:7px;justify-content:center}
-.tchip{display:flex;align-items:center;gap:7px;font-size:13px;color:#e9e1d4}
-.tchip{flex-direction:column;gap:4px;width:88px}
-.tchip img{width:74px;height:74px;border-radius:10px;object-fit:cover;border:1.5px solid rgba(111,181,154,.45);box-shadow:0 4px 12px rgba(0,0,0,.45)}
-.tchip b{font-family:'Cormorant Garamond',serif;font-size:14px;font-weight:600;color:#9fe0c4}
-.tarrow{color:#6FB59A;opacity:.7;align-self:center}
-</style>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"}}</script>
 </head>
 <body>
 
-<!-- ════ 1 · HERO (жълто · Желанието) ════ -->
-<section class="relative h-screen w-full overflow-hidden flex items-start">
-  <video class="herovid" autoplay loop muted playsinline poster="img/hero-mother.jpg">
-    <source src="video/hero-loop-720p.webm" type="video/webm"><source src="video/hero-loop-720p.mp4" type="video/mp4">
-  </video>
-  <img class="herovid-d" src="img/hero-mother-wide.jpg" alt="майка и дете пред картата на пътя">
-  <div class="sweep"></div><div id="particles" class="absolute inset-0"></div><div class="scrim"></div>
-  <div class="relative z-10 w-full max-w-2xl mx-auto px-6 text-center pt-[9vh]">
-    <p class="kicker mb-4" id="h-kick" style="color:#E8C77E;perspective:500px">My AI <span id="t-word" class="t-word">Tactic</span> App</p>
-    <h1 class="font-serif font-semibold leading-[1.1] text-3xl sm:text-4xl md:text-5xl mb-4" id="h-title">Искате ли да се събудите и да си припомните <span class="italic" style="color:#ffe7bd">как се учи</span> на maitapp?</h1>
-    <p class="text-lg md:text-2xl text-parch font-light mb-1" id="h-sub">Не е нужно време, а внимание.</p>
-    <p class="text-base text-gold font-light mb-7" id="h-min">8 минути на ден.</p>
-    <a href="#monster" class="cta inline-block rounded-full px-9 py-4 text-[15px]" id="h-cta">Започни приказката</a>
-  </div>
-  <div class="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 text-gold/70 bounce"><span style="font-size:24px">⌄</span></div>
+<canvas id="stage" aria-hidden="true"></canvas>
+
+<header class="hud" aria-hidden="true">
+  <div class="mark"><span class="dot"></span>maitapp</div>
+  <div class="counter"><b id="cNum">01</b> / 08</div>
+</header>
+
+<main>
+
+<!-- ════ HERO · музейният вход ════ -->
+<section id="hero" data-exhibit="-1">
+  <p class="kicker">My AI <span id="tWord">Tactic</span> App</p>
+  <h1>Искате ли да се събудите и да си припомните <em>как се учи</em> на maitapp?</h1>
+  <p class="sub">Не е нужно време, а внимание.</p>
+  <p class="min8">8 минути на ден.</p>
+  <button class="cta" data-open-wl>Започни приказката</button>
+  <div class="descend"><span>спуснете се</span><span class="chev">⌄</span></div>
 </section>
 
-<!-- ════ 2 · ЧУДОВИЩЕТО (червено · кръг · 6 Илюзоркови · без видео) ════ -->
-<section id="monster" class="dawnbg py-24 px-6">
-  <div class="max-w-3xl mx-auto text-center reveal">
-    <p class="kicker mb-5" style="color:#D4895E">👹 Чудовището</p>
-    <h2 class="font-serif text-4xl md:text-5xl mb-5 leading-tight">Семейство Илюзоркови</h2>
-    <p class="text-lg text-parch/70 font-light leading-relaxed mb-3">Учебната и работната невроза не са лична слабост — те са чудовище. Осем слуги на <span style="color:#d8693a">Времетрон</span> от <span style="color:#d8693a">царството на цъкането</span> — Семейство Илюзоркови и свитата му — крадат вниманието. Назовете ли ги, губят силата си.</p>
-    <p class="text-sm font-light italic mb-2" style="color:#c98a78">Силата на историята зависи от силата на антагониста.</p>
-  </div>
-  <div class="max-w-4xl mx-auto mt-8"><div class="hero-grid reveal" id="foeGrid"></div></div>
-  <p class="text-center text-sm font-light mt-5 reveal" style="color:#b89a86">Разцъкайте всяка сянка — вижте за какво отговаря. <span style="color:#e6a878">Времетрон</span> командва (вместо сърце — часовник).</p>
-  <p class="text-center font-serif text-2xl md:text-3xl font-medium mt-8 reveal max-w-2xl mx-auto" style="color:#e8d9b0">🕯️ Пещерата с най-голямото чудовище крие <span style="color:#E8C77E">най-голямото съкровище</span>.</p>
-</section>
-
-<!-- ════ 3 · ВОДАЧИТЕ = екипът ви ИИ-герои (синьо · ВЕДНАГА след чудовището · Фибоначко ритъм) ════ -->
-<section class="py-24 px-6 border-t border-white/5">
-  <div class="max-w-5xl mx-auto">
-    <div class="text-center mb-12 reveal">
-      <p class="kicker mb-5" style="color:#4A7FA8">🧭 Вашите водачи · екипът ви</p>
-      <h2 class="font-serif text-4xl md:text-5xl mb-4">Не сте сам/а.<br>Екип от ИИ-герои ви води.</h2>
-      <p class="text-lg text-parch/70 font-light max-w-2xl mx-auto">Осем будечители — будни деца-учители, които общуват на човешки език. За родители и деца, които искат ИИ да е разширение на ума: въображение и радост от творчеството, вместо евтин допамин. <span class="text-parch/50">(Разцъкайте всеки в Плана по-долу.)</span></p>
-    </div>
-    <div class="grid sm:grid-cols-3 gap-5">
-      <div class="vcard reveal" style="--cc:#E8C77E"><div class="vimg"><img src="img/art-въпрос.jpg" alt="Снимате"></div><div class="vbody"><h3>Снимате</h3><small>каквото ви дразни, отлагате или ви побърква</small></div><div class="bslots"><span class="bslot on"></span><span class="bslot"></span><span class="bslot"></span></div></div>
-      <div class="vcard reveal" style="--cc:#6FB59A"><div class="vimg"><img src="img/scene-agent-cards.jpg" alt="Избирате герой"></div><div class="vbody"><h3>Избирате герой</h3><small>асистент, който да Ви води — на български</small></div><div class="bslots"><span class="bslot on"></span><span class="bslot on"></span><span class="bslot"></span></div></div>
-      <div class="vcard reveal" style="--cc:#9c7fc8"><div class="vimg"><img src="img/art-резултат.jpg" alt="Асистент → агент"></div><div class="vbody"><h3>Асистент → агент</h3><small>асистентът се развива до агент, който действа и върши реални задачи</small></div><div class="bslots"><span class="bslot on"></span><span class="bslot on"></span><span class="bslot on"></span></div></div>
-    </div>
+<!-- ════ EXHIBIT I · Чашата, още неналята със злато (жълто) ════ -->
+<section class="exhibit" id="ex-1" data-exhibit="0" style="--ex:var(--c1)">
+  <div class="ex-inner">
+    <div class="ex-space" aria-hidden="true"></div>
+    <article class="plaque">
+      <div class="pl-ex">Exhibit I</div>
+      <h2>Чашата, още неналята със злато</h2>
+      <div class="pl-meta"><span>Материал · намерение</span><span>Датировка · ден първи</span></div>
+      <div class="pl-rule"></div>
+      <p class="pl-text">Питеен бокал, изваян от чиста математика. В него — метата: конкретна като чаша с вода, ясна и жива. Водата трепти, защото още никой не я е погледнал докрай — задръжте поглед и повърхността сяда в огледало.</p>
+      <p class="pl-text">Съдът не е празен. Пълен е с вода; празен е само от златото, което го чака в Exhibit VII. На ръба стои една светла точка — Героят — и тънка нишка го свързва с целта му.</p>
+      <p class="pl-text">Уредникът пита: коя е ЕДНАТА мета · как ще разберете, че сте я постигнали · кой е крайният случай на провал.</p>
+      <div class="pl-stamp">Reconstructed by Metaezik · 55 000 points</div>
+    </article>
   </div>
 </section>
 
-<!-- ════ 4 · ЗАЩО (стат) ════ -->
-<section class="dawnbg py-24 px-6 border-t border-white/5">
-  <div class="max-w-3xl mx-auto text-center reveal">
-    <p class="kicker mb-5" style="color:#E8C77E">❓ Защо</p>
-    <div class="vcard mx-auto mb-8" style="--cc:#E8C77E;max-width:340px"><div class="vimg"><img src="img/art-отговор.jpg" alt="Защо"></div></div>
-    <p class="font-serif text-3xl md:text-4xl mb-4 leading-tight">Над <span class="gradtext">95%</span> от децата в 4. клас<br>имат симптоми на учебна невроза.</p>
-    <p class="text-base text-parch/60 font-light mb-8">Светът се мени по-бързо, отколкото усещаме. Старите начини изморяват, а времето не стига.</p>
-    <div class="grid grid-cols-3 gap-3 max-w-xl mx-auto mb-8">
-      <div><div class="font-serif text-4xl md:text-5xl" style="color:#D4895E">62%</div><div class="text-xs text-parch/55 mt-1">хронично тъжни</div></div>
-      <div><div class="font-serif text-4xl md:text-5xl" style="color:#D4895E">32%</div><div class="text-xs text-parch/55 mt-1">с мисли да посегнат на живота си</div></div>
-      <div><div class="font-serif text-4xl md:text-5xl" style="color:#D4895E">23%</div><div class="text-xs text-parch/55 mt-1">правили опит</div></div>
-    </div>
-    <p class="font-serif text-2xl md:text-4xl leading-tight mb-4" style="color:#e8d9b0">Днешното поколение е <span style="color:#D4895E">най-големият ни провал</span> като човечество.</p>
-    <p class="text-xl md:text-2xl text-gold font-serif mb-3">Как да преодолеем това?</p>
-    <p class="text-xs text-parch/40 font-light">тийнейджърки · САЩ · CDC (Youth Risk Behavior Survey) · учебна невроза: конференция „Бъдеще за образованието", 2011</p>
+<!-- ════ EXHIBIT II · Сърцето, което тиктака (червено) ════ -->
+<section class="exhibit alt" id="ex-2" data-exhibit="1" style="--ex:var(--c2)">
+  <div class="ex-inner">
+    <div class="ex-space" aria-hidden="true"></div>
+    <article class="plaque">
+      <div class="pl-ex">Exhibit II</div>
+      <h2>Сърцето, което тиктака</h2>
+      <div class="pl-meta"><span>Материал · откраднато внимание</span><span>Находка · под голям камък</span></div>
+      <div class="pl-rule"></div>
+      <p class="pl-text"><!-- ticket 13: full wall-text --> Най-подробно сглобеният експонат в музея. Вместо сърце — часовник.</p>
+      <div class="pl-stamp">Reconstructed by Metaezik · 58 000 points</div>
+    </article>
   </div>
 </section>
 
-<!-- ════ 5 · КАК (ИИ + игри + изкуство · БЕЗ синьо) ════ -->
-<section class="py-24 px-6 border-t border-white/5">
-  <div class="max-w-4xl mx-auto">
-    <div class="text-center mb-10 reveal">
-      <p class="kicker mb-5" style="color:#E8C77E">⚙️ Как</p>
-      <h2 class="font-serif text-4xl md:text-5xl mb-4">Игри · Изкуство · ИИ</h2>
-      <p class="text-lg text-parch/70 font-light max-w-2xl mx-auto">Реалните задачи, които ви тежат, чрез игри и изкуство за <b class="text-parch/90">8 минути на ден</b> ги превръщаме в игри — и после ги правите с лекота.</p>
-    </div>
-    <div class="grid sm:grid-cols-3 gap-5">
-      <div class="vcard reveal" style="--cc:#E8C77E"><div class="vimg"><img src="img/art-резултат.jpg" alt="Учене"></div><div class="vbody"><h3>Учене без учене</h3><small>разбирам по-дълбоко</small></div></div>
-      <div class="vcard reveal" style="--cc:#e2a458"><div class="vimg"><img src="img/art-задача.jpg" alt="Работа"></div><div class="vbody"><h3>Работа без работа</h3><small>свършвам по-леко и приятно</small></div></div>
-      <div class="vcard reveal" style="--cc:#9c7fc8"><div class="vimg"><img src="img/art-еликсир.jpg" alt="Творчество"></div><div class="vbody"><h3>Творчество</h3><small>забавлявам се, играя и създавам</small></div></div>
-    </div>
+<!-- ════ EXHIBIT III · Осемте, които посяват (синьо) ════ -->
+<section class="exhibit" id="ex-3" data-exhibit="2" style="--ex:var(--c3)">
+  <div class="ex-inner">
+    <div class="ex-space" aria-hidden="true"></div>
+    <article class="plaque">
+      <div class="pl-ex">Exhibit III</div>
+      <h2>Осемте, които посяват</h2>
+      <div class="pl-meta"><span>Материал · поле между осем ума</span><span>Състояние · сеитба</span></div>
+      <div class="pl-rule"></div>
+      <p class="pl-text"><!-- ticket 13: full wall-text --> Осем светли възела ориентират праха. Зърната покълват по-късно.</p>
+      <div class="pl-stamp">Reconstructed by Metaezik · 54 000 points</div>
+    </article>
   </div>
 </section>
 
-<!-- ════ ПРАГ · онбординг-карта (оранжево) ════ -->
-<section class="py-24 px-6 border-t border-white/5">
-  <div class="max-w-4xl mx-auto">
-    <div class="text-center mb-10 reveal">
-      <p class="kicker mb-5" style="color:#E89556">🚪 Прагът</p>
-      <h2 class="font-serif text-4xl md:text-5xl mb-3">Преди нивата — три прага</h2>
-      <p class="text-base text-parch/65 font-light">Малка подготовка, и картата се отваря.</p>
-    </div>
-    <div class="grid sm:grid-cols-3 gap-5">
-      <div class="vcard reveal" style="--cc:#E89556"><div class="vimg"><img src="img/доверка.jpg" alt="Доверка"></div><div class="vbody"><h3>1 · Преминете Доверка</h3><small>Кратка проверка за ИИ-готовност — спокойно, без оценки.</small></div></div>
-      <div class="vcard reveal" style="--cc:#E89556"><div class="vimg"><img src="img/scene-wheel.jpg" alt="Колелото"></div><div class="vbody"><h3>2 · Направете Колелото</h3><small>12-те сфери — „залата на Метатрон". Виждате накъде.</small></div></div>
-      <div class="vcard reveal" style="--cc:#E89556"><div class="vimg"><img src="img/art-метамозък.jpg" alt="Учебникът"></div><div class="vbody"><h3>3 · Подгответе учебника</h3><small>Сваляте PDF; браузър-приставка внася материала Ви в „метамозък".</small></div></div>
-    </div>
+<!-- ════ EXHIBIT IV · Осемте стъпала (зелено) ════ -->
+<section class="exhibit alt" id="ex-4" data-exhibit="3" style="--ex:var(--c4)">
+  <div class="ex-inner">
+    <div class="ex-space" aria-hidden="true"></div>
+    <article class="plaque">
+      <div class="pl-ex">Exhibit IV</div>
+      <h2>Осемте стъпала</h2>
+      <div class="pl-meta"><span>Материал · път в осем плата</span><span>Пропорция · златна</span></div>
+      <div class="pl-rule"></div>
+      <p class="pl-text"><!-- ticket 13: full wall-text --> Възходяща спирала с осем отчетливи стъпала. Зовът тича нагоре по пътя.</p>
+      <div class="pl-stamp">Reconstructed by Metaezik · 56 000 points</div>
+      <div class="pl-extra"><button class="cta" data-open-wl>Започни приказката</button></div>
+    </article>
   </div>
 </section>
 
-<!-- ════ 7 · ПЛАН ЗА ДЕЙСТВИЕ (зелено · визуален · агенти срещу анти-агенти) ════ -->
-<section class="dawnbg py-24 px-6 border-t border-white/5">
-  <div class="max-w-4xl mx-auto">
-    <div class="text-center mb-10 reveal">
-      <p class="kicker mb-5" style="color:#6FB59A">🗺️ План за действие</p>
-      <h2 class="font-serif text-4xl md:text-5xl mb-4">Агентите Ви са водачи.<br>Анти-агентите — пазачи.</h2>
-      <p class="text-lg text-parch/70 font-light max-w-2xl mx-auto">Всяко ниво е една нишка. Картата се разбулва с реални действия.</p>
-    </div>
-    <!-- нишката -->
-    <div class="rounded-2xl p-6 mb-8 reveal thread" style="background:rgba(111,181,154,.07);border:1px solid rgba(111,181,154,.3)">
-      <span class="tchip"><img src="img/loop-учебник.jpg" alt="Учебник"><b>Учебник</b></span><span class="tarrow">→</span>
-      <span class="tchip"><img src="img/loop-агент.jpg" alt="Агент"><b>Агент</b></span><span class="tarrow">→</span>
-      <span class="tchip"><img src="img/loop-знание.jpg" alt="Знание"><b>Знание</b></span><span class="tarrow">→</span>
-      <span class="tchip"><img src="img/loop-история.jpg" alt="История"><b>История</b></span><span class="tarrow">→</span>
-      <span class="tchip"><img src="img/loop-игри.jpg" alt="Игри"><b>Игри</b></span><span class="tarrow">→</span>
-      <span class="tchip"><img src="img/loop-изпит.jpg" alt="Изпит"><b>Изпит</b></span>
-    </div>
-    <!-- будечители кликаеми (водачи срещу анти) -->
-    <div class="hero-grid reveal" id="heroGrid"></div>
-    <div class="text-center mt-10 reveal">
-      <a href="map.html" class="inline-block rounded-full px-9 py-4 text-[15px]" style="border:1px solid #6FB59A;color:#9fe0c4">🗺 Виж цялата карта на играта →</a>
-    </div>
+<!-- ════ EXHIBIT V · Прагът, преминат само в една посока (оранжево) ════ -->
+<section class="exhibit" id="ex-5" data-exhibit="4" style="--ex:var(--c5)">
+  <div class="ex-inner">
+    <div class="ex-space" aria-hidden="true"></div>
+    <article class="plaque">
+      <div class="pl-ex">Exhibit V</div>
+      <h2>Прагът, преминат само в една посока</h2>
+      <div class="pl-meta"><span>Материал · решимост</span><span>Посока · само напред</span></div>
+      <div class="pl-rule"></div>
+      <p class="pl-text"><!-- ticket 13: full wall-text --> Прекрачилите точки пламват и не се връщат. Действието е мощта.</p>
+      <div class="pl-stamp">Reconstructed by Metaezik · 53 000 points</div>
+    </article>
   </div>
 </section>
 
-<!-- ════ 8 · ИЗПИТАНИЕ → СЪКРОВИЩЕ → ЕЛИКСИР ════ -->
-<section class="py-24 px-6 border-t border-white/5">
-  <div class="max-w-4xl mx-auto">
-    <div class="text-center mb-10 reveal">
-      <p class="kicker mb-5" style="color:#8B5E3C">🜂 Изпитанието</p>
-      <h2 class="font-serif text-4xl md:text-5xl mb-4">Една задача → готов резултат</h2>
-      <p class="text-lg text-parch/70 font-light max-w-2xl mx-auto">За пет минути. Без код. На български.</p>
-    </div>
-    <div class="grid sm:grid-cols-[1fr_auto_1fr] gap-5 items-center mb-20">
-      <div class="vcard reveal" style="--cc:#d8693a"><div class="vimg"><img src="img/art-задача.jpg" alt="Задачата"></div><div class="vbody"><h3>Задачата</h3><p>Питате maitapp: „Имам досаден повтарящ се процес или задача. Кой агент и кое умение да развия?"</p></div></div>
-      <div class="missarrow reveal">➜</div>
-      <div class="vcard reveal" style="--cc:#6fb59a"><div class="vimg"><img src="img/art-резултат.jpg" alt="Резултатът"></div><div class="vbody"><h3>Резултатът</h3><p>Жива карта с роли, Куражку пише чернова, Фибоначко намира три пропуска. Без код, на български.</p></div></div>
-    </div>
-    <div class="text-center reveal">
-      <p class="kicker mb-5" style="color:#E8C77E">💎 Съкровището</p>
-      <h2 class="font-serif text-3xl md:text-4xl leading-snug mb-4">Пеем, докато говорим.<br>Танцуваме, докато се движим.<br>Рисуваме, докато пишем.<br>Играем, докато учим и работим.<br><span class="gradtext italic">От забавление до вдъхновение.</span></h2>
-    </div>
+<!-- ════ EXHIBIT VI · Пашкулът и крилете (кафяво) ════ -->
+<section class="exhibit alt" id="ex-6" data-exhibit="5" style="--ex:var(--c6)">
+  <div class="ex-inner">
+    <div class="ex-space" aria-hidden="true"></div>
+    <article class="plaque">
+      <div class="pl-ex">Exhibit VI</div>
+      <h2>Пашкулът и крилете</h2>
+      <div class="pl-meta"><span>Материал · метаморфоза</span><span>Наблюдение · реална като на молец</span></div>
+      <div class="pl-rule"></div>
+      <p class="pl-text"><!-- ticket 13: full wall-text --> Единствената пълна смърт в музея — и единственото прераждане.</p>
+      <div class="pl-stamp">Reconstructed by Metaezik · 57 000 points</div>
+    </article>
   </div>
 </section>
 
-<!-- ════ ЕЛИКСИР · CTA (будечителите · „как да ви наричаме") ════ -->
-<section id="cta" class="dawnbg relative py-28 px-6 border-t border-white/5 overflow-hidden">
-  <div class="sweep" style="opacity:.4"></div>
-  <div class="relative z-10 max-w-2xl mx-auto text-center reveal">
-    <p class="kicker mb-6" style="color:#9c7fc8">Еликсир · поканата</p>
-    <h2 class="font-serif text-4xl md:text-5xl mb-5 leading-tight">Будечителите Ви чакат.<br>Как да Ви наричаме?</h2>
-    <p class="text-lg text-parch/70 font-light mb-9">Не курс. Не домашни. Осем минути и една игра — и нещо, което днес ви тежи, утре ще правите с кеф.</p>
-    <p id="wlOk" style="display:none" class="rounded-2xl p-6 max-w-md mx-auto text-parch font-serif text-xl">✦ Благодарим! Поканите тръгват скоро — пазим мястото ти.</p>
-    <form class="rounded-2xl p-6 max-w-md mx-auto text-left" style="background:rgba(255,255,255,.04);border:1px solid rgba(242,200,120,.2)" onsubmit="this.style.display='none';document.getElementById('wlOk').style.display='block';return false">
-      <label class="block font-serif text-gold text-sm mb-1">Име</label>
-      <input type="text" placeholder="Как да Ви наричаме?" class="w-full mb-4 rounded-lg px-4 py-3 bg-black/30 border border-amber/30 text-parch text-[15px]" autocomplete="name">
-      <label class="block font-serif text-gold text-sm mb-1">Имейл</label>
-      <input type="email" placeholder="вашият@имейл.bg" class="w-full mb-4 rounded-lg px-4 py-3 bg-black/30 border border-amber/30 text-parch text-[15px]" autocomplete="email" required>
-      <label class="flex gap-2 items-start text-xs text-parch/55 mb-5"><input type="checkbox" required class="mt-1">Съгласен/на съм maitapp да съхранява имейла ми, за да получа поканата. <a href="#" class="text-gold">(политика за поверителност · скоро)</a></label>
-      <button type="submit" class="cta w-full rounded-full px-10 py-4 text-base">Заяви поканата си</button>
+<!-- ════ EXHIBIT VII · Чашата, преляла (жълто · римата с I) ════ -->
+<section class="exhibit" id="ex-7" data-exhibit="6" style="--ex:var(--c7)">
+  <div class="ex-inner">
+    <div class="ex-space" aria-hidden="true"></div>
+    <article class="plaque">
+      <div class="pl-ex">Exhibit VII</div>
+      <h2>Чашата, преляла</h2>
+      <div class="pl-meta"><span>Материал · злато</span><span>Произход · същият съд от Exhibit I</span></div>
+      <div class="pl-rule"></div>
+      <p class="pl-text"><!-- ticket 13: full wall-text --> Същият съд — намерен пълен. Но…</p>
+      <div class="pl-stamp">Reconstructed by Metaezik · 57 000 points</div>
+    </article>
+  </div>
+</section>
+
+<!-- ════ EXHIBIT VIII · Сърцето, върнато у дома (лилаво) + ЕЛИКСИР ════ -->
+<section class="exhibit alt" id="ex-8" data-exhibit="7" style="--ex:var(--c8)">
+  <div class="ex-inner">
+    <div class="ex-space" aria-hidden="true"></div>
+    <article class="plaque">
+      <div class="pl-ex">Exhibit VIII</div>
+      <h2>Сърцето, върнато у дома</h2>
+      <div class="pl-meta"><span>Материал · любов в себе си</span><span>Произход · същото сърце от Exhibit II · без часовника</span></div>
+      <div class="pl-rule"></div>
+      <p class="pl-text"><!-- ticket 13: full wall-text --> Часовникът е премахнат. Сърцето бие спокойно и се раздава.</p>
+      <div class="pl-stamp">Reconstructed by Metaezik · 55 000 points</div>
+    </article>
+  </div>
+  <!-- ЕЛИКСИР · поканата (inline форма · финалът на историята) -->
+  <div class="ex-copy" id="elixir">
+    <h2 class="serif" style="font-size:2rem;margin-bottom:10px">Оставете внимание тук</h2>
+    <p style="color:rgba(244,236,216,.72);margin-bottom:22px">Не курс. Не домашни. Осем минути и една игра — и нещо, което днес ви тежи, утре ще правите с кеф.</p>
+    <!-- ticket 09: real wiring to the live waitlist endpoint -->
+    <form id="wlForm" class="wl-card" action="#" novalidate>
+      <label for="wlName">Име</label>
+      <input id="wlName" type="text" placeholder="Как да Ви наричаме?" autocomplete="name">
+      <label for="wlEmail">Имейл</label>
+      <input id="wlEmail" type="email" placeholder="вашият@имейл.bg" autocomplete="email" required>
+      <input class="hp-field" type="text" name="company" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <label class="wl-consent"><input type="checkbox" id="wlConsent" required>
+        <span>Съгласен/на съм maitapp да съхранява имейла ми, за да получа поканата. <a href="https://metareading.com/terms" target="_blank" rel="noopener">Условия</a></span></label>
+      <button type="submit" class="cta" style="width:100%">Заяви поканата си</button>
+      <p class="wl-msg ok" id="wlOk">✦ Благодарим! Поканите тръгват скоро — пазим мястото Ви.</p>
+      <p class="wl-msg err" id="wlErr">Нещо се обърка. Проверете имейла и опитайте отново.</p>
     </form>
-    <p class="text-xs text-parch/40 mt-7 font-light">Каквото споделиш с maitapp, остава вътре. · Металандия · спокойствие · радост · вдъхновение</p>
+    <p style="font-size:11px;color:rgba(244,236,216,.4);margin-top:18px">Каквото споделите с maitapp, остава вътре. · Металандия · спокойствие · радост · вдъхновение</p>
   </div>
 </section>
 
-<a href="#cta" id="stickyCta" class="sticky-cta">✦ Заяви покана</a>
+</main>
 
-<footer class="text-center text-parch/40 text-xs py-10 px-6 font-light border-t border-white/5">
-  maitapp · MyAI Tactics App · построено в <a href="https://metalandia.com" class="text-gold">Металандия</a> · от MetaReading
+<!-- ════ STICKY CTA + MODAL (решение Д2 · модал върху текущата секция) ════ -->
+<button class="cta sticky-cta" id="stickyCta" data-open-wl>✦ Присъединете се</button>
+
+<div class="wl-modal" id="wlModal" role="dialog" aria-modal="true" aria-labelledby="wlmTitle" hidden>
+  <div class="backdrop" data-close-wl></div>
+  <div class="wl-card">
+    <button class="wl-close" data-close-wl aria-label="Затвори">✕</button>
+    <h2 class="serif" id="wlmTitle" style="font-size:1.6rem;margin-bottom:6px">Оставете внимание тук</h2>
+    <p style="font-size:.9rem;color:rgba(244,236,216,.65);margin-bottom:16px">Име и имейл — и пазим мястото Ви за поканата.</p>
+    <!-- ticket 09: real wiring (shared handler with #wlForm) -->
+    <form id="wlFormM" action="#" novalidate>
+      <label for="wlNameM">Име</label>
+      <input id="wlNameM" type="text" placeholder="Как да Ви наричаме?" autocomplete="name">
+      <label for="wlEmailM">Имейл</label>
+      <input id="wlEmailM" type="email" placeholder="вашият@имейл.bg" autocomplete="email" required>
+      <input class="hp-field" type="text" name="company" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <label class="wl-consent"><input type="checkbox" id="wlConsentM" required>
+        <span>Съгласен/на съм maitapp да съхранява имейла ми, за да получа поканата. <a href="https://metareading.com/terms" target="_blank" rel="noopener">Условия</a></span></label>
+      <button type="submit" class="cta" style="width:100%">Заяви поканата си</button>
+      <p class="wl-msg ok" id="wlOkM">✦ Благодарим! Поканите тръгват скоро — пазим мястото Ви.</p>
+      <p class="wl-msg err" id="wlErrM">Нещо се обърка. Проверете имейла и опитайте отново.</p>
+    </form>
+  </div>
+</div>
+
+<footer>
+  maitapp · MyAI Tactics App · построено в <a href="https://metalandia.com">Металандия</a> · от MetaReading
 </footer>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script>
-/* будечители · ред Доверка→Куражку→…→Творея (Лозанов закони) · кликаеми */
-const HEROES=[
- {id:"доверка",lvl:"I",law:"Присъствие",hc:"#d8bd84",role:"Пазител · AI-готовност",bio:"Не натиска. Държи спокойствието, докато избирате целта си.",skills:["Колело","Готовност","Спокойствие"],quest:["Преминете прага","Кратка проверка → виждате накъде сте готови."],un:true},
- {id:"любка",lvl:"II",law:"Любов",hc:"#D4537E",role:"Организатор · личен асистент",bio:"Държи целта, плана и критериите. Казва кой какво и кога.",skills:["Целеполагане","План","Ритъм"],quest:["Направи ми списък","Цел → готов седмичен план за телефона."],un:true},
- {id:"екопътечко",lvl:"III",law:"Свобода",hc:"#9ecb58",role:"Пътеводител · среда на свободата",bio:"Отваря пътеките. Първото Ви умение се ражда тук.",skills:["Пътеки","Умение","Избор"],quest:["Дайте ми път","Дразнеща дейност → първо умение."],un:true},
- {id:"куражку",lvl:"IV",law:"Убеденост",hc:"#e08552",role:"Създател · майстор на словото",bio:"Превръща отлаганото в готово. Дава Ви кураж да започнете.",skills:["Пише","Чете","Прави"],quest:["Напиши го вместо мен","Отлаган мейл + 3 детайла → чернова."],un:true},
- {id:"обемко",lvl:"V",law:"Умножен материал",hc:"#EF9F27",role:"Ковчежник · разширение",bio:"Мери и умножава. Тракер на това, което расте.",skills:["Тракер","ROI","Умножава"],quest:["Измери ми","Цел → числа, които виждаш как растат."],un:false},
- {id:"хола",lvl:"VI",law:"Цяло-Част-Цяло",hc:"#5ba0e6",role:"Огледало · въплъщение",bio:"Вижда цялото в частта. Прави проекти, видео, аудио.",skills:["Цялост","Проекти","Медия"],quest:["Сглоби ми","Парчета → едно цяло с I."],un:false},
- {id:"фибоначко",lvl:"VII",law:"Златна пропорция",hc:"#33b88c",role:"Ревизор · часовникар на ритъма",bio:"Казва честно какво не е наред — с мярка.",skills:["Ритъм","30-сек ревю","Баланс"],quest:["Кажи ми честно","План → 3 забележки + 1 подобрение."],un:false},
- {id:"творея",lvl:"VIII",law:"Класическо изкуство",hc:"#9c7fc8",role:"Разрешител · естет",bio:"Дава финала. Пречиства през изкуство и ясно решение.",skills:["2 въпроса","1 ход","Естетика"],quest:["Реши за мен","Задънена улица → 1 конкретен ход."],un:false}
-];
-const ANTI={доверка:"Страхил",любка:"Его",екопътечко:"Бега",куражку:"Емо",обемко:"Нема",хола:"Умчо",фибоначко:"Ума",творея:"Станка"};
-const g=document.getElementById('heroGrid');
-HEROES.forEach((h,i)=>{
-  const c=document.createElement('div');
-  c.className='hcard'+(h.un?'':' lock');c.style.setProperty('--hc',h.hc);
-  c.innerHTML='<div class="hi"><span class="lvl">'+h.lvl+'</span>'+(h.un?'':'<span class="lk">🔒</span>')+
-    '<img src="img/'+h.id+'.jpg" alt="'+h.id+'" loading="lazy"><span class="hn">'+h.id.charAt(0).toUpperCase()+h.id.slice(1)+
-    '<span class="hr">срещу '+ANTI[h.id]+'</span></span></div>';
-  const d=document.createElement('div');d.className='hdetail';d.style.setProperty('--hc',h.hc);d.id='d-'+h.id;
-  d.innerHTML='<h4>'+h.id.charAt(0).toUpperCase()+h.id.slice(1)+'</h4><div class="cls">Ниво '+h.lvl+' · '+h.law+' · '+h.role+'</div>'+
-    '<div class="bio">'+h.bio+'</div><div class="badges">'+h.skills.map(s=>'<span class="bdg">'+s+'</span>').join('')+'</div>'+
-    '<div class="quest">🎯 <b>'+h.quest[0]+'</b> — '+h.quest[1]+'</div>';
-  c.addEventListener('click',()=>{const was=d.classList.contains('on');document.querySelectorAll('.hdetail').forEach(x=>x.classList.remove('on'));if(!was)d.classList.add('on');});
-  g.appendChild(c);
-  // вмъкни detail след всеки 2-ри (края на реда) — опростено: добавяме всички detail-и накрая на grid, full-width
-  g.appendChild(d);
-});
+/* site behaviors: modal · sticky CTA · rotating hero word (plain script — works without WebGL) */
+(function () {
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var modal = document.getElementById('wlModal');
+  function openWl() { modal.hidden = false; modal.classList.add('on'); }
+  function closeWl() { modal.classList.remove('on'); modal.hidden = true; }
+  document.querySelectorAll('[data-open-wl]').forEach(function (b) { b.addEventListener('click', openWl); });
+  document.querySelectorAll('[data-close-wl]').forEach(function (b) { b.addEventListener('click', closeWl); });
+  addEventListener('keydown', function (e) { if (e.key === 'Escape') closeWl(); });
 
-/* антагонисти · 8 слуги · същия кликаем контрол · 3 заключени (без видим образ) */
-const ANTAGS=[
- {img:"ant-его",name:"Его",fn:"Обсъждане",g:"мъж",sab:"Гонитбата на чуждото одобрение, която изяжда твоето.",un:true},
- {img:"ant-бега",name:"Бега",fn:"Отлагане",g:"жена",sab:"Вечното отлагане — бягство от това, което е сега.",un:true},
- {img:"ant-емо",name:"Емо",fn:"Оплакване",g:"мъж",sab:"Бури от чувства, които те носят, вместо ти да носиш тях.",un:true},
- {img:"ant-нема",name:"Нема",fn:"Обясняване",g:"жена",sab:"Маските и извиненията, зад които изчезваш.",un:true},
- {img:"ant-станка",name:"Станка Ученеврозова",fn:"Оценяване",g:"жена",sab:"Инспекторът, който мери всичко с оценка — ражда учебна невроза.",un:true},
- {img:"ant-ума",name:"Ума Лисева",fn:"Обмисляне",g:"жена",sab:"Анализът без край, който никога не стига до действие.",un:false},
- {img:"ant-умчо",name:"Умчо Вълчев",fn:"Осъждане",g:"мъж",sab:"Студената присъда, обърната първо срещу теб самия.",un:false},
- {img:"ant-страхил",name:"Барон Страхил Прегорялконен",fn:"Прегаряне",g:"мъж",sab:"Прегарянето, което гори резервите ти до пепел.",un:false}
-];
-const fg=document.getElementById('foeGrid');
-if(fg)ANTAGS.forEach(function(a){
-  var c=document.createElement('div');c.className='hcard'+(a.un?'':' lock');c.style.setProperty('--hc','#d8693a');
-  c.innerHTML='<div class="hi">'+(a.un?'':'<span class="lk">🔒</span>')+'<img src="img/'+a.img+'.jpg" alt="'+a.name+'" loading="lazy"><span class="hn">'+a.name+'<span class="hr">'+a.fn+'</span></span></div>';
-  var d=document.createElement('div');d.className='hdetail';d.style.setProperty('--hc','#d8693a');
-  d.innerHTML='<h4>'+a.name+'</h4><div class="cls" style="color:#e6a878">саботира · '+a.fn+' · '+a.g+'</div><div class="bio">'+a.sab+'</div><div class="quest">🛡️ Назовете я — губи силата си.</div>';
-  c.addEventListener('click',function(){var was=d.classList.contains('on');document.querySelectorAll('.hdetail').forEach(function(x){x.classList.remove('on');});if(!was)d.classList.add('on');});
-  fg.appendChild(c);fg.appendChild(d);
-});
+  var sc = document.getElementById('stickyCta'), elixir = document.getElementById('elixir');
+  function updSticky() {
+    var past = window.scrollY > window.innerHeight * 0.85;
+    var nearForm = elixir && elixir.getBoundingClientRect().top < window.innerHeight * 1.05;
+    var modalOpen = modal.classList.contains('on');
+    sc.classList.toggle('show', past && !nearForm && !modalOpen);
+  }
+  addEventListener('scroll', updSticky, { passive: true });
+  updSticky();
 
-(function(){
-  var pc=document.getElementById('particles');
-  for(var i=0;i<14;i++){var p=document.createElement('div');p.className='particle';var s=(Math.random()*2+1).toFixed(1);p.style.width=p.style.height=s+'px';p.style.left=(Math.random()*100)+'%';p.style.bottom=(Math.random()*30)+'%';p.style.animationDuration=(Math.random()*7+7)+'s';p.style.animationDelay=(Math.random()*8)+'s';pc.appendChild(p);}
-  // sticky CTA · показва се след hero · крие се при формата
-  var sc=document.getElementById('stickyCta'),ctaSec=document.getElementById('cta');
-  function updSticky(){if(!sc||!ctaSec)return;var past=window.scrollY>window.innerHeight*0.85;var nearForm=ctaSec.getBoundingClientRect().top<window.innerHeight*1.05;sc.classList.toggle('show',past&&!nearForm);}
-  window.addEventListener('scroll',updSticky,{passive:true});updSticky();
-  // въртяща дума · Tactic→Trust→Tech→True→Transformation (калибър flip · 3s)
-  var tw=document.getElementById('t-word');
-  if(tw){var twords=['Tactic','Trust','Tech','True','Transformation'],twi=0;
-    setInterval(function(){tw.classList.add('out');setTimeout(function(){twi=(twi+1)%twords.length;tw.textContent=twords[twi];tw.classList.remove('out');},420);},3000);}
-  if(window.gsap){
-    gsap.registerPlugin(ScrollTrigger);
-    gsap.set(['#h-kick','#h-title','#h-sub','#h-min','#h-cta'],{opacity:0,y:30});
-    gsap.timeline({delay:.25}).to('#h-kick',{opacity:1,y:0,duration:.9,ease:'power3.out'}).to('#h-title',{opacity:1,y:0,duration:1.1,ease:'power3.out'},'-=.6').to('#h-sub',{opacity:1,y:0,duration:1,ease:'power3.out'},'-=.7').to('#h-min',{opacity:1,y:0,duration:.8,ease:'power3.out'},'-=.8').to('#h-cta',{opacity:1,y:0,duration:.9,ease:'power3.out'},'-=.6');
-    gsap.utils.toArray('.reveal').forEach(function(el){gsap.to(el,{opacity:1,y:0,filter:'blur(0px)',duration:1.1,ease:'power3.out',scrollTrigger:{trigger:el,start:'top 88%'}});});
-  } else {
-    document.querySelectorAll('.reveal').forEach(function(e){e.style.opacity=1;e.style.transform='none';e.style.filter='none';});
-    ['#h-kick','#h-title','#h-sub','#h-min','#h-cta'].forEach(function(s){var e=document.querySelector(s);if(e){e.style.opacity=1;e.style.transform='none';}});
+  var tw = document.getElementById('tWord');
+  if (tw && !reduced) {
+    var words = ['Tactic', 'Trust', 'Tech', 'True', 'Transformation'], i = 0;
+    setInterval(function () { i = (i + 1) % words.length; tw.textContent = words[i]; }, 3000);
   }
 })();
 </script>
+<script type="module" src="app.js"></script>
 </body>
 </html>

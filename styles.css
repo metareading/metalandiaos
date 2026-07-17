@@ -11,6 +11,8 @@
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
 html { scroll-behavior: smooth; }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
@@ -98,6 +100,7 @@ main, footer { position: relative; z-index: 1; }
 .plaque .pl-text { font-size: .92rem; color: rgba(244, 236, 216, .82); margin-bottom: 14px; }
 .plaque .pl-text + .pl-text { margin-top: -6px; }
 .plaque .pl-stamp { font-size: 9.5px; letter-spacing: .22em; text-transform: uppercase; color: rgba(244, 236, 216, .4); border-top: 1px solid rgba(242, 200, 120, .14); padding-top: 10px; }
+.plaque .pl-note { font-size: 10px; color: rgba(244, 236, 216, .38); margin-bottom: 12px; line-height: 1.4; }
 .plaque .pl-extra { margin-top: 14px; }
 
 /* section copy that lives OUTSIDE the plaque (hero-band copy, CTA rows) */

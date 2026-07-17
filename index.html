@@ -21,35 +21,35 @@
 
 <canvas id="stage" aria-hidden="true"></canvas>
 
-<header class="hud" aria-hidden="true">
-  <div class="mark"><span class="dot"></span>maitapp</div>
-  <div class="counter"><b id="cNum">01</b> / 08</div>
+<header class="hud">
+  <div class="mark"><span class="dot" aria-hidden="true"></span>maitapp</div>
+  <div class="counter" role="status" aria-live="polite" aria-atomic="true"><span class="sr-only">Зала </span><b id="cNum">01</b><span aria-hidden="true"> / 08</span><span class="sr-only"> от 8</span></div>
 </header>
 
 <main>
 
 <!-- ════ HERO · музейният вход ════ -->
 <section id="hero" data-exhibit="-1">
-  <p class="kicker">My AI <span id="tWord">Tactic</span> App</p>
+  <p class="kicker">My AI <span id="tWord" aria-live="off">Tactic</span> App</p>
   <h1>Искате ли да се събудите и да си припомните <em>как се учи</em> на maitapp?</h1>
   <p class="sub">Не е нужно време, а внимание.</p>
   <p class="min8">8 минути на ден.</p>
-  <button class="cta" data-open-wl>Започни приказката</button>
-  <div class="descend"><span>спуснете се</span><span class="chev">⌄</span></div>
+  <button class="cta" data-open-wl aria-haspopup="dialog" aria-controls="wlModal">Започни приказката</button>
+  <div class="descend"><span>спуснете се</span><span class="chev" aria-hidden="true">⌄</span></div>
 </section>
 
 <!-- ════ EXHIBIT I · Чашата, още неналята със злато (жълто) ════ -->
 <section class="exhibit" id="ex-1" data-exhibit="0" style="--ex:var(--c1)">
   <div class="ex-inner">
     <div class="ex-space" aria-hidden="true"></div>
-    <article class="plaque">
+    <article class="plaque" aria-labelledby="ex-1-title">
       <div class="pl-ex">Exhibit I</div>
-      <h2>Чашата, още неналята със злато</h2>
+      <h2 id="ex-1-title">Чашата, още неналята със злато</h2>
       <div class="pl-meta"><span>Материал · намерение</span><span>Датировка · ден първи</span></div>
       <div class="pl-rule"></div>
-      <p class="pl-text">Питеен бокал, изваян от чиста математика. В него — метата: конкретна като чаша с вода, ясна и жива. Водата трепти, защото още никой не я е погледнал докрай — задръжте поглед и повърхността сяда в огледало.</p>
-      <p class="pl-text">Съдът не е празен. Пълен е с вода; празен е само от златото, което го чака в Exhibit VII. На ръба стои една светла точка — Героят — и тънка нишка го свързва с целта му.</p>
-      <p class="pl-text">Уредникът пита: коя е ЕДНАТА мета · как ще разберете, че сте я постигнали · кой е крайният случай на провал.</p>
+      <p class="pl-text">Питеен бокал, изваян от чиста математика — нисък и широк, не амфора. В него метата стои конкретна като чаша с вода: ясна, жива, още неуловена.</p>
+      <p class="pl-text">Водата трепти, защото никой още не я е погледнал докрай — задръжте поглед, и повърхността сяда в огледало. Съдът не е празен: пълен е с вода, празен е само от златото, което го чака в Exhibit VII.</p>
+      <p class="pl-text">На ръба стои една светла точка — Героят — свързан с целта си с тънка нишка. Уредникът остави под стъклото три въпроса: коя е едната мета, как ще разберете, че сте я постигнали, и кой е крайният случай на провал.</p>
       <div class="pl-stamp">Reconstructed by Metaezik · 55 000 points</div>
     </article>
   </div>
@@ -59,12 +59,16 @@
 <section class="exhibit alt" id="ex-2" data-exhibit="1" style="--ex:var(--c2)">
   <div class="ex-inner">
     <div class="ex-space" aria-hidden="true"></div>
-    <article class="plaque">
+    <article class="plaque" aria-labelledby="ex-2-title">
       <div class="pl-ex">Exhibit II</div>
-      <h2>Сърцето, което тиктака</h2>
+      <h2 id="ex-2-title">Сърцето, което тиктака</h2>
       <div class="pl-meta"><span>Материал · откраднато внимание</span><span>Находка · под голям камък</span></div>
       <div class="pl-rule"></div>
-      <p class="pl-text"><!-- ticket 13: full wall-text --> Най-подробно сглобеният експонат в музея. Вместо сърце — часовник.</p>
+      <p class="pl-text">Най-подробно сглобеният експонат в музея — вместо сърце, часовник. Три зъбни пръстена въртят слоевете на един и същ проблем, а стрелката помита вниманието; Времетрон командва, неспирно.</p>
+      <p class="pl-text">Каталогът именува рода Илюзоркови: Его · Бега · Емо · Нема · Станка Ученеврозова · Ума Лисева · Умчо Вълчев · барон Страхил Прегорялконен. Назовете сянката — тя губи сила.</p>
+      <p class="pl-text">Находката пази и число: над 95% от децата в 4. клас показват симптоми на учебна невроза; 62% трайно тъжни · 32% с мисли да посегнат на живота си · 23% правили опит.</p>
+      <p class="pl-text">Тревогата не е грешка на родителя — светът направи детското внимание пазар, а часовникът никога не спира.</p>
+      <p class="pl-note">тийнейджърки · САЩ · CDC (Youth Risk Behavior Survey) · учебна невроза: конференция „Бъдеще за образованието", 2011</p>
       <div class="pl-stamp">Reconstructed by Metaezik · 58 000 points</div>
     </article>
   </div>
@@ -74,12 +78,14 @@
 <section class="exhibit" id="ex-3" data-exhibit="2" style="--ex:var(--c3)">
   <div class="ex-inner">
     <div class="ex-space" aria-hidden="true"></div>
-    <article class="plaque">
+    <article class="plaque" aria-labelledby="ex-3-title">
       <div class="pl-ex">Exhibit III</div>
-      <h2>Осемте, които посяват</h2>
+      <h2 id="ex-3-title">Осемте, които посяват</h2>
       <div class="pl-meta"><span>Материал · поле между осем ума</span><span>Състояние · сеитба</span></div>
       <div class="pl-rule"></div>
-      <p class="pl-text"><!-- ticket 13: full wall-text --> Осем светли възела ориентират праха. Зърната покълват по-късно.</p>
+      <p class="pl-text">Осем светли възела ориентират праха по силовите си линии — не го грабват, а го подравняват. Полето между осемте будечители обучава, без да преподава.</p>
+      <p class="pl-text">От възлите падат редки зърна по парабола; част покълват по-късно, защото знанието, посято сега, се разкрива после.</p>
+      <p class="pl-text">Пътят на срещата е прост: снимате каквото Ви дразни или отлагате, избирате герой-водач на български, а асистентът постепенно расте до агент, който върши реални задачи. Планът чака в следващата зала — тук уредникът само пита, никога не решава вместо Вас.</p>
       <div class="pl-stamp">Reconstructed by Metaezik · 54 000 points</div>
     </article>
   </div>
@@ -89,14 +95,16 @@
 <section class="exhibit alt" id="ex-4" data-exhibit="3" style="--ex:var(--c4)">
   <div class="ex-inner">
     <div class="ex-space" aria-hidden="true"></div>
-    <article class="plaque">
+    <article class="plaque" aria-labelledby="ex-4-title">
       <div class="pl-ex">Exhibit IV</div>
-      <h2>Осемте стъпала</h2>
+      <h2 id="ex-4-title">Осемте стъпала</h2>
       <div class="pl-meta"><span>Материал · път в осем плата</span><span>Пропорция · златна</span></div>
       <div class="pl-rule"></div>
-      <p class="pl-text"><!-- ticket 13: full wall-text --> Възходяща спирала с осем отчетливи стъпала. Зовът тича нагоре по пътя.</p>
+      <p class="pl-text">Възходяща златна спирала носи осем отчетливи плата — осемте нива на играта, всяко с двойка водач и сянка: Доверка↔Страхил, Любка↔Его, Екопътечко↔Бега, Куражку↔Емо, Обемко↔Нема, Хола↔Умчо, Фибоначко↔Ума, Творея↔Станка.</p>
+      <p class="pl-text">По пътя тече нишка от шест брънки — Учебник, Агент, Знание, История, Игри, Изпит — а стъпалата се изкачват чрез Игри · Изкуство · ИИ: учене без учене, работа без работа.</p>
+      <p class="pl-text">Амбър-пулсът на Зова тръгва отдолу и стига върха — планът е конкретни, номерирани стъпки, не гладка рампа. Разликата, която пази пътя чист: „не е приоритет сега" е законен отказ, „страх, маскиран като разум" е ЧудоВището, което още говори.</p>
       <div class="pl-stamp">Reconstructed by Metaezik · 56 000 points</div>
-      <div class="pl-extra"><button class="cta" data-open-wl>Започни приказката</button></div>
+      <div class="pl-extra"><button class="cta" data-open-wl aria-haspopup="dialog" aria-controls="wlModal">Започни приказката</button></div>
     </article>
   </div>
 </section>
@@ -105,12 +113,14 @@
 <section class="exhibit" id="ex-5" data-exhibit="4" style="--ex:var(--c5)">
   <div class="ex-inner">
     <div class="ex-space" aria-hidden="true"></div>
-    <article class="plaque">
+    <article class="plaque" aria-labelledby="ex-5-title">
       <div class="pl-ex">Exhibit V</div>
-      <h2>Прагът, преминат само в една посока</h2>
+      <h2 id="ex-5-title">Прагът, преминат само в една посока</h2>
       <div class="pl-meta"><span>Материал · решимост</span><span>Посока · само напред</span></div>
       <div class="pl-rule"></div>
-      <p class="pl-text"><!-- ticket 13: full wall-text --> Прекрачилите точки пламват и не се връщат. Действието е мощта.</p>
+      <p class="pl-text">Портал-арка с трептяща мембрана в отвора — прекрачилите точки пламват на прага и сядат отвъд, подредени. Веднъж отвъд, без връщане.</p>
+      <p class="pl-text">Преди нивата стоят три прага: кратка проверка Доверка, без оценки; Колелото с дванайсетте сфери — залата на Метатрон; и учебникът, внесен в метамозъка чрез приставка.</p>
+      <p class="pl-text">В Металандия прагът се прекрачва рано — преди да сте „готови". Действието е мощта, не мисленето или подготовката.</p>
       <div class="pl-stamp">Reconstructed by Metaezik · 53 000 points</div>
     </article>
   </div>
@@ -120,12 +130,14 @@
 <section class="exhibit alt" id="ex-6" data-exhibit="5" style="--ex:var(--c6)">
   <div class="ex-inner">
     <div class="ex-space" aria-hidden="true"></div>
-    <article class="plaque">
+    <article class="plaque" aria-labelledby="ex-6-title">
       <div class="pl-ex">Exhibit VI</div>
-      <h2>Пашкулът и крилете</h2>
+      <h2 id="ex-6-title">Пашкулът и крилете</h2>
       <div class="pl-meta"><span>Материал · метаморфоза</span><span>Наблюдение · реална като на молец</span></div>
       <div class="pl-rule"></div>
-      <p class="pl-text"><!-- ticket 13: full wall-text --> Единствената пълна смърт в музея — и единственото прераждане.</p>
+      <p class="pl-text">Пашкул умира докрай в гъст, видим прах-вихър и се преражда в крилете на молец — единствената пълна смърт в музея, а прераждането е ясно по-красиво от входа.</p>
+      <p class="pl-text">Наблюдението е достоверно, не метафора: сравнимо с молеца Xanthopan morganii, чийто дълъг хобот Дарвин предсказа години преди да бъде открит. Разтварянето е спокойно — без драма, просто приемане; сграбчването само ускорява прехода, защото пашкулът се разтваря през пръстите.</p>
+      <p class="pl-text">Доказателството за трансформация е конкретно: една задача, готов резултат, пет минути, без код, на български. Изпитанието е и демонстрацията.</p>
       <div class="pl-stamp">Reconstructed by Metaezik · 57 000 points</div>
     </article>
   </div>
@@ -135,12 +147,15 @@
 <section class="exhibit" id="ex-7" data-exhibit="6" style="--ex:var(--c7)">
   <div class="ex-inner">
     <div class="ex-space" aria-hidden="true"></div>
-    <article class="plaque">
+    <article class="plaque" aria-labelledby="ex-7-title">
       <div class="pl-ex">Exhibit VII</div>
-      <h2>Чашата, преляла</h2>
+      <h2 id="ex-7-title">Чашата, преляла</h2>
       <div class="pl-meta"><span>Материал · злато</span><span>Произход · същият съд от Exhibit I</span></div>
       <div class="pl-rule"></div>
-      <p class="pl-text"><!-- ticket 13: full wall-text --> Същият съд — намерен пълен. Но…</p>
+      <p class="pl-text">Същият съд от Exhibit I — идентичен профил, нула промени по геометрията — сега пълен със злато до ръба, неподвижен, преливащ на редки капки. Където водата трептеше, тук е постигнато: пълнота и покой вместо трепет.</p>
+      <p class="pl-text">Каталогът пее находката: пеем, докато говорим; танцуваме, докато се движим; рисуваме, докато пишем; играем, докато учим и работим — от забавление до вдъхновение.</p>
+      <p class="pl-text">Метата беше конкретна като чаша с вода — ето я, наляна със злато.</p>
+      <p class="pl-text">Но…</p>
       <div class="pl-stamp">Reconstructed by Metaezik · 57 000 points</div>
     </article>
   </div>
@@ -150,20 +165,21 @@
 <section class="exhibit alt" id="ex-8" data-exhibit="7" style="--ex:var(--c8)">
   <div class="ex-inner">
     <div class="ex-space" aria-hidden="true"></div>
-    <article class="plaque">
+    <article class="plaque" aria-labelledby="ex-8-title">
       <div class="pl-ex">Exhibit VIII</div>
-      <h2>Сърцето, върнато у дома</h2>
+      <h2 id="ex-8-title">Сърцето, върнато у дома</h2>
       <div class="pl-meta"><span>Материал · любов в себе си</span><span>Произход · същото сърце от Exhibit II · без часовника</span></div>
       <div class="pl-rule"></div>
-      <p class="pl-text"><!-- ticket 13: full wall-text --> Часовникът е премахнат. Сърцето бие спокойно и се раздава.</p>
+      <p class="pl-text">Същото сърце от Exhibit II, вече без часовник — бие бавно и спокойно, а за миг проблясва в осемте канонични цвята на музея: Възкресването.</p>
+      <p class="pl-text">Три движения затварят историята: Завръщане — проблемът съществува, но вече е глобален, не личен; Възкресване — климаксът; Дарът — „Няма външни проблеми. Светът е наше отражение."</p>
+      <p class="pl-text">После сърцето издишва точките си в прах, който запълва целия кадър — същия прах, който отвори музея; изначалното търсене, се оказва, е било комично. Поканата е проста: имейлът тук е начинът да си върнете вниманието.</p>
       <div class="pl-stamp">Reconstructed by Metaezik · 55 000 points</div>
     </article>
   </div>
   <!-- ЕЛИКСИР · поканата (inline форма · финалът на историята) -->
   <div class="ex-copy" id="elixir">
     <h2 class="serif" style="font-size:2rem;margin-bottom:10px">Оставете внимание тук</h2>
-    <p style="color:rgba(244,236,216,.72);margin-bottom:22px">Не курс. Не домашни. Осем минути и една игра — и нещо, което днес ви тежи, утре ще правите с кеф.</p>
-    <!-- ticket 09: real wiring to the live waitlist endpoint -->
+    <p style="color:rgba(244,236,216,.72);margin-bottom:22px">Не курс. Не домашни. Осем минути и една игра — и нещо, което днес Ви тежи, утре ще правите с кеф.</p>
     <form id="wlForm" class="wl-card" action="#" novalidate>
       <label for="wlName">Име</label>
       <input id="wlName" type="text" placeholder="Как да Ви наричаме?" autocomplete="name">
@@ -173,9 +189,10 @@
       <label class="wl-consent"><input type="checkbox" id="wlConsent" required>
         <span>Съгласен/на съм maitapp да съхранява имейла ми, за да получа поканата. <a href="https://metareading.com/terms" target="_blank" rel="noopener">Условия</a></span></label>
       <button type="submit" class="cta" style="width:100%">Заяви поканата си</button>
-      <p class="wl-msg ok" id="wlOk">✦ Благодарим! Поканите тръгват скоро — пазим мястото Ви.</p>
-      <p class="wl-msg err" id="wlErr">Нещо се обърка. Проверете имейла и опитайте отново.</p>
+      <p class="wl-msg err" id="wlErr" role="alert">Нещо се обърка. Проверете имейла и опитайте отново.</p>
     </form>
+    <!-- success message is a SIBLING of the form: hiding the form must not hide the confirmation -->
+    <p class="wl-msg ok" id="wlOk" role="status">✦ Благодарим! Поканите тръгват скоро — пазим мястото Ви.</p>
     <p style="font-size:11px;color:rgba(244,236,216,.4);margin-top:18px">Каквото споделите с maitapp, остава вътре. · Металандия · спокойствие · радост · вдъхновение</p>
   </div>
 </section>
@@ -183,15 +200,14 @@
 </main>
 
 <!-- ════ STICKY CTA + MODAL (решение Д2 · модал върху текущата секция) ════ -->
-<button class="cta sticky-cta" id="stickyCta" data-open-wl>✦ Присъединете се</button>
+<button class="cta sticky-cta" id="stickyCta" data-open-wl aria-haspopup="dialog" aria-controls="wlModal"><span aria-hidden="true">✦</span> Присъединете се</button>
 
-<div class="wl-modal" id="wlModal" role="dialog" aria-modal="true" aria-labelledby="wlmTitle" hidden>
+<div class="wl-modal" id="wlModal" role="dialog" aria-modal="true" aria-labelledby="wlmTitle" aria-describedby="wlmDesc" hidden>
   <div class="backdrop" data-close-wl></div>
   <div class="wl-card">
     <button class="wl-close" data-close-wl aria-label="Затвори">✕</button>
     <h2 class="serif" id="wlmTitle" style="font-size:1.6rem;margin-bottom:6px">Оставете внимание тук</h2>
-    <p style="font-size:.9rem;color:rgba(244,236,216,.65);margin-bottom:16px">Име и имейл — и пазим мястото Ви за поканата.</p>
-    <!-- ticket 09: real wiring (shared handler with #wlForm) -->
+    <p id="wlmDesc" style="font-size:.9rem;color:rgba(244,236,216,.65);margin-bottom:16px">Име и имейл — и пазим мястото Ви за поканата.</p>
     <form id="wlFormM" action="#" novalidate>
       <label for="wlNameM">Име</label>
       <input id="wlNameM" type="text" placeholder="Как да Ви наричаме?" autocomplete="name">
@@ -201,9 +217,9 @@
       <label class="wl-consent"><input type="checkbox" id="wlConsentM" required>
         <span>Съгласен/на съм maitapp да съхранява имейла ми, за да получа поканата. <a href="https://metareading.com/terms" target="_blank" rel="noopener">Условия</a></span></label>
       <button type="submit" class="cta" style="width:100%">Заяви поканата си</button>
-      <p class="wl-msg ok" id="wlOkM">✦ Благодарим! Поканите тръгват скоро — пазим мястото Ви.</p>
-      <p class="wl-msg err" id="wlErrM">Нещо се обърка. Проверете имейла и опитайте отново.</p>
+      <p class="wl-msg err" id="wlErrM" role="alert">Нещо се обърка. Проверете имейла и опитайте отново.</p>
     </form>
+    <p class="wl-msg ok" id="wlOkM" role="status">✦ Благодарим! Поканите тръгват скоро — пазим мястото Ви.</p>
   </div>
 </div>
 
@@ -218,16 +234,21 @@
   var modal = document.getElementById('wlModal');
   var mainEl = document.querySelector('main');
   var lastFocus = null;
+  function setExpanded(v) {
+    document.querySelectorAll('[data-open-wl]').forEach(function (b) { b.setAttribute('aria-expanded', v ? 'true' : 'false'); });
+  }
   function openWl() {
     lastFocus = document.activeElement;
     modal.hidden = false; modal.classList.add('on');
     if (mainEl) mainEl.setAttribute('inert', '');
+    setExpanded(true);
     var first = modal.querySelector('input[type="text"], input[type="email"]');
     if (first) first.focus();
   }
   function closeWl() {
     modal.classList.remove('on'); modal.hidden = true;
     if (mainEl) mainEl.removeAttribute('inert');
+    setExpanded(false);
     if (lastFocus && lastFocus.focus) lastFocus.focus();
   }
   document.querySelectorAll('[data-open-wl]').forEach(function (b) { b.addEventListener('click', openWl); });
@@ -257,6 +278,103 @@
     var words = ['Tactic', 'Trust', 'Tech', 'True', 'Transformation'], i = 0;
     setInterval(function () { i = (i + 1) % words.length; tw.textContent = words[i]; }, 3000);
   }
+})();
+</script>
+<script>
+/* Waitlist wiring — shared handler for the inline (#wlForm) and modal (#wlFormM) forms.
+   Contract: POST {name,email,company} -> {ok:true} | 400 invalid_email | 429 rate_limited.
+   "company" is the honeypot from the hidden .hp-field, sent verbatim. No phone field. */
+(function () {
+  var ENDPOINT = 'https://comfortable-reflection-production.up.railway.app/maitapp/waitlist';
+
+  var MSG_INVALID = 'Проверете имейла и опитайте отново.';
+  var MSG_RATE = 'Твърде много опити — изчакайте минута и опитайте пак.';
+  var MSG_NETWORK = 'Нещо се обърка. Проверете връзката си и опитайте отново.';
+  var MSG_CONSENT = 'Моля, потвърдете съгласието по-горе, за да продължим.';
+
+  var configs = [
+    { form: 'wlForm', name: 'wlName', email: 'wlEmail', consent: 'wlConsent', ok: 'wlOk', err: 'wlErr' },
+    { form: 'wlFormM', name: 'wlNameM', email: 'wlEmailM', consent: 'wlConsentM', ok: 'wlOkM', err: 'wlErrM' }
+  ];
+
+  configs.forEach(function (ids) {
+    var form = document.getElementById(ids.form);
+    if (!form) return;
+
+    var nameEl = document.getElementById(ids.name);
+    var emailEl = document.getElementById(ids.email);
+    var consentEl = document.getElementById(ids.consent);
+    var okEl = document.getElementById(ids.ok);       // SIBLING of the form — stays visible when the form hides
+    var errEl = document.getElementById(ids.err);
+    var companyEl = form.querySelector('.hp-field[name="company"]');
+    var submitBtn = form.querySelector('button[type="submit"]');
+    var inFlight = false;
+
+    function showErr(text, badEmail) {
+      errEl.textContent = text;
+      errEl.classList.add('on');
+      okEl.classList.remove('on');
+      if (emailEl) emailEl.setAttribute('aria-invalid', badEmail ? 'true' : 'false');
+    }
+    function clearErr() {
+      errEl.classList.remove('on');
+      if (emailEl) emailEl.removeAttribute('aria-invalid');
+    }
+    function setBusy(busy) {
+      inFlight = busy;
+      if (submitBtn) submitBtn.disabled = busy;
+    }
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      if (inFlight) return;
+
+      // novalidate → native `required` never blocks; consent is enforced only here.
+      if (!consentEl.checked) {
+        showErr(MSG_CONSENT, false);
+        consentEl.focus();
+        return;
+      }
+
+      clearErr();
+      setBusy(true);
+
+      var payload = {
+        name: nameEl ? nameEl.value.trim() : '',
+        email: emailEl ? emailEl.value.trim() : '',
+        company: companyEl ? companyEl.value : '' // honeypot — sent as-is
+      };
+
+      fetch(ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      })
+        .then(function (res) {
+          return res.json().catch(function () { return {}; }).then(function (data) {
+            return { status: res.status, data: data };
+          });
+        })
+        .then(function (result) {
+          setBusy(false);
+          // any 2xx = accepted (even if the body were unparseable) — never report success as an error
+          if ((result.status >= 200 && result.status < 300) || (result.data && result.data.ok)) {
+            form.hidden = true;
+            okEl.classList.add('on');
+            return;
+          }
+          if (result.status === 429) {
+            showErr(MSG_RATE, false);
+          } else {
+            showErr(MSG_INVALID, true); // field values are never cleared
+          }
+        })
+        .catch(function () {
+          setBusy(false);
+          showErr(MSG_NETWORK, false); // network/CORS/offline — form stays usable
+        });
+    });
+  });
 })();
 </script>
 <script type="module" src="app.js"></script>

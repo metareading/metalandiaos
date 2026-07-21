@@ -1074,6 +1074,9 @@ const state = {
   focus: 0, focusT: 0, swirl: 0, swirlT: 0, flash: 0, demo: 0,
   offset: new THREE.Vector3(), offsetT: new THREE.Vector3(),
   pointer: new THREE.Vector3(), time: 0,
+  cov: 0,        // viewport coverage of the winning band (drives assembly · #3)
+  bandOn: false, // hysteresis latch — kills the assemble/dissolve/re-assemble flicker
+  scale: 1, scaleT: 1, // mobile: fit-to-band cloud scale (#4), replaces the flat 0.74 shrink
 };
 
 let scene, camera, material, points, uniforms;
@@ -1121,8 +1124,25 @@ function initGL() {
   // debug handle (guide lesson: when nothing draws, print camera.position first)
   // step(y): synchronous scroll+drive tick for state sweeps (verification only, no render needed)
   window.__museum = {
-    camera, renderer, uniforms, state,
-    step(y) { window.scrollTo(0, y); driveSections(); driveVariants(); driveOffset(); },
+    camera, renderer, uniforms, state, cloud: CLOUD, extent: visibleExtent,
+    // layout state (offset/scale) is snapped, drama state (assembly/progress) is not —
+    // the sweep must read the true targets, but the metrics must read the settled layout
+    step(y) {
+      document.documentElement.style.scrollBehavior = 'auto'; // smooth-scroll never advances in a hidden tab
+      window.scrollTo(0, y);
+      driveSections(); driveVariants(); driveOffset();
+      state.scale = state.scaleT;
+      state.offset.copy(state.offsetT);
+    },
+    // scroll there, then run real frames until the easings settle → a screenshot
+    // shows what a user sees, not the un-driven boot state of a hidden tab
+    settle(y, seconds) {
+      document.documentElement.style.scrollBehavior = 'auto';
+      if (y != null) window.scrollTo(0, y);
+      const n = Math.round((seconds || 2) * 60);
+      for (let i = 0; i < n; i++) tick(1 / 60);
+      return { ex: state.exhibit, asm: +state.assembly.toFixed(2), cov: +state.cov.toFixed(2) };
+    },
   };
 }
 
@@ -1134,6 +1154,48 @@ function loadHome(idx, gen) {
   g.attributes.aClass.needsUpdate = true;
   g.attributes.aData.needsUpdate = true;
   uniforms.uExhibit.value = idx;
+  measureHome();
+}
+
+/* ── cloud metrics (#4) ───────────────────────────────────────
+   The shape's own bounding box, measured once per geometry load, lets the
+   mobile layout GROW the cloud to the largest size that still fits the band
+   without clipping sideways — instead of the flat 0.74 shrink that left the
+   visual owning ~20% of the screen and a dead void below it. */
+const CLOUD = { minX: -1, maxX: 1, minY: -1, maxY: 1 };
+const CAM_FOV = 50, CAM_Z = 7.2;
+
+function visibleExtent() { // world units spanned by the viewport at z = 0
+  const h = 2 * Math.tan((CAM_FOV * Math.PI / 180) / 2) * CAM_Z;
+  return { h, w: h * (innerWidth / Math.max(1, innerHeight)) };
+}
+
+function measureHome() {
+  let mnX = Infinity, mxX = -Infinity, mnY = Infinity, mxY = -Infinity;
+  for (let i = 0; i < COUNT; i++) {
+    if (cls[i] < -0.5) continue; // parked-in-dust points are not part of the form
+    const x = home[i * 3], y = home[i * 3 + 1];
+    if (x < mnX) mnX = x; if (x > mxX) mxX = x;
+    if (y < mnY) mnY = y; if (y > mxY) mxY = y;
+  }
+  if (mnX < mxX) { CLOUD.minX = mnX; CLOUD.maxX = mxX; CLOUD.minY = mnY; CLOUD.maxY = mxY; }
+  computeScale();
+}
+
+/* mobile 80/20 inversion: fill the visual zone, but never clip horizontally —
+   a round form on a 390-wide viewport is width-bound, so the width fit wins. */
+const MOB_FILL_W = 1.02, MOB_FILL_H = 0.82, MOB_SCALE_MIN = 0.90, MOB_SCALE_MAX = 2.0;
+const MOB_VISUAL_ZONE = 0.80; // top 80% of the band belongs to the visual, bottom 20% to the card
+
+function computeScale() {
+  if (!mqMobile.matches) { state.scaleT = 1.0; return; }
+  const v = visibleExtent();
+  const spanX = Math.max(0.2, CLOUD.maxX - CLOUD.minX);
+  const spanY = Math.max(0.2, CLOUD.maxY - CLOUD.minY);
+  const s = Math.min(v.w * MOB_FILL_W / spanX, v.h * MOB_FILL_H / spanY);
+  // eased, never snapped: hall VI swaps cocoon→wings mid-band and the two forms
+  // have different spans — an instant refit would pop inside the dissolve trough
+  state.scaleT = Math.max(MOB_SCALE_MIN, Math.min(MOB_SCALE_MAX, s));
 }
 
 /* mid-section geometry swap (hall VI: cocoon -> wings at the dissolution trough).
@@ -1156,10 +1218,21 @@ function driveVariants() {
 const sections = Array.from(document.querySelectorAll('[data-exhibit]'));
 const counterEl = document.getElementById('cNum');
 
-function centeredness(rect, vh) {
-  const c = rect.top + rect.height / 2;
-  return Math.max(0, 1 - Math.abs(c - vh / 2) / (vh * 0.78));
+/* #3 · assembly is driven by COVERAGE + hysteresis, not by a narrow centre-snap.
+   The old target = pow(centeredness, 1.35) only peaked in a thin band around the
+   exact centre, so the cloud assembled, fell apart mid-crossing and had to be
+   scrolled back to — "появява се на скрол, бързо изчезва". Coverage stays high for
+   the WHOLE crossing, and the latch keeps it whole once the band owns the viewport,
+   in both scroll directions. */
+function coverage(rect, vh) {
+  const ov = Math.min(rect.bottom, vh) - Math.max(rect.top, 0);
+  return Math.max(0, ov) / Math.max(1, Math.min(vh, rect.height));
 }
+function smoothstep01(e0, e1, x) {
+  const t = Math.max(0, Math.min(1, (x - e0) / Math.max(1e-6, e1 - e0)));
+  return t * t * (3 - 2 * t);
+}
+const COV_IN = 0.42, COV_OUT = 0.18; // latch on / latch off — the hysteresis window
 
 function driveSections() {
   if (state.peekLock != null) { // verification harness: pinned exhibit, snapped (headless gets few rAF frames)
@@ -1173,13 +1246,12 @@ function driveSections() {
   }
   const vh = innerHeight;
   let best = -1, bestC = 0;
-  let heroC = 0;
   for (const s of sections) {
     const rect = s.getBoundingClientRect();
     if (rect.bottom < -vh || rect.top > vh * 2) continue;
-    const c = centeredness(rect, vh);
+    const c = coverage(rect, vh);
     const idx = +s.dataset.exhibit;
-    if (idx < 0) { heroC = Math.max(heroC, c); continue; }
+    if (idx < 0) continue;
     if (c > bestC) { bestC = c; best = idx; }
   }
   if (best >= 0 && best !== state.exhibit) {
@@ -1190,7 +1262,11 @@ function driveSections() {
     updateCounter(best);
     if (best === 4 && !state.demoPlayed && !REDUCED) { state.demo = 1; state.demoPlayed = true; } // hall V auto-demo (skipped under reduced motion)
   }
-  const target = heroC > bestC ? 0 : Math.pow(bestC, 1.35);
+  state.cov = bestC;
+  if (!state.bandOn && bestC >= COV_IN) state.bandOn = true;
+  else if (state.bandOn && bestC < COV_OUT) state.bandOn = false;
+  // latched → fully assembled; otherwise ease in with coverage (monotone, never a dip-and-return)
+  const target = state.bandOn ? 1 : Math.min(0.88, smoothstep01(0.02, COV_IN, bestC));
   state.assemblyT = REDUCED ? (bestC > 0.05 ? 1 : 0) : target;
 
   // within-section progress driver (passive scroll position → phase timeline)
@@ -1210,7 +1286,15 @@ function updateCounter(idx) {
    upper ~60% of the screen (mobile keeps the v2 clean-top-band offset) */
 const mqMobile = window.matchMedia('(max-width: 899px)');
 function driveOffset() {
-  if (mqMobile.matches) { state.offsetT.set(0, 1.35, 0); return; }
+  if (mqMobile.matches) {
+    // #4 · centre the form inside the top-80% visual zone (was: shoved into a thin
+    // top strip at y=1.35, which left a dead ~35vh void between cloud and card)
+    const v = visibleExtent();
+    const worldY = (0.5 - MOB_VISUAL_ZONE / 2) * v.h;         // screen 40% from the top
+    const cy = ((CLOUD.minY + CLOUD.maxY) / 2) * state.scale; // the form's own centre
+    state.offsetT.set(0, worldY - cy, 0);
+    return;
+  }
   state.offsetT.set(0, 0.55, 0);
 }
 
@@ -1226,7 +1310,7 @@ function pointerToLocal(clientX, clientY) {
   if (Math.abs(dir.z) < 1e-4) return;
   const t = (0 - camera.position.z) / dir.z;
   const world = camera.position.clone().add(dir.multiplyScalar(t));
-  const s = mqMobile.matches ? 0.74 : 1.0; // undo the mobile cloud scale → true cloud-local coords
+  const s = state.scale || 1; // undo the mobile cloud scale → true cloud-local coords
   state.pointer.copy(world.sub(state.offset).divideScalar(s));
 }
 
@@ -1254,10 +1338,10 @@ addEventListener('pointercancel', cancelHold, { passive: true });
 /* ═══ MAIN LOOP ═══════════════════════════════════════════════ */
 let lastFrame = performance.now();
 let sizeCheck = 0;
-function frame(now) {
-  requestAnimationFrame(frame);
-  const dt = Math.min(0.05, (now - lastFrame) / 1000);
-  lastFrame = now;
+
+/* one full frame, decoupled from rAF: a backgrounded/headless tab never fires
+   rAF, so verification (screenshots, settle-then-measure) drives tick() directly. */
+function tick(dt) {
   state.time += dt;
 
   if (++sizeCheck >= 30) { // guard against missed resize events (embedded viewports): CSS stretches a stale buffer
@@ -1281,9 +1365,10 @@ function frame(now) {
   state.swirlT *= Math.pow(0.25, dt); // swirl decays when the mouse rests
   state.swirl += (state.swirlT - state.swirl) * k;
   state.offset.lerp(state.offsetT, k);
+  state.scale += (state.scaleT - state.scale) * k;
   if (state.demo > 0) state.demo = Math.max(0, state.demo - dt * 0.4); // uDemo pulse 1 -> 0 (~2.5s)
 
-  uniforms.uScale.value = mqMobile.matches ? 0.74 : 1.0;
+  uniforms.uScale.value = state.scale;
   uniforms.uTime.value = REDUCED ? 12.0 : state.time;
   uniforms.uAssembly.value = state.assembly;
   uniforms.uProgress.value = state.progress;
@@ -1295,11 +1380,19 @@ function frame(now) {
   renderer.render(scene, camera);
 }
 
+function frame(now) {
+  requestAnimationFrame(frame);
+  const dt = Math.min(0.05, (now - lastFrame) / 1000);
+  lastFrame = now;
+  tick(dt);
+}
+
 addEventListener('resize', () => {
   if (!renderer) return;
   renderer.setSize(innerWidth, innerHeight);
   camera.aspect = innerWidth / innerHeight;
   camera.updateProjectionMatrix();
+  computeScale(); // viewport changed → refit the cloud to the band (#4)
 });
 
 /* ═══ STORY-CARD REVEAL (transition bands fade their line in) ═══ */
@@ -1318,6 +1411,8 @@ if (renderer && renderer.getContext()) {
   renderer.setSize(innerWidth, innerHeight);
   loadHome(0);
   updateCounter(0);
+  state.scale = state.scaleT;          // first frame must already be fitted, not eased in from 1.0
+  driveOffset(); state.offset.copy(state.offsetT);
   requestAnimationFrame(frame);
 } else {
   document.body.classList.add('no-webgl'); // DOM copy carries everything on its own
@@ -1344,34 +1439,121 @@ if (renderer && renderer.getContext()) {
       state.assembly = 1;
     }
   }
-  if (qs.get('sweep') && renderer) { // verification: walk the scroll in-page, dump the drama sequence into the DOM
+  if (qs.get('sweep') && renderer) {
+    /* verification: walk the scroll in-page and dump the drama sequence into the DOM.
+       Each step is exhibit:assemblyT:progressT:coverage.
+       Two passes — DOWN then UP — because a one-way pass cannot see a direction-
+       dependent latch; both must return the same verdict (#3 symmetry). */
+    const STEPS = 40, COV_JUDGE = 0.50, ASM_MIN = 0.90, DIP = 0.35;
     const d = document.createElement('div');
     d.id = 'sweepOut';
-    d.style.cssText = 'position:fixed;left:8px;bottom:8px;z-index:99;background:#111;color:#ff0;font:10px monospace;padding:4px;max-width:90vw;white-space:normal';
+    d.style.cssText = 'position:fixed;left:8px;bottom:8px;z-index:99;background:#111;color:#ff0;font:10px monospace;padding:4px;max-width:92vw;white-space:pre-wrap';
     document.body.appendChild(d);
-    requestAnimationFrame(() => {
-      document.documentElement.style.scrollBehavior = 'auto';
-      const H = document.body.scrollHeight - innerHeight;
-      const out = [];
-      for (let s = 0; s <= 40; s++) {
-        window.__museum.step(Math.round(H * s / 40));
-        out.push(state.exhibit + ':' + state.assemblyT.toFixed(2) + ':' + state.progressT.toFixed(2));
+
+    // verdict is computed here, from the same numbers printed above it — never from a screenshot
+    const verdict = (tag, rows) => {
+      const p = rows.map(r => r.split(':').map(Number));
+      let low = 0, flick = 0;
+      for (const row of p) if (row[3] >= COV_JUDGE && row[1] < ASM_MIN) low++;
+      let i = 0;
+      while (i < p.length) {
+        let j = i;
+        while (j + 1 < p.length && p[j + 1][0] === p[i][0]) j++;
+        let peak = -1, trough = 2, dipped = false;
+        for (let k = i; k <= j; k++) {           // dip-and-return INSIDE one exhibit run
+          const a = p[k][1];
+          if (a > peak) { peak = a; trough = a; }
+          if (a < trough) trough = a;
+          if (peak - trough > DIP) dipped = true;
+          if (dipped && a > trough + 0.05) { flick++; dipped = false; peak = a; trough = a; }
+        }
+        i = j + 1;
       }
+      return tag + ' asm≥' + ASM_MIN + '@cov≥' + COV_JUDGE + '=' + (low ? 'FAIL(' + low + ')' : 'PASS')
+        + ' flicker=' + (flick ? 'FAIL(' + flick + ')' : 'PASS');
+    };
+
+    const run = () => {
+      document.documentElement.style.scrollBehavior = 'auto';
+      const H = Math.max(1, document.body.scrollHeight - innerHeight);
+      const pass = (dir) => {
+        const out = [];
+        for (let s = 0; s <= STEPS; s++) {
+          const k = dir > 0 ? s : STEPS - s;
+          window.__museum.step(Math.round(H * k / STEPS));
+          out.push(state.exhibit + ':' + state.assemblyT.toFixed(2)
+            + ':' + state.progressT.toFixed(2) + ':' + state.cov.toFixed(2));
+        }
+        return out;
+      };
+      const down = pass(1), up = pass(-1);
       window.__museum.step(0);
-      d.textContent = 'SWEEP H=' + H + ' vh=' + innerHeight + ' :: ' + out.join(' ');
-    });
+      d.textContent = 'SWEEP H=' + H + ' vh=' + innerHeight + ' scale=' + state.scale.toFixed(2)
+        + '\nDOWN:: ' + down.join(' ')
+        + '\nUP:: ' + up.join(' ')
+        + '\n' + verdict('DOWN', down) + ' | ' + verdict('UP', up);
+    };
+    // rAF never fires in a throttled/background tab → timeout fallback keeps the harness usable headless
+    requestAnimationFrame(run);
+    setTimeout(() => { if (!d.textContent) run(); }, 500);
+    window.__museum.sweep = () => { d.textContent = ''; run(); return d.textContent; };
   }
+  /* layout metrics for #4 / M2 — numbers instead of eyeballing a screenshot.
+     canvasVH = the <canvas> element itself (fixed full-bleed → 1.00 by construction)
+     cloudVH  = the projected vertical extent of the ASSEMBLED form (the honest one)
+     textVH   = the active band's story card
+     gapVH    = largest empty vertical run (nothing but ambient dust) — anti-void metric
+     ctaScrolls = distance to the waitlist form in screens · sticky = #stickyCta shown */
+  function layoutMetrics() {
+    const vh = innerHeight;
+    const cnv = document.getElementById('stage');
+    const canvasVH = cnv ? cnv.getBoundingClientRect().height / vh : 0;
+    const v = visibleExtent();
+    const s = state.scale;
+    // world y → screen px (z = 0 plane; perspective on off-plane grains is ignored)
+    const yTop = (0.5 - (CLOUD.maxY * s + state.offset.y) / v.h) * vh;
+    const yBot = (0.5 - (CLOUD.minY * s + state.offset.y) / v.h) * vh;
+    const cloudVis = state.assembly > 0.5 ? Math.max(0, Math.min(vh, yBot) - Math.max(0, yTop)) : 0;
+    const act = sections.find(x => +x.dataset.exhibit === state.exhibit);
+    const card = act ? act.querySelector('.tr-story') : null;
+    const cr = card ? card.getBoundingClientRect() : null;
+    const textPx = cr ? Math.max(0, Math.min(vh, cr.bottom) - Math.max(0, cr.top)) : 0;
+    const occ = [];
+    if (cloudVis > 0) occ.push([Math.max(0, yTop), Math.min(vh, yBot)]);
+    if (textPx > 0) occ.push([Math.max(0, cr.top), Math.min(vh, cr.bottom)]);
+    occ.sort((a, b) => a[0] - b[0]);
+    let cur = 0, gap = 0;
+    for (const [a, b] of occ) { if (a - cur > gap) gap = a - cur; if (b > cur) cur = b; }
+    if (vh - cur > gap) gap = vh - cur;
+    const cta = document.getElementById('cta');
+    const sticky = document.getElementById('stickyCta');
+    return {
+      canvasVH: +canvasVH.toFixed(2),
+      cloudVH: +(cloudVis / vh).toFixed(2),
+      textVH: +(textPx / vh).toFixed(2),
+      gapVH: +(gap / vh).toFixed(2),
+      ctaScrolls: cta ? +(Math.max(0, cta.getBoundingClientRect().top) / vh).toFixed(2) : -1,
+      sticky: sticky && sticky.classList.contains('show') ? 1 : 0,
+    };
+  }
+  if (window.__museum) window.__museum.metrics = layoutMetrics;
+
   if (qs.get('diag')) {
     const d = document.createElement('div');
     d.style.cssText = 'position:fixed;left:8px;top:8px;z-index:99;background:#222;color:#0f0;font:12px monospace;padding:6px;white-space:pre';
     document.body.appendChild(d);
     const paint = () => {
+      const m = layoutMetrics();
       d.textContent = 'y=' + Math.round(scrollY) + ' ex=' + state.exhibit + ' asm=' + state.assembly.toFixed(2)
-        + ' tgt=' + state.assemblyT.toFixed(2) + ' prog=' + state.progress.toFixed(2) + ' red=' + (REDUCED ? 1 : 0)
+        + ' tgt=' + state.assemblyT.toFixed(2) + ' cov=' + state.cov.toFixed(2)
+        + ' prog=' + state.progress.toFixed(2) + ' red=' + (REDUCED ? 1 : 0)
         + (renderer ? ' calls=' + renderer.info.render.calls + ' pts=' + renderer.info.render.points : ' nogl')
-        + ' vw=' + innerWidth + 'x' + innerHeight;
-      requestAnimationFrame(paint);
+        + ' vw=' + innerWidth + 'x' + innerHeight
+        + '\ncanvasVH=' + m.canvasVH + ' cloudVH=' + m.cloudVH + ' textVH=' + m.textVH
+        + ' gapVH=' + m.gapVH + ' ctaScrolls=' + m.ctaScrolls + ' sticky=' + m.sticky
+        + ' scale=' + state.scale.toFixed(2);
     };
     paint();
+    setInterval(paint, 250); // interval, not rAF: the HUD must keep updating in a throttled tab
   }
 }

@@ -85,7 +85,7 @@ body{background:#0b1114;color:#e9e1d4;font-family:Inter,sans-serif;-webkit-font-
 .hero-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:11px}
 .hcard{position:relative;border-radius:13px;overflow:hidden;border:2px solid var(--hc,#4A7FA8);background:#0d1417;box-shadow:0 0 0 2px #07101a,0 8px 18px rgba(0,0,0,.5);cursor:pointer;transition:transform .25s}
 .hcard:active{transform:scale(.98)}
-.hcard .hi{position:relative;aspect-ratio:1}
+.hcard .hi{display:block;position:relative;aspect-ratio:1}
 .hcard .hi img{width:100%;height:100%;object-fit:cover}
 .hcard.lock .hi img{filter:grayscale(.7) brightness(.45)}
 .hcard .lvl{position:absolute;top:6px;left:7px;font-family:'Cormorant Garamond',serif;font-weight:700;font-size:11px;background:rgba(12,8,5,.82);color:#f2c878;border:1px solid #8a6a1e;border-radius:4px;padding:0 6px;z-index:2}
@@ -124,6 +124,39 @@ body{background:#0b1114;color:#e9e1d4;font-family:Inter,sans-serif;-webkit-font-
 .tchip img{width:74px;height:74px;border-radius:10px;object-fit:cover;border:1.5px solid rgba(111,181,154,.45);box-shadow:0 4px 12px rgba(0,0,0,.45)}
 .tchip b{font-family:'Cormorant Garamond',serif;font-size:14px;font-weight:600;color:#9fe0c4}
 .tarrow{color:#6FB59A;opacity:.7;align-self:center}
+
+/* ── #2 · разгъване: дългият текст се СКРИВА, не се трие ──
+   Опашката стои ВЪТРЕ в същия параграф (inline `.tail`), а не в отделен панел:
+   изречението остава едно цяло в DOM-а, значи машинният v1-diff го намира цял.
+   Бутонът е истински <button> с aria-expanded/aria-controls. */
+.tail[hidden]{display:none}
+.moretog{display:inline-flex;align-items:center;gap:7px;cursor:pointer;margin-top:9px;
+  font-family:'Cormorant Garamond',serif;font-size:1rem;color:#f2c878;
+  border:1px solid rgba(242,200,120,.34);border-radius:22px;padding:4px 15px;
+  background:rgba(242,200,120,.06);transition:border-color .3s,background .3s}
+.moretog::after{content:'⌄';font-size:14px;line-height:1;transition:transform .3s}
+.moretog[aria-expanded="true"]::after{transform:rotate(180deg)}
+.moretog:hover{border-color:rgba(242,200,120,.6);background:rgba(242,200,120,.11)}
+/* видим фокус навсякъде — публично лице + funnel (a11y не е екстра) */
+:where(summary,button,a,input,[tabindex]):focus-visible{outline:2px solid #f2c878;outline-offset:3px;border-radius:6px}
+
+/* ── #5 · кликаемите карти са <button>, не голи div-ове ── */
+button.hcard{display:block;width:100%;padding:0;margin:0;font:inherit;color:inherit;text-align:inherit;-webkit-appearance:none;appearance:none}
+.hcard[aria-expanded="true"]{border-color:#f2c878;box-shadow:0 0 0 2px #07101a,0 0 22px -4px var(--hc,#f2c878)}
+
+/* ── #5 · детайл-панел в НОВАТА естетика (стъкло + амбър косъм + локален облак) ── */
+.hdetail{position:relative;background:linear-gradient(158deg,rgba(21,32,42,.92),rgba(11,17,20,.96));
+  border:1px solid rgba(242,200,120,.26);box-shadow:0 18px 46px -22px #000,inset 0 1px 0 rgba(255,255,255,.05);
+  backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);padding:0 0 16px}
+.hdetail:focus{outline:none}
+.hdetail:focus-visible{outline:2px solid #f2c878;outline-offset:3px}
+.hdetail .mini{display:block;width:100%;height:104px;border-radius:12px 12px 0 0;
+  background:radial-gradient(120% 130% at 50% 12%,rgba(242,200,120,.09),rgba(7,9,11,0) 68%)}
+.hdetail .hbody{padding:12px 16px 0}
+.hdetail .hclose{position:absolute;top:7px;right:8px;z-index:2;width:31px;height:31px;border-radius:50%;
+  border:1px solid rgba(242,200,120,.34);background:rgba(7,9,11,.72);color:#f2c878;font-size:15px;
+  line-height:1;cursor:pointer;padding:0}
+.hdetail .hclose:hover{border-color:#f2c878;background:rgba(242,200,120,.14)}
 </style>
 </head>
 <body>
@@ -162,11 +195,12 @@ body{background:#0b1114;color:#e9e1d4;font-family:Inter,sans-serif;-webkit-font-
   <div class="max-w-3xl mx-auto text-center reveal">
     <p class="kicker mb-5" style="color:#D4895E">👹 Чудовището</p>
     <h2 class="font-serif text-4xl md:text-5xl mb-5 leading-tight">Семейство Илюзоркови</h2>
-    <p class="text-lg text-parch/70 font-light leading-relaxed mb-3">Учебната и работната невроза не са лична слабост — те са чудовище. Осем слуги на <span style="color:#d8693a">Времетрон</span> от <span style="color:#d8693a">царството на цъкането</span> — Семейство Илюзоркови и свитата му — крадат вниманието. Назовете ли ги, губят силата си.</p>
-    <p class="text-sm font-light italic mb-2" style="color:#c98a78">Силата на историята зависи от силата на антагониста.</p>
+    <p class="text-lg text-parch/70 font-light leading-relaxed mb-3">Учебната и работната невроза не са лична слабост — те са чудовище. <span class="tail" id="tl-mon" hidden>Осем слуги на <span style="color:#d8693a">Времетрон</span> от <span style="color:#d8693a">царството на цъкането</span> — Семейство Илюзоркови и свитата му — крадат вниманието. Назовете ли ги, губят силата си.</span></p>
+    <p class="text-sm font-light italic mb-2 tail" id="tl-mon2" hidden style="color:#c98a78">Силата на историята зависи от силата на антагониста.</p>
+    <button type="button" class="moretog" aria-expanded="false" aria-controls="tl-mon tl-mon2 tl-mon3">Още</button>
   </div>
   <div class="max-w-4xl mx-auto mt-8"><div class="hero-grid reveal" id="foeGrid"></div></div>
-  <p class="text-center text-sm font-light mt-5 reveal" style="color:#b89a86">Разцъкайте всяка сянка — вижте за какво отговаря. <span style="color:#e6a878">Времетрон</span> командва (вместо сърце — часовник).</p>
+  <p class="text-center text-sm font-light mt-5 reveal" style="color:#b89a86">Разцъкайте всяка сянка — вижте за какво отговаря. <span class="tail" id="tl-mon3" hidden><span style="color:#e6a878">Времетрон</span> командва (вместо сърце — часовник).</span></p>
   <p class="text-center font-serif text-2xl md:text-3xl font-medium mt-8 reveal max-w-2xl mx-auto" style="color:#e8d9b0">🕯️ Пещерата с най-голямото чудовище крие <span style="color:#E8C77E">най-голямото съкровище</span>.</p>
 </section>
 
@@ -184,7 +218,8 @@ body{background:#0b1114;color:#e9e1d4;font-family:Inter,sans-serif;-webkit-font-
     <div class="text-center mb-12 reveal">
       <p class="kicker mb-5" style="color:#4A7FA8">🧭 Вашите водачи · екипът ви</p>
       <h2 class="font-serif text-4xl md:text-5xl mb-4">Не сте сам/а.<br>Екип от ИИ-герои ви води.</h2>
-      <p class="text-lg text-parch/70 font-light max-w-2xl mx-auto">Осем будечители — будни деца-учители, които общуват на човешки език. За родители и деца, които искат ИИ да е разширение на ума: въображение и радост от творчеството, вместо евтин допамин. <span class="text-parch/50">(Разцъкайте всеки в Плана по-долу.)</span></p>
+      <p class="text-lg text-parch/70 font-light max-w-2xl mx-auto">Осем будечители — будни деца-учители, които общуват на човешки език. <span class="tail" id="tl-vod" hidden>За родители и деца, които искат ИИ да е разширение на ума: въображение и радост от творчеството, вместо евтин допамин. <span class="text-parch/50">(Разцъкайте всеки в Плана по-долу.)</span></span></p>
+      <button type="button" class="moretog" aria-expanded="false" aria-controls="tl-vod">Още</button>
     </div>
     <div class="grid sm:grid-cols-3 gap-5">
       <div class="vcard reveal" style="--cc:#E8C77E"><div class="vimg"><img src="/img/art-въпрос.jpg" alt="Снимате"></div><div class="vbody"><h3>Снимате</h3><small>каквото ви дразни, отлагате или ви побърква</small></div><div class="bslots"><span class="bslot on"></span><span class="bslot"></span><span class="bslot"></span></div></div>
@@ -208,7 +243,7 @@ body{background:#0b1114;color:#e9e1d4;font-family:Inter,sans-serif;-webkit-font-
     <p class="kicker mb-5" style="color:#E8C77E">❓ Защо</p>
     <div class="vcard mx-auto mb-8" style="--cc:#E8C77E;max-width:340px"><div class="vimg"><img src="/img/art-отговор.jpg" alt="Защо"></div></div>
     <p class="font-serif text-3xl md:text-4xl mb-4 leading-tight">Над <span class="gradtext">95%</span> от децата в 4. клас<br>имат симптоми на учебна невроза.</p>
-    <p class="text-base text-parch/60 font-light mb-8">Светът се мени по-бързо, отколкото усещаме. Старите начини изморяват, а времето не стига.</p>
+    <p class="text-base text-parch/60 font-light mb-8 tail" id="tl-zas" hidden>Светът се мени по-бързо, отколкото усещаме. Старите начини изморяват, а времето не стига.</p>
     <div class="grid grid-cols-3 gap-3 max-w-xl mx-auto mb-8">
       <div><div class="font-serif text-4xl md:text-5xl" style="color:#D4895E">62%</div><div class="text-xs text-parch/55 mt-1">хронично тъжни</div></div>
       <div><div class="font-serif text-4xl md:text-5xl" style="color:#D4895E">32%</div><div class="text-xs text-parch/55 mt-1">с мисли да посегнат на живота си</div></div>
@@ -216,7 +251,8 @@ body{background:#0b1114;color:#e9e1d4;font-family:Inter,sans-serif;-webkit-font-
     </div>
     <p class="font-serif text-2xl md:text-4xl leading-tight mb-4" style="color:#e8d9b0">Днешното поколение е <span style="color:#D4895E">най-големият ни провал</span> като човечество.</p>
     <p class="text-xl md:text-2xl text-gold font-serif mb-3">Как да преодолеем това?</p>
-    <p class="text-xs text-parch/40 font-light">тийнейджърки · САЩ · CDC (Youth Risk Behavior Survey) · учебна невроза: конференция „Бъдеще за образованието", 2011</p>
+    <p class="text-xs text-parch/40 font-light tail" id="tl-zas2" hidden>тийнейджърки · САЩ · CDC (Youth Risk Behavior Survey) · учебна невроза: конференция „Бъдеще за образованието", 2011</p>
+    <button type="button" class="moretog" aria-expanded="false" aria-controls="tl-zas tl-zas2">Контекст и източници</button>
   </div>
 </section>
 
@@ -226,7 +262,8 @@ body{background:#0b1114;color:#e9e1d4;font-family:Inter,sans-serif;-webkit-font-
     <div class="text-center mb-10 reveal">
       <p class="kicker mb-5" style="color:#E8C77E">⚙️ Как</p>
       <h2 class="font-serif text-4xl md:text-5xl mb-4">Игри · Изкуство · ИИ</h2>
-      <p class="text-lg text-parch/70 font-light max-w-2xl mx-auto">Реалните задачи, които ви тежат, чрез игри и изкуство за <b class="text-parch/90">8 минути на ден</b> ги превръщаме в игри — и после ги правите с лекота.</p>
+      <p class="text-lg text-parch/70 font-light max-w-2xl mx-auto"><span class="tail" id="tl-kak" hidden>Реалните задачи, които ви тежат, чрез игри и изкуство за </span><b class="text-parch/90">8 минути на ден</b><span class="tail" id="tl-kak2" hidden> ги превръщаме в игри — и после ги правите с лекота.</span></p>
+      <button type="button" class="moretog" aria-expanded="false" aria-controls="tl-kak tl-kak2">Още</button>
     </div>
     <div class="grid sm:grid-cols-3 gap-5">
       <div class="vcard reveal" style="--cc:#E8C77E"><div class="vimg"><img src="/img/art-резултат.jpg" alt="Учене"></div><div class="vbody"><h3>Учене без учене</h3><small>разбирам по-дълбоко</small></div></div>
@@ -302,10 +339,11 @@ body{background:#0b1114;color:#e9e1d4;font-family:Inter,sans-serif;-webkit-font-
       <p class="text-lg text-parch/70 font-light max-w-2xl mx-auto">За пет минути. Без код. На български.</p>
     </div>
     <div class="grid sm:grid-cols-[1fr_auto_1fr] gap-5 items-center">
-      <div class="vcard reveal" style="--cc:#d8693a"><div class="vimg"><img src="/img/art-задача.jpg" alt="Задачата"></div><div class="vbody"><h3>Задачата</h3><p>Питате maitapp: „Имам досаден повтарящ се процес или задача. Кой агент и кое умение да развия?"</p></div></div>
+      <div class="vcard reveal" style="--cc:#d8693a"><div class="vimg"><img src="/img/art-задача.jpg" alt="Задачата"></div><div class="vbody"><h3>Задачата</h3><p class="tail" id="tl-izp" hidden>Питате maitapp: „Имам досаден повтарящ се процес или задача. Кой агент и кое умение да развия?"</p></div></div>
       <div class="missarrow reveal">➜</div>
-      <div class="vcard reveal" style="--cc:#6fb59a"><div class="vimg"><img src="/img/art-резултат.jpg" alt="Резултатът"></div><div class="vbody"><h3>Резултатът</h3><p>Жива карта с роли, Куражку пише чернова, Фибоначко намира три пропуска. Без код, на български.</p></div></div>
+      <div class="vcard reveal" style="--cc:#6fb59a"><div class="vimg"><img src="/img/art-резултат.jpg" alt="Резултатът"></div><div class="vbody"><h3>Резултатът</h3><p class="tail" id="tl-izp2" hidden>Жива карта с роли, Куражку пише чернова, Фибоначко намира три пропуска. Без код, на български.</p></div></div>
     </div>
+    <div class="text-center"><button type="button" class="moretog" aria-expanded="false" aria-controls="tl-izp tl-izp2">Виж примера</button></div>
   </div>
 </section>
 
@@ -341,7 +379,8 @@ body{background:#0b1114;color:#e9e1d4;font-family:Inter,sans-serif;-webkit-font-
   <div class="relative z-10 max-w-2xl mx-auto text-center reveal">
     <p class="kicker mb-6" style="color:#9c7fc8">Еликсир · поканата</p>
     <h2 class="font-serif text-4xl md:text-5xl mb-5 leading-tight">Будечителите Ви чакат.<br>Как да Ви наричаме?</h2>
-    <p class="text-lg text-parch/70 font-light mb-9">Не курс. Не домашни. Осем минути и една игра — и нещо, което днес ви тежи, утре ще правите с кеф.</p>
+    <p class="text-lg text-parch/70 font-light mb-3">Не курс. Не домашни. <span class="tail" id="tl-cta" hidden>Осем минути и една игра — и нещо, което днес ви тежи, утре ще правите с кеф.</span></p>
+    <button type="button" class="moretog mb-7" aria-expanded="false" aria-controls="tl-cta tl-cta2">Още</button>
     <form id="wlForm" class="rounded-2xl p-6 max-w-md mx-auto text-left" style="background:rgba(255,255,255,.04);border:1px solid rgba(242,200,120,.2)" action="#" novalidate>
       <label class="block font-serif text-gold text-sm mb-1" for="wlName">Име</label>
       <input id="wlName" type="text" placeholder="Как да Ви наричаме?" class="w-full mb-4 rounded-lg px-4 py-3 bg-black/30 border border-amber/30 text-parch text-[15px]" autocomplete="name">
@@ -354,7 +393,7 @@ body{background:#0b1114;color:#e9e1d4;font-family:Inter,sans-serif;-webkit-font-
     </form>
     <!-- success message is a SIBLING of the form: hiding the form must not hide the confirmation -->
     <p class="wl-msg ok" id="wlOk" role="status">✦ Благодарим! Поканите тръгват скоро — пазим мястото Ви.</p>
-    <p class="text-xs text-parch/40 mt-7 font-light">Каквото споделиш с maitapp, остава вътре. · Металандия · спокойствие · радост · вдъхновение</p>
+    <p class="text-xs text-parch/40 mt-7 font-light">Каквото споделиш с maitapp, остава вътре. <span class="tail" id="tl-cta2" hidden>· Металандия · спокойствие · радост · вдъхновение</span></p>
   </div>
 </section>
 
@@ -389,21 +428,107 @@ const HEROES=[
  {id:"творея",lvl:"VIII",law:"Класическо изкуство",hc:"#9c7fc8",role:"Разрешител · естет",bio:"Дава финала. Пречиства през изкуство и ясно решение.",skills:["2 въпроса","1 ход","Естетика"],quest:["Реши за мен","Задънена улица → 1 конкретен ход."],un:false}
 ];
 const ANTI={доверка:"Страхил",любка:"Его",екопътечко:"Бега",куражку:"Емо",обемко:"Нема",хола:"Умчо",фибоначко:"Ума",творея:"Станка"};
+/* ── #5 · локален мини point-cloud (2D canvas · нула WebGL) ──
+   Ехо на големия облак в мащаба на панела: прах се сглобява в златен ъгъл
+   (phyllotaxis) — същият език „прах → форма". Работи и при ?nogl=1, и без GPU;
+   при prefers-reduced-motion се рисува само крайният кадър. */
+var MINI_REDUCED=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+function miniRand(a){return function(){a|=0;a=(a+0x6D2B79F5)|0;var t=Math.imul(a^(a>>>15),1|a);t=(t+Math.imul(t^(t>>>7),61|t))^t;return ((t^(t>>>14))>>>0)/4294967296;};}
+function miniHex(h){h=h.replace('#','');if(h.length===3)h=h[0]+h[0]+h[1]+h[1]+h[2]+h[2];var n=parseInt(h,16);return [(n>>16)&255,(n>>8)&255,n&255];}
+function miniMake(cv,color,restless,seedn){
+  var ctx=cv.getContext('2d');if(!ctx)return null;
+  var rgb=miniHex(color),N=320,rnd=miniRand(seedn),pts=[];
+  for(var i=0;i<N;i++){
+    var f=i/(N-1),ang=i*2.39996,rad=Math.sqrt(f);
+    pts.push({hx:Math.cos(ang)*rad,hy:Math.sin(ang)*rad*.72,
+      dx:(rnd()*2-1)*1.35,dy:(rnd()*2-1)*1.1,s:rnd(),ph:rnd()*6.283});
+  }
+  var api={t:0,raf:0,tt:0};
+  api.draw=function(t,time){
+    var w=cv.width,h=cv.height,cx=w/2,cy=h/2,R=Math.min(w,h)*.44;
+    ctx.clearRect(0,0,w,h);ctx.globalCompositeOperation='lighter';
+    for(var i=0;i<N;i++){
+      var p=pts[i],e=Math.max(0,Math.min(1,t*1.35-p.s*.35));e=e*e*(3-2*e);
+      var wob=restless?(1-e*.55)*.055*Math.sin(time*2.4+p.ph):.012*Math.sin(time*.9+p.ph);
+      var x=cx+(p.dx*(1-e)+(p.hx+wob)*e)*R,y=cy+(p.dy*(1-e)+(p.hy+wob)*e)*R;
+      var a=(.10+.55*e)*(.45+.55*p.s);
+      ctx.fillStyle='rgba('+rgb[0]+','+rgb[1]+','+rgb[2]+','+a.toFixed(3)+')';
+      ctx.beginPath();ctx.arc(x,y,.55+1.15*p.s*(.5+.5*e),0,6.283);ctx.fill();
+    }
+    ctx.globalCompositeOperation='source-over';
+  };
+  api.size=function(){var r=cv.getBoundingClientRect(),d=Math.min(window.devicePixelRatio||1,2);
+    cv.width=Math.max(80,Math.round(r.width*d));cv.height=Math.max(60,Math.round(r.height*d));};
+  api.start=function(){
+    api.size();
+    if(MINI_REDUCED){api.draw(1,0);return;}          // статичен after-state
+    api.t=0;api.tt=0;api.draw(0,0);
+    var t0=performance.now();
+    var loop=function(now){var dt=(now-t0)/1000;api.tt=dt;
+      api.t=Math.min(1,dt/1.15);api.draw(api.t,dt);
+      api.raf=requestAnimationFrame(loop);};
+    api.raf=requestAnimationFrame(loop);
+  };
+  api.stop=function(){if(api.raf)cancelAnimationFrame(api.raf);api.raf=0;};
+  return api;
+}
+var MINIS=new Map();
+function miniStart(panel){var cv=panel.querySelector('.mini');if(!cv)return;var m=MINIS.get(cv);if(m){m.stop();m.start();}}
+function miniStop(panel){var cv=panel.querySelector('.mini');if(!cv)return;var m=MINIS.get(cv);if(m)m.stop();}
+/* verification hook: рисува всички мини-облаци на фиксирано t (скрит таб = нула rAF) */
+window.__mini={render:function(t){MINIS.forEach(function(m){m.size();m.draw(t==null?1:t,3.0);});return MINIS.size;}};
+
+/* ── #5 · един контролер за отваряне/затваряне · клавиатура · фокус · Esc ── */
+var openTrigger=null;
+function panelCloseAll(refocus){
+  document.querySelectorAll('.hdetail.on').forEach(function(d){d.classList.remove('on');miniStop(d);});
+  document.querySelectorAll('.hcard[aria-expanded="true"]').forEach(function(b){b.setAttribute('aria-expanded','false');});
+  var t=openTrigger;openTrigger=null;
+  if(refocus&&t)t.focus();
+}
+function panelToggle(btn,d){
+  var was=d.classList.contains('on');
+  panelCloseAll(false);
+  if(!was){d.classList.add('on');btn.setAttribute('aria-expanded','true');openTrigger=btn;miniStart(d);d.focus();}
+}
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&openTrigger)panelCloseAll(true);});
+
+/* карта + панел · картата е <button> (не гол div): Enter/Space, роля и фокус наготово */
+function buildCard(o){
+  var c=document.createElement('button');
+  c.type='button';
+  c.className='hcard'+(o.locked?' lock':'');
+  c.style.setProperty('--hc',o.color);
+  c.setAttribute('aria-expanded','false');
+  c.setAttribute('aria-controls',o.pid);
+  c.innerHTML='<span class="hi">'+(o.lvl?'<span class="lvl">'+o.lvl+'</span>':'')+(o.locked?'<span class="lk">🔒</span>':'')+
+    '<img src="/img/'+o.img+'.jpg" alt="'+o.alt+'" loading="lazy"><span class="hn">'+o.title+
+    '<span class="hr">'+o.sub+'</span></span></span>';
+  var d=document.createElement('div');
+  d.className='hdetail';d.id=o.pid;d.style.setProperty('--hc',o.color);
+  d.setAttribute('role','region');d.setAttribute('tabindex','-1');d.setAttribute('aria-label',o.title);
+  d.innerHTML='<canvas class="mini" aria-hidden="true"></canvas>'+
+    '<button type="button" class="hclose" aria-label="Затвори панела">✕</button>'+
+    '<div class="hbody">'+o.body+'</div>';
+  MINIS.set(d.querySelector('.mini'),miniMake(d.querySelector('.mini'),o.color,!!o.restless,o.seed));
+  c.addEventListener('click',function(){panelToggle(c,d);});
+  d.querySelector('.hclose').addEventListener('click',function(){panelCloseAll(true);});
+  return [c,d];
+}
+
 const g=document.getElementById('heroGrid');
 HEROES.forEach((h,i)=>{
-  const c=document.createElement('div');
-  c.className='hcard'+(h.un?'':' lock');c.style.setProperty('--hc',h.hc);
-  c.innerHTML='<div class="hi"><span class="lvl">'+h.lvl+'</span>'+(h.un?'':'<span class="lk">🔒</span>')+
-    '<img src="/img/'+h.id+'.jpg" alt="'+h.id+'" loading="lazy"><span class="hn">'+h.id.charAt(0).toUpperCase()+h.id.slice(1)+
-    '<span class="hr">срещу '+ANTI[h.id]+'</span></span></div>';
-  const d=document.createElement('div');d.className='hdetail';d.style.setProperty('--hc',h.hc);d.id='d-'+h.id;
-  d.innerHTML='<h4>'+h.id.charAt(0).toUpperCase()+h.id.slice(1)+'</h4><div class="cls">Ниво '+h.lvl+' · '+h.law+' · '+h.role+'</div>'+
-    '<div class="bio">'+h.bio+'</div><div class="badges">'+h.skills.map(s=>'<span class="bdg">'+s+'</span>').join('')+'</div>'+
-    '<div class="quest">🎯 <b>'+h.quest[0]+'</b> — '+h.quest[1]+'</div>';
-  c.addEventListener('click',()=>{const was=d.classList.contains('on');document.querySelectorAll('.hdetail').forEach(x=>x.classList.remove('on'));if(!was)d.classList.add('on');});
-  g.appendChild(c);
-  // вмъкни detail след всеки 2-ри (края на реда) — опростено: добавяме всички detail-и накрая на grid, full-width
-  g.appendChild(d);
+  const cap=h.id.charAt(0).toUpperCase()+h.id.slice(1);
+  const pair=buildCard({
+    pid:'d-'+h.id,color:h.hc,img:h.id,alt:h.id,lvl:h.lvl,locked:!h.un,seed:1700+i*37,
+    title:cap,sub:'срещу '+ANTI[h.id],
+    body:'<h4>'+cap+'</h4><div class="cls">Ниво '+h.lvl+' · '+h.law+' · '+h.role+'</div>'+
+      '<div class="bio">'+h.bio+'</div><div class="badges">'+h.skills.map(s=>'<span class="bdg">'+s+'</span>').join('')+'</div>'+
+      '<div class="quest">🎯 <b>'+h.quest[0]+'</b> — '+h.quest[1]+'</div>'
+  });
+  g.appendChild(pair[0]);
+  // detail-ите се добавят веднага след картата · grid-column:1/3 ги прави full-width
+  g.appendChild(pair[1]);
 });
 
 /* антагонисти · 8 слуги · същия кликаем контрол · 3 заключени (без видим образ) */
@@ -418,13 +543,27 @@ const ANTAGS=[
  {img:"ant-страхил",name:"Барон Страхил Прегорялконен",fn:"Прегаряне",g:"мъж",sab:"Прегарянето, което гори резервите ти до пепел.",un:false}
 ];
 const fg=document.getElementById('foeGrid');
-if(fg)ANTAGS.forEach(function(a){
-  var c=document.createElement('div');c.className='hcard'+(a.un?'':' lock');c.style.setProperty('--hc','#d8693a');
-  c.innerHTML='<div class="hi">'+(a.un?'':'<span class="lk">🔒</span>')+'<img src="/img/'+a.img+'.jpg" alt="'+a.name+'" loading="lazy"><span class="hn">'+a.name+'<span class="hr">'+a.fn+'</span></span></div>';
-  var d=document.createElement('div');d.className='hdetail';d.style.setProperty('--hc','#d8693a');
-  d.innerHTML='<h4>'+a.name+'</h4><div class="cls" style="color:#e6a878">саботира · '+a.fn+' · '+a.g+'</div><div class="bio">'+a.sab+'</div><div class="quest">🛡️ Назовете я — губи силата си.</div>';
-  c.addEventListener('click',function(){var was=d.classList.contains('on');document.querySelectorAll('.hdetail').forEach(function(x){x.classList.remove('on');});if(!was)d.classList.add('on');});
-  fg.appendChild(c);fg.appendChild(d);
+if(fg)ANTAGS.forEach(function(a,i){
+  var pair=buildCard({
+    pid:'d-'+a.img,color:'#d8693a',img:a.img,alt:a.name,lvl:'',locked:!a.un,seed:2600+i*53,
+    restless:true,               // сянката не се успокоява — обратният жест на будечителя
+    title:a.name,sub:a.fn,
+    body:'<h4>'+a.name+'</h4><div class="cls" style="color:#e6a878">саботира · '+a.fn+' · '+a.g+'</div>'+
+      '<div class="bio">'+a.sab+'</div><div class="quest">🛡️ Назовете я — губи силата си.</div>'
+  });
+  fg.appendChild(pair[0]);fg.appendChild(pair[1]);
+});
+
+/* #2 · разгъване на дългия текст · истински бутон + aria-expanded/aria-controls */
+document.querySelectorAll('.moretog').forEach(function(b){
+  var ids=(b.getAttribute('aria-controls')||'').split(/\s+/).filter(Boolean);
+  var lab=b.textContent;
+  b.addEventListener('click',function(){
+    var open=b.getAttribute('aria-expanded')==='true';
+    ids.forEach(function(id){var el=document.getElementById(id);if(el)el.hidden=open;});
+    b.setAttribute('aria-expanded',open?'false':'true');
+    b.textContent=open?lab:'По-малко';
+  });
 });
 
 (function(){
@@ -491,7 +630,10 @@ if(fg)ANTAGS.forEach(function(a){
     }
     function setBusy(busy) {
       inFlight = busy;
-      if (submitBtn) submitBtn.disabled = busy;
+      if (submitBtn) {
+        submitBtn.disabled = busy;              // втори клик не може да мине
+        submitBtn.setAttribute('aria-busy', busy ? 'true' : 'false');
+      }
     }
 
     form.addEventListener('submit', function (e) {

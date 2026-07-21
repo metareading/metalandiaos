@@ -10,7 +10,10 @@ import * as THREE from 'three';
 const TAU = Math.PI * 2;
 
 /* ── capability tier ─────────────────────────────────────────── */
-const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+/* ?reduced=1 forces the reduced-motion path (mirrors ?nogl=1): the OS setting cannot
+   be toggled from a verification harness, so the criterion needs a switch. */
+const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  || /[?&]reduced=1/.test(location.search);
 const IS_MOBILE = window.matchMedia('(max-width: 899px)').matches;
 const LOW_POWER = (navigator.hardwareConcurrency || 8) <= 4 || (navigator.deviceMemory || 8) <= 2;
 const COUNT = IS_MOBILE ? (LOW_POWER ? 18000 : 30000) : (LOW_POWER ? 34000 : 58000);

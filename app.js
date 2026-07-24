@@ -170,45 +170,40 @@ function arcLookup(pts, d) { // binary search: first entry with acc >= d
   return pts[lo];
 }
 
-function genClock(home, cls, data, N, rand) {
+function genHeart(home, cls, data, N, rand) {
   const nEnvelope = Math.floor(N * 0.68);
   const nRing1 = Math.floor(N * 0.11);
   const nRing2 = Math.floor(N * 0.10);
   const nRing3 = Math.floor(N * 0.09);
   const nArrow = N - nEnvelope - nRing1 - nRing2 - nRing3;
 
+  const table = heartArcTable(500);
+  const WALL_JITTER = 0.028;
   const Z_DEPTH = 0.22;
-  const R_DIAL = 1.16; // rim sits outside the hand sweep (1.02) and the gear trio (0.40/0.58/0.74)
 
   let i = 0;
   for (let k = 0; k < nEnvelope; k++, i++) {
-    // Времетрон dial: volumetric rim + 12 hour ticks. Same cls 0 as the old heart
-    // envelope — the shader's theft wave is angle-based, so it sweeps the rim untouched.
-    const isTick = rand() < 0.28;
-    let phi, r, zThin = false;
-    if (isTick) {
-      const h = Math.floor(rand() * 12);
-      const rIn = (h % 3) === 0 ? 0.90 : 0.99; // 12/3/6/9 reach deeper
-      phi = h * (TAU / 12) + (rand() - 0.5) * 0.035;
-      r = rIn + rand() * (R_DIAL - 0.035 - rIn);
-      zThin = true;
-    } else {
-      phi = rand() * TAU;
-      const shell = (rand() - 0.5) * 0.05;
-      const inward = -Math.pow(rand(), 2.1) * 0.16;
-      r = R_DIAL + shell + (rand() < 0.55 ? inward : 0);
-    }
-    home[i * 3] = r * Math.cos(phi);
-    home[i * 3 + 1] = r * Math.sin(phi);
-    // two z-contours (front/back shells) + light fill between — same depth recipe as the heart
+    const d = rand() * table.total;
+    const seg = arcLookup(table.pts, d);
+    const t = seg.t;
+    const [x0, y0] = heartRaw(t);
+    const [tx, ty] = heartTangent(t);
+    const tl = Math.hypot(tx, ty) || 1;
+    const nx = -ty / tl, ny = tx / tl;
+    // volumetric body: two shell contours + inward-biased fill toward the gear core (richest form in the museum)
+    const shell = (rand() - 0.5) * (WALL_JITTER * 4.0 / HEART_SCALE);
+    const inward = -Math.pow(rand(), 2.1) * (0.52 / HEART_SCALE);
+    const j = shell + (rand() < 0.55 ? inward : 0);
+    const x = x0 + nx * j, y = y0 + ny * j;
+    home[i * 3] = x * HEART_SCALE;
+    home[i * 3 + 1] = y * HEART_SCALE + HEART_YOFF;
+    // two z-contours (front/back shells) + light fill between — PRD "2 контура + запълване"
     const zu = rand();
-    home[i * 3 + 2] = zThin
-      ? (rand() - 0.5) * 0.03
-      : (zu < 0.72
-        ? (rand() < 0.5 ? -1 : 1) * Z_DEPTH * (0.30 + 0.20 * rand())
-        : (rand() - 0.5) * Z_DEPTH);
+    home[i * 3 + 2] = zu < 0.72
+      ? (rand() < 0.5 ? -1 : 1) * Z_DEPTH * (0.30 + 0.20 * rand())
+      : (rand() - 0.5) * Z_DEPTH;
     cls[i] = 0;
-    data[i] = (((phi % TAU) + TAU) % TAU) / TAU;
+    data[i] = t / TAU;
   }
 
   function fillRing(n, clsVal, R0, teeth, k) {
@@ -653,7 +648,7 @@ function genHomeHeart(home, cls, data, N, rand) {
   }
 }
 
-const GENERATORS = [genCup, genClock, genConstellation, genStairs, genPortal, genCocoon, genGoldCup, genHomeHeart];
+const GENERATORS = [genCup, genHeart, genConstellation, genStairs, genPortal, genCocoon, genGoldCup, genHomeHeart];
 
 /* ═══ SHADERS ═════════════════════════════════════════════════
    Exhibit blocks live in EX_BLOCKS[i]; each block reads
@@ -683,8 +678,8 @@ const EX1_GLSL = /* glsl */`
 `;
 
 const EX2_GLSL = /* glsl */`
-  // cls: 0 dial+ticks · 1 ring1(fastest) · 2 ring2 · 3 ring3(slowest) · 4 hand
-  float breathe = 1.0 + 0.028 * sin(uTime * 0.55);   // whole clock breathes as ONE body
+  // cls: 0 envelope · 1 ring1(fastest) · 2 ring2 · 3 ring3(slowest) · 4 arrow
+  float breathe = 1.0 + 0.028 * sin(uTime * 0.55);   // whole heart breathes as ONE body
   if (clsv < 0.5) {
     a = asm2(uAssembly, seedv, 0.0);
     float thetaP = atan(hp.y, hp.x);

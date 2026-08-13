@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Готово! · Пет живи срещи от Беглика | Azaira</title>
+<meta name="description" content="Мястото Ви е запазено. Ето линка за гледане.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ══ Беглика · Thank-You · статична версия за maitapp.com · MET-249 ══
+   Източник на истината: website/app/(landing)/serial/beglika/thank-you/page.tsx */
+*{margin:0;box-sizing:border-box}
+:root{
+  --slate-200:#e2e8f0;--slate-300:#cbd5e1;--slate-400:#94a3b8;--slate-900:#0f172a;
+  --violet-300:#c4b5fd;--amber-300:#fcd34d;--amber-500:#f59e0b;--emerald-300:#6ee7b7;
+  --line:rgba(255,255,255,.1);--card:rgba(255,255,255,.04);
+  --serif:'Playfair Display',Georgia,serif;
+}
+body{min-height:100dvh;background:#0b1120 radial-gradient(120% 80% at 50% -10%,#1e1b4b 0%,#0f172a 45%,#0b1120 100%) no-repeat;color:var(--slate-200);font-family:Inter,-apple-system,sans-serif;line-height:1.625;-webkit-font-smoothing:antialiased}
+.page{display:flex;flex-direction:column;align-items:center;max-width:576px;margin:0 auto;padding:40px 20px 48px;text-align:center}
+.badge{display:inline-flex;align-items:center;justify-content:center;width:56px;height:56px;margin-bottom:16px;border-radius:999px;background:rgba(52,211,153,.15);font-size:1.875rem;color:var(--emerald-300)}
+h1{font-size:1.5rem;font-weight:700;line-height:1.25;color:#fff}
+.sub{margin-top:12px;font-size:1rem;line-height:1.625;color:var(--slate-300)}
+.sub strong{color:#fff}
+.watch{width:100%;margin-top:24px;padding:24px;border:1px solid rgba(252,211,77,.4);border-radius:24px;background:var(--card);text-align:left}
+.kicker{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.22em;color:var(--violet-300)}
+.watch p{margin-top:8px;font-size:1rem;line-height:1.625;color:var(--slate-300)}
+.watch .keep{margin-top:12px;font-size:.875rem;color:var(--slate-400)}
+#watch-link{display:none;margin-top:16px;padding:16px 24px;border-radius:999px;background:linear-gradient(90deg,var(--amber-300),var(--amber-500));color:var(--slate-900);font-size:1rem;font-weight:600;text-align:center;text-decoration:none;box-shadow:0 10px 15px -3px rgba(245,158,11,.2),0 4px 6px -4px rgba(245,158,11,.2);transition:transform .15s}
+#watch-link:hover{transform:translateY(-1px)}
+#watch-mode-link,#watch-mode-mail{display:none}
+#watch-mode-link.on,#watch-mode-mail.on{display:block}
+#watch-mode-link.on #watch-link{display:flex;align-items:center;justify-content:center}
+#watch-mode-mail p.first{color:var(--slate-200)}
+#watch-mode-mail .keep{line-height:1.625}
+.back{display:inline-block;margin-top:24px;font-size:.875rem;font-weight:500;color:var(--violet-300);text-decoration:none}
+.back:hover{text-decoration:underline}
+@media (min-width:640px){h1{font-size:1.875rem}}
+</style>
+</head>
+<body>
+<main class="page">
+  <span class="badge">✓</span>
+  <h1>Готово — мястото Ви е запазено!</h1>
+  <p class="sub">Оставихте имейла си веднъж — достъпът важи за <strong>петте срещи</strong> от Беглика. Живото остава на запис, така че гледате и по-късно.</p>
+
+  <!-- Линкът за гледане — сърцето на страницата -->
+  <section class="watch">
+    <p class="kicker">Линкът за гледане</p>
+
+    <!-- вариант А · клетката е попълнена → линкът се показва веднага -->
+    <div id="watch-mode-link">
+      <p>Оттук гледате всяко от петте излъчвания — от телефон или от компютър.</p>
+      <a id="watch-link" href="#">Отворете линка за гледане</a>
+      <p class="keep">Запазете си го — той важи за петте срещи. Изпращаме Ви го и на имейла преди всяко излъчване.</p>
+    </div>
+
+    <!-- вариант Б · празна клетка → мейл-фолбек (по подразбиране) -->
+    <div id="watch-mode-mail" class="on">
+      <p class="first">Линкът пристига на имейла Ви преди излъчването.</p>
+      <p class="keep">Ако не пристигне до няколко минути преди началото, проверете папките „Промоции“ и „Спам“.</p>
+    </div>
+  </section>
+
+  <a class="back" href="../">← Обратно към петте срещи</a>
+</main>
+
+<script>
+/* ⚠️ КЛЕТКА 1 · ЛИНКЪТ ЗА ГЛЕДАНЕ (плейлист/стрийм — един за петте срещи ·
+   ADR-0036 · „линкът е клетка, не ветка"). Платформата (YouTube/Facebook)
+   се решава от друг грил и може да се смени минути преди ефира — смяната
+   е редакция на ЕДНАТА стойност долу, за секунди.
+   Празна ("") → мейл-фолбекът остава и нищо не се чупи.
+   Попълнена → линкът се показва веднага. */
+var BEGLIKA_WATCH_URL = "";
+
+(function () {
+  var url = (BEGLIKA_WATCH_URL || "").trim();
+  if (!url) return;
+  document.getElementById("watch-link").setAttribute("href", url);
+  document.getElementById("watch-mode-link").classList.add("on");
+  document.getElementById("watch-mode-mail").classList.remove("on");
+})();
+</script>
+</body>
+</html>

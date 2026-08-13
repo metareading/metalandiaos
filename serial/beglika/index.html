@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Беглика · Пет живи срещи | Azaira</title>
+<meta name="description" content="Живо от фестивал Беглика, 13 – 15 август. Оставяте имейла си веднъж — получавате достъп до петте събития.">
+<meta property="og:title" content="Беглика · Пет живи срещи">
+<meta property="og:description" content="Живо от фестивал Беглика, 13 – 15 август. Оставяте имейла си веднъж — получавате достъп до петте събития.">
+<meta property="og:url" content="https://maitapp.com/serial/beglika/">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ══ Беглика · статична версия за maitapp.com (GitHub Pages) · MET-249 ══
+   Източник на истината: website/app/(landing)/serial/beglika/page.tsx
+   (Next.js · metalandia.com). Текстове портнати 1:1. Mobile-first 390px. */
+*{margin:0;box-sizing:border-box}
+:root{
+  --slate-100:#f1f5f9;--slate-200:#e2e8f0;--slate-300:#cbd5e1;--slate-400:#94a3b8;--slate-500:#64748b;--slate-900:#0f172a;
+  --violet-200:#ddd6fe;--violet-300:#c4b5fd;
+  --amber-200:#fde68a;--amber-300:#fcd34d;--amber-500:#f59e0b;
+  --emerald-300:#6ee7b7;--rose-300:#fda4af;
+  --line:rgba(255,255,255,.1);--card:rgba(255,255,255,.04);
+  --serif:'Playfair Display',Georgia,serif;
+}
+html{scroll-behavior:smooth}
+body{min-height:100dvh;background:#0b1120 radial-gradient(120% 80% at 50% -10%,#1e1b4b 0%,#0f172a 45%,#0b1120 100%) no-repeat;color:var(--slate-200);font-family:Inter,-apple-system,sans-serif;line-height:1.625;-webkit-font-smoothing:antialiased}
+.page{max-width:672px;margin:0 auto;padding:0 20px 56px}
+button{font:inherit;cursor:pointer}
+.kicker{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.22em;color:var(--violet-300)}
+.h2{margin-top:12px;font-family:var(--serif);font-size:1.5rem;font-weight:600;line-height:1.3;color:#fff}
+.sub{margin-top:12px;font-size:1rem;line-height:1.625;color:var(--slate-300)}
+/* ── 1 · HERO ── */
+.hero{padding-top:48px;text-align:center}
+.hero h1{margin-top:16px;font-family:var(--serif);font-size:1.875rem;font-weight:600;line-height:1.22;color:#fff}
+.hero .lead{margin-top:20px;font-family:var(--serif);font-size:1.125rem;line-height:1.625;color:var(--slate-300)}
+.hero .attr{margin-top:8px;font-size:.75rem;text-transform:uppercase;letter-spacing:.16em;color:var(--slate-400)}
+.headline{display:inline-block;margin-top:24px;padding:8px 16px;border:1px solid rgba(167,139,250,.4);border-radius:999px;background:rgba(167,139,250,.1);font-size:.875rem;color:var(--violet-200)}
+.cta{display:inline-block;width:100%;max-width:340px;margin-top:24px;padding:16px 28px;border:0;border-radius:999px;background:linear-gradient(90deg,var(--amber-300),var(--amber-500));color:var(--slate-900);font-size:1rem;font-weight:600;box-shadow:0 10px 15px -3px rgba(245,158,11,.2),0 4px 6px -4px rgba(245,158,11,.2);transition:transform .15s}
+.cta:hover{transform:translateY(-1px)}
+.cta:active{transform:scale(.99)}
+/* ── 2 · СДЕЛКАТА ── */
+.deal{margin-top:48px;padding:24px;border:1px solid rgba(252,211,77,.3);border-radius:24px;background:rgba(252,211,77,.1);text-align:center}
+.deal .big{font-family:var(--serif);font-size:1.25rem;line-height:1.375;color:#fff}
+.deal .small{margin-top:12px;font-size:.875rem;color:var(--slate-300)}
+/* ── 2.5 · ВИДЕО (самоскриваща се клетка) ── */
+#video-section{display:none;margin-top:48px}
+#video-section.on{display:block}
+.video-frame{aspect-ratio:9/16;width:100%;max-width:380px;margin:24px auto 0;overflow:hidden;border-radius:16px;background:#000;box-shadow:0 0 0 1px var(--line)}
+.video-frame iframe{width:100%;height:100%;border:0}
+/* ── 3 · КАРТИТЕ ── */
+.cards{margin-top:24px;display:flex;flex-direction:column;gap:16px}
+.card{padding:20px;border:1px solid var(--line);border-radius:24px;background:var(--card)}
+.card--live{border-color:rgba(52,211,153,.5);background:rgba(52,211,153,.1)}
+.card--focus{border-color:rgba(252,211,77,.5);background:rgba(252,211,77,.1)}
+.card--past{opacity:.7}
+.card h3{margin-top:8px;font-family:var(--serif);font-size:1.25rem;font-weight:600;color:var(--amber-200)}
+.card .forwho{margin-top:8px;font-size:.875rem;line-height:1.625;color:var(--slate-400)}
+.card .quote{margin-top:12px;padding-left:12px;border-left:2px solid rgba(167,139,250,.4);font-family:var(--serif);font-size:1rem;line-height:1.625;color:var(--slate-200)}
+.pills{margin-top:16px;display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.pill{padding:4px 12px;border:1px solid var(--line);border-radius:999px;font-size:13px;color:var(--slate-400)}
+.pill--dated{border-color:rgba(252,211,77,.4);background:rgba(252,211,77,.1);color:var(--amber-200)}
+.pill--rel{display:none}
+.pill--rel.on{display:inline-block}
+.pill--rel.live{border-color:rgba(52,211,153,.6);background:rgba(52,211,153,.15);color:var(--emerald-300)}
+.card-btn{margin-top:16px;padding:8px 20px;border:1px solid rgba(252,211,77,.4);border-radius:999px;background:transparent;font-size:.875rem;font-weight:500;color:var(--amber-200);transition:background .15s}
+.card-btn:hover{background:rgba(252,211,77,.1)}
+/* ── 4 · ФОРМАТА ── */
+#beglika-form-section{scroll-margin-top:24px}
+.form-box{margin-top:24px;padding:20px;border:1px solid var(--line);border-radius:24px;background:var(--card)}
+.from-line{margin-bottom:20px;padding:10px 16px;border:1px solid var(--line);border-radius:12px;font-size:.875rem;color:var(--slate-400)}
+.from-line strong{font-weight:600;color:var(--amber-200)}
+.field{margin-bottom:16px}
+.field .lbl{display:block;margin-bottom:6px;font-size:.875rem;color:var(--slate-200)}
+.field .lbl .opt{color:var(--slate-500)}
+.field input{display:block;width:100%;padding:12px 16px;border:1px solid var(--line);border-radius:12px;background:rgba(0,0,0,.25);font:inherit;font-size:1rem;color:var(--slate-100)}
+.field input::placeholder{color:var(--slate-500)}
+.field input:focus{outline:none;border-color:var(--amber-300);box-shadow:0 0 0 2px rgba(252,211,77,.25)}
+.err{display:none;margin-top:6px;font-size:13px;color:var(--rose-300)}
+.err.on{display:block}
+.consent{display:flex;align-items:flex-start;gap:10px;cursor:pointer;font-size:.875rem;line-height:1.625;color:var(--slate-400)}
+.consent input{margin-top:2px;width:20px;height:20px;flex-shrink:0;accent-color:#fbbf24}
+.submit{margin-top:20px;width:100%;padding:16px 28px;border:0;border-radius:999px;background:linear-gradient(90deg,var(--amber-300),var(--amber-500));color:var(--slate-900);font-size:1rem;font-weight:600;box-shadow:0 10px 15px -3px rgba(245,158,11,.2),0 4px 6px -4px rgba(245,158,11,.2);transition:transform .15s}
+.submit:hover{transform:translateY(-1px)}
+.submit:active{transform:scale(.99)}
+.submit:disabled{cursor:default;opacity:.55;transform:none}
+.status{display:none;margin-top:16px;text-align:center;font-size:.875rem;color:var(--slate-400)}
+.status.on{display:block}
+.status.error{color:var(--rose-300)}
+/* ── 5-8 ── */
+.section{margin-top:56px}
+.bq{margin-top:24px;padding:24px;border:1px solid var(--line);border-left:2px solid rgba(167,139,250,.5);border-radius:0 24px 24px 0;background:var(--card);font-family:var(--serif);font-size:1.125rem;line-height:1.625;color:var(--slate-200)}
+.bq+.bq{margin-top:16px}
+.bq .note{display:block;margin-top:16px;font-family:Inter,sans-serif;font-size:15px;color:var(--amber-200)}
+.who{margin-top:24px;display:flex;flex-direction:column;gap:16px;list-style:none;padding:0}
+.who li{padding:20px;border:1px solid var(--line);border-radius:24px;background:var(--card)}
+.who .t{display:block;font-family:var(--serif);font-size:1.125rem;color:var(--amber-200)}
+.who p{margin-top:8px;font-size:.875rem;line-height:1.625;color:var(--slate-300)}
+.who p.dim{color:var(--slate-400)}
+.bio{margin-top:24px;padding:24px;border:1px solid var(--line);border-radius:24px;background:var(--card)}
+.bio p{margin-top:12px;font-size:1rem;line-height:1.625;color:var(--slate-300)}
+.faq{margin-top:24px;overflow:hidden;border:1px solid var(--line);border-radius:24px;background:var(--card)}
+.faq details+details{border-top:1px solid var(--line)}
+.faq summary{padding:16px 20px;cursor:pointer;list-style:none;font-family:var(--serif);font-size:1.125rem;color:var(--amber-200)}
+.faq summary::-webkit-details-marker{display:none}
+.faq details p{padding:0 20px 16px;font-size:.875rem;line-height:1.625;color:var(--slate-400)}
+.center{text-align:center}
+footer{margin-top:56px;padding-top:32px;border-top:1px solid var(--line);text-align:center;font-size:.875rem;line-height:1.625;color:var(--slate-400)}
+footer p+p{margin-top:8px}
+/* ── по-широк екран ── */
+@media (min-width:640px){
+  .hero h1{font-size:3rem;line-height:1.1}
+  .card{padding:24px}
+  .form-box{padding:28px}
+}
+</style>
+</head>
+<body>
+<main class="page">
+
+  <!-- ═══ 1 · HERO ═══ -->
+  <header class="hero">
+    <p class="kicker">Живо от фестивал Беглика · 13 – 15 август</p>
+    <h1>Не е въпрос на време,<br>а на внимание</h1>
+    <p class="lead">„Това с управлението на времето не работи. Докато ако отглеждаме вниманието… Ние сме нашето внимание, мили хора, и е добре да си върнем вниманието.“</p>
+    <p class="attr">Димитър Караманчев · от Беглика</p>
+    <p><span class="headline" id="headline">Пет живи срещи · три от тях този уикенд</span></p>
+    <p><button type="button" class="cta" data-scroll>Запазете достъпа си</button></p>
+  </header>
+
+  <!-- ═══ 2 · СДЕЛКАТА ═══ -->
+  <section class="deal">
+    <p class="big">Оставяте имейла си веднъж.<br>Получавате достъп до петте събития.</p>
+    <p class="small">Един адрес, една форма. Линкът за гледане пристига при Вас преди всяко излъчване.</p>
+  </section>
+
+  <!-- ═══ 2.5 · МИНУТА ОТ БЕГЛИКА · видео-слот (празна клетка → няма секция) ═══ -->
+  <section id="video-section">
+    <p class="kicker">Минута от Беглика</p>
+    <h2 class="h2">Чуйте за какво става дума</h2>
+    <div class="video-frame" id="video-frame"></div>
+  </section>
+
+  <!-- ═══ 3 · ПЕТТЕ СРЕЩИ ═══ -->
+  <section class="section">
+    <p class="kicker">Програмата</p>
+    <h2 class="h2">Петте срещи</h2>
+    <p class="sub">Три от тях се излъчват на живо този уикенд. Другите две идват следващата седмица — при същия имейл, без ново записване.</p>
+
+    <div class="cards">
+      <article class="card" data-key="metaroditel">
+        <p class="kicker">Среща първа</p>
+        <h3>Метародител</h3>
+        <p class="forwho">За родители на ученици. Най-ключовият учител сте Вие — детето отразява това, което вижда.</p>
+        <p class="quote">„Не учим хората да са родители, а показваме как един нов тип комуникация може да се приложи много практично и дори приятно за ситуации, в които тотално не успяваме да комуникираме с тийнейджъри.“</p>
+        <div class="pills"><span class="pill pill--dated">Днес · 16:30 – 18:00</span><span class="pill pill--rel"></span></div>
+        <button type="button" class="card-btn" data-pick="metaroditel">Запазете достъпа</button>
+      </article>
+
+      <article class="card" data-key="i4">
+        <p class="kicker">Среща втора</p>
+        <h3>И4 · ИИ с игри и изкуство</h3>
+        <p class="forwho">За родители и тийнейджъри заедно. Какво е изкуственият интелект, когато влезе в дома не като екран, а като игра и изкуство.</p>
+        <p class="quote">„Живо излъчване от Беглика, където водим И4 — изкуствен интелект с игри и изкуство.“</p>
+        <div class="pills"><span class="pill pill--dated">Утре · 11:00 – 12:00</span><span class="pill pill--rel"></span></div>
+        <button type="button" class="card-btn" data-pick="i4">Запазете достъпа</button>
+      </article>
+
+      <article class="card" data-key="metateen">
+        <p class="kicker">Среща трета</p>
+        <h3>Метатийн</h3>
+        <p class="forwho">За тийнейджъри от 14 до 18 и родителите им — заедно, в едно поле, не поотделно.</p>
+        <p class="quote">„Моето любимо, защото с тийнейджърите сме на един акъл. Почваме да играем — Диксит листчета — и те виждат, че ученето може да е бати кефа.“</p>
+        <div class="pills"><span class="pill pill--dated">Събота · 15:30 – 16:30</span><span class="pill pill--rel"></span></div>
+        <button type="button" class="card-btn" data-pick="metateen">Запазете достъпа</button>
+      </article>
+
+      <article class="card" data-key="nz-ep3">
+        <p class="kicker">Среща четвърта</p>
+        <h3>Нова Жена · епизод 3</h3>
+        <p class="forwho">За възрастни от 28 до 55 — за жената сама по себе си, извън ролята на родител.</p>
+        <p class="quote">„Епизод три на сериала Нова жена, в който ще си говорим за спокойствие при истерични проблеми.“</p>
+        <div class="pills"><span class="pill">Следващата седмица</span><span class="pill pill--rel"></span></div>
+        <button type="button" class="card-btn" data-pick="nz-ep3">Запазете достъпа</button>
+      </article>
+
+      <article class="card" data-key="mt-ep4">
+        <p class="kicker">Среща пета</p>
+        <h3>Метатийн и Метародител · епизод 4</h3>
+        <p class="forwho">За родител и дете в едно поле. Изрично и за хората, които се дразнят от технологиите.</p>
+        <p class="quote">„Ще отключим шестте умения за изкуствен интелект, които са най-съществени, за да навлезем. Особено полезно е за хора, които мразят технологиите, изнервят ги.“</p>
+        <div class="pills"><span class="pill">Следващата седмица</span><span class="pill pill--rel"></span></div>
+        <button type="button" class="card-btn" data-pick="mt-ep4">Запазете достъпа</button>
+      </article>
+    </div>
+  </section>
+
+  <!-- ═══ 4 · ФОРМАТА ═══ -->
+  <section class="section" id="beglika-form-section">
+    <p class="kicker">Един имейл, пет срещи</p>
+    <h2 class="h2">Запазете достъпа си</h2>
+
+    <div class="form-box">
+      <form id="beglika-form" novalidate>
+        <p class="from-line">Тръгвате от: <strong id="focus-label">Метародител · днес · 16:30</strong></p>
+
+        <div class="field">
+          <label class="lbl" for="f-firstName">Име</label>
+          <input id="f-firstName" type="text" name="firstName" placeholder="Вашето име" autocomplete="given-name" required>
+          <p class="err" id="err-firstName">Моля, въведете име.</p>
+        </div>
+
+        <div class="field">
+          <label class="lbl" for="f-email">Имейл</label>
+          <input id="f-email" type="email" name="email" placeholder="example@email.com" autocomplete="email" inputmode="email" required>
+          <p class="err" id="err-email">Моля, въведете валиден имейл.</p>
+        </div>
+
+        <div class="field">
+          <label class="lbl" for="f-phone">Телефон <span class="opt">· по желание</span></label>
+          <input id="f-phone" type="tel" name="phone" placeholder="0888 123 456" autocomplete="tel" inputmode="tel">
+          <p class="err" id="err-phone">Телефонът изглежда непълен. Оставете го празен, ако предпочитате.</p>
+        </div>
+
+        <label class="consent">
+          <input type="checkbox" name="consent" id="f-consent">
+          <span>Съгласявам се данните ми да бъдат използвани за връзка относно тези събития и свързани материали.</span>
+        </label>
+        <p class="err" id="err-consent">Необходимо е съгласие, за да продължим.</p>
+
+        <button type="submit" class="submit" id="submit-btn">Искам достъп до петте</button>
+        <p class="status" id="form-status"></p>
+      </form>
+    </div>
+  </section>
+
+  <!-- ═══ 5 · ЗАЩО ТОЧНО ТАКА · негови думи ═══ -->
+  <section class="section">
+    <p class="kicker">Защо точно така</p>
+    <h2 class="h2">Спокойствието не се учи, когато вече е късно</h2>
+    <p class="sub">Моментът, в който нещо вече ни дразни или дори ни побърква, е късен момент. Затова упражнението е другаде.</p>
+
+    <blockquote class="bq">„Начинът е в моменти, в които нищо не се случва — на някоя опашка сме, в задръстване, или някой ни говори нещо, дето не ни вълнува. Точно тогава да изберем да присъстваме и дори да не ни кефи, просто да сме тук и сега. Това ни разширява като хора, за да може после, като дойде някой, който вика или имаме истерия някаква, ние да се сетим да сме тук и сега.“<span class="note">„Защото спокойствието откъде идва? С покой сте вие.“</span></blockquote>
+
+    <blockquote class="bq">„Запомняме, когато нещо е необикновено, различно и интересно. Концентрирани сме, когато това е свързано с нещо, което обичаме, което ни радва, което ни е кеф. Възприемаме, когато ни е интересно.“<span class="note">Затова срещите вървят през игра и изкуство, а не през напрягане.</span></blockquote>
+  </section>
+
+  <!-- ═══ 6 · ЗА КОГО Е ═══ -->
+  <section class="section">
+    <p class="kicker">За кого е</p>
+    <h2 class="h2">Три различни маси, една покана</h2>
+
+    <ul class="who">
+      <li>
+        <span class="t">За родители на ученици</span>
+        <p>Най-ключовият учител на детето не е училището, не са частните уроци и не са социалните мрежи. Най-ключовият учител сте Вие. Детето отразява това, което вижда всеки ден.</p>
+        <p class="dim">„Виждам, че много родители са концентрирани в какво ли не друго, но не и в себе си. Е, това е определението на стрес.“</p>
+      </li>
+      <li>
+        <span class="t">За родители и тийнейджъри заедно</span>
+        <p>„И при тях същият казус: мразя математиката. Ами значи точно математиката е най-ключовото, което да ни разшири. И начинът това да се случва е не когато дойде контролното и е тегавия, ами когато нещата са окей.“</p>
+      </li>
+      <li>
+        <span class="t">За тези, които се дразнят от технологиите</span>
+        <p>„Особено полезно е за хора, които мразят технологиите, изнервят ги. Значи те са точно за това.“</p>
+      </li>
+    </ul>
+  </section>
+
+  <!-- ═══ 7 · КОЙ СТОИ ЗАД ТОВА ═══ -->
+  <section class="section">
+    <p class="kicker">Кой стои зад това</p>
+    <h2 class="h2">Димитър Караманчев</h2>
+
+    <div class="bio">
+      <p class="kicker">Основател на Metareading</p>
+      <p>Димитър Караманчев — до 15-годишна възраст не е прочел нито една книга и не е можел да дели дроби. Днес е обучил над 2500 души да учат и възприемат средно 4 пъти по-добре.</p>
+      <p>Неговият метод се основава на откритията на проф. д-р Георги Лозанов — създателя на сугестопедията, чиито изследвания показват, че резервните капацитети на мозъка се отключват не чрез напрягане, а чрез игра, изкуство и правилната личност за дейността.</p>
+    </div>
+  </section>
+
+  <!-- ═══ 8 · ЧЕСТО ЗАДАВАНИ ВЪПРОСИ ═══ -->
+  <section class="section">
+    <p class="kicker">Често задавани въпроси</p>
+    <h2 class="h2">Преди да оставите имейла си</h2>
+
+    <div class="faq">
+      <details>
+        <summary>Плаща ли се?</summary>
+        <p>Не. Оставяте имейла си веднъж и достъпът важи за петте срещи.</p>
+      </details>
+      <details>
+        <summary>Как ще получа достъпа?</summary>
+        <p>С имейл преди всяко излъчване. В него е линкът за гледане — отваряте го от телефон или от компютър.</p>
+      </details>
+      <details>
+        <summary>Трябва ли да съм на живо?</summary>
+        <p>Живото е по-хубаво, защото задавате въпроси и участвате в игрите. Живото остава на запис, така че гледате и по-късно.</p>
+      </details>
+      <details>
+        <summary>Трябва ли детето ми да е с мен?</summary>
+        <p>Зависи от срещата. Метародител е за Вас самите. Метатийн и епизод 4 са за родител и дете заедно, в едно поле. И4 се гледа от двамата.</p>
+      </details>
+      <details>
+        <summary>Нужна ли е подготовка?</summary>
+        <p>Не е нужно предходно знание. Всяка среща е практична и започва от там, където сте.</p>
+      </details>
+      <details>
+        <summary>А ако технологиите ме дразнят?</summary>
+        <p>„Особено полезно е за хора, които мразят технологиите, изнервят ги. Значи те са точно за това.“ Шестте умения се отключват през игра и изкуство, не през настройки.</p>
+      </details>
+    </div>
+  </section>
+
+  <!-- ═══ 9 · ПОСЛЕДНА КРАЧКА ═══ -->
+  <section class="section center">
+    <p class="kicker">Последна крачка</p>
+    <h2 class="h2">Оставяте имейла си веднъж</h2>
+    <p class="sub">Достъпът важи за петте срещи. Линкът за гледане пристига при Вас преди всяко излъчване, а живото остава на запис.</p>
+    <p><button type="button" class="cta" data-scroll>Запазете достъпа си</button></p>
+  </section>
+
+  <!-- ═══ 10 · ПОДСЛОН СЛЕД ЕФИРА ═══ -->
+  <footer>
+    <p>Страницата остава жива и след днешното излъчване — тя не е за едно събитие, а за петте.</p>
+    <p>Живото остава на запис. Достъпът пътува по имейла, който сте оставили веднъж.</p>
+  </footer>
+
+</main>
+
+<script>
+/* ══ Беглика · статичен порт на page.tsx · MET-249 ══ */
+
+/* Записът пътува към живия seam на Vercel (metalandia.com) — GitHub Pages
+   няма runtime. eventKey `beglika` → lib/registration-events.ts. */
+var API_BASE = "https://metalandia.com/api/register";
+
+/* ⚠️ КЛЕТКА 2 · „Минута от Беглика" — видео-слотът (ADR-0036 · линкът е
+   клетка, не ветка). Приема пълен YouTube адрес ИЛИ голо видео-ID.
+   Празна ("") → секцията изобщо не се показва. Клиповете са вертикални
+   (1080×1920) → рамката е портретна и не се пипа при попълване. */
+var BEGLIKA_VIDEO_URL = "";
+
+var EVENTS = [
+  { key: "metaroditel", name: "Метародител", when: "днес · 16:30",
+    start: "2026-08-13T16:30:00+03:00", end: "2026-08-13T18:00:00+03:00" },
+  { key: "i4", name: "И4 · ИИ с игри и изкуство", when: "утре · 11:00",
+    start: "2026-08-14T11:00:00+03:00", end: "2026-08-14T12:00:00+03:00" },
+  { key: "metateen", name: "Метатийн", when: "събота · 15:30",
+    start: "2026-08-15T15:30:00+03:00", end: "2026-08-15T16:30:00+03:00" },
+  { key: "nz-ep3", name: "Нова Жена · епизод 3", when: "следващата седмица", start: "", end: "" },
+  { key: "mt-ep4", name: "Метатийн и Метародител · епизод 4", when: "следващата седмица", start: "", end: "" }
+];
+
+function parseAt(value) {
+  if (!value) return null;
+  var t = Date.parse(value);
+  return isNaN(t) ? null : new Date(t);
+}
+
+function relLabel(ms) {
+  var minutes = Math.round(ms / 60000);
+  if (minutes < 1) return "започва всеки момент";
+  if (minutes < 60) return "на живо след " + minutes + " " + (minutes === 1 ? "минута" : "минути");
+  var hours = Math.floor(minutes / 60);
+  var rest = minutes % 60;
+  if (hours < 24) return "на живо след " + hours + " " + (hours === 1 ? "час" : "часа") + (rest ? " и " + rest + " мин" : "");
+  var days = Math.round(hours / 24);
+  return "на живо след " + days + " " + (days === 1 ? "ден" : "дни");
+}
+
+function computeStates(now) {
+  var states = {};
+  var live = null, next = null, lastDated = null;
+  for (var i = 0; i < EVENTS.length; i++) {
+    var ev = EVENTS[i];
+    var start = parseAt(ev.start);
+    if (!start) { states[ev.key] = { phase: "soon", rel: "" }; continue; }
+    lastDated = ev;
+    var end = parseAt(ev.end) || new Date(start.getTime() + 90 * 60000);
+    if (now >= start && now <= end) {
+      states[ev.key] = { phase: "live", rel: "на живо сега" };
+      if (!live) live = ev;
+    } else if (now < start) {
+      states[ev.key] = { phase: next ? "upcoming" : "focus", rel: relLabel(start.getTime() - now.getTime()) };
+      if (!next) next = ev;
+    } else {
+      states[ev.key] = { phase: "past", rel: "остава на запис" };
+    }
+  }
+  var headline;
+  if (live) {
+    headline = "На живо сега: " + live.name;
+  } else if (next) {
+    var s = parseAt(next.start);
+    headline = "Следващо: " + next.name + " · " + next.when + " · " + relLabel(s.getTime() - now.getTime());
+  } else {
+    headline = "Живите излъчвания минаха · записите и следващите две идват при Вас";
+  }
+  return { states: states, defaultFocus: (live || next || lastDated || EVENTS[0]).key, headline: headline };
+}
+
+/* ── живото състояние на картите + заглавната лента ── */
+var pickedKey = null;
+var computed = null;
+
+function findEvent(key) {
+  for (var i = 0; i < EVENTS.length; i++) if (EVENTS[i].key === key) return EVENTS[i];
+  return EVENTS[0];
+}
+
+function render() {
+  computed = computeStates(new Date());
+  document.getElementById("headline").textContent = computed.headline;
+  var cards = document.querySelectorAll(".card[data-key]");
+  for (var i = 0; i < cards.length; i++) {
+    var card = cards[i];
+    var st = computed.states[card.getAttribute("data-key")];
+    card.classList.remove("card--live", "card--focus", "card--past");
+    if (st.phase === "live") card.classList.add("card--live");
+    else if (st.phase === "focus") card.classList.add("card--focus");
+    else if (st.phase === "past") card.classList.add("card--past");
+    var rel = card.querySelector(".pill--rel");
+    rel.textContent = st.rel;
+    rel.classList.toggle("on", !!st.rel);
+    rel.classList.toggle("live", st.phase === "live");
+  }
+  updateFocusLabel();
+}
+
+function updateFocusLabel() {
+  var key = pickedKey || (computed ? computed.defaultFocus : EVENTS[0].key);
+  var ev = findEvent(key);
+  document.getElementById("focus-label").textContent = ev.name + " · " + ev.when;
+}
+
+function focusKeyNow() {
+  return pickedKey || (computed ? computed.defaultFocus : EVENTS[0].key);
+}
+
+function scrollToForm() {
+  document.getElementById("beglika-form-section").scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+/* ── бутоните ── */
+document.querySelectorAll("[data-scroll]").forEach(function (btn) {
+  btn.addEventListener("click", scrollToForm);
+});
+document.querySelectorAll("[data-pick]").forEach(function (btn) {
+  btn.addEventListener("click", function () {
+    pickedKey = btn.getAttribute("data-pick");
+    updateFocusLabel();
+    scrollToForm();
+    window.setTimeout(function () { document.getElementById("f-firstName").focus(); }, 420);
+  });
+});
+
+/* ── видео-клетката (празна → секцията остава скрита) ── */
+function youtubeId(raw) {
+  var t = (raw || "").trim();
+  if (!t) return null;
+  var m = t.match(/(?:youtu\.be\/|shorts\/|embed\/|watch\?v=)([\w-]{6,})/);
+  if (m) return m[1];
+  return /^[\w-]{6,}$/.test(t) ? t : null;
+}
+(function () {
+  var id = youtubeId(BEGLIKA_VIDEO_URL);
+  if (!id) return;
+  var iframe = document.createElement("iframe");
+  iframe.src = "https://www.youtube-nocookie.com/embed/" + id;
+  iframe.title = "Минута от Беглика";
+  iframe.setAttribute("allow", "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture");
+  iframe.setAttribute("allowfullscreen", "");
+  iframe.loading = "lazy";
+  document.getElementById("video-frame").appendChild(iframe);
+  document.getElementById("video-section").classList.add("on");
+})();
+
+/* ── формата ── */
+var busy = false;
+
+function setErr(name, on) {
+  document.getElementById("err-" + name).classList.toggle("on", on);
+}
+function setStatus(text, isError) {
+  var el = document.getElementById("form-status");
+  el.textContent = text || "";
+  el.classList.toggle("on", !!text);
+  el.classList.toggle("error", !!isError);
+}
+
+document.getElementById("beglika-form").addEventListener("submit", function (e) {
+  e.preventDefault();
+  if (busy) return;
+
+  var firstName = document.getElementById("f-firstName").value.trim();
+  var email = document.getElementById("f-email").value.trim();
+  var phone = document.getElementById("f-phone").value.replace(/[^\d+]/g, "");
+  var consent = document.getElementById("f-consent").checked;
+
+  var bad = false;
+  var badName = firstName.length < 2; setErr("firstName", badName); bad = bad || badName;
+  var badEmail = !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email); setErr("email", badEmail); bad = bad || badEmail;
+  var badPhone = !!(phone && phone.replace(/\D/g, "").length < 8); setErr("phone", badPhone); bad = bad || badPhone;
+  var badConsent = !consent; setErr("consent", badConsent); bad = bad || badConsent;
+
+  if (bad) {
+    setStatus("Моля, коригирайте полетата и опитайте отново.", true);
+    return;
+  }
+
+  busy = true;
+  document.getElementById("submit-btn").disabled = true;
+  setStatus("Изпращаме данните...", false);
+
+  fetch(API_BASE, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({
+      eventKey: "beglika",
+      firstName: firstName,
+      lastName: "",
+      email: email,
+      phone: phone,
+      consent: true,
+      utm: { source: "beglika-landing", pick: focusKeyNow() }
+    })
+  }).then(function (res) {
+    return res.json().catch(function () { return null; }).then(function (body) {
+      if (res.ok && body && body.ok) {
+        window.location.href = "./thank-you/";
+        return;
+      }
+      /* Грешка/503 → топло съобщение · формата НЕ губи въведеното */
+      setStatus("Записването се подготвя — опитайте отново след няколко минути.", true);
+      busy = false;
+      document.getElementById("submit-btn").disabled = false;
+    });
+  }).catch(function () {
+    setStatus("Записването се подготвя — опитайте отново след няколко минути.", true);
+    busy = false;
+    document.getElementById("submit-btn").disabled = false;
+  });
+});
+
+/* часовникът — както в Next-версията, на 30 секунди */
+render();
+window.setInterval(render, 30000);
+</script>
+</body>
+</html>

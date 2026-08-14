@@ -154,7 +154,7 @@ footer p+p{margin-top:8px}
         <h3>Метародител</h3>
         <p class="forwho">За родители на ученици. Най-ключовият учител сте Вие — детето отразява това, което вижда.</p>
         <p class="quote">„Не учим хората да са родители, а показваме как един нов тип комуникация може да се приложи много практично и дори приятно за ситуации, в които тотално не успяваме да комуникираме с тийнейджъри.“</p>
-        <div class="pills"><span class="pill pill--dated">Вчера · 16:30 – 18:00</span><span class="pill pill--rel"></span></div>
+        <div class="pills"><span class="pill pill--dated">Четвъртък · 13 август · 16:30 – 18:00</span><span class="pill pill--rel"></span></div>
         <button type="button" class="card-btn" data-pick="metaroditel">Запазете достъпа</button>
       </article>
 
@@ -163,7 +163,7 @@ footer p+p{margin-top:8px}
         <h3>И4 · ИИ с игри и изкуство</h3>
         <p class="forwho">За родители и тийнейджъри заедно. Какво е изкуственият интелект, когато влезе в дома не като екран, а като игра и изкуство.</p>
         <p class="quote">„Живо излъчване от Беглика, където водим И4 — изкуствен интелект с игри и изкуство.“</p>
-        <div class="pills"><span class="pill pill--dated">Днес · 11:00 – 12:00</span><span class="pill pill--rel"></span></div>
+        <div class="pills"><span class="pill pill--dated">Петък · 14 август · 11:00 – 12:00</span><span class="pill pill--rel"></span></div>
         <button type="button" class="card-btn" data-pick="i4">Запазете достъпа</button>
       </article>
 
@@ -172,7 +172,7 @@ footer p+p{margin-top:8px}
         <h3>Метатийн</h3>
         <p class="forwho">За тийнейджъри от 14 до 18 и родителите им — заедно, в едно поле, не поотделно.</p>
         <p class="quote">„Моето любимо, защото с тийнейджърите сме на един акъл. Почваме да играем — Диксит листчета — и те виждат, че ученето може да е бати кефа.“</p>
-        <div class="pills"><span class="pill pill--dated">Събота · 15:30 – 16:30</span><span class="pill pill--rel"></span></div>
+        <div class="pills"><span class="pill pill--dated">Днес · 15:30 – 16:30</span><span class="pill pill--rel"></span></div>
         <button type="button" class="card-btn" data-pick="metateen">Запазете достъпа</button>
       </article>
 
@@ -203,7 +203,7 @@ footer p+p{margin-top:8px}
 
     <div class="form-box">
       <form id="beglika-form" novalidate>
-        <p class="from-line">Тръгвате от: <strong id="focus-label">Метародител · днес · 16:30</strong></p>
+        <p class="from-line">Тръгвате от: <strong id="focus-label">Метатийн · 15 август · 15:30</strong></p>
 
         <div class="field">
           <label class="lbl" for="f-firstName">Име</label>
@@ -343,11 +343,11 @@ var API_BASE = "https://www.metalandia.com/api/register";
 var BEGLIKA_VIDEO_URL = "";
 
 var EVENTS = [
-  { key: "metaroditel", name: "Метародител", when: "днес · 16:30",
+  { key: "metaroditel", name: "Метародител", when: "13 август · 16:30",
     start: "2026-08-13T16:30:00+03:00", end: "2026-08-13T18:00:00+03:00" },
-  { key: "i4", name: "И4 · ИИ с игри и изкуство", when: "днес · 11:00",
+  { key: "i4", name: "И4 · ИИ с игри и изкуство", when: "14 август · 11:00",
     start: "2026-08-14T11:00:00+03:00", end: "2026-08-14T12:00:00+03:00" },
-  { key: "metateen", name: "Метатийн", when: "събота · 15:30",
+  { key: "metateen", name: "Метатийн", when: "15 август · 15:30",
     start: "2026-08-15T15:30:00+03:00", end: "2026-08-15T16:30:00+03:00" },
   { key: "nz-ep3", name: "Нова Жена · епизод 3", when: "следващата седмица", start: "", end: "" },
   { key: "mt-ep4", name: "Метатийн и Метародител · епизод 4", when: "следващата седмица", start: "", end: "" }
@@ -368,6 +368,34 @@ function relLabel(ms) {
   if (hours < 24) return "на живо след " + hours + " " + (hours === 1 ? "час" : "часа") + (rest ? " и " + rest + " мин" : "");
   var days = Math.round(hours / 24);
   return "на живо след " + days + " " + (days === 1 ? "ден" : "дни");
+}
+
+/* ── dated-пилове (ADR доер-дата-гнилоч-15-08) · БЕЗ Intl, БЕЗ „днес/утре"
+   закодирани в HTML — денят се смята от EVENTS.start/end при всеки render(). ── */
+var DAY_NAMES = ["Неделя", "Понеделник", "Вторник", "Сряда", "Четвъртък", "Петък", "Събота"];
+var MONTH_NAMES = ["януари", "февруари", "март", "април", "май", "юни", "юли", "август", "септември", "октомври", "ноември", "декември"];
+
+function wallTime(iso) {
+  var m = /T(\d{2}):(\d{2})/.exec(iso || "");
+  return m ? (m[1] + ":" + m[2]) : "";
+}
+
+function dayLabel(start, now) {
+  var startDay = new Date(start.getFullYear(), start.getMonth(), start.getDate());
+  var nowDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  var diffDays = Math.round((startDay.getTime() - nowDay.getTime()) / 86400000);
+  if (diffDays === 0) return "Днес";
+  if (diffDays === 1) return "Утре";
+  if (diffDays === -1) return "Вчера";
+  return DAY_NAMES[start.getDay()] + " · " + start.getDate() + " " + MONTH_NAMES[start.getMonth()];
+}
+
+function datedPillLabel(ev, now) {
+  var start = parseAt(ev.start);
+  if (!start) return null;
+  var startHM = wallTime(ev.start);
+  var endHM = wallTime(ev.end) || startHM;
+  return dayLabel(start, now) + " · " + startHM + " – " + endHM;
 }
 
 function computeStates(now) {
@@ -411,12 +439,14 @@ function findEvent(key) {
 }
 
 function render() {
-  computed = computeStates(new Date());
+  var now = new Date();
+  computed = computeStates(now);
   document.getElementById("headline").textContent = computed.headline;
   var cards = document.querySelectorAll(".card[data-key]");
   for (var i = 0; i < cards.length; i++) {
     var card = cards[i];
-    var st = computed.states[card.getAttribute("data-key")];
+    var key = card.getAttribute("data-key");
+    var st = computed.states[key];
     card.classList.remove("card--live", "card--focus", "card--past");
     if (st.phase === "live") card.classList.add("card--live");
     else if (st.phase === "focus") card.classList.add("card--focus");
@@ -425,6 +455,11 @@ function render() {
     rel.textContent = st.rel;
     rel.classList.toggle("on", !!st.rel);
     rel.classList.toggle("live", st.phase === "live");
+    var dated = card.querySelector(".pill--dated");
+    if (dated) {
+      var label = datedPillLabel(findEvent(key), now);
+      if (label) dated.textContent = label;
+    }
   }
   updateFocusLabel();
 }

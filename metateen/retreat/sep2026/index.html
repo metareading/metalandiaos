@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Осемте будечители · реален ролеви ритрийт · Банско, 2–6 септември 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap&subset=cyrillic" rel="stylesheet">
+<style>
+/* ═══ MOBILE-FIRST · базата е 390px · нагоре се разширява с min-width ═══ */
+*{margin:0;box-sizing:border-box}
+body{background:#0b1114;color:#e9e1d4;font-family:Inter,sans-serif;-webkit-font-smoothing:antialiased;line-height:1.6;overflow-x:hidden}
+.wrap{max-width:760px;margin:0 auto;padding:0 16px}
+img{max-width:100%;display:block}
+a{color:#f2c878}
+b,strong{color:#f4ecd8;font-weight:600}
+
+/* ── лента ── */
+#bar{position:sticky;top:0;z-index:50;background:rgba(11,17,20,.95);backdrop-filter:blur(8px);border-bottom:1px solid rgba(242,200,120,.25);padding:9px 16px}
+.barrow{max-width:760px;margin:0 auto;display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.barrow .live{display:none;font-size:.72rem;color:#bcd0c2;background:rgba(111,181,154,.14);border:1px solid rgba(111,181,154,.4);border-radius:20px;padding:3px 10px;white-space:nowrap}
+.barrow .when{font-family:'Cormorant Garamond',serif;font-weight:700;color:#f2c878;font-size:.92rem;white-space:nowrap}
+.barrow .go{margin-left:auto;background:linear-gradient(120deg,#ffe1a0,#e2a458);color:#2a1908;font-weight:600;padding:6px 13px;border-radius:20px;text-decoration:none;font-size:.8rem;white-space:nowrap}
+
+/* ── герой ── */
+.hero{position:relative;text-align:center;padding:0 0 22px;overflow:hidden}
+.hero .heroimg{position:relative;width:100%;aspect-ratio:4/3;overflow:hidden}
+.hero .heroimg img{width:100%;height:100%;object-fit:cover;object-position:center 45%;opacity:.8}
+.hero .heroimg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,17,20,.2) 0%,rgba(11,17,20,.55) 55%,#0b1114 100%)}
+.hero .ov{position:relative;margin-top:-86px;padding:0 16px;z-index:2}
+.kicker{letter-spacing:.2em;font-size:10.5px;text-transform:uppercase;color:#e2a458;font-weight:600}
+h1{font-family:'Cormorant Garamond',serif;font-size:1.95rem;line-height:1.12;margin:10px 0 4px;color:#f4ecd8;text-shadow:0 2px 14px #000}
+.h1sub{font-family:'Cormorant Garamond',serif;font-size:1.12rem;color:#f2c878;margin-bottom:10px}
+.lead{font-size:1rem;color:#cdbfa6;font-weight:300;max-width:600px;margin:0 auto}
+.lead b{color:#ffe1a0}
+.when-line{font-size:.92rem;color:#bcd0c2;margin-top:14px;line-height:1.7}
+.when-line b{color:#ffe1a0}
+.cta{display:inline-block;margin-top:18px;background:linear-gradient(120deg,#ffe1a0,#e2a458);color:#2a1908;font-weight:600;padding:13px 26px;border-radius:30px;text-decoration:none;box-shadow:0 10px 30px -10px rgba(226,164,88,.7);font-size:.95rem}
+
+/* ── глава ── */
+.chapter{text-align:center;margin:44px 0 8px}
+.chapter .scn{display:inline-block;letter-spacing:.15em;font-size:10.5px;text-transform:uppercase;font-weight:600;color:#E8C77E}
+.chapter h2{font-family:'Cormorant Garamond',serif;font-size:1.6rem;margin-top:4px;color:#f4ecd8}
+.chapter p{color:#9fb0a0;font-size:.94rem;max-width:600px;margin:6px auto 0}
+
+.band{position:relative;width:100%;aspect-ratio:16/9;border-radius:18px;overflow:hidden;border:1px solid rgba(242,200,120,.28);margin:14px 0;box-shadow:0 12px 34px -14px rgba(0,0,0,.7)}
+.band img{width:100%;height:100%;object-fit:cover}
+.band::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,17,20,.05) 0%,rgba(11,17,20,.12) 55%,rgba(11,17,20,.72) 100%)}
+.band .clbl{position:absolute;left:16px;right:16px;bottom:12px;z-index:2}
+.band .clbl .ch{font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:#fff;line-height:1.1;text-shadow:0 2px 12px #000}
+
+/* ── списък „как го правим" ── */
+.how{list-style:none;padding:0;margin:10px 0}
+.how li{background:rgba(255,255,255,.035);border:1px solid rgba(242,200,120,.2);border-radius:14px;padding:13px 15px;margin:0 0 10px;color:#ddd2bc;font-size:.95rem}
+.how li b{color:#f4ecd8}
+.note{font-size:.9rem;color:#bcd0c2;background:rgba(111,181,154,.09);border-left:3px solid #6FB59A;border-radius:6px;padding:11px 14px;margin:12px 0}
+.note.warn{border-left-color:#E89556;background:rgba(232,149,86,.1);color:#e7c4a2}
+.note b{color:#fff}
+
+/* ── ментори ── */
+.mentors{display:grid;grid-template-columns:1fr;gap:14px;margin:12px 0}
+.mentor{background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));border:1px solid rgba(242,200,120,.22);border-radius:18px;overflow:hidden}
+.mentor .portrait{position:relative;width:100%;aspect-ratio:16/9;overflow:hidden}
+.mentor .portrait img{width:100%;height:100%;object-fit:cover;object-position:center 18%}
+.mentor .portrait::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 50%,rgba(13,20,23,.88) 100%)}
+.mentor .mlbl{position:absolute;left:13px;right:13px;bottom:9px;z-index:2}
+.mentor .mlbl .mname{font-family:'Cormorant Garamond',serif;font-size:1.32rem;color:#fff;line-height:1;text-shadow:0 2px 8px #000}
+.mentor .mbody{padding:12px 14px 14px}
+.mentor .mbody .mline{color:#f2c878;font-size:.92rem;margin-bottom:5px}
+.mentor .mbody .mweek{color:#9fb0a0;font-size:.83rem}
+
+/* ── програма ── */
+.day{background:rgba(255,255,255,.035);border:1px solid rgba(242,200,120,.22);border-radius:16px;margin:12px 0;overflow:hidden}
+.day .dhead{padding:13px 15px;border-bottom:1px dashed rgba(242,200,120,.2);background:rgba(242,200,120,.05)}
+.day .dhead .dd{font-family:'Cormorant Garamond',serif;font-size:1.25rem;color:#ffe1a0;line-height:1.2}
+.day .dhead .darc{font-size:.72rem;letter-spacing:.15em;text-transform:uppercase;color:#6FB59A;font-weight:600;margin-top:3px}
+.day .slots{list-style:none;padding:10px 15px 14px;margin:0}
+.day .slots li{display:flex;gap:11px;align-items:flex-start;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:.93rem;color:#ddd2bc}
+.day .slots li:last-child{border-bottom:0}
+.day .slots .t{font-family:'Cormorant Garamond',serif;font-weight:700;color:#f2c878;flex-shrink:0;min-width:52px;font-size:1rem}
+
+/* ── седмици ── */
+.weeks{list-style:none;padding:0;margin:10px 0}
+.weeks li{background:rgba(255,255,255,.03);border:1px solid rgba(242,200,120,.18);border-radius:13px;padding:12px 14px;margin:0 0 9px}
+.weeks .wno{font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:#f2c878}
+.weeks .wdate{font-size:.76rem;color:#6FB59A;letter-spacing:.06em;margin-left:7px}
+.weeks .wtxt{color:#ddd2bc;font-size:.92rem;margin-top:3px}
+
+details{margin:14px 0;border:1px solid rgba(242,200,120,.25);border-radius:14px;background:rgba(0,0,0,.22);overflow:hidden}
+summary{cursor:pointer;padding:14px 15px;font-family:'Cormorant Garamond',serif;font-size:1.12rem;color:#f2c878;list-style:none;display:flex;align-items:center;gap:8px}
+summary::-webkit-details-marker{display:none}
+summary .ar{color:#e2a458;transition:.2s}
+details[open] summary .ar{transform:rotate(90deg)}
+.dbody{padding:0 15px 16px;color:#ddd2bc;font-size:.93rem}
+.dbody p{margin:0 0 10px}
+.letter{font-size:.93rem;line-height:1.75;color:#ddd2bc}
+.letter .vs{color:#cdbfa6;font-style:italic}
+.letter .sig{font-family:'Cormorant Garamond',serif;color:#f2c878;font-size:1.1rem;margin-top:12px}
+.letter .fnote{font-size:.82rem;color:#8e9a91;border-top:1px dashed rgba(242,200,120,.18);padding-top:10px;margin-top:14px}
+
+/* ── логистика ── */
+.prep{list-style:none;padding:0;margin:8px 0}
+.prep li{display:flex;gap:12px;align-items:flex-start;background:rgba(255,255,255,.035);border:1px solid rgba(242,200,120,.2);border-radius:14px;padding:12px 14px;margin:0 0 9px}
+.prep .pi{font-size:1.35rem;line-height:1.2;flex-shrink:0}
+.prep .pt b{color:#f4ecd8;font-size:.97rem}
+.prep .pt span{display:block;color:#bcd0c2;font-size:.87rem;margin-top:2px}
+.prep .pt a{word-break:break-word}
+
+.finalcta{text-align:center;background:linear-gradient(135deg,rgba(232,199,126,.16),rgba(111,181,154,.12));border:1px solid #E8C77E;border-radius:16px;padding:22px 16px;margin:26px 0}
+.finalcta h3{font-family:'Cormorant Garamond',serif;font-size:1.5rem;color:#ffe1a0;margin-bottom:8px}
+.finalcta p{color:#ddd2bc;max-width:560px;margin:0 auto 6px;font-size:.95rem}
+.foot{text-align:center;color:#7d8a82;font-size:.8rem;padding:36px 16px 56px;border-top:1px solid rgba(255,255,255,.06);margin-top:30px;line-height:1.7}
+
+/* ═══ 560px и нагоре ═══ */
+@media(min-width:430px){
+  .barrow .live{display:inline}
+}
+@media(min-width:560px){
+  .hero .heroimg{aspect-ratio:16/9;max-height:340px}
+  .hero .ov{margin-top:-96px}
+  h1{font-size:2.3rem}
+  .h1sub{font-size:1.3rem}
+  .chapter h2{font-size:1.85rem}
+  .mentors{grid-template-columns:repeat(2,1fr)}
+  .mentor .portrait{aspect-ratio:1/1}
+  .day .slots .t{min-width:58px}
+  .cta{padding:13px 30px;font-size:1rem}
+}
+/* ═══ 860px и нагоре ═══ */
+@media(min-width:860px){
+  .mentors{grid-template-columns:repeat(4,1fr)}
+  .mentor .mbody .mweek{min-height:2.6em}
+}
+</style>
+</head>
+<body>
+
+<div id="bar"><div class="barrow">
+  <span class="live">● Реален ролеви ритрийт</span>
+  <span class="when">2–6 септември 2026 · Банско</span>
+  <a class="go" href="mailto:start@metareading.com?subject=%D0%9C%D0%B5%D1%82%D0%B0%D1%80%D0%B8%D1%82%D1%80%D0%B8%D0%B9%D1%82%20%D0%91%D0%B0%D0%BD%D1%81%D0%BA%D0%BE%20%C2%B7%202-6.09.2026">Пишете ни →</a>
+</div></div>
+
+<!-- ════ 1 · ГЕРОЙ ════ -->
+<div class="hero">
+  <div class="heroimg"><img src="../../../img/retreat-hero.jpg" alt="Река и върховете на Пирин над Банско"></div>
+  <div class="ov">
+    <p class="kicker">🎥 Продукция · МетаРитрийт</p>
+    <h1>Осемте будечители</h1>
+    <p class="h1sub">Реален ролеви ритрийт в Банско</p>
+    <p class="lead">🌟 Метаидея: <b>„Да живееш означава да се радваш."</b> — д-р Лозанов</p>
+    <p class="when-line">📅 <b>2–6 септември 2026</b> · сряда – неделя<br>🏡 Артамент Банско, ул. Пирин 125</p>
+    <a class="cta" href="mailto:start@metareading.com?subject=%D0%9C%D0%B5%D1%82%D0%B0%D1%80%D0%B8%D1%82%D1%80%D0%B8%D0%B9%D1%82%20%D0%91%D0%B0%D0%BD%D1%81%D0%BA%D0%BE%20%C2%B7%202-6.09.2026">Пишете ни за място →</a>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <div class="note">🧚‍♀️ <b>Предизвикателство:</b> Осъзнаването, че не се ли радвате, значи че не сте в правилната личност за дейността.</div>
+
+  <p style="color:#cdbfa6;margin:14px 0 0;font-size:1rem">🌸 Метаритрийтът е ролева игра в реалността, в която Вие сте актьор и помощник-сценарист във вълшебна продукция, който създаваме заедно! 🎥</p>
+
+  <!-- ════ 2 · КАК ГО ПРАВИМ ════ -->
+  <div class="chapter">
+    <div class="scn">🎭 Продукцията</div>
+    <h2>Как го правим</h2>
+  </div>
+
+  <ul class="how">
+    <li>Създаваме си <b>нова разЛичност</b>, избираме си име, мисия и умения, които да развиваме.</li>
+    <li>Избираме <b>един от 8 образа за ментор</b>, чрез които пишем, четем и заживяваме ролята си.</li>
+    <li>Всеки от нас отговаря да допише сценария на <b>една от 8 сцени</b> – металандци сме режисьори и продуценти, а Вие сте сътворците!</li>
+    <li>Имаме <b>3 репетиции</b> (2, 3 и 4-тия ден), а на 5-тия снимаме <b>епичен филм</b> 🎬</li>
+    <li>💃 Преживяваме, рисуваме, пеем, танцуваме, играем и се изразяваме с тялото си.</li>
+    <li>📖 Съществена част е <b>21-минутното самостоятелно творене</b> с това, което си взимаме от книга-сценария и как го прилагаме на практика върху личните учебници и книги – свободно, вдъхновено, с внимание.</li>
+    <li>🌿 Всичко е живо и с дълбок смисъл. Ако не бъркате, значи не играете правилно 😊 Когато се радвате, смеете и усмихвате – сте в правилната личност за играта.</li>
+  </ul>
+
+  <!-- ════ 3 · МЕНТОРИТЕ ════ -->
+  <div class="chapter">
+    <div class="scn">🧙 Актьори · ментори</div>
+    <h2>Осемте будечители</h2>
+    <p>Всеки избира своя ментор — образът, през който пише, чете и заживява ролята си. Всеки от тях води по една седмица от продължението.</p>
+  </div>
+
+  <div class="mentors">
+    <div class="mentor"><div class="portrait"><img src="../../../img/%D0%BB%D1%8E%D0%B1%D0%BA%D0%B0.jpg" alt="Любка"><div class="mlbl"><div class="mname">Любка</div></div></div>
+      <div class="mbody"><div class="mline">Грижата, която подкрепя невидимо.</div><div class="mweek">Седмица 1 · събужда се с цел</div></div></div>
+    <div class="mentor"><div class="portrait"><img src="../../../img/%D0%B5%D0%BA%D0%BE%D0%BF%D1%8A%D1%82%D0%B5%D1%87%D0%BA%D0%BE.jpg" alt="Екопътечко"><div class="mlbl"><div class="mname">Екопътечко</div></div></div>
+      <div class="mbody"><div class="mline">Свободата сами да изберете пътя.</div><div class="mweek">Седмица 2 · отвлечен от Его Илюзорков</div></div></div>
+    <div class="mentor"><div class="portrait"><img src="../../../img/%D0%BA%D1%83%D1%80%D0%B0%D0%B6%D0%BA%D1%83.jpg" alt="Куражку"><div class="mlbl"><div class="mname">Куражку</div></div></div>
+      <div class="mbody"><div class="mline">Увереността, която излъчва.</div><div class="mweek">Седмица 3 · разбира Любка и има опит със смелост</div></div></div>
+    <div class="mentor"><div class="portrait"><img src="../../../img/%D0%BE%D0%B1%D0%B5%D0%BC%D0%BA%D0%BE.jpg" alt="Обемко"><div class="mlbl"><div class="mname">Обемко</div></div></div>
+      <div class="mbody"><div class="mline">Повече за същото време, без умора.</div><div class="mweek">Седмица 4 · от пазач се превръща в приятел</div></div></div>
+    <div class="mentor"><div class="portrait"><img src="../../../img/%D1%85%D0%BE%D0%BB%D0%B0.jpg" alt="Хола"><div class="mlbl"><div class="mname">Хола</div></div></div>
+      <div class="mbody"><div class="mline">Всяка част носи цялото.</div><div class="mweek">Седмица 5 · дава концентрация, внимание и фокус</div></div></div>
+    <div class="mentor"><div class="portrait"><img src="../../../img/%D1%84%D0%B8%D0%B1%D0%BE%D0%BD%D0%B0%D1%87%D0%BA%D0%BE.jpg" alt="Фибоначко"><div class="mlbl"><div class="mname">Фибоначко</div></div></div>
+      <div class="mbody"><div class="mline">Ритъм и изненада в златна мяра.</div><div class="mweek">Седмица 6 · балансира източниците, инструментите и игрите</div></div></div>
+    <div class="mentor"><div class="portrait"><img src="../../../img/%D1%82%D0%B2%D0%BE%D1%80%D0%B5%D1%8F.jpg" alt="Творея"><div class="mlbl"><div class="mname">Творея</div></div></div>
+      <div class="mbody"><div class="mline">Красотата като тих учител.</div><div class="mweek">Седмица 7 · включва се в кулминацията</div></div></div>
+    <div class="mentor"><div class="portrait"><img src="../../../img/%D0%B4%D0%BE%D0%B2%D0%B5%D1%80%D0%BA%D0%B0.jpg" alt="Доверка"><div class="mlbl"><div class="mname">Доверка</div></div></div>
+      <div class="mbody"><div class="mline">Присъствието, което държи всичко цяло.</div><div class="mweek">Седмица 8 · съм-Не-ние-то става съм-Да-ние</div></div></div>
+  </div>
+
+  <!-- ════ 4 · ПРОГРАМА ════ -->
+  <div class="chapter">
+    <div class="scn">📅 Пет дни</div>
+    <h2>Програма</h2>
+    <p>Пет дни в Банско — от отделянето до представлението. Три репетиции, един снимачен ден.</p>
+  </div>
+
+  <div class="band"><img src="../../../img/retreat-band.jpg" alt="Залез над планината край Банско">
+    <div class="clbl"><div class="ch">2–6 септември 2026 · Банско</div></div></div>
+
+  <div class="day">
+    <div class="dhead"><div class="dd">🌿 2 септември (сряда)</div><div class="darc">Ден I · Отделяне</div></div>
+    <ul class="slots">
+      <li><span class="t">11:00</span><span>🏡 Настаняване на ул. Пирин 125, Petroff Apartments &amp; Bake Point</span></li>
+      <li><span class="t">13:00</span><span>📖 Сугестопедия и специална програма за свръхсън, свръххрана и просто присъствие · 💤 Приказка-действие за Спинкачу</span></li>
+      <li><span class="t">14:00</span><span>👦 Метатийн: РазЛичност, мета, фоточетене и концерт</span></li>
+      <li><span class="t">18:00</span><span>🔮 Откриваща вечеря</span></li>
+      <li><span class="t">19:00</span><span>👩‍🦰 Метачетене: РазЛичност, мета, фоточетене и концерт</span></li>
+    </ul>
+  </div>
+
+  <div class="day">
+    <div class="dhead"><div class="dd">🏞️ 3 септември (четвъртък)</div><div class="darc">Ден II · Потапяне</div></div>
+    <ul class="slots">
+      <li><span class="t">08:00</span><span>🏔️ Преходът на Творея „Присъствие, Писане и Приказване": от Стара котва до Байкушева мура</span></li>
+      <li><span class="t">12:00</span><span>🥗 Обяд</span></li>
+      <li><span class="t">13:00</span><span>👦 Метатийн: ЧудоВище, въпроси и скоростно четене</span></li>
+      <li><span class="t">17:00</span><span>🌅🍽️ Вечеря и <b>първа репетиция</b></span></li>
+      <li><span class="t">18:00</span><span>👩‍🦰 Метачетене: ЧудоВище, въпроси и скоростно четене</span></li>
+    </ul>
+  </div>
+
+  <div class="day">
+    <div class="dhead"><div class="dd">🎾 4 септември (петък)</div><div class="darc">Ден III · Посвещение</div></div>
+    <ul class="slots">
+      <li><span class="t">10:00</span><span>🎾 Тенис с Топко Машинков за не/напреднали в Hot Springs, с. Баня</span></li>
+      <li><span class="t">12:00</span><span>🥗 Обяд</span></li>
+      <li><span class="t">13:00</span><span>👦 Метатийн: Ментор, мисловни карти и памет</span></li>
+      <li><span class="t">17:00</span><span>🌅🍽️ Вечеря и <b>втора репетиция</b></span></li>
+      <li><span class="t">18:00</span><span>👩‍🦰 Метачетене: Ментор, мисловни карти и памет</span></li>
+    </ul>
+  </div>
+
+  <div class="day">
+    <div class="dhead"><div class="dd">🚵‍♀️ 5 септември (събота)</div><div class="darc">Ден IV · Завръщане</div></div>
+    <ul class="slots">
+      <li><span class="t">08:00</span><span>🏊‍♀️ Плуване и джакузи в Alfa Spa, Добринище</span></li>
+      <li><span class="t">12:00</span><span>🥗 Обяд</span></li>
+      <li><span class="t">13:00</span><span>👦 Метатийн: Изпитание, СъкроВище, Mixit и историзарчета</span></li>
+      <li><span class="t">17:00</span><span>🌅🍽️ Вечеря и <b>генерална репетиция</b></span></li>
+      <li><span class="t">18:00</span><span>👩‍🦰 Метачетене: Изпитание, СъкроВище, Mixit и историзарчета</span></li>
+    </ul>
+  </div>
+
+  <div class="day">
+    <div class="dhead"><div class="dd">🏖️ 6 септември (неделя)</div><div class="darc">Ден V · Представление</div></div>
+    <ul class="slots">
+      <li><span class="t">08:00</span><span>🎥 Метачетене: заснемане на филм с 8 сцени</span></li>
+      <li><span class="t">12:00</span><span>🥗 Обяд</span></li>
+      <li><span class="t">13:00</span><span>🎥 Метатийн: заснемане на филм с 8 сцени</span></li>
+      <li><span class="t">17:00</span><span>🎊 Празненство с игри и заснемане на кадри зад кулисите</span></li>
+    </ul>
+  </div>
+
+  <!-- ════ 5 · ПРОДЪЛЖЕНИЕТО ════ -->
+  <div class="chapter">
+    <div class="scn">🚀 Правене без правене</div>
+    <h2>Продължението · десет седмици</h2>
+    <p>Ритрийтът не свършва на 6 септември. Оттам нататък тръгва планът за действие — по един будечител на седмица, до 15 ноември.</p>
+  </div>
+
+  <div class="note">🍃 <b>Меню:</b> 1 метаигра на ден, дори да е за 1 мм. <i>(връзка към Внимавник — скоро)</i></div>
+
+  <ul class="weeks">
+    <li><span class="wno">Седмица 0</span><span class="wdate">07.09 – 13.09</span>
+      <div class="wtxt"><b>Метатрон</b> — присъствие, приемане и правене</div></li>
+    <li><span class="wno">Седмица 1</span><span class="wdate">14.09 – 20.09</span>
+      <div class="wtxt"><b>Любка</b> се събужда с цел</div></li>
+    <li><span class="wno">Седмица 2</span><span class="wdate">21.09 – 27.09</span>
+      <div class="wtxt"><b>Екопътечко</b> е отвлечен от Его Илюзорков</div></li>
+    <li><span class="wno">Седмица 3</span><span class="wdate">28.09 – 04.10</span>
+      <div class="wtxt"><b>Куражку</b> разбира Любка и има опит със смелост</div></li>
+    <li><span class="wno">Седмица 4</span><span class="wdate">05.10 – 11.10</span>
+      <div class="wtxt"><b>Обемко</b> от пазач се превръща в приятел</div></li>
+    <li><span class="wno">Седмица 5</span><span class="wdate">12.10 – 18.10</span>
+      <div class="wtxt"><b>Хола</b> дава концентрация, внимание и фокус</div></li>
+    <li><span class="wno">Седмица 6</span><span class="wdate">19.10 – 25.10</span>
+      <div class="wtxt"><b>Фибоначко</b> балансира безбройните източници, инструменти и игри</div></li>
+    <li><span class="wno">Седмица 7</span><span class="wdate">26.10 – 01.11</span>
+      <div class="wtxt"><b>Творея</b> се включва в кулминацията с красота, вдъхновение и чародейство</div></li>
+    <li><span class="wno">Седмица 8</span><span class="wdate">02.11 – 08.11</span>
+      <div class="wtxt"><b>Доверка</b> преобразява съм-Не-ние-то в съм-Да-ние с осъзнаването, че всеки от нас е 100% Метатрон, когато се роди, и постепенно го забравя преди да избере или „да си отиде преди да си отиде", като забележи, че the biggest lie is the I. След като си припомним, че освен капка сме и море и можем да пребиваваме и в двете, можем да изберем каква е нашата метаформула. Например Митрандировата е 34% Любка + 21% Екопътечко + 13% Куражку + 8% Обемко (800%) + 5% Хола + 3% Фибоначко + 2% Творея.</div></li>
+    <li><span class="wno">Седмица 9</span><span class="wdate">09.11 – 15.11</span>
+      <div class="wtxt"><b>Метатрон</b> · Писмо 2</div></li>
+  </ul>
+
+  <details>
+    <summary><span class="ar">▸</span> 📜 Седмица 0 · Писмо 1 на Метатрон</summary>
+    <div class="dbody letter">
+      <p>🌀 „Добре е да започнем завръщането от Пътешествие, като си припомним началото.</p>
+      <p>В послеписа на писмото има връзка, която припомня един от най-великите филми, правени някога*, който вече е класика** и който дава толкова многократно разЛична перспектива за света, че осъзнат и приложен в ежедневието позволява сами да създаваме светове:</p>
+      <p>▶️ <a href="https://www.youtube.com/watch?v=8AG4rlGkCRU" target="_blank" rel="noopener">youtube.com/watch?v=8AG4rlGkCRU</a></p>
+      <p class="vs">било то такива с BMW,<br>футбол, баскетче,<br>или 6-тици с векторче<br>чрез игри с ускефче.<br>Каквото и да е,<br>най-ключовото е<br>кой сме<br>в момента на действие.</p>
+      <p>🎭 Добре е да наблюдаваме доколко като актьори, помощник-сценаристи, оператори, режисьори или продуценти на продукцията съумяваме да въплъщаваме всички 8 будечители едновременно… и най-вече в кои точно моменти най-много не го правим.</p>
+      <p class="vs">Виждаме най-добре това<br>чрез околната си среда<br>и своите отражениА.<br>Усещаме най-добре това,<br>докато правим действия.</p>
+      <p>🗝️ За Съкровището, което най-много искаме, е добре да се изправим пред чудоВището, което най-много неискаме. Тук ключов ментор е <b>Куражку</b>.</p>
+      <p>Добре е Митрандир и елфите на Металандия да отгледат едно „Метаменю", от което актьорите да избират дневната си репетиция.</p>
+      <p>Добре е да:<br>🔹 се концентрираме в себе си<br>🔹 да отглеждаме вниманието си<br>🔹 да се фокусираме в Любкова подкрепа на другите актьори и Екопътечков подход на свободна и спонтанна комуникация в трупата.</p>
+      <p class="vs">Защото любов е да осъзнаваме себе си в другите.<br>The biggest lie<br>is the I.<br>След като знаем кой/коя сме.<br>Преди да се потопим,<br>е добре да си припомним,<br>че…</p>
+      <p>Многото информация е една от най-добрите възможности за припомняне, че да четем с металичност значи да четем с мощ и че не четем ли с кеф, вероятно в този момент не знаем кой сме и накъде отиваме. И тогава е добре да сме благодарни. И че това вероятно е сигнал, че имаме достатъчно информация и е добре да преминем към действие.</p>
+      <p>Например:<br>🎧 да метаслушаме Мономита на Матрицата (1.5 метаминути)<br>✍️ да го метакстнем (2мм)<br>💭 да формулираме 3 мисловни проби по 3-те последни етапа (3мм)<br>📋 да си направим план за действие с например 4 стъпки и 4 подстъпки под формата на<br>🍃 20 листчета (8мм)<br>🗺️ мисловна карта (21мм) или<br>📖 приказна история (34мм)</p>
+      <p class="vs">Всичко е избор.<br>Това е и проблемът,<br>в основата на Матрицата.</p>
+      <p>⚡ Силно чудоВище, силна продукция.</p>
+      <p class="vs">Тези от Вас, които днес<br>избират да се изправят<br>пред Времетрон и дори<br>само да прочетат това<br>послание дотук, вече<br>отглеждат вниманието си.<br>Времетрицата е избор.<br>Ускефът също.</p>
+      <p>🌟 Да сме будни е да поемаме отговорност за света, който създаваме. Какъвто и да е. С будечителите или не.</p>
+      <p>Благодаря Ви за играта. Виждам, че преживявате пълния спектър на светлините. Точно затова са ни тук душите.</p>
+      <p>✨ Приятно и присъствено пътешествие.</p>
+      <p class="sig">Метатрон***"</p>
+      <div class="fnote">
+        Колко интересно, че никой от метатийновете не е гледал „Матрицата", а например в Художествената академия има професор по перспектива, който води 6 месеца курс само с кадри от този филм…<br><br>
+        * както казва Великият Вълшебник, едно произведение е класика, ако е оцеляло на времето, което по определение… е поне едно поколение… или след поне 25 години Слънцето обиколили, хората още да го помнили.<br><br>
+        ** Пфф, лесно, пич.
+      </div>
+    </div>
+  </details>
+
+  <div class="note">🎪 <b>Постпродукция:</b> Годишен фестивал на Металандия. · 🎬 <b>Премиера:</b> предложения, идеи и препоръки — заедно.</div>
+
+  <!-- ════ 6 · CTA ════ -->
+  <div class="finalcta">
+    <h3>Пишете ни за вашето място</h3>
+    <p>Един участник вече е записан. Местата са малко — ритрийтът е трупа, не зала.</p>
+    <p>Отговаряме лично: с цената, свободните места и всичко около настаняването.</p>
+    <p style="margin-top:16px"><a class="cta" href="mailto:start@metareading.com?subject=%D0%9C%D0%B5%D1%82%D0%B0%D1%80%D0%B8%D1%82%D1%80%D0%B8%D0%B9%D1%82%20%D0%91%D0%B0%D0%BD%D1%81%D0%BA%D0%BE%20%C2%B7%202-6.09.2026">Пишете на start@metareading.com →</a></p>
+  </div>
+
+  <!-- ════ 7 · ЛОГИСТИКА ════ -->
+  <div class="chapter">
+    <div class="scn">🎒 За решилите</div>
+    <h2>Какво да носите</h2>
+  </div>
+
+  <ul class="prep">
+    <li><span class="pi">🥾</span><span class="pt"><b>Планинарски обувки</b><span>Има дневен преход до Байкушева мура за около час, в посока със спиране на кемпер паркинга на Шилигарник.</span></span></li>
+    <li><span class="pi">🩱</span><span class="pt"><b>Бански и кърпа</b><span>Alfa Spa с минерални извори, джакузи, басейн за плуване, сауна и парна баня.</span></span></li>
+    <li><span class="pi">🎾</span><span class="pt"><b>Тенис ракета</b><span>Ако имате. Може и да се наеме — при желаещи е предвидена игра в Hot Springs, с. Баня, заедно с метатреньор Топко Машинков.</span></span></li>
+    <li><span class="pi">📓</span><span class="pt"><b>Красив бележник/дневник</b><span>Плюс химикали и фулмастри.</span></span></li>
+    <li><span class="pi">💻</span><span class="pt"><b>Лаптоп/таблет и телефон</b><span>С инсталирани приложенията по-долу.</span></span></li>
+    <li><span class="pi">🎧</span><span class="pt"><b>Слушалки</b><span>За МетаСлушане — особено ключови!</span></span></li>
+    <li><span class="pi">👗</span><span class="pt"><b>Дрехи за сцена</b><span>Плюс нещо празнично, приказно и вдъхновяващо за снимки 📸</span></span></li>
+    <li><span class="pi">🌞</span><span class="pt"><b>Слънцезащитен крем, шапка, слънчеви очила</b><span>И за плуване.</span></span></li>
+    <li><span class="pi">🧘‍♀️</span><span class="pt"><b>Нещо меко за сядане на земя</b><span>За движенческите практики.</span></span></li>
+  </ul>
+
+  <div class="chapter">
+    <div class="scn">🧘 Преди да дойдете</div>
+    <h2>Какво да имате</h2>
+    <p>Седем инструмента и две декларации — свалени и работещи преди 2 септември.</p>
+  </div>
+
+  <ul class="prep">
+    <li><span class="pi">🔢</span><span class="pt"><b>Таблици на Шулте</b><span>Schulte Table — за iPhone и за Android.</span></span></li>
+    <li><span class="pi">🟧</span><span class="pt"><b>Storytel</b><span>Свалено и работещо приложение · <a href="https://www.storytel.com/bg" target="_blank" rel="noopener">storytel.com/bg</a></span></span></li>
+    <li><span class="pi">⚡</span><span class="pt"><b>Spreeder</b><span>Дигиталният треньор за скоростно четене с дълбоко разбиране — софтуер за скоростно четене на PDF-и и статии · <a href="https://www.spreeder.com" target="_blank" rel="noopener">spreeder.com</a></span></span></li>
+    <li><span class="pi">🚗</span><span class="pt"><b>Живко Шофьорков</b><span>Вашият изкуствен и удивително естествен съюзник в метаприключението · <a href="https://chatgpt.com/g/g-680a67d6d4f0819187da68152cd6a6d4-zhivko" target="_blank" rel="noopener">отворете Живко</a></span></span></li>
+    <li><span class="pi">🤖</span><span class="pt"><b>Claude</b><span>Вашият дигитален мета-асистент и входът към света на AI агентите в Металандия. Живко е специализиран за конкретни задачи — Claude е по-широкото поле, там заедно развиваме Героя ви като AI Brain: от 🧑‍💻 дигитален асистент, през 🤝 дигитален колега, до 🏰 цялостна система от дигитални служители. Инсталирайте на телефона и по възможност на лаптопа · <a href="https://claude.ai/download" target="_blank" rel="noopener">claude.ai/download</a><br><b>🎯 Първата стъпка:</b> отворете Claude и напишете: „Аз съм [вашето приказно име] и моята мета е [вашата мета]. Как можеш да ми помогнеш?"</span></span></li>
+    <li><span class="pi">🗳️</span><span class="pt"><b>Декларация (МетаЧетене)</b><span>За използване на снимки и видео · <a href="https://docs.google.com/forms/d/1F6tjHenUkhky74tnsODkd2hnmzSQodJ1Pxe3g9DYLvg/viewform" target="_blank" rel="noopener">попълнете тук</a></span></span></li>
+    <li><span class="pi">🗳️</span><span class="pt"><b>Декларация за детето (МетаТийн)</b><span>За използване на снимки и видео · <a href="https://docs.google.com/forms/d/e/1FAIpQLSdPjq6nopV4787j5loGBQU61K3y5KaXTKbzAm-vkJ5k3cX4tg/viewform" target="_blank" rel="noopener">попълнете тук</a></span></span></li>
+  </ul>
+
+  <div class="band" style="aspect-ratio:4/3;max-height:420px"><img src="../../../img/retreat-sun.png" alt="Слънце над Банско">
+    <div class="clbl"><div class="ch">Да живееш означава да се радваш.</div></div></div>
+
+  <div class="finalcta">
+    <h3>Елате заедно — родител и дете</h3>
+    <p>Вие сте актьор и помощник-сценарист. Продукцията се пише, докато я играем.</p>
+    <p style="margin-top:14px"><a class="cta" href="mailto:start@metareading.com?subject=%D0%9C%D0%B5%D1%82%D0%B0%D1%80%D0%B8%D1%82%D1%80%D0%B8%D0%B9%D1%82%20%D0%91%D0%B0%D0%BD%D1%81%D0%BA%D0%BE%20%C2%B7%202-6.09.2026">Запазете място →</a></p>
+  </div>
+
+</div>
+
+<div class="foot">
+  MetaReading · Металандия · спокойствие · радост · вдъхновение<br>
+  Тази страница е лична — споделяйте я само със спътниците си.
+</div>
+
+</body>
+</html>

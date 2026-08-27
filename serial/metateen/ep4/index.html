@@ -35,6 +35,11 @@ h1{font-family:'Cormorant Garamond',serif;font-size:2rem;line-height:1.1;margin:
 .when-line b{color:#ffe1a0}
 .cta{display:inline-block;margin-top:18px;background:linear-gradient(120deg,#ffe1a0,#e2a458);color:#2a1908;font-weight:600;padding:13px 28px;border-radius:30px;text-decoration:none;box-shadow:0 10px 30px -10px rgba(226,164,88,.7)}
 
+.band{position:relative;width:100%;aspect-ratio:16/9;border-radius:18px;overflow:hidden;border:1px solid rgba(242,200,120,.28);margin:22px 0 8px;box-shadow:0 12px 34px -14px rgba(0,0,0,.7)}
+.band img{width:100%;height:100%;object-fit:cover}
+.band::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,17,20,0) 0%,rgba(11,17,20,.10) 42%,rgba(11,17,20,.62) 76%,rgba(11,17,20,.9) 100%)}
+.band .clbl{position:absolute;left:16px;right:16px;bottom:12px;z-index:2}
+.band .clbl .ch{font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:#fff;line-height:1.1;text-shadow:0 2px 12px #000}
 .chapter{text-align:center;margin:40px 0 10px}
 .chapter h2{font-family:'Cormorant Garamond',serif;font-size:1.6rem;color:#f4ecd8}
 .chapter p{color:#9fb0a0;font-size:.95rem;max-width:520px;margin:6px auto 0}
@@ -76,21 +81,24 @@ h1{font-family:'Cormorant Garamond',serif;font-size:2rem;line-height:1.1;margin:
 
 <div id="bar"><div class="barrow">
   <span class="when">Понеделник, 31 август · 19:00 ч.</span>
-  <a class="go" href="https://www.metalandia.com/serial/metateen/ep4">Влез →</a>
+  <a class="go" href="https://metareading.skillplate.com/onlineroleplay">Влез →</a>
 </div></div>
 
 <div class="hero">
-  <div class="heroimg"><img src="../../../img/deck-title.jpg" alt="МетаТийн · картата на приключението" fetchpriority="high" decoding="async"></div>
+  <div class="heroimg"><img src="../../../img/w/hero-ep4.webp" alt="МетаТийн · картата на приключението" fetchpriority="high" decoding="async"></div>
   <div class="ov">
     <p class="kicker">Сериал МетаТийн · Епизод 4</p>
     <h1>6-те AI умения</h1>
     <p class="lead"><b>Не догонвайте AI. Поведете го</b> — спокойно, до детето си.</p>
     <p class="when-line">📅 <b>Понеделник, 31 август · 19:00 ч.</b> · Zoom · 90 минути</p>
-    <a class="cta" href="https://www.metalandia.com/serial/metateen/ep4">Влезте в стаята →</a>
+    <a class="cta" href="https://metareading.skillplate.com/onlineroleplay">Влезте в стаята →</a>
   </div>
 </div>
 
 <div class="wrap">
+
+  <div class="band"><img src="../../../img/w/b-premiere.webp" alt="Премиера на епизода — светлините се вдигат" loading="lazy" decoding="async">
+    <div class="clbl"><div class="ch">Епизод 4 · премиера на живо</div></div></div>
 
   <div class="chapter"><h2>Какво ще се случи</h2></div>
   <ul class="three">
@@ -99,24 +107,30 @@ h1{font-family:'Cormorant Garamond',serif;font-size:2rem;line-height:1.1;margin:
     <li>Излизате с „<b>мога</b>", не с „чух за".</li>
   </ul>
 
+  <div class="band"><img src="../../../img/w/b-6umenia.webp" alt="Шестте AI умения като карти на приключението" loading="lazy" decoding="async">
+    <div class="clbl"><div class="ch">Шест умения · по 8 минути</div></div></div>
+
   <div class="chapter">
     <h2>Шестте умения</h2>
     <p>Всяко умение има свой ментор и своя игра.</p>
   </div>
   <div class="skills">
-    <div class="skill"><img src="../../../img/%D0%BA%D1%83%D1%80%D0%B0%D0%B6%D0%BA%D1%83.jpg" alt="Куражку" loading="lazy" decoding="async">
+    <div class="skill"><img src="../../../img/w/s-kurajku.webp" alt="Куражку" loading="lazy" decoding="async">
       <div class="sb"><div class="sm">Куражку</div><div class="sn">Водачът</div><div class="sd">Поемате руля, вместо да гоните машината.</div></div></div>
-    <div class="skill"><img src="../../../img/%D1%82%D0%B2%D0%BE%D1%80%D0%B5%D1%8F.jpg" alt="Творея" loading="lazy" decoding="async">
+    <div class="skill"><img src="../../../img/w/s-tvoreya.webp" alt="Творея" loading="lazy" decoding="async">
       <div class="sb"><div class="sm">Творея</div><div class="sn">Вкусникът</div><div class="sd">Усещате кое е добро — не ви лъже всеки лъскав изход.</div></div></div>
-    <div class="skill"><img src="../../../img/%D0%B5%D0%BA%D0%BE%D0%BF%D1%8A%D1%82%D0%B5%D1%87%D0%BA%D0%BE.jpg" alt="Екопътечко" loading="lazy" decoding="async">
+    <div class="skill"><img src="../../../img/w/s-ekopatechko.webp" alt="Екопътечко" loading="lazy" decoding="async">
       <div class="sb"><div class="sm">Екопътечко</div><div class="sn">Гласът на волята</div><div class="sd">Казвате точно каквото искате.</div></div></div>
-    <div class="skill"><img src="../../../img/%D0%BE%D0%B1%D0%B5%D0%BC%D0%BA%D0%BE.jpg" alt="Обемко" loading="lazy" decoding="async">
+    <div class="skill"><img src="../../../img/w/s-obemko.webp" alt="Обемко" loading="lazy" decoding="async">
       <div class="sb"><div class="sm">Обемко</div><div class="sn">Стигна!</div><div class="sd">Знаете кога СТИГА — край на анализ-парализата.</div></div></div>
-    <div class="skill"><img src="../../../img/%D0%BB%D1%8E%D0%B1%D0%BA%D0%B0.jpg" alt="Любка" loading="lazy" decoding="async">
+    <div class="skill"><img src="../../../img/w/s-lyubka.webp" alt="Любка" loading="lazy" decoding="async">
       <div class="sb"><div class="sm">Любка</div><div class="sn">Кога Джарвис мълчи</div><div class="sd">Връщате си присъствието — стопанин, не роб на екрана.</div></div></div>
-    <div class="skill"><img src="../../../img/%D1%85%D0%BE%D0%BB%D0%B0.jpg" alt="Хола" loading="lazy" decoding="async">
+    <div class="skill"><img src="../../../img/w/s-hola.webp" alt="Хола" loading="lazy" decoding="async">
       <div class="sb"><div class="sm">Хола</div><div class="sn">Многото мостове</div><div class="sd">Не залагате на едно — спокойна устойчивост.</div></div></div>
   </div>
+
+  <div class="band"><img src="../../../img/w/b-agents.webp" alt="Картите на дигиталните съюзници" loading="lazy" decoding="async">
+    <div class="clbl"><div class="ch">Инструментите, с които идвате</div></div></div>
 
   <div class="chapter"><h2>Какво да вземете</h2><p>Всичко по желание. Елате както ви е удобно.</p></div>
   <ul class="prep">
@@ -126,10 +140,13 @@ h1{font-family:'Cormorant Garamond',serif;font-size:2rem;line-height:1.1;margin:
     <li><span class="pi">📓</span><b>Тетрадка</b><span>и химикал</span></li>
   </ul>
 
+  <div class="band"><img src="../../../img/w/b-mother.webp" alt="Родител и дете, рамо до рамо" loading="lazy" decoding="async">
+    <div class="clbl"><div class="ch">Родител и дете — в едно поле</div></div></div>
+
   <div class="finalcta">
     <h3>Елате заедно</h3>
     <p>Родител и дете, в едно поле. Бъдете пример — не с думи, а като отиграете шестте умения рамо до рамо.</p>
-    <p style="margin-top:16px"><a class="cta" href="https://www.metalandia.com/serial/metateen/ep4">Влезте в стаята · 19:00 ч. →</a></p>
+    <p style="margin-top:16px"><a class="cta" href="https://metareading.skillplate.com/onlineroleplay">Влезте в стаята · 19:00 ч. →</a></p>
   </div>
 
 </div>

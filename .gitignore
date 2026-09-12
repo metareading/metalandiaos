@@ -1,1 +1,4 @@
 _screenshots/
+
+# Нова Жена V1 · self-contained data-URI варианти (rebuild: nova-zhena-build-inline.py)
+*.inline.html

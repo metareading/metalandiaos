@@ -6,14 +6,14 @@
 ```bash
 cd /Users/user/metalandiaos
 python3 nova-zhena-seam-патч.py nova-zhena-v2.html      # ① заменя <!-- SEAM v2: Yespo segment … --> с <script>шев</script> · ② маха shell-хендлъра (console.log + .done)
-grep -c 'nova-zhena-seam.js v0.1' nova-zhena-v2.html    # → 1
+grep -c 'nova-zhena-seam.js v0.1.1' nova-zhena-v2.html    # → 1
 grep -c 'V2 shell · SEAM v2 Yespo' nova-zhena-v2.html   # → 0
 python3 nova-zhena-build-inline.py nova-zhena-v2.html   # inline-копие за Skillplate-паст (шевът вече е вътре · без външен <script src>)
 ```
 Втори пуск → „вече приложен". Ако shell-хендлърът е бил променен от доер А → патчът само предупреждава (шевът го обезсилва сам: `submit` в capture-фаза + `stopImmediatePropagation`).
 Проверено на копие: `nova-zhena-tests/_seam-preview.html` (gitignored · `bash nova-zhena-tests/static-checks.sh` го ражда наново).
 
-## 2 · Какво прави шевът (`nova-zhena-seam.js` · 155 реда · нула зависимости)
+## 2 · Какво прави шевът (`nova-zhena-seam.js` · v0.1.1 · 157 реда · нула зависимости)
 - **submit** → валидация (име ≥ 2 · имейл · телефон ≥ 9 цифри, ако е даден · въпрос при режим `question`) → **POST JSON** към `https://primary-production-110e3.up.railway.app/webhook/new-woman` (живият поток „New-Woman Form" · Yespo `POST /api/v1/contact` → статична група **„Нова Жена форма" (id 202454894)** · HubSpot контакт · известие до екипа · авто-отговор до лийда) → `.fcard.done` (печатът) + събитие `нж:изпратено`.
 - **грешка** (HTTP ≠ 2xx · мрежа · таймаут 12 s) → честен ред под бутона: „Не се получи по мрежата. Обадете се на **+359 886 788 857** (и Viber) или пишете на start@metareading.com — отговаряме лично. Може и да опитате пак." · бутонът се връща · събитие `нж:грешка`.
 - **товарът** носи легаси полета за СЕГАШНИЯ поток (`spheres` = режим-етикет · `problem` = въпросът · `want_individual_attention` = чекбоксът „пълната програма") + новите (`mode` · `full` · `question` · `source` · `page` · `ts`) — сегашният поток ги подминава, новият ще ги чете.
@@ -22,6 +22,8 @@ python3 nova-zhena-build-inline.py nova-zhena-v2.html   # inline-копие за
 - **публично**: `НЖшев.режим('question'|'live'|'online'|'unsure')` · `НЖшев.товар()` (какво ще се прати · без изпращане) · `НЖшев.тел()` · `НЖшев.viber()` · `?mode=question` в URL-а отваря формата в режим въпрос.
 
 ## 3 · Фрагменти за визуала (доер А владее вида · шевът само чете атрибутите)
+
+> **Интеграция с V2.1 (комит `15965b5` · доер А):** fab-ът вече има режим `q` („Имате въпрос? · Отговаряме лично“) в Проблем·Чудовище·Скала + `<a class="call" href="tel:…">`. Шевът v0.1.1 го разбира БЕЗ нова маркировка: тап на `#fab a[href="#form"]` докато fab е `.q` → `режим('question')` (скрит input `mode=question` · `spheres=„Въпрос“` · `want_individual_attention=false`). Textarea за въпроса (3в) е по избор — без нея валидацията НЕ иска текст, лийдът минава като „Въпрос“ и екипът звъни. Цената: доер А държи `let ЦЕНИ={пълна:1527, капаро_pct:34}` (ред ~1916) → при дума „1597“ се сменя ЕДНО число; сметките в `nova-zhena-цени.json` съвпадат с формулата му (1527 → капаро 519 € · 1597 → 543 €).
 ### 3а · Лепкавото CTA · „Заявете място" + „Задайте въпрос" + директно обаждане
 ```html
 <div id="fab">

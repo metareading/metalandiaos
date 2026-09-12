@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════════════════════════
-   nova-zhena-seam.js · v0.1 · 12.09.2026 · SEAM v2 · формата → n8n webhook → Yespo (+HubSpot)
+   nova-zhena-seam.js · v0.1.1 · 12.09.2026 · SEAM v2 · формата → n8n webhook → Yespo (+HubSpot)
    ───────────────────────────────────────────────────────────────────────────
    Доер Б · MET-621 · Модел: Fable 5.1 (дума на Митрандир 12.09).
    Шевът НЕ носи ключ. Браузърът POST-ва JSON към n8n webhook (публичен URL, без ключ);
@@ -32,14 +32,15 @@
   function събери(f) {
     var d = {}; new FormData(f).forEach(function (v, k) { if (typeof v === 'string') d[k] = v.trim(); });
     d.full = !!f.querySelector('[name="full"]:checked');
+    var h = f.querySelector('input[name="mode"][type="hidden"]'); if (h && h.value) d.mode = h.value;   /* скритият режим (fab „Задайте въпрос“) печели пред радиото */
     return d;
   }
-  function провери(d) {
-    var г = [];
+  function провери(d, f) {
+    var г = [], имаВъпрос = !!(f && f.querySelector('[name="question"]'));
     if (!d.name || d.name.length < 2) г.push(['name', 'Как да се обръщаме към Вас?']);
     if (!ИМЕЙЛ.test(d.email || '')) г.push(['email', 'Проверете имейла — на него отговаряме.']);
     if (d.phone && чист(d.phone).replace(/\D/g, '').length < 9) г.push(['phone', 'Телефонът изглежда непълен.']);
-    if (d.mode === 'question' && !(d.question || '').trim()) г.push(['question', 'Напишете въпроса си — отговаряме лично.']);
+    if (d.mode === 'question' && имаВъпрос && !(d.question || '').trim()) г.push(['question', 'Напишете въпроса си — отговаряме лично.']);
     return г;
   }
   function товар(d) {
@@ -98,7 +99,7 @@
   /* ── режими · „Задайте въпрос" = същата форма с поле „въпрос" ── */
   function въпросПолета(f) { return [].slice.call(f.querySelectorAll('[name="question"], .q-wrap, [data-нж-само-въпрос]')); }
   function приложиРежим(f) {
-    var r = f.querySelector('[name="mode"]:checked') || f.querySelector('input[name="mode"][type="hidden"]');
+    var r = f.querySelector('input[name="mode"][type="hidden"]') || f.querySelector('[name="mode"]:checked');
     var m = r ? r.value : 'unsure', q = m === 'question';
     въпросПолета(f).forEach(function (el) { if (el.matches('[data-нж-само-въпрос], .q-wrap')) el.hidden = !q; });
     var full = f.querySelector('[name="full"]'); if (full && full.closest('label')) full.closest('label').hidden = q;
@@ -107,10 +108,11 @@
   function режим(m) {
     var f = форма(); if (!f) return;
     var r = f.querySelector('input[name="mode"][value="' + m + '"]');
-    if (r) { r.checked = true; }
+    var h0 = f.querySelector('input[name="mode"][type="hidden"]');
+    if (r) { r.checked = true; if (h0) h0.remove(); }
     else {
-      var h = f.querySelector('input[name="mode"][type="hidden"]');
-      if (!h) { h = document.createElement('input'); h.type = 'hidden'; h.name = 'mode'; f.appendChild(h); }
+      f.querySelectorAll('input[name="mode"][type="radio"]').forEach(function (x) { x.checked = false; });
+      var h = h0; if (!h) { h = document.createElement('input'); h.type = 'hidden'; h.name = 'mode'; f.appendChild(h); }
       h.value = m;
     }
     приложиРежим(f);
@@ -128,7 +130,7 @@
       e.preventDefault(); e.stopImmediatePropagation();          /* shell-хендлърът на V2 (console.log + .done) не бива да върви */
       if (f.dataset.sending) return;
       var hp = f.querySelector('[name="company"]'); if (hp && hp.value) { успех(f, товар(събери(f))); return; }  /* honeypot · ботът вижда „успех" */
-      var d = събери(f), г = провери(d);
+      var d = събери(f), г = провери(d, f);
       скрийГрешка(f); маркирай(f, г);
       if (г.length) { покажиГрешка(f, г.map(function (x) { return x[1]; }).join('<br>')); return; }
       var obj = товар(d), btn = f.querySelector('button[type="submit"]'), стар = btn && btn.innerHTML;
@@ -138,11 +140,12 @@
         неСеПолучи(f); document.dispatchEvent(new CustomEvent('нж:грешка', { detail: { error: String(err && err.message), товар: obj } }));
       }).then(function () { delete f.dataset.sending; if (btn) { btn.disabled = false; btn.innerHTML = стар; } });
     }, true);
-    f.querySelectorAll('input[name="mode"]').forEach(function (r) { r.addEventListener('change', function () { приложиРежим(f); }); });
+    f.querySelectorAll('input[name="mode"]').forEach(function (r) { r.addEventListener('change', function () { var h = f.querySelector('input[name="mode"][type="hidden"]'); if (h) h.remove(); приложиРежим(f); }); });
     приложиРежим(f);
     var m = (location.search.match(/[?&]mode=(live|online|unsure|question)/) || [])[1]; if (m) режим(m);
   }
   function вържеЛинкове() {
+    document.querySelectorAll('#fab a[href="#form"], #fab a.cta').forEach(function (a) { if (a.hasAttribute('data-нж-режим')) return; a.addEventListener('click', function () { var fab = a.closest('#fab'); if (fab && fab.classList.contains('q')) режим('question'); }); });  /* V2.1 · доер А: fab.q = „Задайте въпрос“ */
     document.querySelectorAll('[data-нж-режим]').forEach(function (el) { el.addEventListener('click', function (e) { e.preventDefault(); режим(el.getAttribute('data-нж-режим')); }); });
     document.querySelectorAll('a[data-нж-тел]').forEach(function (a) { a.href = телЛинк(a.getAttribute('data-нж-тел')); });
     document.querySelectorAll('a[data-нж-viber]').forEach(function (a) { a.href = viberЛинк(a.getAttribute('data-нж-viber')); });
@@ -150,5 +153,5 @@
   function старт() { var f = форма(); if (f) върже(f); вържеЛинкове(); }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', старт); else старт();
 
-  window.НЖшев = { конфиг: К, режим: режим, изпрати: изпрати, товар: function (f) { return товар(събери(f || форма())); }, провери: function (f) { return провери(събери(f || форма())); }, тел: телЛинк, viber: viberЛинк, версия: '0.1' };
+  window.НЖшев = { конфиг: К, режим: режим, изпрати: изпрати, товар: function (f) { return товар(събери(f || форма())); }, провери: function (f) { f = f || форма(); return провери(събери(f), f); }, тел: телЛинк, viber: viberЛинк, версия: '0.1.1' };
 })();

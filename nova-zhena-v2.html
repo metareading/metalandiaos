@@ -11,7 +11,13 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Inter:wght@300;400;500;600&display=swap&subset=cyrillic" rel="stylesheet">
 <!--
   ══════════════════════════════════════════════════════════════════════
-  НОВА ЖЕНА · V2 „Холограма“ · v2.0 · 12.09.2026 · MET-621
+  НОВА ЖЕНА · V2 „Холограма“ · v2.1 · 12.09.2026 · 21:37 · MET-621 · дизайн-финал по думата на Митрандир (12.09 · след V2)
+  v2.1 делта: ЗАКОН ЗА ВСЕКИ КОНТРОЛ (95% телефон · скролът сменя · тапът за спрелия · подсказка „докоснете" до първата
+  интеракция · нула hover) · съзвездието → ПЪТЯТ на героинята (S-пътека нагоре · златни звезди · HTML-етикети · искра по скрол) ·
+  Спирачката → три сенки, които се сглобяват по скрол и се разпадат в жарава при смяна · скалата и по скрол/тап ·
+  денят-часовник лепкав по средата с етикет ПОД кръга · слънцето с игра „докоснете" · цената в € с разпределение ·
+  лепкавото CTA „Задайте въпрос" + обаждане в Проблем·Чудовище·Скала · поредицата като ред · образи img/nz3 (класическо
+  изкуство · след ОВ на 3-те стил-кандидата · дотогава img/nz2).
   Една страница · self-contained · mobile-first (390px база) · нула build · нула зависимости.
   Основата = частиковият двигател от хоума на maitapp (app.js) и от ЕП4-извадения:
   ЕДИН скрит WebGL контекст рисува ПЕТ фигури (hero преди→сега · съзвездие на 8-те етапа ·
@@ -75,6 +81,13 @@ html:where(.js) [data-reveal].in{opacity:1;transform:none}
 .mfig .cap{position:absolute;left:0;right:0;bottom:8px;text-align:center;font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(232,199,126,.7);pointer-events:none}
 .mfig .glow{position:absolute;inset:0;pointer-events:none;background:radial-gradient(60% 55% at 50% 50%,rgba(232,199,126,.10),transparent 70%)}
 .mfig.tapable{cursor:pointer}
+/* подсказка „докоснете" · пулсира до първата интеракция (законът за всеки контрол · дума 12.09) */
+.tap{position:absolute;left:50%;bottom:10px;transform:translateX(-50%);display:flex;align-items:center;gap:9px;padding:6px 13px 6px 8px;border-radius:22px;background:rgba(13,10,8,.58);border:1px solid rgba(232,199,126,.38);color:var(--gold);font-size:.66rem;letter-spacing:.18em;text-transform:uppercase;pointer-events:none;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);transition:opacity .6s;z-index:4;white-space:nowrap}
+.tap i{position:relative;width:14px;height:14px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#fff5d6,#e2a458);box-shadow:0 0 12px rgba(232,199,126,.85)}
+.tap i::before,.tap i::after{content:"";position:absolute;inset:-3px;border-radius:50%;border:1px solid rgba(232,199,126,.9);animation:tapring 1.7s ease-out infinite}
+.tap i::after{animation-delay:.85s}
+@keyframes tapring{0%{transform:scale(.7);opacity:1}100%{transform:scale(2.6);opacity:0}}
+.seen .tap,.tap[hidden]{opacity:0}
 
 /* ── HERO ── */
 .hero{padding:14px 0 30px;background:radial-gradient(90% 60% at 50% 32%,#1c1610 0%,var(--bg) 70%)}
@@ -121,8 +134,17 @@ html:where(.js) .note{opacity:0;transform:translateY(16px) scale(.98)}
 .stpanel{background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));border:1px solid rgba(232,199,126,.25);border-radius:var(--r);padding:16px 16px 14px;min-height:150px;margin-top:8px}
 .stpanel .stk{display:flex;align-items:center;gap:10px}
 .stpanel .num{font-family:var(--serif);font-size:2.2rem;font-weight:700;color:var(--gold);line-height:1}
-.stpanel .nm{font-family:var(--serif);font-size:1.5rem;font-weight:600;color:#fff;line-height:1.05}
-.stpanel .mn{font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:var(--em);margin-top:2px}
+.stpanel .nm{font-family:var(--serif);font-size:1.9rem;font-weight:600;color:#fff;line-height:1.02}
+.stpanel .mn{display:inline-flex;align-items:center;gap:6px;margin-top:5px;border:1px solid rgba(232,199,126,.5);border-radius:14px;padding:2px 10px 2px 8px;font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);background:rgba(232,199,126,.06)}
+.stpanel .mn::before{content:"✦";font-size:.7rem}
+/* етикетите на етапите до звездите · позиции от двигателя (__мфиг.проектирай) */
+.stlabs{position:absolute;inset:0;pointer-events:none;z-index:3}
+.stlab{position:absolute;display:flex;align-items:center;gap:6px;white-space:nowrap;color:rgba(240,235,224,.5);font-size:.74rem;letter-spacing:.04em;transition:color .4s,font-size .4s;text-shadow:0 1px 8px #000,0 0 18px rgba(13,10,8,.9);transform:translate(calc(-100% - 15px),-50%)}
+.stlab.r{transform:translate(15px,-50%)}
+.stlab b{font-family:var(--serif);font-weight:700;color:rgba(232,199,126,.65);font-size:.9em}
+.stlab.lit{color:#efe7d3}
+.stlab.on{color:#fff;font-family:var(--serif);font-size:1.28rem;font-weight:600;letter-spacing:0}
+.stlab.on b{color:var(--gold);font-size:1rem}
 .stpanel .ln{font-family:var(--serif);font-style:italic;font-size:1.22rem;color:var(--ink);margin:10px 0 6px;transition:opacity .35s}
 .stpanel .ds{font-size:.9rem;color:var(--mute)}
 .stpanel .nav{display:flex;gap:8px;margin-top:12px;align-items:center}
@@ -205,8 +227,17 @@ html:where(.js) .note{opacity:0;transform:translateY(16px) scale(.98)}
 /* ── DAY · слънчев часовник (от V1b) ── */
 .day{background:var(--bg)}
 .daygrid{display:grid;gap:10px;margin-top:10px}
-.clockwrap{position:sticky;top:50px;z-index:5;padding:8px 0 10px;background:linear-gradient(180deg,var(--bg) 82%,rgba(13,10,8,0))}
-.clock{position:relative;width:min(76%,300px);aspect-ratio:1;margin:0 auto}
+/* мобилен: часовникът е лепкав ПО СРЕДАТА на екрана (дума 12.09) · етикетът е ПОД кръга, голям и четим ·
+   моментите текат над и под него — картата, която е „зад" кръга, е текущата (нейният текст е в етикета) */
+.clockwrap{position:sticky;top:calc(50vh - var(--ch,400px)/2);z-index:5;padding:12px 0 10px;background:var(--bg)}
+.clockwrap::before,.clockwrap::after{content:"";position:absolute;left:0;right:0;height:28px;pointer-events:none}
+.clockwrap::before{top:-28px;background:linear-gradient(180deg,rgba(13,10,8,0),var(--bg))}
+.clockwrap::after{bottom:-28px;background:linear-gradient(180deg,var(--bg),rgba(13,10,8,0))}
+.clock{position:relative;width:min(68%,268px);aspect-ratio:1;margin:0 auto;cursor:pointer}
+.clabel{text-align:center;margin:16px auto 0;max-width:420px;min-height:124px}
+.clabel .tm{font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--em);font-weight:600}
+.clabel h3{font-size:1.55rem;margin:4px 0 5px;color:#fff;line-height:1.1}
+.clabel p{font-size:.9rem;color:var(--ink2);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
 .clock svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
 .clock .ringd{fill:none;stroke:rgba(232,199,126,.45);stroke-width:1.2;stroke-dasharray:2 5}
 .clock .dot{fill:var(--bg);stroke:var(--gold);stroke-width:1.4;cursor:pointer;transition:all .4s}
@@ -216,8 +247,8 @@ html:where(.js) .note{opacity:0;transform:translateY(16px) scale(.98)}
 .clock .center{position:absolute;left:50%;top:50%;width:64%;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;overflow:hidden;box-shadow:0 0 0 5px var(--bg),0 0 0 6px rgba(232,199,126,.5),0 20px 40px -20px #000;background:#2b2018}
 .clock .center img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .7s ease}
 .clock .center img.on{opacity:1}
-.clock .ctime{position:absolute;left:0;right:0;bottom:0;padding:22px 8px 10px;text-align:center;color:#ffe1a0;font-family:var(--serif);font-size:1.02rem;font-weight:600;background:linear-gradient(180deg,transparent,rgba(13,10,8,.85));text-shadow:0 1px 6px #000}
-.moments{display:grid;gap:14px;padding-top:8px}
+.moments{display:grid;gap:calc(var(--ch,400px) - 185px);padding:calc(var(--ch,400px)*.22) 0 calc(var(--ch,400px)*.42)}
+.moments .mo{scroll-margin-top:50vh}
 .mo{padding:14px 16px;border-radius:14px;border:1px solid rgba(232,199,126,.2);background:rgba(255,255,255,.03);transition:all .5s}
 .mo.on{background:rgba(232,199,126,.07);border-color:var(--gold);box-shadow:0 18px 34px -24px #000}
 .mo .tm{font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;color:var(--em);font-weight:600}
@@ -228,8 +259,6 @@ html:where(.js) .note{opacity:0;transform:translateY(16px) scale(.98)}
 .benefit ul{list-style:none;padding:0;margin:12px 0 0;display:grid;gap:6px}
 .benefit li{display:flex;gap:10px;align-items:baseline;font-size:.95rem;color:var(--ink2)}
 .benefit li::before{content:"◆";color:var(--em);font-size:.7rem}
-.benefit .pic{border-radius:12px;overflow:hidden;border:1px solid rgba(111,181,154,.35);margin-top:14px;aspect-ratio:4/3}
-.benefit .pic img{width:100%;height:100%;object-fit:cover}
 .leader{display:grid;gap:16px;margin-top:26px;align-items:center}
 .leader .ph{width:min(100%,300px);margin:0 auto;border-radius:200px 200px 22px 22px;overflow:hidden;border:1px solid rgba(232,199,126,.6);box-shadow:0 0 0 6px rgba(13,10,8,1),0 0 0 7px rgba(232,199,126,.35),0 30px 60px -30px #000;aspect-ratio:4/5}
 .leader .ph img{width:100%;height:100%;object-fit:cover;object-position:center 15%}
@@ -261,7 +290,9 @@ html:where(.js) .note{opacity:0;transform:translateY(16px) scale(.98)}
 .modes button.on{background:linear-gradient(120deg,#ffe1a0,#e2a458);color:#2a1908;font-weight:600}
 .slots{display:grid;gap:8px;margin-top:6px}
 .slot{display:grid;grid-template-columns:56px 1fr;gap:10px;align-items:start;background:rgba(255,255,255,.035);border:1px solid rgba(232,199,126,.2);border-radius:14px;padding:11px 13px;transition:border-color .4s,background .4s}
+.slot{cursor:pointer}
 .slot.on{border-color:rgba(232,199,126,.65);background:rgba(232,199,126,.07)}
+.slot.now{border-color:var(--gold);box-shadow:0 0 0 1px rgba(232,199,126,.35),0 18px 34px -24px #000;background:rgba(232,199,126,.11)}
 .slot .t{font-family:var(--serif);font-weight:700;color:var(--gold);font-size:1.15rem;line-height:1.2}
 .slot .w{font-weight:600;color:#fff;font-size:.95rem}
 .slot .c{font-size:.84rem;color:var(--mute)}
@@ -321,16 +352,21 @@ html:where(.js) .note{opacity:0;transform:translateY(16px) scale(.98)}
 .plans span{border:1px solid rgba(232,199,126,.4);border-radius:12px;text-align:center;padding:8px 2px;font-family:var(--serif);color:var(--gold);font-size:1.15rem;font-weight:700}
 .plans span small{display:block;font-family:var(--sans);font-size:.62rem;color:var(--mute);font-weight:400;letter-spacing:.08em;text-transform:uppercase}
 .pay{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:10px}
-.pay button{background:rgba(255,255,255,.04);border:1px solid rgba(232,199,126,.3);color:var(--ink2);border-radius:12px;padding:10px 4px;font-size:.78rem;transition:all .3s}
+.pay button{display:grid;gap:3px;background:rgba(255,255,255,.04);border:1px solid rgba(232,199,126,.3);color:var(--ink2);border-radius:12px;padding:10px 4px;font-size:.74rem;transition:all .3s;line-height:1.2}
+.pay button .v{font-family:var(--serif);font-size:1.02rem;font-weight:700;color:var(--gold);white-space:nowrap}
 .pay button.on{background:linear-gradient(120deg,#ffe1a0,#e2a458);color:#2a1908;border-color:transparent;font-weight:600}
+.pay button.on .v{color:#2a1908}
+.pbox .amt .cur{font-size:1.4rem;color:var(--gold);font-weight:500}
+.pbox .note{display:block;font-size:.78rem;color:var(--mute);margin-top:2px}
 .gift{display:grid;grid-template-columns:84px 1fr;gap:12px;align-items:center;margin-top:12px;background:rgba(232,199,126,.06);border:1px solid rgba(232,199,126,.3);border-radius:14px;padding:12px}
 .gift img{width:84px;aspect-ratio:597/800;object-fit:cover;border-radius:8px;border:1px solid rgba(232,199,126,.5)}
 .gift .gn{font-family:var(--serif);font-size:1.6rem;font-weight:700;color:var(--gold);line-height:1;transition:all .3s}
 .gift .gt{font-size:.88rem;color:var(--ink2)}
 .gift .gv{font-size:.78rem;color:var(--mute);margin-top:4px}
-.chain{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:.8rem;color:var(--mute);margin-top:10px}
-.chain span{border:1px solid rgba(232,199,126,.3);border-radius:12px;padding:3px 10px;color:var(--ink2)}
-.chain span.first{border-color:var(--gold);color:var(--gold);font-weight:600}
+/* поредицата: ред текст, не бутони (дума 12.09: „не ми се поиска да ги натисна") */
+.chain{font-family:var(--serif);font-size:1.25rem;font-style:italic;color:var(--ink2);margin-top:10px;line-height:1.4}
+.chain span.first{color:var(--gold);font-weight:600;font-style:normal;white-space:nowrap}
+.chain i{font-style:normal;color:var(--gold3);margin:0 6px}
 
 /* ── footer ── */
 footer{padding:36px 0 110px;text-align:center;color:var(--mute);font-size:.86rem;border-top:1px solid rgba(232,199,126,.15)}
@@ -339,9 +375,13 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
 /* ── floating CTA (mobile) ── */
 #fab{position:fixed;left:12px;right:12px;bottom:12px;z-index:70;display:flex;align-items:center;gap:10px;background:rgba(21,16,12,.92);border:1px solid rgba(232,199,126,.4);border-radius:30px;padding:8px 8px 8px 16px;transform:translateY(120%);transition:transform .5s cubic-bezier(.2,.7,.2,1);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:0 20px 40px -18px #000}
 #fab.show{transform:none}
-#fab .t{font-size:.78rem;color:var(--ink2);line-height:1.2}
+#fab .t{font-size:.78rem;color:var(--ink2);line-height:1.2;flex:1;min-width:0}
 #fab .t b{display:block;color:#fff;font-size:.86rem}
-#fab .cta{margin-left:auto;padding:10px 16px;font-size:.85rem}
+#fab .cta{padding:10px 16px;font-size:.85rem;white-space:nowrap}
+#fab .call{display:none;width:42px;height:42px;border-radius:50%;border:1px solid rgba(232,199,126,.6);color:var(--gold);place-items:center;text-decoration:none;flex:0 0 42px;background:rgba(232,199,126,.08)}
+#fab .call svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+#fab .b{display:none}
+#fab.q .a{display:none} #fab.q .b{display:inline} #fab.q .t b .b{display:block} #fab.q .call{display:grid}
 
 /* ── desktop ── */
 @media (min-width:720px){
@@ -355,13 +395,16 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
   .hero .stage{margin:0}
   .mgrid{grid-template-columns:300px 1fr;align-items:start}
   .mgrid .deck{margin:0}
-  .pathgrid{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
+  .pathgrid{max-width:600px;margin:0 auto}
   .rail{display:grid;grid-template-columns:repeat(4,1fr);overflow:visible;margin:0;padding:14px 0}
   .rail .deck{flex:auto;max-width:none}
   .railhint{display:none}
   .daygrid{grid-template-columns:320px 1fr;gap:28px;align-items:start}
-  .clockwrap{top:80px;background:transparent}
+  .clockwrap{top:80px;background:transparent;padding:0}
+  .clockwrap::before,.clockwrap::after{display:none}
   .clock{width:300px}
+  .clabel{min-height:0}
+  .moments{gap:14px;padding:8px 0 0}
   .leader{grid-template-columns:260px 1fr}
   .vgrid{grid-template-columns:1.6fr 1fr;align-items:start}
   .fgrid{grid-template-columns:1fr 1.1fr;align-items:center}
@@ -396,11 +439,11 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
     <div class="wrap">
       <div class="kicker">Хибриден ритрийт · 18–22 септември<span class="long"> · Банско + онлайн · 2026</span></div>
       <h1><span>Искате ли да се събудите?</span><span>Как ще разберете?</span></h1>
-      <div class="stage mfig tapable" id="fig-hero" data-bleed="mobile">
+      <div class="stage mfig tapable" id="fig-hero" data-bleed="mobile" data-tap>
         <div class="glow"></div>
         <canvas data-фигура="hero" role="img" aria-label="Героинята: от пясъчния часовник на умората към жена с искра в гърдите и криле"></canvas>
         <img class="poster" src="img/nz2/hero-now.webp" alt="Героинята при първата светлина — с искра в гърдите" width="896" height="1200" hidden decoding="async">
-        <div class="cap" id="hero-cap" hidden>докоснете · преди → сега</div>
+        <div class="tap" aria-hidden="true"><i></i><span>докоснете · преди → сега</span></div>
         <div class="toggle" id="hero-toggle" aria-label="Преди и сега"><button data-s="0">Преди</button><button data-s="1" class="on">Сега</button></div>
       </div>
       <p class="lead">Три белега на пробуждането:</p>
@@ -443,10 +486,11 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
     <h2 data-reveal>Всяка жена носи в себе си <em>цяла трупа.</em></h2>
     <p class="lead" data-reveal>„Нова Жена“ е път по осемте етапа на метаезика — осем сцени, през които минава всяка героиня в приказките и всяка жена в живота. Не гледаме — играем. На всеки етап се събужда по един от осемте будители у Вас.</p>
   </div>
-  <div class="mfig tapable" id="fig-path" data-bleed="always">
-    <canvas data-фигура="path" role="img" aria-label="Съзвездието на осемте етапа — светва по скрол"></canvas>
-    <img class="poster" src="img/nz2/path-poster.webp" alt="Осем златни звезди над Пирин" width="896" height="1195" hidden loading="lazy" decoding="async">
-    <div class="cap">скролнете — звездите светват · докоснете звезда</div>
+  <div class="mfig tapable" id="fig-path" data-bleed="always" data-tap>
+    <canvas data-фигура="path" role="img" aria-label="Пътят на героинята: осем златни звезди по пътека нагоре — светват по скрол, искрата върви по пътя"></canvas>
+    <img class="poster" src="img/nz2/path-poster.webp" alt="Осем златни звезди по пътека нагоре над Пирин" width="896" height="1195" hidden loading="lazy" decoding="async">
+    <div class="stlabs" id="stlabs" aria-hidden="true"></div>
+    <div class="tap" aria-hidden="true"><i></i><span>докоснете звезда</span></div>
   </div>
   <div class="wrap">
     <div class="pathgrid">
@@ -456,7 +500,6 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
         <div class="ds" id="st-ds">Първата сцена: избирате си име, роля и ментор. Ролята пази — в нея смеете повече.</div>
         <div class="nav"><button id="st-prev">← назад</button><button id="st-next">напред →</button><div class="dots" id="st-dots"></div></div>
       </div>
-      <div class="stlist" id="stlist" data-reveal></div>
     </div>
   </div>
 </section>
@@ -468,10 +511,10 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
     <h2 data-reveal>Спирачката</h2>
     <p class="lead" data-reveal>Едно чудовище, три лица. Времето изтича, старите начини изморяват. На ритрийта го рисуваме, назоваваме и му излизаме насреща — заедно.</p>
   </div>
-  <div class="mfig tapable" id="fig-monster" data-bleed="always">
-    <canvas data-фигура="monster" role="img" aria-label="Пясъчният часовник на Спирачката — пясъкът е жарава, три сенки го пазят"></canvas>
-    <img class="poster" src="img/nz2/monster-poster.webp" alt="Пясъчен часовник, чийто пясък е жарава" width="896" height="1195" hidden loading="lazy" decoding="async">
-    <div class="cap">задръжте — жаравата се разгаря · изберете лице</div>
+  <div class="mfig tapable" id="fig-monster" data-bleed="always" data-tap>
+    <canvas data-фигура="monster" role="img" aria-label="Трите сенки на Спирачката — вътрешна, външна, философска — се сглобяват по скрол; избраната се разпада в жарава и се събира като следващата"></canvas>
+    <img class="poster" src="img/nz2/monster-poster.webp" alt="Трите сенки на Спирачката" width="896" height="1195" hidden loading="lazy" decoding="async">
+    <div class="tap" aria-hidden="true"><i></i><span>докоснете — следващото лице</span></div>
   </div>
   <div class="wrap">
     <div class="mgrid">
@@ -509,13 +552,14 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
     <h2 data-reveal>Пет стъпала <em>нагоре</em></h2>
     <p class="lead" data-reveal>Скалата не е тест. Тя е пътят на ритрийта: нещата, които днес Ви побъркват, стават нещата, които Ви вдъхновяват. Същите неща — друга Вие. Плъзнете.</p>
   </div>
-  <div class="mfig" id="fig-scale" data-bleed="always">
+  <div class="mfig tapable" id="fig-scale" data-bleed="always" data-tap>
     <div class="scalepics" aria-hidden="true">
       <img class="storm" src="img/nz2/scale-storm.webp" alt="" width="896" height="1195" loading="lazy" decoding="async">
       <img class="dawn" id="sc-dawn" src="img/nz2/scale-dawn.webp" alt="" width="896" height="1195" loading="lazy" decoding="async">
     </div>
-    <canvas data-фигура="scale" role="img" aria-label="Частиците: буря, която се събира в зора — по плъзгача"></canvas>
+    <canvas data-фигура="scale" role="img" aria-label="Частиците: буря, която се събира в зора — по скрол, по докосване и по плъзгача"></canvas>
     <img class="poster" src="img/nz2/scale-dawn.webp" alt="Героинята на зазоряване в планинска поляна" width="896" height="1195" hidden loading="lazy" decoding="async">
+    <div class="tap" aria-hidden="true"><i></i><span>докоснете — следващото стъпало</span></div>
   </div>
   <div class="wrap">
     <div data-reveal>
@@ -596,8 +640,8 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
     <h2 data-reveal>Приказната <em>дъга</em></h2>
     <p class="lead" data-reveal>Сугестопедията не се обяснява — преживява се. Четири момента от един ден. Скролнете — слънцето върви.</p>
     <div class="daygrid">
-      <div class="clockwrap">
-        <div class="clock" id="clock">
+      <div class="clockwrap" id="clockwrap">
+        <div class="clock" id="clock" data-tap>
           <svg viewBox="0 0 300 300" aria-hidden="true">
             <circle class="ringd" cx="150" cy="150" r="132"/>
             <g id="cdots"></g>
@@ -608,9 +652,10 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
             <img src="img/nz2/concert.webp" alt="" width="1200" height="900" loading="lazy" decoding="async">
             <img src="img/nz2/transition.webp" alt="" width="1200" height="900" loading="lazy" decoding="async">
             <img src="img/nz2/presence.webp" alt="" width="896" height="1195" loading="lazy" decoding="async">
-            <div class="ctime" id="ctime">Следобед · Трупата</div>
           </div>
+          <div class="tap" aria-hidden="true"><i></i><span>докоснете</span></div>
         </div>
+        <div class="clabel" aria-live="polite"><div class="tm" id="cl-tm">Следобед · Трупата</div><h3 id="cl-h">Влизане в образ</h3><p id="cl-p">Избирате си име, роля и ментор. Ролята пази — в нея смеете повече, отколкото „Вие“.</p></div>
       </div>
       <div class="moments" id="moments">
         <div class="mo on"><div class="tm">Следобед · Трупата</div><h3>Влизане в образ</h3><p>Избирате си име, роля и ментор. Ролята пази — в нея смеете повече, отколкото „Вие“.</p></div>
@@ -630,7 +675,7 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
         <li>спокойствие през цялото време · тиха радост през повечето</li>
         <li>вдъхновение, което идва само</li>
       </ul>
-      <div class="pic"><img src="img/nz2/benefit.webp" alt="Две жени в честен разговор до прозорец с планинска светлина" width="1200" height="900" loading="lazy" decoding="async"></div>
+      <!-- v2.1: образът „смеещите се жени" е махнат по думата (12.09); слот за img/nz3/benefit.webp след ОВ на стила -->
       <p class="muted" style="margin-top:10px">Как го мерим? По осъзнаването на дишането — пет портала към настоящето.</p>
     </div>
 
@@ -679,9 +724,10 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
     <div data-reveal><span class="badge"><i></i>Присъствено или онлайн — Вие избирате</span></div>
     <div class="modes" id="modes" data-reveal><button class="on" data-m="live">Присъствено · Банско</button><button data-m="online">Онлайн · Zoom</button></div>
   </div>
-  <div class="mfig" id="fig-sun" data-bleed="always">
-    <canvas data-фигура="sunarc" role="img" aria-label="Слънцето на деня върви по дъгата от 15:30 до 20:00"></canvas>
+  <div class="mfig tapable" id="fig-sun" data-bleed="always" data-tap>
+    <canvas data-фигура="sunarc" role="img" aria-label="Слънцето на деня върви по дъгата от 15:30 до 20:00 — по скрол, или го водите с пръст"></canvas>
     <img class="poster" src="img/nz2/dawn-wide.webp" alt="Изгрев над Пирин" width="1600" height="900" hidden loading="lazy" decoding="async">
+    <div class="tap" aria-hidden="true"><i></i><span>докоснете слънцето</span></div>
   </div>
   <div class="wrap">
     <div class="slots" id="slots">
@@ -757,8 +803,9 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
     <div class="price">
       <div class="pbox full" data-reveal>
         <div class="tag">Какво получавате</div>
-        <div class="amt">1597 <small>лв</small> <small style="color:var(--mute);font-size:.95rem">· ≈ 816 €</small></div>
-        <div class="sub">Капаро <b>34%</b> (543 лв) запазва мястото Ви.</div>
+        <!-- v2.1: цената е в ЕВРО (дума 12.09: „1527 евро, не лева") · числото ЧАКА ДУМА · сметката идва от доер Б (nova-zhena-цени.json) -->
+        <div class="amt"><span id="p-amt">1527 €</span><small class="note">пълна цена · в евро</small></div>
+        <div class="sub">Капаро <b><span id="p-kap-pct">34%</span></b> (<span id="p-kap">519 €</span>) запазва мястото Ви.</div>
         <ul>
           <li>5-дневен хибриден ритрийт · 18–22 септември · Банско или онлайн</li>
           <li>12 месеца клубни срещи · трупата остава</li>
@@ -770,12 +817,12 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
       <div class="pbox" data-reveal>
         <div class="tag">Подаръчни онлайн курсове</div>
         <div class="sub" style="margin-top:6px">Изберете как плащате — вижте подаръка:</div>
-        <div class="pay" id="pay"><button class="on" data-g="2" data-t="Метатийн + Метародител или Метачетене">Наведнъж</button><button data-g="1" data-t="Метатийн">3 вноски</button><button data-g="0" data-t="без подаръчни курсове">12 вноски</button></div>
+        <div class="pay" id="pay"><button class="on" data-n="1" data-g="2" data-t="Метатийн + Метародител или Метачетене"><span>Наведнъж</span><span class="v">1527 €</span></button><button data-n="3" data-g="1" data-t="Метатийн"><span>3 вноски</span><span class="v">3 × 509 €</span></button><button data-n="12" data-g="0" data-t="без подаръчни курсове"><span>12 вноски</span><span class="v">12 × ≈ 127 €</span></button></div>
         <div class="gift"><img src="img/nz/card-sakrovishte.webp" alt="" width="84" height="113" loading="lazy" decoding="async"><div><div class="gn" id="g-n">2 подаръчни курса</div><div class="gt" id="g-t">Метатийн + Метародител или Метачетене</div><div class="gv">стандартно 610 € · до 15 септември 377 €</div></div></div>
       </div>
       <div class="pbox" data-reveal>
         <div class="tag">Поредицата</div>
-        <div class="chain"><span class="first">Нова Жена</span>→<span>Метачетене</span>→<span>Метаписане</span></div>
+        <p class="chain"><span class="first">Нова Жена</span><i>→</i>Метачетене<i>→</i>Метаписане</p>
         <p style="font-size:.9rem;margin-top:10px">Всеки следващ курс иска минат предишен. Нова Жена не иска нищо — освен да дойдете.</p>
         <p class="center" style="margin-top:14px"><a class="cta" href="#form">Заявете място ✦</a></p>
       </div>
@@ -791,7 +838,8 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
   </div>
 </footer>
 
-<div id="fab"><div class="t"><b>Нова Жена · 18–22 сеп</b>Банско или онлайн</div><a class="cta" href="#form">Заявете място</a></div>
+<!-- v2.1: лепкавото CTA · „Заявете място" през повечето време · в Проблем·Чудовище·Скала = „Задайте въпрос" + обаждане (функцията форма-въпрос/Viber идва от доер Б · nova-zhena-seam.js) -->
+<div id="fab"><div class="t"><b><span class="a">Нова Жена · 18–22 сеп</span><span class="b">Имате въпрос?</span></b><span class="a">Банско или онлайн</span><span class="b">Отговаряме лично</span></div><a class="call" href="tel:+359886788857" aria-label="Обадете се · +359 886 788 857"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg></a><a class="cta" href="#form" data-hook="question"><span class="a">Заявете място</span><span class="b">Задайте въпрос</span></a></div>
 
 <script>
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -830,6 +878,7 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
     if (p) p.hidden = false;
     c.hidden = true;
     var cap = c.parentNode.querySelector('.cap'); if (cap) cap.hidden = true;
+    var tap = c.parentNode.querySelector('.tap'); if (tap) tap.hidden = true;
   }
   /* стеснено движение → постерът вместо анимацията (критерий на V2) */
   if (СТЕСНЕН || БЕЗGL) { сцени.forEach(постер); window.__мфиг = { режим: 'постер', фигури: [] }; return; }
@@ -873,10 +922,12 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
     return out;
   }
   /* тяло на въртене от профил → home/cls/data от индекс i0; връща следващия индекс */
-  function лате(profile, n, rand, home, cls, data, i0, clsVal, jitter, scale, dx, dy, dz) {
-    var prof = профилПоДъга(profile, n, rand);
+  function лате(profile, n, rand, home, cls, data, i0, clsVal, jitter, scale, dx, dy, dz, плоско) {
+    var prof = профилПоДъга(profile, n, rand), пл = плоско || 0;
     for (var k = 0; k < n; k++) {
       var p = prof[k], th = rand() * TAU, r = (p.r + (rand() - 0.5) * jitter) * scale, i = i0 + k;
+      /* v2.1 · остър силует: дял от точките ляга върху контура (профилът, гледан отпред), не по цялата повърхност */
+      if (rand() < пл) th = (rand() < 0.5 ? 0 : Math.PI) + (rand() - 0.5) * 0.30;
       home[i * 3] = r * Math.cos(th) + dx;
       home[i * 3 + 1] = p.y * scale + dy;
       home[i * 3 + 2] = r * Math.sin(th) + dz;
@@ -906,7 +957,39 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
     return [[0.00, -1.00], [0.30, -1.00], [0.30, -0.62], [0.26, -0.20], [0.22, 0.20], [0.20, 0.44],
       [0.26, 0.60], [0.22, 0.74], [0.14, 0.86], [0.00, 0.96]];
   }
-  var КАЧУЛКИ = [[-0.98, -0.22, -0.55], [0.00, -0.06, -0.95], [0.98, -0.22, -0.55]];
+  var КАЧУЛКИ = [[-0.98, -0.22, -0.55], [0.00, -0.06, -0.95], [0.98, -0.22, -0.55]]; /* V2 · само за часовника (hero „преди“ вече не ги ползва) */
+
+  /* ══ СПИРАЧКАТА · три качулати сенки (v2.1 · дума 12.09: „нова фигура, не часовник“) ═══════════
+     cls: 0 тяло на сянка (data = лице/2 · 0 вътрешен · 0.5 външен · 1 философски) · 1 жарава (data = темп) · 2 земя
+     Сглобяват се по скрол (uAssembly идва от страницата) · избраното лице свети · при смяна (uAux.x = старото ·
+     uAux.y = фаза 0→1) старата сянка се разпада в жарава, която прелита и се събира като новото лице. */
+  var СЕНКИ = [[-0.78, 0.0, -0.15], [0.0, 0.0, 0.10], [0.78, 0.0, -0.15]], СЕНКИ_МАЩАБ = [0.82, 0.95, 0.82];
+  function сянкаПрофил() {
+    return [[0.00, -1.00], [0.34, -1.00], [0.36, -0.70], [0.30, -0.25], [0.27, 0.15], [0.30, 0.42], [0.34, 0.52],
+      [0.30, 0.62], [0.22, 0.72], [0.16, 0.82], [0.10, 0.92], [0.00, 0.98]];
+  }
+  function genMonster(home, cls, data, N, rand) {
+    var nТела = Math.floor(N * 0.70), nЖар = Math.floor(N * 0.22), i = 0, k, s;
+    var дял = [0.30, 0.40, 0.30];
+    for (s = 0; s < 3; s++) {
+      var n = Math.floor(nТела * дял[s]), i0 = i, sc = СЕНКИ_МАЩАБ[s], o = СЕНКИ[s];
+      i = лате(сянкаПрофил(), n, rand, home, cls, data, i, 0, 0.010, sc, o[0], o[1], o[2], 0.35);
+      for (k = i0; k < i; k++) {
+        data[k] = s / 2;
+        /* качулката е куха отпред: точките пред лицето се обръщат назад */
+        var ly = (home[k * 3 + 1] - o[1]) / sc, lz = home[k * 3 + 2] - o[2];
+        if (ly > 0.56 && lz > 0.02) home[k * 3 + 2] = o[2] - lz;
+      }
+    }
+    for (k = 0; k < nЖар; k++, i++) {
+      home[i * 3] = (rand() * 2 - 1) * 1.30; home[i * 3 + 1] = -1.0; home[i * 3 + 2] = (rand() - 0.5) * 0.6;
+      cls[i] = 1; data[i] = rand();
+    }
+    for (; i < N; i++) {
+      home[i * 3] = (rand() * 2 - 1) * 1.45; home[i * 3 + 1] = -1.03 + (rand() - 0.5) * 0.03; home[i * 3 + 2] = (rand() - 0.5) * 0.4;
+      cls[i] = 2; data[i] = rand();
+    }
+  }
 
   function genHourglass(сенки) {
     return function (home, cls, data, N, rand) {
@@ -915,7 +998,7 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
       var nСтъкло = Math.floor(nОст * 0.40), nРамка = Math.floor(nОст * 0.12), nГоре = Math.floor(nОст * 0.18);
       var nПоток = Math.floor(nОст * 0.08), nКупч = nОст - nСтъкло - nРамка - nГоре - nПоток;
       var i = 0, k, th, r, y;
-      i = лате(часовникПрофил(), nСтъкло, rand, home, cls, data, i, 0, 0.012, 1, 0, 0, 0);
+      i = лате(часовникПрофил(), nСтъкло, rand, home, cls, data, i, 0, 0.008, 1, 0, 0, 0, 0.45);
       /* рамката: три колони + два пръстена */
       var nКол = Math.floor(nРамка * 0.6), nПр = nРамка - nКол;
       for (k = 0; k < nКол; k++, i++) {
@@ -964,11 +1047,11 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
 
   /* ══ ЖЕНАТА С ИСКРА И КРИЛЕ · „сега“ ═══════════════════════════════════
      cls: 0 тяло (силует на въртене · data = от полите към главата) · 1 криле · 2 искрата в гърдите */
-  function женаПрофил() {
+  function женаПрофил() { /* v2.1 · по-ясни рамене · по-дълга шия · по-четлива глава */
     return [[0.00, -1.06], [0.50, -1.06], [0.49, -1.00], [0.44, -0.82], [0.36, -0.60], [0.28, -0.38], [0.22, -0.18],
-      [0.19, -0.02], [0.21, 0.10], [0.26, 0.22], [0.27, 0.32], [0.25, 0.42], [0.18, 0.50], [0.08, 0.55],
-      [0.065, 0.60], [0.065, 0.64], [0.11, 0.68], [0.16, 0.74], [0.175, 0.82], [0.16, 0.90], [0.11, 0.97],
-      [0.04, 1.01], [0.00, 1.02]];
+      [0.19, -0.02], [0.21, 0.10], [0.26, 0.22], [0.28, 0.34], [0.27, 0.44], [0.22, 0.50], [0.10, 0.545],
+      [0.058, 0.575], [0.055, 0.635], [0.10, 0.675], [0.16, 0.73], [0.185, 0.82], [0.17, 0.91], [0.12, 0.975],
+      [0.05, 1.01], [0.00, 1.02]];
   }
   function крило(side, rand) { /* дословно от хоума (genWings) */
     var u = rand(), v = rand();
@@ -981,14 +1064,21 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
   }
   var ИСКРА = [0.0, 0.30, 0.30];
   function genWoman(home, cls, data, N, rand) {
-    var nТяло = Math.floor(N * 0.60), nИскра = Math.floor(N * 0.045), nКрило = Math.floor((N - nТяло - nИскра) / 2);
-    var i = лате(женаПрофил(), nТяло, rand, home, cls, data, 0, 0, 0.014, 1, 0, 0, 0), k, q;
+    var nТяло = Math.floor(N * 0.56), nИскра = Math.floor(N * 0.045), nКоса = Math.floor(N * 0.07), nКрило = Math.floor((N - nТяло - nИскра - nКоса) / 2);
+    var i = лате(женаПрофил(), nТяло, rand, home, cls, data, 0, 0, 0.009, 1, 0, 0, 0, 0.42), k, q;
     for (var side = -1; side <= 1; side += 2) {
       for (k = 0; k < nКрило; k++, i++) {
         q = крило(side, rand);
         home[i * 3] = q[0] * 0.88; home[i * 3 + 1] = q[1] * 0.88 + 0.14; home[i * 3 + 2] = q[2] - 0.14;
         cls[i] = 1; data[i] = q[3];
       }
+    }
+    /* косата (cls 3): вълна от темето по дясното рамо надолу · data = от корена към върха — прави силуета жена, не фигура */
+    for (k = 0; k < nКоса; k++, i++) {
+      var u = Math.pow(rand(), 0.85), hy = 0.98 - u * 0.95;
+      var hx = 0.05 + 0.30 * Math.sin(u * 1.35) + 0.05 * Math.sin(u * 12.0) + (rand() - 0.5) * 0.07;
+      home[i * 3] = hx; home[i * 3 + 1] = hy + (rand() - 0.5) * 0.03; home[i * 3 + 2] = 0.12 * Math.cos(u * 1.6) + (rand() - 0.5) * 0.08 - 0.02;
+      cls[i] = 3; data[i] = u;
     }
     for (; i < N; i++) {
       var r = 0.075 * Math.cbrt(rand()), th = rand() * TAU, ph = Math.acos(2 * rand() - 1);
@@ -999,67 +1089,49 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
     }
   }
 
-  /* ══ СЪЗВЕЗДИЕТО НА ОСЕМТЕ ЕТАПА ═══════════════════════════════════════
-     cls: 0 възел (data = k/7) · 1 прах · 2 дъга (data = (сегмент + t)/7 → светва по ред) · 3 семе */
-  var GOLD_HALF_SPAN = Math.PI * 35 / 180, GOLD_R = 2.004;
-  function възел(k) {
-    var frac = (k * 137.5 / 360.0) % 1.0;
-    var ang = -GOLD_HALF_SPAN + 2 * GOLD_HALF_SPAN * frac;
-    return [GOLD_R * Math.sin(ang), GOLD_R * (Math.cos(ang) - Math.cos(GOLD_HALF_SPAN)) + 0.05, 0.10 * Math.sin(ang * 2.0 + k)];
-  }
-  var ВЪЗЛИ = []; for (var вк = 0; вк < 8; вк++) ВЪЗЛИ.push(възел(вк));
+  /* ══ ПЪТЯТ НА ГЕРОИНЯТА · 8 звезди по възходяща S-пътека (v2.1 · дума 12.09: „яка идея — да се разработи“) ══
+     cls: 0 ядро на звезда (data = k/7) · 1 топла мъгла · 2 лентата на пътя (data = t по пътя) ·
+          3 искри, които се вдигат от светналия път (data = t) · 4 ореол + четири лъча на звезда (data = k/7)
+     Пътят тръгва долу вляво и се изкачва на S до върха в средата — чете се като път нагоре без обяснение;
+     имената на етапите са HTML-етикети до звездите (страницата ги слага през __мфиг.проектирай). */
+  function път(t) { return [0.80 * Math.sin(Math.PI * (1.5 * t - 0.5)), -0.86 + 1.72 * t, 0.06 * Math.sin(t * 9.0)]; }
+  var ВЪЗЛИ = []; for (var вк = 0; вк < 8; вк++) ВЪЗЛИ.push(път(вк / 7));
   function genConstellation(home, cls, data, N, rand) {
-    var nВъзли = 8 * 6, nДъги = Math.floor(N * 0.12), nЗърна = Math.floor(N * 0.05), nПоле = N - nВъзли - nДъги - nЗърна;
-    var i = 0, k, m;
-    for (k = 0; k < 8; k++) for (m = 0; m < 6; m++, i++) {
-      var rr0 = 0.012 * Math.sqrt(rand()), th0 = rand() * TAU;
-      home[i * 3] = ВЪЗЛИ[k][0] + rr0 * Math.cos(th0); home[i * 3 + 1] = ВЪЗЛИ[k][1] + rr0 * Math.sin(th0); home[i * 3 + 2] = ВЪЗЛИ[k][2];
-      cls[i] = 0; data[i] = k / 7;
-    }
-    var наСегмент = Math.floor(nДъги / 7), сложени = 0;
-    for (var сг = 0; сг < 7; сг++) {
-      var na = ВЪЗЛИ[сг], nb = ВЪЗЛИ[сг + 1];
-      var dx = nb[0] - na[0], dy = nb[1] - na[1], dz = nb[2] - na[2];
-      var дъл = Math.hypot(dx, dy, dz) || 1, ux = dx / дъл, uy = dy / дъл, uz = dz / дъл;
-      var px = -uy, py = ux, pz = 0, pl = Math.hypot(px, py, pz);
-      if (pl < 1e-4) { px = 0; py = -uz; pz = uy; pl = Math.hypot(px, py, pz); }
-      px /= pl; py /= pl; pz /= pl;
-      var qx = uy * pz - uz * py, qy = uz * px - ux * pz, qz = ux * py - uy * px;
-      var брой = (сг === 6) ? (nДъги - сложени) : наСегмент;
-      for (m = 0; m < брой; m++, i++) {
-        var t = rand(), rr = (rand() - 0.5) * 0.022, th = rand() * TAU;
-        home[i * 3] = na[0] + dx * t + (Math.cos(th) * px + Math.sin(th) * qx) * rr;
-        home[i * 3 + 1] = na[1] + dy * t + (Math.cos(th) * py + Math.sin(th) * qy) * rr;
-        home[i * 3 + 2] = na[2] + dz * t + (Math.cos(th) * pz + Math.sin(th) * qz) * rr;
-        cls[i] = 2; data[i] = (сг + t) / 7;
+    var ЯДРО = 34, ОРЕОЛ = 110, nЛента = Math.floor(N * 0.22), nИскри = Math.floor(N * 0.06);
+    var nПоле = N - 8 * (ЯДРО + ОРЕОЛ) - nЛента - nИскри, i = 0, k, m, a, r, q;
+    for (k = 0; k < 8; k++) {
+      var v = ВЪЗЛИ[k];
+      for (m = 0; m < ЯДРО; m++, i++) {
+        r = 0.016 * Math.sqrt(rand()); a = rand() * TAU;
+        home[i * 3] = v[0] + r * Math.cos(a); home[i * 3 + 1] = v[1] + r * Math.sin(a); home[i * 3 + 2] = v[2];
+        cls[i] = 0; data[i] = k / 7;
       }
-      сложени += брой;
-    }
-    /* полето: прах, притеглен веднъж към трите най-близки възела (хоумът) */
-    var B = { x0: -1.30, x1: 1.30, y0: -0.62, y1: 0.62, z0: -0.32, z1: 0.32 };
-    for (k = 0; k < nПоле; k++, i++) {
-      var p0x = B.x0 + rand() * (B.x1 - B.x0), p0y = B.y0 + rand() * (B.y1 - B.y0), p0z = B.z0 + rand() * (B.z1 - B.z0);
-      var b1 = 0, b2 = 0, b3 = 0, d1 = 1e9, d2 = 1e9, d3 = 1e9;
-      for (var n = 0; n < 8; n++) {
-        var d = Math.hypot(ВЪЗЛИ[n][0] - p0x, ВЪЗЛИ[n][1] - p0y, ВЪЗЛИ[n][2] - p0z);
-        if (d < d1) { d3 = d2; b3 = b2; d2 = d1; b2 = b1; d1 = d; b1 = n; }
-        else if (d < d2) { d3 = d2; b3 = b2; d2 = d; b2 = n; }
-        else if (d < d3) { d3 = d; b3 = n; }
+      for (m = 0; m < ОРЕОЛ; m++, i++) {
+        if (m < 60) { /* четири лъча · по-гъсти към звездата */
+          var лъч = m % 4, d = 0.02 + 0.11 * Math.pow(rand(), 1.6);
+          var ax = (лъч < 2) ? (лъч ? -d : d) : (rand() - 0.5) * 0.006, ay = (лъч < 2) ? (rand() - 0.5) * 0.006 : (лъч === 2 ? d : -d);
+          home[i * 3] = v[0] + ax; home[i * 3 + 1] = v[1] + ay; home[i * 3 + 2] = v[2];
+        } else { /* мек ореол */
+          r = 0.03 + 0.07 * Math.pow(rand(), 0.7); a = rand() * TAU;
+          home[i * 3] = v[0] + r * Math.cos(a); home[i * 3 + 1] = v[1] + r * Math.sin(a); home[i * 3 + 2] = v[2] + (rand() - 0.5) * 0.03;
+        }
+        cls[i] = 4; data[i] = k / 7;
       }
-      var w1 = 1 / (d1 + 0.06), w2 = 1 / (d2 + 0.06), w3 = 1 / (d3 + 0.06), ws = w1 + w2 + w3;
-      var wx = (ВЪЗЛИ[b1][0] * w1 + ВЪЗЛИ[b2][0] * w2 + ВЪЗЛИ[b3][0] * w3) / ws;
-      var wy = (ВЪЗЛИ[b1][1] * w1 + ВЪЗЛИ[b2][1] * w2 + ВЪЗЛИ[b3][1] * w3) / ws;
-      var wz = (ВЪЗЛИ[b1][2] * w1 + ВЪЗЛИ[b2][2] * w2 + ВЪЗЛИ[b3][2] * w3) / ws;
-      var blend = Math.pow(rand(), 0.65);
-      home[i * 3] = p0x + (wx - p0x) * blend; home[i * 3 + 1] = p0y + (wy - p0y) * blend; home[i * 3 + 2] = p0z + (wz - p0z) * blend;
-      cls[i] = 1; data[i] = blend;
     }
-    for (m = 0; m < nЗърна; m++, i++) {
-      var a2 = rand() * TAU, r2 = 1.18 * Math.sqrt(rand());
-      home[i * 3] = r2 * Math.cos(a2) * 1.05; home[i * 3 + 1] = -0.62 + rand() * 0.20; home[i * 3 + 2] = (rand() - 0.5) * 0.45;
-      cls[i] = 3; data[i] = rand();
+    for (m = 0; m < nЛента; m++, i++) {
+      var t = rand(); q = път(t);
+      home[i * 3] = q[0] + (rand() - 0.5) * 0.045; home[i * 3 + 1] = q[1] + (rand() - 0.5) * 0.03; home[i * 3 + 2] = q[2] + (rand() - 0.5) * 0.03;
+      cls[i] = 2; data[i] = t;
     }
-    while (i < N) { home[i * 3] = 0; home[i * 3 + 1] = 0; home[i * 3 + 2] = 0; cls[i] = 1; data[i] = 0; i++; }
+    for (m = 0; m < nИскри; m++, i++) {
+      var t2 = rand(); q = път(t2);
+      home[i * 3] = q[0] + (rand() - 0.5) * 0.12; home[i * 3 + 1] = q[1]; home[i * 3 + 2] = q[2];
+      cls[i] = 3; data[i] = t2;
+    }
+    for (k = 0; k < nПоле; k++, i++) { /* топла мъгла · по-гъста долу · не по-широка от пътя, за да не смалява кадъра */
+      home[i * 3] = (rand() * 2 - 1) * 0.92; home[i * 3 + 1] = -0.95 + Math.pow(rand(), 1.8) * 1.9; home[i * 3 + 2] = (rand() - 0.5) * 0.6;
+      cls[i] = 1; data[i] = rand();
+    }
   }
 
   /* ══ СКАЛАТА · буря (A) → зора (B) ═════════════════════════════════════
@@ -1143,7 +1215,8 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
     '  if (clsv > 1.5 && clsv < 2.5) { src.y = 0.06 - mod(datv + uTime * 0.22, 1.0) * 0.92; }',
     '  vec3 tg = aTarget;',
     '  if (cls2 > 0.5 && cls2 < 1.5) { float fl = sin(uTime * 1.15 + dat2 * 2.4) * 0.07 * dat2; tg.z += fl * 1.6; tg.y += fl * 0.5; }',
-    '  if (cls2 > 1.5) { float pu = 1.0 + 0.35 * sin(uTime * 2.4) + uFocus * 0.9; tg = (tg - vec3(0.0, 0.30, 0.30)) * pu + vec3(0.0, 0.30, 0.30); }',
+    '  if (cls2 > 1.5 && cls2 < 2.5) { float pu = 1.0 + 0.35 * sin(uTime * 2.4) + uFocus * 0.9; tg = (tg - vec3(0.0, 0.30, 0.30)) * pu + vec3(0.0, 0.30, 0.30); }',
+    '  if (cls2 > 2.5) { tg.x += sin(uTime * 1.1 + dat2 * 4.0) * 0.025 * dat2; tg.z += cos(uTime * 0.9 + dat2 * 3.0) * 0.02 * dat2; }',
     '  hp = mix(src, tg, mm);',
     '  hp += mid * 0.5 * vec3(cos(uTime * 1.6 + seedv * 21.0), sin(uTime * 1.3 + seedv * 17.0) * 0.8, sin(uTime * 1.9 + seedv * 9.0));',
     '  a = asm2(uAssembly, seedv, 0.0);',
@@ -1153,72 +1226,85 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
     '            : mix(uShadow * 0.9, uPal[1] * 0.7, datv);',
     '  vec3 colB = (cls2 < 0.5) ? mix(uPal[0] * 0.85, uBone * 1.15, dat2)',
     '            : (cls2 < 1.5) ? mix(uPal[0] * 0.85, uPal[0] * 1.35, dat2)',
-    '            : mix(uPal[3] * 1.2, uPal[0] * 1.25, dat2 * dat2);',
+    '            : (cls2 < 2.5) ? mix(uPal[3] * 1.2, uPal[0] * 1.25, dat2 * dat2)',
+    '            : mix(uPal[5] * 1.1, uPal[0] * 1.0, dat2 * dat2);',
     '  col = mix(colA, colB, mm) + uPal[0] * mid * 0.55;',
     '  float szA = (clsv > 1.5 && clsv < 3.5) ? 1.3 : 1.0;',
-    '  float szB = (cls2 > 1.5) ? 1.5 : ((cls2 > 0.5) ? 1.15 : 1.0);',
+    '  float szB = (cls2 > 1.5 && cls2 < 2.5) ? 1.5 : ((cls2 > 0.5 && cls2 < 1.5) ? 1.15 : 1.0);',
     '  sizeF = mix(szA, szB, mm) * (1.0 + mid * 0.5);',
-    '  alphaF = mix(0.9, (cls2 > 1.5) ? 1.0 : 0.9, mm);'
+    '  alphaF = mix(0.9, (cls2 > 1.5 && cls2 < 2.5) ? 1.0 : 0.9, mm);'
   ].join('\n');
 
   var СЪЗВЕЗДИЕ_GLSL = [
-    '  float litN = uProgress * 7.0;',
-    '  if (clsv < 0.5) {',
+    '  float litN = uProgress * 7.0;',                                  /* текущият етап · непрекъснато */
+    '  if (clsv < 0.5 || clsv > 3.5) {',                                /* ядро + ореол/лъчи на звезда */
     '    float kk = datv * 7.0;',
-    '    float lit = 1.0 - smoothstep(litN + 0.15, litN + 0.6, kk);',
-    '    float cur = exp(-(kk - litN) * (kk - litN) * 3.0);',
-    '    float pulse = 0.5 + 0.5 * sin(uTime * 2.0 + kk * 1.7);',
+    '    float lit = 1.0 - smoothstep(litN + 0.2, litN + 0.7, kk);',     /* минатите и текущата светят */
+    '    float cur = exp(-(kk - litN) * (kk - litN) * 4.0);',            /* текущата — най-силно */
+    '    float pulse = 0.5 + 0.5 * sin(uTime * 2.2 + kk * 1.7);',
+    '    bool core = clsv < 0.5;',
     '    a = asm2(uAssembly, seedv, 0.0);',
-    '    vec2 toPtr = hp.xy - uPointer.xy;',
-    '    float near = exp(-dot(toPtr, toPtr) * 3.2) * ptrAct;',
-    '    col = mix(uPal[2] * 1.0, uPal[0] * 1.7, lit) + uPal[0] * (cur * 0.6 + near * 0.5);',
-    '    sizeF = mix(2.3, 3.3, lit) + cur * (1.0 + 0.5 * pulse) + near;',
-    '    alphaF = 1.0;',
-    '  } else if (clsv < 1.5) {',
-    '    a = asm2(uAssembly, seedv, 0.10 + datv * 0.10);',
-    '    col = mix(uPal[2] * 0.55, mix(uPal[2], uPal[0], uProgress * 0.5) * 1.05, datv);',
-    '    alphaF = mix(0.35, 0.85, datv); sizeF = mix(0.85, 1.15, datv);',
-    '  } else if (clsv < 2.5) {',
-    '    float lit = 1.0 - smoothstep(litN - 0.02, litN + 0.05, datv * 7.0);',
+    '    vec2 toPtr = hp.xy - uPointer.xy; float near = exp(-dot(toPtr, toPtr) * 3.2) * ptrAct;',
+    '    vec3 base = mix(uBone * 0.55, uPal[0] * 1.6, lit);',
+    '    col = base + uPal[1] * cur * (0.5 + 0.4 * pulse) + uPal[0] * near * 0.5;',
+    '    sizeF = (core ? (mix(1.6, 2.8, lit) + cur * (1.2 + 0.6 * pulse)) : (mix(0.7, 1.2, lit) + cur * 0.8)) + near;',
+    '    alphaF = core ? 1.0 : (mix(0.25, 0.75, lit) + cur * 0.25);',
+    '  } else if (clsv < 1.5) {',                                        /* топла мъгла */
+    '    a = asm2(uAssembly, seedv, 0.12 + datv * 0.10);',
+    '    col = mix(uPal[5] * 0.35, uPal[0] * 0.30, datv); alphaF = 0.30; sizeF = mix(0.9, 1.5, datv);',
+    '  } else if (clsv < 2.5) {',                                        /* лентата на пътя · искрата пътува по нея */
+    '    float lit = 1.0 - smoothstep(uProgress - 0.01, uProgress + 0.02, datv);',
     '    a = asm2(uAssembly, seedv, 0.05);',
-    '    float sp = exp(-pow(fract(uTime * 0.12) * 7.0 - datv * 7.0, 2.0) * 40.0) * lit;',
-    '    float shimmer = 0.55 + 0.45 * sin(uTime * 2.0 - datv * 60.0);',
-    '    col = mix(uPal[2] * (0.5 + 0.3 * shimmer), uPal[0] * 1.4, lit) + uPal[0] * sp * 1.6;',
-    '    alphaF = mix(0.35, 0.9, lit); sizeF = mix(0.9, 1.3, lit) + sp * 1.6;',
-    '  } else {',
-    '    a = asm2(uAssembly, seedv, 0.14);',
-    '    float period = 4.2;',
-    '    float ttG = mod(uTime * 0.6 + datv * period, period);',
-    '    float vx = sin(seedv * 12.9) * 0.34; float vy0 = 0.55 + 0.30 * cos(seedv * 7.3); float gG = 0.85;',
-    '    float ground = -0.62 + 0.12 * sin(seedv * 31.7);',
-    '    float disc = vy0 * vy0 - 2.0 * gG * ground;',
-    '    float tLand = (vy0 + sqrt(max(disc, 0.0))) / gG;',
-    '    float te = min(ttG, tLand);',
-    '    hp.x += vx * te; hp.y += vy0 * te - 0.5 * gG * te * te;',
-    '    float germ = max(1.0 / (1.0 + exp(-(uTime * 0.05 + seedv * 9.0 - 4.5))), uProgress);',
-    '    col = mix(uPal[2] * 0.9, uPal[0] * 1.35, germ); sizeF = mix(1.1, 1.6, germ); alphaF = mix(0.5, 0.85, germ);',
+    '    float dcur = datv - uProgress;',
+    '    float comet = exp(-dcur * dcur * 900.0) + 0.6 * exp(-max(0.0, -dcur) * 14.0) * step(0.0, -dcur);',
+    '    float shimmer = 0.6 + 0.4 * sin(uTime * 2.4 - datv * 50.0);',
+    '    col = mix(uBone * 0.32, uPal[0] * (0.9 + 0.5 * shimmer), lit) + uPal[1] * comet * 1.8;',
+    '    alphaF = mix(0.28, 0.85, lit) + comet * 0.3; sizeF = mix(0.75, 1.2, lit) + comet * 2.2;',
+    '  } else {',                                                        /* искри от светналия път */
+    '    float lit = step(datv, uProgress);',
+    '    a = asm2(uAssembly, seedv, 0.1);',
+    '    float ph = fract(uTime * 0.16 + seedv * 3.0);',
+    '    hp.y += ph * 0.35; hp.x += sin(uTime * 1.5 + seedv * 20.0) * 0.03;',
+    '    col = uPal[0] * 1.3 * lit; sizeF = 1.0; alphaF = (1.0 - ph) * 0.9 * lit;',
     '  }'
   ].join('\n');
 
   var ЧУДОВИЩЕ_GLSL = [
     '  float ember = 0.75 + 0.25 * sin(uTime * 3.1 + seedv * 40.0);',
-    '  float heat = 1.0 + uFocus * 1.2;',                                 /* задържането разгаря жаравата */
-    '  if (clsv < 0.5) { a = asm2(uAssembly, seedv, 0.0); col = mix(uShadow * 0.7, uShadow * 1.45, datv); sizeF = 0.95; alphaF = 0.8; }',
-    '  else if (clsv < 1.5) { a = asm2(uAssembly, seedv, 0.05); col = mix(uBone * 0.4, uPal[0] * 0.7, datv); sizeF = 1.0; alphaF = 0.85; }',
-    '  else if (clsv < 2.5) {',
-    '    a = asm2(uAssembly, seedv, 0.15);',
-    '    hp.y = 0.06 - mod(datv + uTime * 0.22 * heat, 1.0) * 0.92;',
-    '    hp.xz *= 1.0 + 2.5 * clamp((-0.5 - hp.y) / 0.45, 0.0, 1.0);',   /* при дъното пясъкът се разпръсва */
-    '    col = uPal[1] * (1.2 + 0.5 * ember) * heat; sizeF = 1.4 + ember * 0.4; alphaF = 1.0;',
-    '  }',
-    '  else if (clsv < 3.5) { a = asm2(uAssembly, seedv, 0.10); col = mix(uPal[5] * 0.9, uPal[1] * 1.5 * heat, datv * datv) * (0.8 + 0.2 * ember); sizeF = 1.0 + datv * 0.5; alphaF = 0.95; }',
-    '  else if (clsv < 4.5) { a = asm2(uAssembly, seedv, 0.0); col = mix(uShadow * 1.1, uPal[1] * 0.9, datv); sizeF = 0.95; alphaF = 0.85; }',
-    '  else {',
-    '    float lit = 1.0 - smoothstep(0.08, 0.30, abs(datv - uProgress));',   /* избраното лице свети */
-    '    a = asm2(uAssembly, seedv, 0.2);',
-    '    vec2 toPtr = hp.xy - uPointer.xy; float near = exp(-dot(toPtr, toPtr) * 2.0) * ptrAct;',
-    '    col = mix(uShadow * 0.6, uPal[1] * 1.4, lit) + uPal[0] * near * 0.5;',
-    '    sizeF = 1.0 + lit * 0.6; alphaF = mix(0.7, 1.0, lit);',
+    '  float b = clamp(uAux.y, 0.0, 1.0);',                                        /* фаза на прехода 0 → 1 */
+    '  float eb = smoothstep(0.0, 1.0, b);',
+    '  float trans = step(0.01, abs(uAux.x - uProgress)) * (1.0 - step(0.999, b));', /* има ли преход в момента */
+    '  if (clsv < 0.5) {',                                                          /* телата на трите сенки */
+    '    vec3 mine = shade3(datv);',
+    '    float isNew = 1.0 - smoothstep(0.08, 0.30, abs(datv - uProgress));',
+    '    float isOld = (1.0 - smoothstep(0.08, 0.30, abs(datv - uAux.x))) * trans;',
+    '    float d = (datv < 0.25) ? 0.14 : ((datv < 0.75) ? 0.0 : 0.20);',
+    '    a = asm2(uAssembly, seedv, d);',
+    '    vec3 scatter = vec3(sin(seedv * 40.0), 0.6 + fract(seedv * 7.0), cos(seedv * 23.0)) * 0.9;',
+    '    if (isNew > 0.5 && trans > 0.5) {',                                        /* новото лице: жаравата прелита от старото място и се събира */
+    '      vec3 fromOld = shade3(uAux.x) + (hp - mine);',
+    '      hp = mix(fromOld + scatter * sin(eb * 3.14159), hp, eb);',
+    '      col = mix(uPal[1] * 1.8, mix(uShadow * 1.5, uPal[1] * 0.9, ember * 0.35), eb);',
+    '      sizeF = 1.6 - 0.5 * eb; alphaF = mix(0.55, 1.0, eb);',
+    '    } else if (isOld > 0.5) {',                                                /* старото лице: разпада се нагоре в жарава */
+    '      hp += scatter * eb * 1.3 + vec3(0.0, eb * 0.9, 0.0);',
+    '      col = uPal[1] * (1.6 + 0.6 * ember); sizeF = 1.5; alphaF = (1.0 - eb) * 1.0;',
+    '    } else {',
+    '      float breath = 1.0 + 0.02 * sin(uTime * 1.3) * isNew;',
+    '      hp = mine + (hp - mine) * breath;',
+    '      vec2 toPtr = hp.xy - uPointer.xy; float near = exp(-dot(toPtr, toPtr) * 2.0) * ptrAct;',
+    '      col = mix(uShadow * 0.55, mix(uShadow * 1.55, uPal[1] * 1.1, 0.25 + 0.15 * ember), isNew) + uPal[0] * near * 0.5;',
+    '      sizeF = mix(0.9, 1.25, isNew); alphaF = mix(0.55, 1.0, isNew);',
+    '    }',
+    '  } else if (clsv < 1.5) {',                                                   /* жаравата: вдига се от земята, най-силна под избраното лице */
+    '    a = asm2(uAssembly, seedv, 0.3);',
+    '    float ph = fract(uTime * 0.10 * (0.6 + datv) + seedv);',
+    '    hp.y = -1.0 + ph * 1.5; hp.x += sin(uTime * 0.8 + seedv * 30.0) * 0.06 * ph;',
+    '    float nearSel = exp(-pow(hp.x - shade3(uProgress).x, 2.0) * 2.5);',
+    '    float flare = 1.0 + (1.0 - eb) * trans * 1.5;',
+    '    col = uPal[1] * (1.1 + 0.6 * ember) * flare; sizeF = 1.0 + 0.4 * nearSel; alphaF = (1.0 - ph) * (0.25 + 0.75 * nearSel) * 0.9;',
+    '  } else {',                                                                   /* земята */
+    '    a = asm2(uAssembly, seedv, 0.05); col = uBone * 0.35; sizeF = 0.8; alphaF = 0.55;',
     '  }'
   ].join('\n');
 
@@ -1274,11 +1360,15 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
       'uniform float uTime, uAssembly, uProgress, uFocus, uSwirl, uExhibit, uReduced, uSizeBase, uPx, uScale;',
       'uniform vec3 uOffset, uPointer, uBone, uShadow;',
       'uniform vec3 uPal[8];',
+      'uniform vec4 uAux;',
       'varying vec3 vColor;',
       'varying float vAlpha;',
       '',
       'float asm2(float u, float s, float d) {',
       '  return smoothstep(0.0, 1.0, u * (1.35 + d) - (s * 0.35 + d));',
+      '}',
+      'vec3 shade3(float f) {',   /* центровете на трите сенки на Спирачката · дословно СЕНКИ */
+      '  return f < 0.25 ? vec3(-0.78, 0.0, -0.15) : (f < 0.75 ? vec3(0.0, 0.0, 0.10) : vec3(0.78, 0.0, -0.15));',
       '}',
       '',
       'void main() {',
@@ -1360,7 +1450,7 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
   var A = {}, U = {};
   ['position', 'aTarget', 'aDust', 'aSeed', 'aClass', 'aClass2', 'aData', 'aData2'].forEach(function (n) { A[n] = gl.getAttribLocation(прогр, n); });
   ['modelViewMatrix', 'projectionMatrix', 'uTime', 'uAssembly', 'uProgress', 'uFocus', 'uSwirl', 'uExhibit', 'uReduced',
-    'uSizeBase', 'uPx', 'uScale', 'uOffset', 'uPointer', 'uBone', 'uShadow', 'uPal[0]'].forEach(function (n) { U[n] = gl.getUniformLocation(прогр, n); });
+    'uSizeBase', 'uPx', 'uScale', 'uOffset', 'uPointer', 'uBone', 'uShadow', 'uPal[0]', 'uAux'].forEach(function (n) { U[n] = gl.getUniformLocation(прогр, n); });
 
   gl.disable(gl.DEPTH_TEST);
   gl.enable(gl.SCISSOR_TEST);
@@ -1388,8 +1478,10 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
   var РЕЦЕПТИ = {
     hero:    { индекс: 0, семе: 20260912, ген: genHourglass(false), ген2: genWoman, драйвер: 'авто', скорост: 1.3,
                височина: ТЕЛЕФОН ? [0.34, 0.42] : [0.60, 0.88] },
-    path:    { индекс: 1, семе: 20260828, ген: genConstellation, драйвер: 'външен', скорост: 3.0, височина: [0.40, 0.62] },
-    monster: { индекс: 2, семе: 20260913, ген: genHourglass(true), драйвер: 'външен', скорост: 3.0, височина: [0.52, 0.80] },
+    path:    { индекс: 1, семе: 20260828, ген: genConstellation, драйвер: 'външен', скорост: 2.6, височина: [0.42, 0.64] },
+    /* Спирачката: сглобява се по скрол (сглобяване 'скрол' · целта идва от страницата) · лицето е дискретно (0 · ½ · 1) ·
+       смяната пуска преход „разпад в жарава → събиране“ с дължина бум секунди (uAux) */
+    monster: { индекс: 2, семе: 20260913, ген: genMonster, драйвер: 'външен', скорост: 3.0, дискретен: true, сглобяване: 'скрол', бум: 1.15, височина: [0.50, 0.78] },
     scale:   { индекс: 3, семе: 20260914, ген: genStorm, ген2: genDawn, драйвер: 'външен', скорост: 2.2, височина: [0.52, 0.80] },
     sunarc:  { индекс: 4, семе: 20260915, ген: genSunArc, драйвер: 'външен', скорост: 4.0, височина: [0.28, 0.42] }
   };
@@ -1417,7 +1509,7 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
     var вид = платно.getAttribute('data-фигура');
     if (!РЕЦЕПТИ[вид]) return null;
     return { платно: платно, дъска: платно.getContext('2d'), вид: вид, сцена: платно.parentNode,
-      роден: false, буден: false, време: 0, сглоб: 0, ръст: 0, цел: 0, ръчно: false, авто: 0,
+      роден: false, буден: false, време: 0, сглоб: 0, сглобЦел: 0, ръст: 0, цел: 0, предиЦел: 0, aux0: 0, бум: 1, ръчно: false, авто: 0,
       фокус: 0, вихър: 0, пкх: 0, пкy: 0, ш: 0, в: 0, държи: false, камZ: 3.2, слуш: [] };
   }).filter(Boolean);
   if (!фигури.length) return;
@@ -1512,12 +1604,16 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
       if (ф.ш < 40 || ф.в < 40) continue;
 
       ф.време += dt;
-      ф.сглоб += (1 - ф.сглоб) * (1 - Math.exp(-dt * 2.2));
+      if (р.сглобяване === 'скрол') ф.сглоб += (ф.сглобЦел - ф.сглоб) * (1 - Math.exp(-dt * 3.0));  /* сглобяването го кара скролът */
+      else ф.сглоб += (1 - ф.сглоб) * (1 - Math.exp(-dt * 2.2));
       ф.фокус += ((ф.държи ? 1 : 0) - ф.фокус) * (1 - Math.exp(-dt * 3.4));
       ф.вихър *= Math.exp(-dt * 2.6);
       /* hero: сглобява се „преди“, диша миг и сам минава към „сега“ — освен ако ръката вече е избрала */
       if (р.драйвер === 'авто' && !ф.ръчно && ф.сглоб > 0.9) { ф.авто += dt; if (ф.авто > 1.1) ф.цел = 1; }
-      ф.ръст += (ф.цел - ф.ръст) * (1 - Math.exp(-dt * р.скорост));
+      if (р.дискретен) { /* стойността скача · преходът е в шейдъра (uAux = старата стойност · фаза) */
+        if (ф.цел !== ф.предиЦел) { ф.aux0 = ф.предиЦел; ф.бум = 0; ф.предиЦел = ф.цел; }
+        ф.бум = Math.min(1, ф.бум + dt / (р.бум || 1)); ф.ръст = ф.цел;
+      } else ф.ръст += (ф.цел - ф.ръст) * (1 - Math.exp(-dt * р.скорост));
       for (var s = 0; s < ф.слуш.length; s++) ф.слуш[s](ф);
 
       var аспект = ф.ш / Math.max(1, ф.в);
@@ -1542,6 +1638,7 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
       gl.uniform3f(U.uBone, КОСТ3[0], КОСТ3[1], КОСТ3[2]);
       gl.uniform3f(U.uShadow, СЯНКА3[0], СЯНКА3[1], СЯНКА3[2]);
       gl.uniform3fv(U['uPal[0]'], ПАЛ);
+      gl.uniform4f(U.uAux, ф.aux0, ф.бум, 0, 0);
 
       вържи(ф.формаА.поз, A.position, 3);
       вържи(ф.формаБ.поз, A.aTarget, 3);
@@ -1568,8 +1665,14 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
 
   /* ══════════════ ВРАТА КЪМ СТРАНИЦАТА · и верификационна кука ══════════════ */
   window.__мфиг = {
-    режим: 'webgl', фигури: фигури, брой: БРОЙ, възли: ВЪЗЛИ, качулки: КАЧУЛКИ, намери: намери,
+    режим: 'webgl', фигури: фигури, брой: БРОЙ, възли: ВЪЗЛИ, качулки: СЕНКИ, намери: намери,
     задай: function (вид, цел, ръчно) { var ф = намери(вид); if (!ф) return; ф.цел = Math.max(0, Math.min(1, цел)); if (ръчно) ф.ръчно = true; пусни(); },
+    сглоби: function (вид, u) { var ф = намери(вид); if (!ф) return; ф.сглобЦел = Math.max(0, Math.min(1, u)); пусни(); },
+    обратно: function (вид, px, py) {  /* пиксели в сцената → моделни координати (обратното на проектирай) */
+      var ф = намери(вид); if (!ф) return null;
+      var r = ф.сцена.getBoundingClientRect(), asp = ф.ш / Math.max(1, ф.в), z = ф.камZ || 3.2;
+      return { x: ((px / Math.max(1, r.width)) * 2 - 1) * ТАН * asp * z, y: (1 - (py / Math.max(1, r.height)) * 2) * ТАН * z };
+    },
     слушай: function (вид, fn) { var ф = намери(вид); if (ф) ф.слуш.push(fn); },
     проектирай: function (вид, x, y) {  /* моделни координати → пиксели в сцената */
       var ф = намери(вид); if (!ф) return null;
@@ -1605,19 +1708,44 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
   const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
   const МФ=()=>window.__мфиг||null;
   const задай=(вид,v,ръчно)=>{const m=МФ(); if(m&&m.задай) m.задай(вид,v,ръчно)};
+  const сглоби=(вид,u)=>{const m=МФ(); if(m&&m.сглоби) m.сглоби(вид,u)};
   const NS='http://www.w3.org/2000/svg', rad=d=>d*Math.PI/180;
+  const STATIC=/[?&]static=1/.test(location.search);  /* QA: всичко видимо без IO */
+  const vh=()=>innerHeight||document.documentElement.clientHeight;
 
-  /* hero awake + преди/сега */
+  /* ══ ЗАКОНЪТ ЗА ВСЕКИ КОНТРОЛ (дума на Митрандир 12.09 · 95% са от телефон) ══
+     (а) сменя се САМ, докато скролваш покрай него · (б) спреш ли — тап го сменя ·
+     (в) подсказка „докоснете" + пулс до първата интеракция · (г) нула hover, нула „сети се да кликнеш".
+     драйвер(): скролът е господар. Тапът държи стойността, докато скрол-стойността не се промени —
+     тогава скролът си взима контрола обратно (нищо не се връща „под пръста"). */
+  function драйвер(стъпки, изчисли, приложи, начало){
+    let авто=null, ръчно=null, котва=null, тек=(начало===undefined?null:начало);
+    const ефект=()=>{const e=ръчно!==null?ръчно:авто; if(e!==null&&e!==тек){тек=e; приложи(e)}};
+    const d={
+      скрол(){const a=изчисли(); if(a===null) return; if(ръчно!==null&&a!==котва) ръчно=null; авто=a; ефект()},
+      тап(i){ръчно=((i%стъпки)+стъпки)%стъпки; котва=авто; ефект()},
+      следващ(){d.тап((тек===null?-1:тек)+1)},
+      get тек(){return тек}
+    };
+    return d;
+  }
+  /* напредък на елемент през екрана: 0 = горният му ръб на `от`·vh · 1 = горният му ръб на `до`·vh */
+  const напредък=(el,от,до)=>{const r=el.getBoundingClientRect(), H=vh(); return clamp((H*от-r.top)/(H*(от-до)),0,1)};
+  const наЕкран=(el,запас)=>{const r=el.getBoundingClientRect(), z=запас||0; return r.bottom>-z&&r.top<vh()+z};
+
+  /* подсказките „докоснете": пулсират до първата интеракция със сцената */
+  $$('[data-tap]').forEach(el=>{const seen=()=>el.classList.add('seen'); el.addEventListener('pointerdown',seen,{passive:true}); el.addEventListener('click',seen)});
+  const видяно=sel=>{const el=$(sel); if(el) el.classList.add('seen')};
+
+  /* ══ HERO · преди/сега (авто-морф от двигателя · чипове · тап) ══ */
   setTimeout(()=>$('#hero').classList.add('awake'),120);
-  const STATIC=/[?&]static=1/.test(location.search);  /* QA: всичко видимо без IO/rAF */
   const tg=$$('#hero-toggle button');
   function heroUI(v){tg.forEach(b=>b.classList.toggle('on',+b.dataset.s===v))}
-  tg.forEach(b=>b.addEventListener('click',()=>{задай('hero',+b.dataset.s,true); heroUI(+b.dataset.s)}));
+  tg.forEach(b=>b.addEventListener('click',e=>{e.stopPropagation(); задай('hero',+b.dataset.s,true); heroUI(+b.dataset.s)}));
   let heroDown=0; const hs=$('#fig-hero');
   hs.addEventListener('pointerdown',()=>{heroDown=performance.now()});
   hs.addEventListener('click',()=>{ if(performance.now()-heroDown>320) return; const m=МФ(); const ф=m&&m.намери&&m.намери('hero'); const v=ф?(ф.цел>0.5?0:1):1; задай('hero',v,true); heroUI(v)});
-  /* следи авто-морфа на двигателя, за да държи чиповете в синхрон */
-  const heroSync=()=>{const m=МФ(); if(m&&m.слушай){m.слушай('hero',ф=>{const v=ф.цел>0.5?1:0; if(+tg.find(b=>b.classList.contains('on')).dataset.s!==v) heroUI(v)})} else setTimeout(heroSync,200)}; heroSync();
+  const heroSync=()=>{const m=МФ(); if(m&&m.слушай){m.слушай('hero',ф=>{const v=ф.цел>0.5?1:0; const on=tg.find(b=>b.classList.contains('on')); if(!on||+on.dataset.s!==v) heroUI(v)})} else setTimeout(heroSync,200)}; heroSync();
 
   /* reveal */
   const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.12,rootMargin:'0px 0px -6% 0px'});
@@ -1627,7 +1755,7 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
   const notes=$$('#notes .note');
   if(STATIC) notes.forEach(n=>n.classList.add('in')); else new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){notes.forEach((n,i)=>setTimeout(()=>n.classList.add('in'),250+i*600))}}),{threshold:.4}).observe($('#notes'));
 
-  /* 8 етапа · съзвездие */
+  /* ══ 8 ЕТАПА · пътят на героинята (скрол сменя етапа · тап на звезда = скок · тап другаде = следващ) ══ */
   const ST=[
     {n:'РазЛичност',m:'се събужда Любка',l:'„Приета съм такава, каквато съм.“',d:'Първата сцена: избирате си име, роля и ментор. Ролята пази — в нея смеете повече.'},
     {n:'ЧудоВище',m:'се събужда Доверка',l:'„Срещам сянката си — в три пласта.“',d:'Вътрешен, външен, философски. Едно чудовище, три лица — Спирачката.'},
@@ -1638,53 +1766,62 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
     {n:'Съкровището',m:'се събужда Фибоначко',l:'„Намирам ритъма си.“',d:'Златна мяра между източници, игри и почивка. Ритъмът остава у дома.'},
     {n:'Еликсирът',m:'се събужда Творея',l:'„Връщам дара — творя.“',d:'Красотата като тих учител. Очите почват да светят.'}
   ];
-  const list=$('#stlist'), dots=$('#st-dots');
-  ST.forEach((s,i)=>{const b=document.createElement('button'); b.innerHTML=`<b>${i+1}</b><span>${s.n} <small style="color:var(--mute)">· ${s.m}</small></span>`; b.addEventListener('click',()=>setSt(i,true)); list.appendChild(b); const d=document.createElement('i'); d.addEventListener('click',()=>setSt(i,true)); dots.appendChild(d);});
-  let cur=0, userPick=false;
-  function setSt(i,user){
-    cur=clamp(i,0,7); if(user) userPick=true;
-    const s=ST[cur]; $('#st-num').textContent=cur+1; $('#st-nm').textContent=s.n; $('#st-mn').textContent=s.m;
+  const dots=$('#st-dots'), labs=$('#stlabs'), pathStage=$('#fig-path');
+  const LAB=ST.map((s,i)=>{const d=document.createElement('div'); d.className='stlab'; d.innerHTML=`<b>${i+1}</b><span>${s.n}</span>`; labs.appendChild(d); return d});
+  let cur=0;
+  function setSt(i){
+    cur=clamp(i,0,7); const s=ST[cur];
+    $('#st-num').textContent=cur+1; $('#st-nm').textContent=s.n; $('#st-mn').textContent=s.m;
     const ln=$('#st-ln'); ln.style.opacity=0; setTimeout(()=>{ln.textContent=s.l; $('#st-ds').textContent=s.d; ln.style.opacity=1},160);
-    $$('#stlist button').forEach((b,k)=>b.classList.toggle('on',k===cur)); $$('#st-dots i').forEach((d,k)=>d.classList.toggle('on',k===cur));
-    задай('path',cur/7,user);
+    $$('#st-dots i').forEach((d,k)=>d.classList.toggle('on',k===cur));
+    LAB.forEach((d,k)=>{d.classList.toggle('on',k===cur); d.classList.toggle('lit',k<cur)});
+    задай('path',cur/7,true);
   }
-  $('#st-prev').addEventListener('click',()=>setSt(cur-1,true)); $('#st-next').addEventListener('click',()=>setSt(cur+1,true));
-  setSt(0,false);
-  const pathStage=$('#fig-path');
-  function pathProgress(){
-    if(userPick) return;
-    const r=pathStage.getBoundingClientRect(), vh=innerHeight;
-    const p=clamp((vh*0.85-r.top)/(r.height+vh*0.45),0,1);
-    const k=clamp(Math.round(p*7.6-0.3),0,7); if(k!==cur) setSt(k,false);
+  const pathDrv=драйвер(8,()=>наЕкран(pathStage)?clamp(Math.round(напредък(pathStage,0.92,0.06)*7.4-0.2),0,7):null,setSt,0);
+  ST.forEach((s,i)=>{const d=document.createElement('i'); d.addEventListener('click',()=>{pathDrv.тап(i); видяно('#fig-path')}); dots.appendChild(d)});
+  $('#st-prev').addEventListener('click',()=>{pathDrv.тап(cur-1); видяно('#fig-path')});
+  $('#st-next').addEventListener('click',()=>{pathDrv.тап(cur+1); видяно('#fig-path')});
+  setSt(0);
+  /* етикетите до звездите · позиции от двигателя · само когато кадърът се смени */
+  let labKey='';
+  function placeLabels(ф){
+    const m=МФ(); if(!m||!m.проектирай) return;
+    const key=ф.ш+'x'+ф.в+'@'+(ф.камZ||0).toFixed(2); if(key===labKey) return; labKey=key;
+    m.възли.forEach((n,k)=>{const q=m.проектирай('path',n[0],n[1]); if(!q) return; const d=LAB[k]; d.classList.toggle('r',n[0]<0.15); d.style.left=q.x+'px'; d.style.top=q.y+'px'});
   }
-  /* докосване на звезда → етап */
+  const pathHook=()=>{const m=МФ(); if(m&&m.слушай) m.слушай('path',placeLabels); else setTimeout(pathHook,200)}; pathHook();
+  let pathDown=0; pathStage.addEventListener('pointerdown',()=>{pathDown=performance.now()});
   pathStage.addEventListener('click',e=>{
-    const m=МФ(); if(!m||!m.проектирай) return; const r=pathStage.getBoundingClientRect(); const x=e.clientX-r.left, y=e.clientY-r.top;
-    let best=-1, bd=1e9; m.възли.forEach((n,k)=>{const q=m.проектирай('path',n[0],n[1]); if(!q) return; const d=Math.hypot(q.x-x,q.y-y); if(d<bd){bd=d;best=k}});
-    if(best>=0&&bd<48) setSt(best,true);
+    if(performance.now()-pathDown>320) return;
+    const m=МФ(); const r=pathStage.getBoundingClientRect(); const x=e.clientX-r.left, y=e.clientY-r.top;
+    let best=-1, bd=1e9; if(m&&m.проектирай) m.възли.forEach((n,k)=>{const q=m.проектирай('path',n[0],n[1]); if(!q) return; const d=Math.hypot(q.x-x,q.y-y); if(d<bd){bd=d;best=k}});
+    if(best>=0&&bd<46) pathDrv.тап(best); else pathDrv.следващ();
   });
 
-  /* чудовището: лица → качулка свети */
+  /* ══ СПИРАЧКАТА · три сенки: сглобяват се по скрол · лицето се сменя по скрол · тап = следващо (разпад в жарава) ══ */
   const F=[
     {l:'Вътрешният проблем',q:'„Не спя. Не спирам. Не съм си на мястото.“',t:'Сънят, дишането, вътрешният глас, който не млъква. Чудовището отвътре е най-тихото — и най-упоритото.'},
     {l:'Външният проблем',q:'„Всички искат нещо от мен.“',t:'Работата, семейството, телефонът. Дразненето от ситуации и хора, което се връща всеки ден в същия час.'},
     {l:'Философският проблем',q:'„Това ли е всичко?“',t:'Липсата на посока и смисъл. Животът, отложен „за после“, докато времето не стига.'}
   ];
+  const monStage=$('#fig-monster');
   function setFace(i){
     $$('#faces button').forEach((x,k)=>x.classList.toggle('on',k===i));
     const f=F[i], face=$('#face'); face.style.opacity=0; setTimeout(()=>{$('#f-l').textContent=f.l;$('#f-q').textContent=f.q;$('#f-t').textContent=f.t;face.style.transition='opacity .35s';face.style.opacity=1},160);
     задай('monster',i/2,true);
   }
-  $$('#faces button').forEach(b=>b.addEventListener('click',()=>setFace(+b.dataset.f)));
-  const monStage=$('#fig-monster'); let monDown=0;
-  monStage.addEventListener('pointerdown',()=>{monDown=performance.now()});
+  const monDrv=драйвер(3,()=>{ if(!наЕкран(monStage)) return null; const p=напредък(monStage,0.86,0.0); return p<0.40?0:(p<0.72?1:2) },setFace,0);
+  $$('#faces button').forEach(b=>b.addEventListener('click',()=>{monDrv.тап(+b.dataset.f); видяно('#fig-monster')}));
+  let monDown=0; monStage.addEventListener('pointerdown',()=>{monDown=performance.now()});
   monStage.addEventListener('click',e=>{
-    if(performance.now()-monDown>320) return; const m=МФ(); if(!m||!m.проектирай) return; const r=monStage.getBoundingClientRect(); const x=e.clientX-r.left, y=e.clientY-r.top;
-    let best=-1, bd=1e9; m.качулки.forEach((n,k)=>{const q=m.проектирай('monster',n[0],n[1]); if(!q) return; const d=Math.hypot(q.x-x,q.y-y); if(d<bd){bd=d;best=k}});
-    if(best>=0&&bd<90) setFace(best);
+    if(performance.now()-monDown>320) return; const m=МФ(); const r=monStage.getBoundingClientRect(); const x=e.clientX-r.left, y=e.clientY-r.top;
+    let best=-1, bd=1e9; if(m&&m.проектирай) m.качулки.forEach((n,k)=>{const q=m.проектирай('monster',n[0],n[1]); if(!q) return; const d=Math.hypot(q.x-x,q.y-y); if(d<bd){bd=d;best=k}});
+    if(best>=0&&bd<70&&best!==monDrv.тек) monDrv.тап(best); else monDrv.следващ();
   });
+  const monAssembly=()=>{ if(наЕкран(monStage,400)) сглоби('monster',напредък(monStage,1.0,0.40)) };
+  setFace(0);
 
-  /* скалата: буря → зора */
+  /* ══ СКАЛАТА 1→5 · степента расте по скрол · тап = следващо стъпало · плъзгачът остава ══ */
   const W=[
     ['Побъркват ме','Същите ситуации, същите хора — и всеки път експлодирам отвътре.'],
     ['Дразнят ме','Вече не експлодирам. Само тлея. Уморително е.'],
@@ -1692,17 +1829,20 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
     ['Радват ме','Същите ситуации — а вече ми носят усмивка. Очите почват да светят.'],
     ['Вдъхновяват ме','Ситуациите стават материал за творене. Тиха радост. Спокойствие.']
   ];
-  const sc=$('#sc'), dawn=$('#sc-dawn');
+  const scStage=$('#fig-scale'), sc=$('#sc'), dawn=$('#sc-dawn');
   function setScale(v){
     const p=(v-1)/4; dawn.style.opacity=p*.46; $('.scalepics .storm').style.opacity=.40*(1-p);
     $('#sc-w').textContent=W[v-1][0]; $('#sc-d').textContent=W[v-1][1]; $('#sc-step').textContent=`${v} / 5`;
     $('#sc-w').style.color=['#c9c2d6','#d9d0bd','#e6dcc2','#f4e6bf','#ffe1a0'][v-1];
     $$('#ticks span').forEach((t,i)=>t.classList.toggle('on',i===v-1));
+    if(+sc.value!==v) sc.value=v;
     задай('scale',p,true);
   }
-  let userScaled=false; sc.addEventListener('input',()=>{userScaled=true; setScale(+sc.value)}); setScale(1);
-  let demoed=false;
-  new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting&&!demoed&&!reduce){demoed=true; let v=1; const t=setInterval(()=>{if(userScaled){clearInterval(t);return} v++; if(v>3){clearInterval(t); setTimeout(()=>{if(!userScaled){sc.value=1;setScale(1)}},1600); return} sc.value=v; setScale(v)},900)}}),{threshold:.55}).observe($('#fig-scale'));
+  const scDrv=драйвер(5,()=>наЕкран(scStage)?clamp(Math.floor(напредък(scStage,0.82,0.08)*4.999),0,4):null,i=>setScale(i+1),0);
+  sc.addEventListener('input',()=>{scDrv.тап(+sc.value-1); видяно('#fig-scale')});
+  let scDown=0; scStage.addEventListener('pointerdown',()=>{scDown=performance.now()});
+  scStage.addEventListener('click',()=>{ if(performance.now()-scDown>320) return; scDrv.следващ() });
+  setScale(1);
 
   /* locked cards + rail dots */
   $$('.deck.locked').forEach(c=>c.addEventListener('click',()=>{c.classList.remove('shake'); void c.offsetWidth; c.classList.add('shake'); c.classList.add('told')}));
@@ -1710,43 +1850,78 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
   function railDots(){const i=Math.round(rail.scrollLeft/(cards[0].offsetWidth+14)); $$('#railhint i').forEach((d,k)=>d.classList.toggle('on',k===clamp(i,0,cards.length-1)))}
   rail.addEventListener('scroll',railDots,{passive:true}); railDots();
 
-  /* слънчев часовник · 4 момента (от V1b) */
-  const mos=$$('#moments .mo'), imgs=$$('#ccenter img'), sung=$('#sung'), cdots=$('#cdots'), NM=mos.length;
-  const cd=mos.map((m,i)=>{const a=-90+i*360/NM; const d=document.createElementNS(NS,'circle'); d.setAttribute('class','dot'+(i===0?' on':'')); d.setAttribute('r','6'); d.setAttribute('cx',150+132*Math.cos(rad(a))); d.setAttribute('cy',150+132*Math.sin(rad(a))); cdots.appendChild(d); d.addEventListener('click',()=>{setMo(i); mos[i].scrollIntoView({behavior:'smooth',block:'center'})}); return d});
+  /* ══ ЕДИН ДЕН · часовникът е лепкав по средата · моментите текат над и под него и го въртят · тап = следващ момент ══ */
+  const mos=$$('#moments .mo'), imgs=$$('#ccenter img'), sung=$('#sung'), cdots=$('#cdots'), NM=mos.length, clockEl=$('#clock'), cw=$('#clockwrap');
+  function measureClock(){ const h=cw.offsetHeight; if(h>0) document.documentElement.style.setProperty('--ch',h+'px') }
+  function goMo(i){ const r=mos[i].getBoundingClientRect(); scrollTo({top:scrollY+r.top+r.height/2-vh()/2, behavior:reduce?'auto':'smooth'}) }
+  const cd=mos.map((m,i)=>{const a=-90+i*360/NM; const d=document.createElementNS(NS,'circle'); d.setAttribute('class','dot'+(i===0?' on':'')); d.setAttribute('r','6'); d.setAttribute('cx',150+132*Math.cos(rad(a))); d.setAttribute('cy',150+132*Math.sin(rad(a))); cdots.appendChild(d); d.addEventListener('click',e=>{e.stopPropagation(); goMo(i)}); return d});
   function setMo(i){
     sung.style.transform=`rotate(${i*360/NM}deg)`;
     imgs.forEach((im,k)=>im.classList.toggle('on',k===i)); cd.forEach((d,k)=>d.classList.toggle('on',k===i)); mos.forEach((m,k)=>m.classList.toggle('on',k===i));
-    $('#ctime').textContent=$('.tm',mos[i]).textContent;
+    const m=mos[i]; $('#cl-tm').textContent=$('.tm',m).textContent; $('#cl-h').textContent=$('h3',m).textContent; $('#cl-p').textContent=$('p',m).textContent;
   }
-  mos.forEach((m,i)=>new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting) setMo(i)}),{rootMargin:'-45% 0px -45% 0px',threshold:0}).observe(m));
+  const moAuto=()=>{ /* картата, чийто център е най-близо до средата на екрана */
+    if(!наЕкран($('#moments'),vh())) return null; const mid=vh()/2; let best=0, bd=1e9;
+    mos.forEach((m,k)=>{const r=m.getBoundingClientRect(); const d=Math.abs((r.top+r.bottom)/2-mid); if(d<bd){bd=d;best=k}}); return best;
+  };
+  const dayDrv=драйвер(NM,moAuto,setMo,0);
+  clockEl.addEventListener('click',()=>goMo(((dayDrv.тек===null?0:dayDrv.тек)+1)%NM));
+  mos.forEach((m,i)=>m.addEventListener('click',()=>goMo(i)));
+  measureClock(); addEventListener('load',measureClock); if(document.fonts&&document.fonts.ready) document.fonts.ready.then(measureClock);
 
   /* video facades */
   $$('.vf').forEach(v=>v.addEventListener('click',()=>{
     const id=v.dataset.yt; const f=document.createElement('iframe'); f.src=`https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0&modestbranding=1`; f.allow='accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture'; f.allowFullscreen=true; f.title='Видео'; v.innerHTML=''; v.appendChild(f);
   }));
 
-  /* разписание: режими + слънцето по дъгата (частици) */
+  /* ══ РАЗПИСАНИЕ · режими · слънцето върви по скрол · докоснете/влачете слънцето по дъгата (играта „докосни") ══ */
   $$('#modes button').forEach(b=>b.addEventListener('click',()=>{$$('#modes button').forEach(x=>x.classList.remove('on')); b.classList.add('on'); $('#sched').dataset.mode=b.dataset.m}));
-  const slots=$$('.slot');
-  function sunMove(){
-    const r=$('#slots').getBoundingClientRect(), vh=innerHeight; const p=clamp((vh*0.9-r.top)/(r.height+vh*0.35),0,1);
-    задай('sunarc',p,false);
-    slots.forEach(s=>s.classList.toggle('on',+s.dataset.p<=p+0.02));
+  const sunStage=$('#fig-sun'), slots=$$('.slot');
+  let sunMan=null, sunAnchor=0;
+  function applySun(p){
+    задай('sunarc',p,false); let act=-1;
+    slots.forEach((s,i)=>{const on=+s.dataset.p<=p+0.02; s.classList.toggle('on',on); if(on) act=i});
+    slots.forEach((s,i)=>s.classList.toggle('now',i===act));
   }
+  const sunAuto=()=>{const r=$('#slots').getBoundingClientRect(); return clamp((vh()*0.9-r.top)/(r.height+vh()*0.35),0,1)};
+  function sunScroll(){ const a=sunAuto(); if(sunMan!==null&&Math.abs(a-sunAnchor)>0.10) sunMan=null; applySun(sunMan!==null?sunMan:a) }
+  function sunSet(p){ sunMan=clamp(p,0,1); sunAnchor=sunAuto(); applySun(sunMan) }
+  const sunFrom=e=>{const m=МФ(); if(!m||!m.обратно) return null; const r=sunStage.getBoundingClientRect(); const q=m.обратно('sunarc',e.clientX-r.left,e.clientY-r.top); return q?clamp((q.x+1.25)/2.5,0,1):null};
+  let sunDrag=false;
+  sunStage.addEventListener('pointerdown',e=>{sunDrag=true; const p=sunFrom(e); if(p!==null) sunSet(p)});
+  sunStage.addEventListener('pointermove',e=>{ if(!sunDrag) return; const p=sunFrom(e); if(p!==null) sunSet(p) });
+  ['pointerup','pointercancel','pointerleave'].forEach(n=>sunStage.addEventListener(n,()=>{sunDrag=false}));
+  slots.forEach(s=>s.addEventListener('click',()=>{sunSet(+s.dataset.p); видяно('#fig-sun')}));
 
-  /* fab + scroll-driven */
-  const fab=$('#fab'), heroH=()=>$('#hero').offsetHeight; let ticking=false;
+  /* ══ ЛЕПКАВОТО CTA · „Заявете място" · в Проблем·Чудовище·Скала → „Задайте въпрос" + обаждане ══ */
+  const fab=$('#fab'), heroH=()=>$('#hero').offsetHeight, QS=['#pain','#monster','#scale'].map(id=>$(id));
+  function fabMode(){ const mid=vh()*0.5; fab.classList.toggle('q', QS.some(s=>{const r=s.getBoundingClientRect(); return r.top<mid&&r.bottom>mid})) }
+
+  /* скрол-диригентът: един rAF · всички драйвери */
+  let ticking=false;
   function onScroll(){
     if(ticking) return; ticking=true;
     requestAnimationFrame(()=>{
       const y=scrollY, fr=$('#form').getBoundingClientRect();
-      fab.classList.toggle('show', y>heroH()*0.8 && !(fr.top<innerHeight && fr.bottom>0));
-      pathProgress(); sunMove(); ticking=false;
+      fab.classList.toggle('show', y>heroH()*0.8 && !(fr.top<vh() && fr.bottom>0)); fabMode();
+      pathDrv.скрол(); monDrv.скрол(); monAssembly(); scDrv.скрол(); dayDrv.скрол(); sunScroll();
+      ticking=false;
     });
   }
-  addEventListener('scroll',onScroll,{passive:true}); addEventListener('resize',onScroll); onScroll(); setTimeout(onScroll,400);
+  addEventListener('scroll',onScroll,{passive:true}); addEventListener('resize',()=>{measureClock(); onScroll()}); onScroll(); setTimeout(onScroll,400);
 
-  /* предложение: плащане → подарък */
+  /* ══ ЦЕНАТА · в евро (дума 12.09: „1527 евро, не лева · лева няма отдавна в БГ") ══
+     Числото е от транскрипцията → ЧАКА ДУМА. Сметката (капаро · вноски) идва от доер Б като nova-zhena-цени.json —
+     ако файлът е до страницата, замества дефолта долу; тук е мястото и превключвателят. */
+  let ЦЕНИ={пълна:1527, капаро_pct:34};
+  const евро=n=>{const r=Math.round(n); return (Math.abs(n-r)>0.01?'≈ ':'')+r.toLocaleString('bg-BG')+' €'};
+  function priceUI(){
+    const P=+ЦЕНИ.пълна||0, pct=+ЦЕНИ.капаро_pct||0;
+    $('#p-amt').textContent=евро(P); $('#p-kap-pct').textContent=pct+'%'; $('#p-kap').textContent=евро(P*pct/100);
+    $$('#pay button').forEach(b=>{const n=+b.dataset.n||1, v=$('.v',b); if(v) v.textContent=n===1?евро(P):`${n} × ${евро(P/n)}`});
+  }
+  priceUI();
+  fetch('nova-zhena-цени.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(j=>{ if(j&&typeof j==='object'){ ЦЕНИ=Object.assign(ЦЕНИ,j); priceUI() } }).catch(()=>{});
   $$('#pay button').forEach(b=>b.addEventListener('click',()=>{$$('#pay button').forEach(x=>x.classList.remove('on')); b.classList.add('on'); const g=+b.dataset.g; const gn=$('#g-n'); gn.style.transform='scale(1.15)'; setTimeout(()=>gn.style.transform='',250); gn.textContent=g===2?'2 подаръчни курса':g===1?'1 подаръчен курс':'0 подаръчни курса'; $('#g-t').textContent=b.dataset.t}));
 
   /* form shell — SEAM v2: Yespo segment (фаза 2) */
@@ -1757,6 +1932,7 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
     $('#fcard').classList.add('done'); $('#fcard').scrollIntoView({behavior:'smooth',block:'center'});
   });
 })();
+
 </script>
 
 </body>

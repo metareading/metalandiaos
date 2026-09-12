@@ -11,20 +11,25 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Inter:wght@300;400;500;600&display=swap&subset=cyrillic" rel="stylesheet">
 <!--
   ══════════════════════════════════════════════════════════════════════
-  НОВА ЖЕНА · V2 „Холограма“ · v2.1 · 12.09.2026 · 21:37 · MET-621 · дизайн-финал по думата на Митрандир (12.09 · след V2)
+  НОВА ЖЕНА · V2 „Холограма“ · v2.2 · 12.09.2026 · 23:40 · MET-621 · образи B (Сорола) + дизайн по ТРЕТАТА дума на Митрандир (12.09 · след V2.1)
+  v2.2 делта: 14-те образа + постерите в img/nz3 (стил B · Сорола · ИСТИНСКО ИЗКУСТВО в един стил) · Спирачката = три
+  качулати ФИГУРИ (роба-камбана · заоблена качулка · ръкави отпред), не стрелки · „Пет стъпала“ = циферблатът от V1b
+  ДИРЕКТНО (сектори 1–5 · стрелка от частици · сменя се САМ на всеки 2.5 s, докато сте там · тап спира, за да четете ·
+  лентата долу махната) · „Приказната дъга“ = часовникът от V1b + игра: картите на моментите са СКРИТИ (гръб от деката)
+  и се обръщат по скрол или тап · разписанието: слънцето слиза по златна НИШКА покрай петте карти и свети до текущия
+  слот · Екран 2: картата на осемте етапа (стил B) живее ЗАД частиковия Път (десктоп: карта до панела) · златната
+  анимация = мотив навсякъде, изигран различно (hero морф · Път комета · Спирачка жарава · циферблат искри по дъгата ·
+  часовник пръстен · разписание нишка · форма искра при фокус) — осем вида фигури на ЕДИНИЯ WebGL контекст.
   v2.1 делта: ЗАКОН ЗА ВСЕКИ КОНТРОЛ (95% телефон · скролът сменя · тапът за спрелия · подсказка „докоснете" до първата
-  интеракция · нула hover) · съзвездието → ПЪТЯТ на героинята (S-пътека нагоре · златни звезди · HTML-етикети · искра по скрол) ·
-  Спирачката → три сенки, които се сглобяват по скрол и се разпадат в жарава при смяна · скалата и по скрол/тап ·
-  денят-часовник лепкав по средата с етикет ПОД кръга · слънцето с игра „докоснете" · цената в € с разпределение ·
-  лепкавото CTA „Задайте въпрос" + обаждане в Проблем·Чудовище·Скала · поредицата като ред · образи img/nz3 (класическо
-  изкуство · след ОВ на 3-те стил-кандидата · дотогава img/nz2).
+  интеракция · нула hover) · съзвездието → ПЪТЯТ на героинята · Спирачката → три сенки · скалата по скрол/тап ·
+  денят-часовник лепкав · слънцето с игра „докоснете" · цената в € · лепкавото CTA „Задайте въпрос" · поредицата като ред.
   Една страница · self-contained · mobile-first (390px база) · нула build · нула зависимости.
   Основата = частиковият двигател от хоума на maitapp (app.js) и от ЕП4-извадения:
   ЕДИН скрит WebGL контекст рисува ПЕТ фигури (hero преди→сега · съзвездие на 8-те етапа ·
   пясъчният часовник на Спирачката · скалата буря→зора · слънцето на деня) и кадърът
   се копира в платното на гледаната сцена. Нула iframe. Платната са прозрачни върху градиента.
   prefers-reduced-motion → статичен постер (webp) вместо анимация.
-  Образи: img/nz2/ (V2 · класическа красота + съвременен дизайн) + img/nz/card-*.webp (деката · канон)
+  Образи: img/nz3/ (v2.2 · стил B · Сорола · същите 14 имена като img/nz2, който остава за сравнение) + img/nz/card-*.webp (деката · канон)
   + img/nz/vodach.webp (реален портрет) + img/nz/yt-*.webp. Инлайн: nova-zhena-v2.inline.html
   Модел: Fable 5.1 (Max) — изрична дума на Митрандир (12.09 · MET-621).
   ══════════════════════════════════════════════════════════════════════
@@ -129,8 +134,12 @@ html:where(.js) .note{opacity:0;transform:translateY(16px) scale(.98)}
 .note .dot{width:8px;height:8px;border-radius:50%;background:var(--shadow);box-shadow:0 0 0 4px rgba(90,74,107,.25);flex:0 0 8px}
 .pain .q{font-family:var(--serif);font-size:1.5rem;font-style:italic;color:var(--gold);margin-top:18px;text-align:center}
 
-/* ── PATH (8 етапа · съзвездие) ── */
+/* ── PATH (8 етапа · пътят на героинята) ── */
 .path{background:linear-gradient(180deg,var(--bg) 0%,#0e1218 50%,var(--bg) 100%)}
+/* v2.2 · картата на осемте етапа ЗАД живия път (телефон) · ниска наситеност, за да не се бие с частиците */
+.path .map{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 42%;opacity:.46;filter:saturate(.72) contrast(1.05)}
+.path .mapveil{position:absolute;inset:0;pointer-events:none;background:radial-gradient(80% 72% at 50% 50%,rgba(14,18,24,0) 32%,rgba(14,18,24,.92) 100%),linear-gradient(180deg,rgba(14,18,24,.85),rgba(14,18,24,0) 18%,rgba(14,18,24,0) 82%,rgba(14,18,24,.85))}
+.mapcard{display:none}
 .stpanel{background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));border:1px solid rgba(232,199,126,.25);border-radius:var(--r);padding:16px 16px 14px;min-height:150px;margin-top:8px}
 .stpanel .stk{display:flex;align-items:center;gap:10px}
 .stpanel .num{font-family:var(--serif);font-size:2.2rem;font-weight:700;color:var(--gold);line-height:1}
@@ -185,24 +194,22 @@ html:where(.js) .note{opacity:0;transform:translateY(16px) scale(.98)}
 .cta2{margin-top:22px;padding:18px;border-radius:var(--r);border:1px solid rgba(232,199,126,.35);background:linear-gradient(120deg,rgba(232,199,126,.08),rgba(212,137,94,.06));display:grid;gap:8px}
 .cta2 .big{font-family:var(--serif);font-size:1.35rem;color:#fff;line-height:1.2}
 
-/* ── SCALE ── */
+/* ── SCALE · циферблатът „Пет стъпала“ от V1b (v2.2) · наместван по кадъра на двигателя (__мфиг.проектирай) ── */
 .scale{background:var(--bg)}
-.dialword{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:baseline;margin-top:6px}
+.dial{position:absolute;left:50%;top:50%;width:min(72%,300px);aspect-ratio:1;transform:translate(-50%,-50%);z-index:1;pointer-events:none}
+.dial .port{position:absolute;left:50%;top:50%;width:62%;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;overflow:hidden;background:#2b2018;box-shadow:0 0 0 5px var(--bg),0 0 0 6px rgba(232,199,126,.55),0 24px 48px -20px #000}
+.dial .port img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 30%;transition:opacity .7s ease,filter .7s ease}
+.dial .port .storm{filter:saturate(.45) brightness(.85)}
+.dial .port .dawn{opacity:0}
+.dialsvg{position:absolute;left:50%;top:50%;width:min(72%,300px);aspect-ratio:1;transform:translate(-50%,-50%);z-index:3;overflow:visible}
+.dialsvg .sec{fill:rgba(232,199,126,.07);stroke:rgba(232,199,126,.42);stroke-width:1;cursor:pointer;transition:fill .45s}
+.dialsvg .sec.on{fill:rgba(232,199,126,.34)}
+.dialsvg .sn{font-family:var(--serif);font-weight:700;font-size:16px;fill:var(--ink);text-anchor:middle;dominant-baseline:central;pointer-events:none;transition:fill .4s}
+.dialsvg .on + .sn{fill:#fff}
+.dialword{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:baseline;margin-top:4px}
 .dialword .step{font-family:var(--serif);font-size:1.1rem;color:var(--gold);border:1px solid rgba(232,199,126,.4);border-radius:20px;padding:3px 12px;white-space:nowrap}
-.dialword .w{font-family:var(--serif);font-size:2.1rem;font-weight:600;color:#fff;line-height:1;transition:color .4s}
+.dialword .w{font-family:var(--serif);font-size:2.2rem;font-weight:600;color:#fff;line-height:1;transition:color .4s}
 .dialword .d{grid-column:1/-1;font-size:.95rem;color:#efe7d6;min-height:2.6em}
-.slider{margin:14px 4px 4px}
-.slider input{-webkit-appearance:none;appearance:none;width:100%;height:6px;border-radius:6px;background:linear-gradient(90deg,#5A4A6B 0%,#7a6a7a 30%,#a7955f 60%,#E8C77E 100%);outline:none}
-.slider input::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:30px;height:30px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#fff5d6,#e2a458);border:2px solid #fff;box-shadow:0 0 0 6px rgba(232,199,126,.18),0 8px 20px -6px #000;cursor:pointer}
-.slider input::-moz-range-thumb{width:30px;height:30px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#fff5d6,#e2a458);border:2px solid #fff;box-shadow:0 0 0 6px rgba(232,199,126,.18);cursor:pointer}
-.ticks{display:grid;grid-template-columns:repeat(5,1fr);margin-top:10px}
-.ticks span{font-size:.66rem;text-align:center;color:var(--mute);letter-spacing:.02em;line-height:1.2;transition:color .3s;padding:0 2px}
-.ticks span.on{color:var(--gold);font-weight:600}
-.scalepics{position:absolute;inset:0;pointer-events:none}
-.scalepics img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 62%;transition:opacity .5s ease}
-.scalepics .storm{opacity:.40}
-.scalepics .dawn{opacity:0}
-.scalepics::after{content:"";position:absolute;inset:0;background:radial-gradient(70% 70% at 50% 50%,rgba(13,10,8,0) 30%,rgba(13,10,8,.85) 100%)}
 
 /* ── DECK TASTING ── */
 .tasting{background:linear-gradient(180deg,var(--bg),#120e0b 40%,var(--bg))}
@@ -224,33 +231,39 @@ html:where(.js) .note{opacity:0;transform:translateY(16px) scale(.98)}
 .railhint i{width:6px;height:6px;border-radius:50%;background:rgba(232,199,126,.3)}
 .railhint i.on{background:var(--gold)}
 
-/* ── DAY · слънчев часовник (от V1b) ── */
+/* ── DAY · часовникът от V1b + скритите карти (v2.2) ── */
 .day{background:var(--bg)}
 .daygrid{display:grid;gap:10px;margin-top:10px}
-/* мобилен: часовникът е лепкав ПО СРЕДАТА на екрана (дума 12.09) · етикетът е ПОД кръга, голям и четим ·
-   моментите текат над и под него — картата, която е „зад" кръга, е текущата (нейният текст е в етикета) */
-.clockwrap{position:sticky;top:calc(50vh - var(--ch,400px)/2);z-index:5;padding:12px 0 10px;background:var(--bg)}
-.clockwrap::before,.clockwrap::after{content:"";position:absolute;left:0;right:0;height:28px;pointer-events:none}
-.clockwrap::before{top:-28px;background:linear-gradient(180deg,rgba(13,10,8,0),var(--bg))}
-.clockwrap::after{bottom:-28px;background:linear-gradient(180deg,var(--bg),rgba(13,10,8,0))}
-.clock{position:relative;width:min(68%,268px);aspect-ratio:1;margin:0 auto;cursor:pointer}
-.clabel{text-align:center;margin:16px auto 0;max-width:420px;min-height:124px}
-.clabel .tm{font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--em);font-weight:600}
-.clabel h3{font-size:1.55rem;margin:4px 0 5px;color:#fff;line-height:1.1}
-.clabel p{font-size:.9rem;color:var(--ink2);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+/* мобилен: часовникът е лепкав под лентата · сцената на частиците е в него · картите долу се обръщат, когато минат под него */
+.clockwrap{position:sticky;top:46px;z-index:5;padding:0 0 6px;background:var(--bg);will-change:transform} /* v2.2 · собствен слой: платното в лепкавия часовник иначе пада до ~50 fps (мерено 12.09) */
+.clockwrap::after{content:"";position:absolute;left:0;right:0;bottom:-26px;height:26px;pointer-events:none;background:linear-gradient(180deg,var(--bg),rgba(13,10,8,0))}
+#fig-clock{min-height:min(100vw,44vh)} /* v2.2 · начална височина ≈ тази на двигателя · без скок в лейаута */
+#fig-clock .tap{bottom:auto;top:8px;left:auto;right:12px;transform:none}
+.clockimg,.clock{position:absolute;left:50%;top:50%;width:min(66%,270px);aspect-ratio:1;transform:translate(-50%,-50%)}
+.clockimg{z-index:1;pointer-events:none}
+.clock{z-index:3;cursor:pointer}
+.clabel{text-align:center;margin:2px auto 0;max-width:420px}
+.clabel .tm{font-size:.74rem;letter-spacing:.2em;text-transform:uppercase;color:var(--em);font-weight:600}
 .clock svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
 .clock .ringd{fill:none;stroke:rgba(232,199,126,.45);stroke-width:1.2;stroke-dasharray:2 5}
 .clock .dot{fill:var(--bg);stroke:var(--gold);stroke-width:1.4;cursor:pointer;transition:all .4s}
 .clock .dot.on{fill:var(--gold)}
 .clock .sung{transform-origin:150px 150px;transition:transform .9s cubic-bezier(.2,.8,.2,1)}
 .clock .sun{fill:#ffe1a0;stroke:var(--fire);stroke-width:1.5;filter:drop-shadow(0 0 6px rgba(232,199,126,.9)) drop-shadow(0 0 16px rgba(212,137,94,.6))}
-.clock .center{position:absolute;left:50%;top:50%;width:64%;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;overflow:hidden;box-shadow:0 0 0 5px var(--bg),0 0 0 6px rgba(232,199,126,.5),0 20px 40px -20px #000;background:#2b2018}
-.clock .center img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .7s ease}
-.clock .center img.on{opacity:1}
-.moments{display:grid;gap:calc(var(--ch,400px) - 185px);padding:calc(var(--ch,400px)*.22) 0 calc(var(--ch,400px)*.42)}
-.moments .mo{scroll-margin-top:50vh}
-.mo{padding:14px 16px;border-radius:14px;border:1px solid rgba(232,199,126,.2);background:rgba(255,255,255,.03);transition:all .5s}
-.mo.on{background:rgba(232,199,126,.07);border-color:var(--gold);box-shadow:0 18px 34px -24px #000}
+.clockimg .center{position:absolute;left:50%;top:50%;width:73%;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;overflow:hidden;box-shadow:0 0 0 5px var(--bg),0 0 0 6px rgba(232,199,126,.5),0 20px 40px -20px #000;background:#2b2018}
+.clockimg .center img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .7s ease}
+.clockimg .center img.on{opacity:1}
+/* картите на моментите: скрити (гръб от деката) · обръщат се по скрол/тап (3D flip) · текстът е на лицето */
+.moments{display:grid;gap:12px;padding:6px 0 0}
+.mo{position:relative;perspective:1200px;cursor:pointer;scroll-margin-top:calc(46px + var(--ch,330px))}
+.mo .inner{position:relative;transform-style:preserve-3d;transition:transform .9s cubic-bezier(.2,.75,.2,1);border-radius:14px}
+.mo.on .inner{transform:rotateY(180deg)}
+.mo .front,.mo .back{backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:14px}
+.mo .front{position:relative;transform:rotateY(180deg);padding:14px 16px;min-height:150px;border:1px solid rgba(232,199,126,.55);background:linear-gradient(180deg,rgba(232,199,126,.10),rgba(255,255,255,.03));box-shadow:0 18px 34px -24px #000}
+.mo .back{position:absolute;inset:0;overflow:hidden;border:1px solid rgba(232,199,126,.4);background:#171210}
+.mo .back img{width:100%;height:100%;object-fit:cover;object-position:center;opacity:.92}
+.mo .back .cue{position:absolute;left:50%;bottom:10px;transform:translateX(-50%);font-size:.64rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);background:rgba(13,10,8,.72);border:1px solid rgba(232,199,126,.5);border-radius:20px;padding:5px 11px;white-space:nowrap}
+.mo.seenall .back .cue{display:none}
 .mo .tm{font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;color:var(--em);font-weight:600}
 .mo h3{margin:2px 0 6px;font-size:1.35rem}
 .mo p{font-size:.93rem}
@@ -288,7 +301,11 @@ html:where(.js) .note{opacity:0;transform:translateY(16px) scale(.98)}
 .modes{display:inline-grid;grid-template-columns:1fr 1fr;background:rgba(255,255,255,.05);border:1px solid rgba(232,199,126,.3);border-radius:24px;padding:3px;margin:14px 0 6px}
 .modes button{border:0;background:transparent;color:var(--ink2);padding:8px 16px;border-radius:20px;font-size:.85rem;transition:all .3s}
 .modes button.on{background:linear-gradient(120deg,#ffe1a0,#e2a458);color:#2a1908;font-weight:600}
-.slots{display:grid;gap:8px;margin-top:6px}
+.slots{display:grid;gap:8px;margin-top:6px;padding-left:44px} /* v2.2 · релсата на нишката вляво */
+#fig-sun{min-height:0;padding:10px 0 12px}
+#fig-sun .wrap{position:relative;z-index:2}
+#fig-sun .tap{bottom:auto;top:-4px;left:auto;right:18px;transform:none}
+.railhit{position:absolute;top:0;bottom:0;left:0;width:52px;z-index:3;touch-action:none;cursor:grab}
 .slot{display:grid;grid-template-columns:56px 1fr;gap:10px;align-items:start;background:rgba(255,255,255,.035);border:1px solid rgba(232,199,126,.2);border-radius:14px;padding:11px 13px;transition:border-color .4s,background .4s}
 .slot{cursor:pointer}
 .slot.on{border-color:rgba(232,199,126,.65);background:rgba(232,199,126,.07)}
@@ -311,6 +328,9 @@ html:where(.js) .note{opacity:0;transform:translateY(16px) scale(.98)}
 
 /* ── FORM ── */
 .form{background:radial-gradient(90% 60% at 50% 30%,#1b1510 0%,var(--bg) 70%)}
+.mfig.soft{overflow:visible;min-height:0;touch-action:auto;cursor:auto}
+.mfig.soft .wrap{position:relative;z-index:2}
+.mfig.soft canvas{pointer-events:none} /* искрите живеят в тъмното около картата: при фокус се стичат по РАМКАТА ѝ на височината на полето */
 .fgrid{display:grid;gap:18px;margin-top:14px}
 .fcard{background:linear-gradient(180deg,var(--parch),var(--parch2));color:var(--parchink);border-radius:var(--r);padding:22px 18px;border:1px solid rgba(232,199,126,.6);box-shadow:0 30px 70px -30px #000,inset 0 0 0 1px rgba(138,106,46,.25);position:relative}
 .fcard h3{color:var(--parchink);font-size:1.7rem}
@@ -395,16 +415,19 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
   .hero .stage{margin:0}
   .mgrid{grid-template-columns:300px 1fr;align-items:start}
   .mgrid .deck{margin:0}
-  .pathgrid{max-width:600px;margin:0 auto}
+  .pathgrid{max-width:820px;margin:0 auto;display:grid;grid-template-columns:230px 1fr;gap:22px;align-items:start}
+  .path .map,.path .mapveil{display:none}
+  .mapcard{display:block;border-radius:14px;overflow:hidden;border:1px solid rgba(232,199,126,.5);box-shadow:0 24px 50px -24px #000;aspect-ratio:3/4}
+  .mapcard img{width:100%;height:100%;object-fit:cover}
   .rail{display:grid;grid-template-columns:repeat(4,1fr);overflow:visible;margin:0;padding:14px 0}
   .rail .deck{flex:auto;max-width:none}
   .railhint{display:none}
-  .daygrid{grid-template-columns:320px 1fr;gap:28px;align-items:start}
+  .daygrid{grid-template-columns:340px 1fr;gap:28px;align-items:start}
+  #fig-clock{min-height:340px}
   .clockwrap{top:80px;background:transparent;padding:0}
-  .clockwrap::before,.clockwrap::after{display:none}
-  .clock{width:300px}
-  .clabel{min-height:0}
+  .clockwrap::after{display:none}
   .moments{gap:14px;padding:8px 0 0}
+  .mo .front{min-height:170px}
   .leader{grid-template-columns:260px 1fr}
   .vgrid{grid-template-columns:1.6fr 1fr;align-items:start}
   .fgrid{grid-template-columns:1fr 1.1fr;align-items:center}
@@ -442,7 +465,7 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
       <div class="stage mfig tapable" id="fig-hero" data-bleed="mobile" data-tap>
         <div class="glow"></div>
         <canvas data-фигура="hero" role="img" aria-label="Героинята: от пясъчния часовник на умората към жена с искра в гърдите и криле"></canvas>
-        <img class="poster" src="img/nz2/hero-now.webp" alt="Героинята при първата светлина — с искра в гърдите" width="896" height="1200" hidden decoding="async">
+        <img class="poster" src="img/nz3/hero-now.webp" alt="Героинята при първата светлина — с искра в гърдите" width="896" height="1200" hidden decoding="async">
         <div class="tap" aria-hidden="true"><i></i><span>докоснете · преди → сега</span></div>
         <div class="toggle" id="hero-toggle" aria-label="Преди и сега"><button data-s="0">Преди</button><button data-s="1" class="on">Сега</button></div>
       </div>
@@ -468,7 +491,7 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
     <h2 data-reveal>Тя не е спала. <em>Пак.</em></h2>
     <p class="lead" data-reveal>Дразни се от дребните неща. Побърква се от големите. Говори с всички — освен със себе си. Отлага себе си „за по-късно“, а по-късно е студено и на телефон.</p>
     <div class="scene" data-reveal>
-      <img src="img/nz2/hero-before.webp" alt="Жена в 23:41 в тъмна кухня, осветена само от телефона" width="896" height="1195" loading="lazy" decoding="async">
+      <img src="img/nz3/hero-before.webp" alt="Жена в 23:41 в тъмна кухня, осветена само от телефона" width="896" height="1195" loading="lazy" decoding="async">
     </div>
     <div class="notes" id="notes">
       <div class="note"><span class="dot"></span><span class="t">23:41</span><span class="m">Телефонът свети. Умът не спира.</span></div>
@@ -487,13 +510,18 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
     <p class="lead" data-reveal>„Нова Жена“ е път по осемте етапа на метаезика — осем сцени, през които минава всяка героиня в приказките и всяка жена в живота. Не гледаме — играем. На всеки етап се събужда по един от осемте будители у Вас.</p>
   </div>
   <div class="mfig tapable" id="fig-path" data-bleed="always" data-tap>
+    <!-- v2.2 · Екран 2 (дума 12.09: „да запазим този ефект … мегаяк и мазен“): картата на осемте етапа ЗАД живия път ·
+         същата сцена в стил B (img/nz3/path-poster) · ?map=nz показва оригиналната акварелна карта img/nz/path-8.webp -->
+    <img class="map" id="pathmap" src="img/nz3/path-poster.webp" alt="" width="896" height="1195" loading="lazy" decoding="async" aria-hidden="true">
+    <div class="mapveil" aria-hidden="true"></div>
     <canvas data-фигура="path" role="img" aria-label="Пътят на героинята: осем златни звезди по пътека нагоре — светват по скрол, искрата върви по пътя"></canvas>
-    <img class="poster" src="img/nz2/path-poster.webp" alt="Осем златни звезди по пътека нагоре над Пирин" width="896" height="1195" hidden loading="lazy" decoding="async">
+    <img class="poster" src="img/nz3/path-poster.webp" alt="Осем златни звезди по пътека нагоре над Пирин" width="896" height="1195" hidden loading="lazy" decoding="async">
     <div class="stlabs" id="stlabs" aria-hidden="true"></div>
     <div class="tap" aria-hidden="true"><i></i><span>докоснете звезда</span></div>
   </div>
   <div class="wrap">
     <div class="pathgrid">
+      <div class="mapcard" data-reveal="l" aria-hidden="true"><img src="img/nz3/path-poster.webp" alt="" width="896" height="1195" loading="lazy" decoding="async"></div>
       <div class="stpanel" id="stpanel" data-reveal>
         <div class="stk"><div class="num" id="st-num">1</div><div><div class="nm" id="st-nm">РазЛичност</div><div class="mn" id="st-mn">се събужда Любка</div></div></div>
         <div class="ln" id="st-ln">„Приета съм такава, каквато съм.“</div>
@@ -513,7 +541,7 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
   </div>
   <div class="mfig tapable" id="fig-monster" data-bleed="always" data-tap>
     <canvas data-фигура="monster" role="img" aria-label="Трите сенки на Спирачката — вътрешна, външна, философска — се сглобяват по скрол; избраната се разпада в жарава и се събира като следващата"></canvas>
-    <img class="poster" src="img/nz2/monster-poster.webp" alt="Трите сенки на Спирачката" width="896" height="1195" hidden loading="lazy" decoding="async">
+    <img class="poster" src="img/nz3/monster-poster.webp" alt="Трите сенки на Спирачката" width="896" height="1195" hidden loading="lazy" decoding="async">
     <div class="tap" aria-hidden="true"><i></i><span>докоснете — следващото лице</span></div>
   </div>
   <div class="wrap">
@@ -545,28 +573,24 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
   </div>
 </section>
 
-<!-- ═══ 5 · СКАЛА 1→5 · буря → зора от частици ═══ -->
+<!-- ═══ 5 · ПЕТ СТЪПАЛА · циферблатът от V1b (v2.2 · дума 12.09: „директно този контрол“ · сменя се сам · тап спира) ═══ -->
 <section class="scale" id="scale">
   <div class="wrap">
     <div class="kicker" data-reveal>Къде сте сега?</div>
     <h2 data-reveal>Пет стъпала <em>нагоре</em></h2>
-    <p class="lead" data-reveal>Скалата не е тест. Тя е пътят на ритрийта: нещата, които днес Ви побъркват, стават нещата, които Ви вдъхновяват. Същите неща — друга Вие. Плъзнете.</p>
+    <p class="lead" data-reveal>Скалата не е тест. Тя е пътят на ритрийта: нещата, които днес Ви побъркват, стават нещата, които Ви вдъхновяват. Същите неща — друга Вие. Докоснете сектор.</p>
   </div>
   <div class="mfig tapable" id="fig-scale" data-bleed="always" data-tap>
-    <div class="scalepics" aria-hidden="true">
-      <img class="storm" src="img/nz2/scale-storm.webp" alt="" width="896" height="1195" loading="lazy" decoding="async">
-      <img class="dawn" id="sc-dawn" src="img/nz2/scale-dawn.webp" alt="" width="896" height="1195" loading="lazy" decoding="async">
+    <div class="dial" id="dial" aria-hidden="true">
+      <div class="port"><img class="storm" src="img/nz3/scale-storm.webp" alt="" width="896" height="1195" decoding="async"><img class="dawn" id="sc-dawn" src="img/nz3/scale-dawn.webp" alt="" width="896" height="1195" loading="lazy" decoding="async"></div>
     </div>
-    <canvas data-фигура="scale" role="img" aria-label="Частиците: буря, която се събира в зора — по скрол, по докосване и по плъзгача"></canvas>
-    <img class="poster" src="img/nz2/scale-dawn.webp" alt="Героинята на зазоряване в планинска поляна" width="896" height="1195" hidden loading="lazy" decoding="async">
-    <div class="tap" aria-hidden="true"><i></i><span>докоснете — следващото стъпало</span></div>
+    <canvas data-фигура="dial" role="img" aria-label="Циферблатът на петте стъпала: стрелка от златни частици, искри по дъгата при всяка смяна, буря около циферблата, която става зора"></canvas>
+    <img class="poster" src="img/nz3/scale-dawn.webp" alt="Героинята на зазоряване в планинска поляна" width="896" height="1195" hidden loading="lazy" decoding="async">
+    <svg class="dialsvg" id="dialsvg" viewBox="0 0 320 320" aria-hidden="true"><g id="secs"></g></svg>
+    <div class="tap" aria-hidden="true"><i></i><span>докоснете — спира · следващо</span></div>
   </div>
   <div class="wrap">
-    <div data-reveal>
-      <div class="slider"><input type="range" id="sc" min="1" max="5" step="1" value="1" aria-label="Пет стъпала на скалата"></div>
-      <div class="ticks" id="ticks"><span class="on">побъркват ме</span><span>дразнят ме</span><span>приемам и правя</span><span>радват ме</span><span>вдъхновяват ме</span></div>
-      <div class="dialword"><div class="step" id="sc-step">1 / 5</div><div class="w" id="sc-w">Побъркват ме</div><div class="d" id="sc-d">Същите ситуации, същите хора — и всеки път експлодирам отвътре.</div></div>
-    </div>
+    <div class="dialword" data-reveal><div class="step" id="sc-step">1 / 5</div><div class="w" id="sc-w">Побъркват ме</div><div class="d" id="sc-d">Същите ситуации, същите хора — и всеки път експлодирам отвътре.</div></div>
   </div>
 </section>
 
@@ -641,27 +665,32 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
     <p class="lead" data-reveal>Сугестопедията не се обяснява — преживява се. Четири момента от един ден. Скролнете — слънцето върви.</p>
     <div class="daygrid">
       <div class="clockwrap" id="clockwrap">
-        <div class="clock" id="clock" data-tap>
-          <svg viewBox="0 0 300 300" aria-hidden="true">
-            <circle class="ringd" cx="150" cy="150" r="132"/>
-            <g id="cdots"></g>
-            <g class="sung" id="sung"><circle class="sun" cx="150" cy="18" r="10"/></g>
-          </svg>
-          <div class="center" id="ccenter">
-            <img src="img/nz2/troupe.webp" alt="" width="1200" height="900" loading="lazy" decoding="async" class="on">
-            <img src="img/nz2/concert.webp" alt="" width="1200" height="900" loading="lazy" decoding="async">
-            <img src="img/nz2/transition.webp" alt="" width="1200" height="900" loading="lazy" decoding="async">
-            <img src="img/nz2/presence.webp" alt="" width="896" height="1195" loading="lazy" decoding="async">
+        <!-- v2.2 · часовникът от V1b (пръстен с точки · слънце · кръгъл образ с концентрични златни кръгове от частици) ·
+             сцената на частиците е ПОД пръстена и НАД образа · картите на моментите долу са скрити и се обръщат -->
+        <div class="mfig tapable" id="fig-clock" data-bleed="always" data-tap>
+          <div class="clockimg" id="clockimg" aria-hidden="true"><div class="center" id="ccenter">
+            <img src="img/nz3/troupe.webp" alt="" width="1200" height="900" decoding="async" class="on">
+            <img src="img/nz3/concert.webp" alt="" width="1200" height="900" loading="lazy" decoding="async">
+            <img src="img/nz3/transition.webp" alt="" width="1200" height="900" loading="lazy" decoding="async">
+            <img src="img/nz3/presence.webp" alt="" width="896" height="1195" loading="lazy" decoding="async">
+          </div></div>
+          <canvas data-фигура="clock" role="img" aria-label="Часовникът на деня: златен пръстен, по който слънцето и едно златно зърно минават от момент към момент; концентрични кръгове светят върху образа"></canvas>
+          <div class="clock" id="clock">
+            <svg viewBox="0 0 300 300" aria-hidden="true">
+              <circle class="ringd" cx="150" cy="150" r="132"/>
+              <g id="cdots"></g>
+              <g class="sung" id="sung"><circle class="sun" cx="150" cy="18" r="10"/></g>
+            </svg>
           </div>
-          <div class="tap" aria-hidden="true"><i></i><span>докоснете</span></div>
+          <div class="tap" aria-hidden="true"><i></i><span>докоснете — следващият момент</span></div>
         </div>
-        <div class="clabel" aria-live="polite"><div class="tm" id="cl-tm">Следобед · Трупата</div><h3 id="cl-h">Влизане в образ</h3><p id="cl-p">Избирате си име, роля и ментор. Ролята пази — в нея смеете повече, отколкото „Вие“.</p></div>
+        <div class="clabel" aria-live="polite"><div class="tm" id="cl-tm">Следобед · Трупата</div></div>
       </div>
       <div class="moments" id="moments">
-        <div class="mo on"><div class="tm">Следобед · Трупата</div><h3>Влизане в образ</h3><p>Избирате си име, роля и ментор. Ролята пази — в нея смеете повече, отколкото „Вие“.</p></div>
-        <div class="mo"><div class="tm">Вечер · Концертен сеанс</div><h3>Класика и Моцарт</h3><p>Водещият чете сценария, Вие следите текста — после само музиката. Нищо не се учи. Всичко остава.</p></div>
-        <div class="mo"><div class="tm">Сутрин · Преходът на Творея</div><h3>Мурата · Рибно езеро · дивите коне</h3><p>Час и половина в тишина: най-старото дърво в Пирин, огледалото на езерото, конете. Онлайн — Вашата разходка със същата тишина.</p></div>
-        <div class="mo"><div class="tm">Всеки ден · Присъствие</div><h3>Слизане в Присъствие</h3><p>Пет портала на дишането до „сега“. Умът замлъква за миг, после за два. Тук се мери пробуждането — не в тест, а в дъх.</p></div>
+        <div class="mo" data-i="0"><div class="inner"><div class="back" aria-hidden="true"><img src="img/nz/deck-back.webp" alt="" width="720" height="894" loading="lazy" decoding="async"><span class="cue">докоснете — обърнете</span></div><div class="front"><div class="tm">Следобед · Трупата</div><h3>Влизане в образ</h3><p>Избирате си име, роля и ментор. Ролята пази — в нея смеете повече, отколкото „Вие“.</p></div></div></div>
+        <div class="mo" data-i="1"><div class="inner"><div class="back" aria-hidden="true"><img src="img/nz/deck-back.webp" alt="" width="720" height="894" loading="lazy" decoding="async"><span class="cue">докоснете — обърнете</span></div><div class="front"><div class="tm">Вечер · Концертен сеанс</div><h3>Класика и Моцарт</h3><p>Водещият чете сценария, Вие следите текста — после само музиката. Нищо не се учи. Всичко остава.</p></div></div></div>
+        <div class="mo" data-i="2"><div class="inner"><div class="back" aria-hidden="true"><img src="img/nz/deck-back.webp" alt="" width="720" height="894" loading="lazy" decoding="async"><span class="cue">докоснете — обърнете</span></div><div class="front"><div class="tm">Сутрин · Преходът на Творея</div><h3>Мурата · Рибно езеро · дивите коне</h3><p>Час и половина в тишина: най-старото дърво в Пирин, огледалото на езерото, конете. Онлайн — Вашата разходка със същата тишина.</p></div></div></div>
+        <div class="mo" data-i="3"><div class="inner"><div class="back" aria-hidden="true"><img src="img/nz/deck-back.webp" alt="" width="720" height="894" loading="lazy" decoding="async"><span class="cue">докоснете — обърнете</span></div><div class="front"><div class="tm">Всеки ден · Присъствие</div><h3>Слизане в Присъствие</h3><p>Пет портала на дишането до „сега“. Умът замлъква за миг, после за два. Тук се мери пробуждането — не в тест, а в дъх.</p></div></div></div>
       </div>
     </div>
 
@@ -710,7 +739,7 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
       </div>
     </div>
     <div class="sleep" data-reveal>
-      <img src="img/nz2/sleep-dawn.webp" alt="Спокоен сън в планинска стая на зазоряване" width="896" height="1195" loading="lazy" decoding="async">
+      <img src="img/nz3/sleep-dawn.webp" alt="Спокоен сън в планинска стая на зазоряване" width="896" height="1195" loading="lazy" decoding="async">
       <div><div class="n">2 ч → 8 ч <small>сън</small></div><p style="font-size:.9rem;margin-top:4px">Числото не убеждава. То се случва — след един концертен сеанс.</p></div>
     </div>
   </div>
@@ -724,12 +753,12 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
     <div data-reveal><span class="badge"><i></i>Присъствено или онлайн — Вие избирате</span></div>
     <div class="modes" id="modes" data-reveal><button class="on" data-m="live">Присъствено · Банско</button><button data-m="online">Онлайн · Zoom</button></div>
   </div>
-  <div class="mfig tapable" id="fig-sun" data-bleed="always" data-tap>
-    <canvas data-фигура="sunarc" role="img" aria-label="Слънцето на деня върви по дъгата от 15:30 до 20:00 — по скрол, или го водите с пръст"></canvas>
-    <img class="poster" src="img/nz2/dawn-wide.webp" alt="Изгрев над Пирин" width="1600" height="900" hidden loading="lazy" decoding="async">
-    <div class="tap" aria-hidden="true"><i></i><span>докоснете слънцето</span></div>
-  </div>
-  <div class="wrap">
+  <!-- v2.2 · дума 12.09: „изчезва слънцето много бързо … да се вплете с 5-те карти“ → сцената е ЗАД картите (auto-височина):
+       златна нишка покрай петте слота · слънцето слиза по нея по скрол · свети до текущия слот · тап на слот = скок · влачене по нишката -->
+  <div class="mfig tapable" id="fig-sun" data-bleed="always" data-tap data-height="auto">
+    <canvas data-фигура="thread" role="img" aria-label="Златната нишка на деня: слънцето слиза по нея от 15:30 до 20:00 и свети до текущия момент — по скрол, или го водите с пръст"></canvas>
+    <img class="poster" src="img/nz3/dawn-wide.webp" alt="Изгрев над Пирин" width="1600" height="900" hidden loading="lazy" decoding="async">
+    <div class="wrap">
     <div class="slots" id="slots">
       <div class="slot" data-p="0"><div class="t">15:30</div><div><div class="w">Влизане в образ</div><div class="c"><span class="live">Трупата се събира в залата в Банско.</span><span class="online">В Zoom — с включена камера, в своя образ.</span></div></div></div>
       <div class="slot" data-p="0.25"><div class="t">16:00</div><div><div class="w">Сеанс и игра · метаезикът на живо</div><div class="c"><span class="live">Карти, сценарий, роли — на маса, заедно.</span><span class="online">Същите карти на екрана — играете от мястото си.</span></div></div></div>
@@ -737,6 +766,10 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
       <div class="slot" data-p="0.72"><div class="t">18:30</div><div><div class="w">Концертен сеанс · класика и Моцарт</div><div class="c"><span class="live">На живо, на свещи, в залата.</span><span class="online">Слушалки, приглушена лампа, текстът пред Вас.</span></div></div></div>
       <div class="slot" data-p="1"><div class="t">20:00</div><div><div class="w">Край · и тишина до сутринта</div><div class="c"><span class="live">Сутрините са за преходите: езерото, мурата, конете.</span><span class="online">Сутрините са Ваши — със същата тишина.</span></div></div></div>
     </div>
+    </div>
+    <div class="tap" aria-hidden="true"><i></i><span>докоснете слънцето</span></div>
+  </div>
+  <div class="wrap">
     <div class="dates" data-reveal>
       <div class="first"><div class="d">18</div><div class="wd">пт</div></div>
       <div><div class="d">19</div><div class="wd">сб</div></div>
@@ -755,6 +788,10 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
     <div class="kicker" data-reveal>Последната карта</div>
     <h2 data-reveal>Заявете <em>място</em></h2>
     <p class="lead" data-reveal>Пълната програма и специалните условия до 15 септември получавате лично — в отговор на формата. Формата не Ви обвързва с покупка.</p>
+    <!-- v2.2 · златният мотив и тук: искра при фокус (сцената е зад картата · auto-височина · без подсказка) -->
+    <div class="mfig soft" id="fig-form" data-bleed="always" data-height="auto">
+    <canvas data-фигура="spark" aria-hidden="true"></canvas>
+    <div class="wrap">
     <div class="fgrid">
       <div class="deck eli" data-reveal="l">
         <span class="corner c1">✦</span><span class="corner c2">✦</span><span class="corner c3">✦</span><span class="corner c4">✦</span>
@@ -790,12 +827,14 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
         </div>
       </div>
     </div>
+    </div>
+    </div>
   </div>
 </section>
 
 <!-- ═══ 11 · ПРЕДЛОЖЕНИЕ ═══ -->
 <section class="offer" id="offer">
-  <div class="bgw" aria-hidden="true"><img src="img/nz2/hero-wide.webp" alt="" width="1600" height="900" loading="lazy" decoding="async"></div>
+  <div class="bgw" aria-hidden="true"><img src="img/nz3/hero-wide.webp" alt="" width="1600" height="900" loading="lazy" decoding="async"></div>
   <div class="wrap">
     <div class="kicker" data-reveal>Предложението</div>
     <h2 data-reveal>Пълната програма <em>„Нова Жена“</em></h2>
@@ -843,7 +882,7 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
 
 <script>
 /* ═══════════════════════════════════════════════════════════════════════════
-   МЕТА-ФИГУРА · V2 „Холограма“ · двигателят на ПЕТТЕ фигури · 12.09.2026
+   МЕТА-ФИГУРА · V2 „Холограма“ · двигателят на фигурите · v2.2 · 12.09.2026 (пет → осем вида · един контекст)
    ───────────────────────────────────────────────────────────────────────────
    Изведен от хоума на maitapp (app.js · Three.js Points + ShaderMaterial) през
    ЕП4-извадения (същите генератори и шейдъри БЕЗ Three.js). Тук се надгражда:
@@ -959,27 +998,46 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
   }
   var КАЧУЛКИ = [[-0.98, -0.22, -0.55], [0.00, -0.06, -0.95], [0.98, -0.22, -0.55]]; /* V2 · само за часовника (hero „преди“ вече не ги ползва) */
 
-  /* ══ СПИРАЧКАТА · три качулати сенки (v2.1 · дума 12.09: „нова фигура, не часовник“) ═══════════
-     cls: 0 тяло на сянка (data = лице/2 · 0 вътрешен · 0.5 външен · 1 философски) · 1 жарава (data = темп) · 2 земя
-     Сглобяват се по скрол (uAssembly идва от страницата) · избраното лице свети · при смяна (uAux.x = старото ·
-     uAux.y = фаза 0→1) старата сянка се разпада в жарава, която прелита и се събира като новото лице. */
-  var СЕНКИ = [[-0.78, 0.0, -0.15], [0.0, 0.0, 0.10], [0.78, 0.0, -0.15]], СЕНКИ_МАЩАБ = [0.82, 0.95, 0.82];
-  function сянкаПрофил() {
-    return [[0.00, -1.00], [0.34, -1.00], [0.36, -0.70], [0.30, -0.25], [0.27, 0.15], [0.30, 0.42], [0.34, 0.52],
-      [0.30, 0.62], [0.22, 0.72], [0.16, 0.82], [0.10, 0.92], [0.00, 0.98]];
+  /* ══ СПИРАЧКАТА · три качулати ФИГУРИ (v2.2 · дума 12.09: „не става ясно какви са тези стрелки“) ═══════════
+     cls: 0 фигура (data = лице/2 · 0 вътрешен · 0.5 външен · 1 философски) · 1 жарава (data = темп) · 2 земя
+     Фигурата е сглобена от ЧАСТИ, не е едно тяло на въртене с връх: роба-камбана с широки рамене · заоблена качулка
+     без остър връх (купол), леко наклонена около шията · два ръкава, които се срещат отпред в ръце · плътен контур
+     (плоско 0.50) · земя и жарава под краката. Сглобяват се по скрол (uAssembly) · избраното лице свети · при смяна
+     (uAux.x = старото · uAux.y = фаза 0→1) старата фигура се разпада в жарава, която прелита и се събира като новото. */
+  var СЕНКИ = [[-0.82, 0.0, -0.15], [0.0, 0.0, 0.10], [0.82, 0.0, -0.15]], СЕНКИ_МАЩАБ = [0.80, 0.94, 0.80], СЕНКИ_НАКЛОН = [0.16, -0.05, -0.15];
+  function робаПрофил() { /* полите (y −1) → кръст → широки рамене → шия (y 0.62) · камбана */
+    return [[0.00, -1.00], [0.42, -1.00], [0.44, -0.90], [0.40, -0.66], [0.33, -0.40], [0.28, -0.16], [0.27, 0.06],
+      [0.30, 0.24], [0.38, 0.38], [0.44, 0.46], [0.42, 0.52], [0.30, 0.56], [0.16, 0.60], [0.00, 0.62]];
   }
+  function качулкаКупол() { /* заоблена качулка · купол без връх · y 0.52 → 1.00 · r 0.27 → 0 с хоризонтална тангента отгоре */
+    var p = [], n = 14;
+    for (var k = 0; k <= n; k++) { var u = k / n, ang = u * Math.PI / 2; p.push([0.27 * Math.cos(ang), 0.52 + 0.48 * Math.sin(ang)]); }
+    return p;
+  }
+  function безие(a, b, c, u) { var v = 1 - u; return [v * v * a[0] + 2 * v * u * b[0] + u * u * c[0], v * v * a[1] + 2 * v * u * b[1] + u * u * c[1], v * v * a[2] + 2 * v * u * b[2] + u * u * c[2]]; }
   function genMonster(home, cls, data, N, rand) {
     var nТела = Math.floor(N * 0.70), nЖар = Math.floor(N * 0.22), i = 0, k, s;
-    var дял = [0.30, 0.40, 0.30];
+    var дял = [0.31, 0.38, 0.31];
     for (s = 0; s < 3; s++) {
-      var n = Math.floor(nТела * дял[s]), i0 = i, sc = СЕНКИ_МАЩАБ[s], o = СЕНКИ[s];
-      i = лате(сянкаПрофил(), n, rand, home, cls, data, i, 0, 0.010, sc, o[0], o[1], o[2], 0.35);
-      for (k = i0; k < i; k++) {
-        data[k] = s / 2;
-        /* качулката е куха отпред: точките пред лицето се обръщат назад */
-        var ly = (home[k * 3 + 1] - o[1]) / sc, lz = home[k * 3 + 2] - o[2];
-        if (ly > 0.56 && lz > 0.02) home[k * 3 + 2] = o[2] - lz;
+      var n = Math.floor(nТела * дял[s]), i0 = i, sc = СЕНКИ_МАЩАБ[s], o = СЕНКИ[s], нак = СЕНКИ_НАКЛОН[s];
+      var nРоба = Math.floor(n * 0.60), nКач = Math.floor(n * 0.24), nРък = n - nРоба - nКач;
+      i = лате(робаПрофил(), nРоба, rand, home, cls, data, i, 0, 0.010, sc, o[0], o[1], o[2], 0.50);
+      var iК = i;
+      i = лате(качулкаКупол(), nКач, rand, home, cls, data, i, 0, 0.008, sc, o[0], o[1], o[2], 0.50);
+      for (k = iК; k < i; k++) { /* качулката: куха отпред (точките пред лицето се обръщат назад) · леко наклонена около шията */
+        var lx = (home[k * 3] - o[0]) / sc, ly = (home[k * 3 + 1] - o[1]) / sc, lz = home[k * 3 + 2] - o[2];
+        if (ly > 0.64 && lz > 0.03) lz = -lz;
+        var cs = Math.cos(нак), sn = Math.sin(нак), dy = ly - 0.56;
+        home[k * 3] = o[0] + (lx * cs - dy * sn) * sc; home[k * 3 + 1] = o[1] + (0.56 + lx * sn + dy * cs) * sc; home[k * 3 + 2] = o[2] + lz;
       }
+      for (k = 0; k < nРък; k++, i++) { /* ръкавите: две тръби от раменете надолу и навътре · ръцете се срещат отпред */
+        var side = k % 2 ? 1 : -1, u = rand();
+        var q = безие([side * 0.40, 0.42, 0.0], [side * 0.50, 0.02, 0.20], [side * 0.06, -0.14, 0.36], u);
+        var th = rand() * TAU, rr = 0.075 * (rand() < 0.5 ? 1 : Math.sqrt(rand()));
+        home[i * 3] = o[0] + (q[0] + rr * Math.cos(th)) * sc; home[i * 3 + 1] = o[1] + (q[1] + rr * Math.sin(th) * 0.8) * sc; home[i * 3 + 2] = o[2] + q[2] + rr * Math.sin(th) * 0.5;
+        cls[i] = 0; data[i] = 0;
+      }
+      for (k = i0; k < i; k++) data[k] = s / 2;
     }
     for (k = 0; k < nЖар; k++, i++) {
       home[i * 3] = (rand() * 2 - 1) * 1.30; home[i * 3 + 1] = -1.0; home[i * 3 + 2] = (rand() - 0.5) * 0.6;
@@ -1134,76 +1192,106 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
     }
   }
 
-  /* ══ СКАЛАТА · буря (A) → зора (B) ═════════════════════════════════════
-     A cls: 0 облак · 1 дъжд · B cls: 0 слънце · 1 лъчи · 2 хребет · 3 небесен прах */
-  function genStorm(home, cls, data, N, rand) {
-    var nДъжд = Math.floor(N * 0.15), i = 0, k;
-    for (k = 0; k < N - nДъжд; k++, i++) {
-      var a = rand() * TAU, r = Math.sqrt(rand());
-      home[i * 3] = r * Math.cos(a) * 1.28; home[i * 3 + 1] = r * Math.sin(a) * 0.74 + 0.05; home[i * 3 + 2] = (rand() - 0.5) * 0.8;
-      cls[i] = 0; data[i] = 1 - r;
+  /* ══ ЦИФЕРБЛАТЪТ „Пет стъпала“ (v2.2 · дума 12.09: „да използваме директно този контрол“ + златната анимация) ══
+     Моделна единица = пръстенът на V1b (r 118 в viewBox 320) → секторите r 1.03–1.32 · портретът r 0.84 (страницата
+     намества HTML-контрола по __мфиг.проектирай). cls: 0 пръстен (data = обиколка 0→1 от ляво през горе) ·
+     1 искри по дъгата (при смяна пътуват от старото към новото стъпало · uAux) · 2 буря→зора прах (data = темп ·
+     шейдърът го изнася на r 0.6–1.35 · при 1 = вихър и дъжд, при 5 = бавно вдигаща се зора) · 3 стрелката (комета
+     от центъра към сектора · ъгълът е uProgress, гладък през uAux) · 4 секторен прах (data = сектор/4 · r ×1.32) */
+  function genDial(home, cls, data, N, rand) {
+    var nПр = Math.floor(N * 0.30), nИскри = Math.floor(N * 0.10), nПрах = Math.floor(N * 0.30), nСтр = Math.floor(N * 0.10), i = 0, k, a, r;
+    for (k = 0; k < nПр; k++, i++) {
+      var u = rand(); a = Math.PI - u * TAU; r = 1.0 + (rand() - 0.5) * 0.022;
+      home[i * 3] = r * Math.cos(a); home[i * 3 + 1] = r * Math.sin(a); home[i * 3 + 2] = (rand() - 0.5) * 0.03;
+      cls[i] = 0; data[i] = u;
     }
-    for (; i < N; i++) {
-      home[i * 3] = (rand() * 2 - 1) * 1.3; home[i * 3 + 1] = (rand() * 2 - 1) * 0.8; home[i * 3 + 2] = (rand() - 0.5) * 0.5;
+    for (k = 0; k < nИскри; k++, i++) { /* искрите живеят в шейдъра: position = (закъснение · радиален разсей · орбита) */
+      home[i * 3] = rand(); home[i * 3 + 1] = rand(); home[i * 3 + 2] = rand();
       cls[i] = 1; data[i] = rand();
     }
-  }
-  function хребет(x) { return -0.50 + 0.20 * Math.abs(Math.sin(x * 1.9 + 0.7)) + 0.08 * Math.sin(x * 4.1); }
-  function genDawn(home, cls, data, N, rand) {
-    var nСл = Math.floor(N * 0.30), nЛ = Math.floor(N * 0.18), nХр = Math.floor(N * 0.32), i = 0, k, a, r, x, y;
-    for (k = 0; k < nСл; k++, i++) {
-      a = rand() * TAU; r = 0.42 * Math.sqrt(rand());
-      home[i * 3] = r * Math.cos(a); home[i * 3 + 1] = 0.40 + r * Math.sin(a); home[i * 3 + 2] = (rand() - 0.5) * 0.1;
-      cls[i] = 0; data[i] = r / 0.42;
+    for (k = 0; k < nПрах; k++, i++) { /* прахът: около циферблата · долната половина по-гъста */
+      a = rand() * TAU; r = 0.45 + 0.55 * Math.sqrt(rand()); var y = r * Math.sin(a);
+      if (y > 0 && rand() < 0.6) y = -y;
+      home[i * 3] = r * Math.cos(a); home[i * 3 + 1] = y; home[i * 3 + 2] = (rand() - 0.5) * 0.4;
+      cls[i] = 2; data[i] = rand();
     }
-    for (k = 0; k < nЛ; k++, i++) {
-      var л = Math.floor(rand() * 14); a = (л + 0.5) * TAU / 14 + (rand() - 0.5) * 0.03; var t = rand(); r = 0.50 + t * 0.62;
-      home[i * 3] = r * Math.cos(a); home[i * 3 + 1] = 0.40 + r * Math.sin(a); home[i * 3 + 2] = (rand() - 0.5) * 0.05;
-      cls[i] = 1; data[i] = t;
+    for (k = 0; k < nСтр; k++, i++) { /* стрелката: r 0.20→0.96 по +x (шейдърът я върти) · върхът по-гъст */
+      var t = 1 - Math.pow(rand(), 1.6); r = 0.20 + 0.76 * t;
+      home[i * 3] = r; home[i * 3 + 1] = (rand() - 0.5) * 0.06 * (1 - t * 0.7); home[i * 3 + 2] = (rand() - 0.5) * 0.03;
+      cls[i] = 3; data[i] = t;
     }
-    for (k = 0; k < nХр; k++, i++) {
-      x = (rand() * 2 - 1) * 1.32; var h = хребет(x), dn = Math.pow(rand(), 0.8) * 0.36; y = h - dn;
-      home[i * 3] = x; home[i * 3 + 1] = y; home[i * 3 + 2] = (rand() - 0.5) * 0.4;
-      cls[i] = 2; data[i] = dn / 0.36;
-    }
-    for (; i < N; i++) {
-      x = (rand() * 2 - 1) * 1.32; y = -0.40 + rand() * 1.30;
-      home[i * 3] = x; home[i * 3 + 1] = y; home[i * 3 + 2] = (rand() - 0.5) * 0.6;
-      cls[i] = 3; data[i] = rand();
+    for (; i < N; i++) { /* секторният прах: 5 сектора × 36° · r 0.78→1.0 (×1.32 в шейдъра) */
+      var sk = Math.floor(rand() * 5); a = Math.PI - (sk + rand()) * (Math.PI / 5); r = 0.78 + 0.22 * rand();
+      home[i * 3] = r * Math.cos(a); home[i * 3 + 1] = r * Math.sin(a); home[i * 3 + 2] = 0;
+      cls[i] = 4; data[i] = sk / 4;
     }
   }
 
-  /* ══ СЛЪНЦЕТО НА ДЕНЯ · дъгата 15:30 → 20:00 ════════════════════════════
-     cls: 0 слънце (шейдърът го води по дъгата) · 1 лъчи · 2 дъга-прах (data = дял от пътя) ·
-          3 хоризонт · 4 възли на моментите (data = позиция) */
-  var МОМЕНТИ = [0, 0.25, 0.48, 0.72, 1];
-  function дъга(p) { var a = Math.PI * (1 - p); return [1.25 * Math.cos(a), 0.78 * Math.sin(a) - 0.42]; }
-  function genSunArc(home, cls, data, N, rand) {
-    var nСл = Math.floor(N * 0.26), nЛ = Math.floor(N * 0.10), nД = Math.floor(N * 0.32), nХ = Math.floor(N * 0.20), i = 0, k, a, r, p, c;
-    for (k = 0; k < nСл; k++, i++) {
-      a = rand() * TAU; r = 0.20 * Math.sqrt(rand());
-      home[i * 3] = r * Math.cos(a); home[i * 3 + 1] = r * Math.sin(a); home[i * 3 + 2] = (rand() - 0.5) * 0.06;
-      cls[i] = 0; data[i] = r / 0.20;
+  /* ══ ЧАСОВНИКЪТ НА ДЕНЯ (v2.2 · дума 12.09: „тази на Екран 4 е по-добре … НЕЩО УАУ … игра“) ══
+     Моделна единица = пунктираният пръстен на V1b (r 132 в viewBox 300) · образът r 0.73 · слънцето върви по пръстена.
+     cls: 0 ореол на пръстена (data = обиколка 0→1 от горе по часовника) · 1 зърното (при смяна пътува по най-късия път
+     от стария към новия момент · uAux · после свети под слънцето) · 2 искрици, които се вдигат от пръстена край слънцето ·
+     3 концентрични златни кръгове ВЪРХУ образа (три · бавен шимър · data = кръг) · 4 лъчи зад слънцето · 5 прах извън пръстена */
+  function genClock(home, cls, data, N, rand) {
+    var nОр = Math.floor(N * 0.26), nЗ = Math.floor(N * 0.08), nИ = Math.floor(N * 0.12), nКр = Math.floor(N * 0.22), nЛ = Math.floor(N * 0.08), i = 0, k, a, r;
+    for (k = 0; k < nОр; k++, i++) {
+      var u = rand(); a = Math.PI / 2 - u * TAU; r = 1.0 + (rand() - 0.5) * 0.05;
+      home[i * 3] = r * Math.cos(a); home[i * 3 + 1] = r * Math.sin(a); home[i * 3 + 2] = (rand() - 0.5) * 0.03;
+      cls[i] = 0; data[i] = u;
+    }
+    for (k = 0; k < nЗ; k++, i++) { home[i * 3] = rand(); home[i * 3 + 1] = rand(); home[i * 3 + 2] = rand(); cls[i] = 1; data[i] = rand(); }
+    for (k = 0; k < nИ; k++, i++) { home[i * 3] = rand(); home[i * 3 + 1] = rand(); home[i * 3 + 2] = rand(); cls[i] = 2; data[i] = rand(); }
+    for (k = 0; k < nКр; k++, i++) {
+      var кр = Math.floor(rand() * 3); r = [0.34, 0.50, 0.64][кр] + (rand() - 0.5) * 0.012; a = rand() * TAU;
+      home[i * 3] = r * Math.cos(a); home[i * 3 + 1] = r * Math.sin(a); home[i * 3 + 2] = 0;
+      cls[i] = 3; data[i] = кр / 2;
     }
     for (k = 0; k < nЛ; k++, i++) {
-      var л = Math.floor(rand() * 12); a = (л + 0.5) * TAU / 12 + (rand() - 0.5) * 0.04; var t = rand(); r = 0.25 + t * 0.17;
+      var л = Math.floor(rand() * 12); a = (л + 0.5) * TAU / 12 + (rand() - 0.5) * 0.05; var t = rand(); r = 0.06 + t * 0.18;
       home[i * 3] = r * Math.cos(a); home[i * 3 + 1] = r * Math.sin(a); home[i * 3 + 2] = 0;
-      cls[i] = 1; data[i] = t;
-    }
-    for (k = 0; k < nД; k++, i++) {
-      p = rand(); c = дъга(p);
-      home[i * 3] = c[0] + (rand() - 0.5) * 0.025; home[i * 3 + 1] = c[1] + (rand() - 0.5) * 0.025; home[i * 3 + 2] = (rand() - 0.5) * 0.05;
-      cls[i] = 2; data[i] = p;
-    }
-    for (k = 0; k < nХ; k++, i++) {
-      home[i * 3] = (rand() * 2 - 1) * 1.48; home[i * 3 + 1] = -0.45 + (rand() - 0.5) * 0.03; home[i * 3 + 2] = (rand() - 0.5) * 0.3;
-      cls[i] = 3; data[i] = rand();
+      cls[i] = 4; data[i] = t;
     }
     for (; i < N; i++) {
-      var m = Math.floor(rand() * 5); p = МОМЕНТИ[m]; c = дъга(p); a = rand() * TAU; r = 0.05 * Math.sqrt(rand());
-      home[i * 3] = c[0] + r * Math.cos(a); home[i * 3 + 1] = c[1] + r * Math.sin(a); home[i * 3 + 2] = 0;
-      cls[i] = 4; data[i] = p;
+      a = rand() * TAU; r = 0.80 + 0.20 * rand();
+      home[i * 3] = r * Math.cos(a); home[i * 3 + 1] = r * Math.sin(a); home[i * 3 + 2] = (rand() - 0.5) * 0.5;
+      cls[i] = 5; data[i] = rand();
     }
+  }
+
+  /* ══ НИШКАТА НА ДЕНЯ · разписанието (v2.2 · дума 12.09: „изчезва слънцето много бързо … да се вплете с 5-те карти“) ══
+     Златна нишка минава ВЕРТИКАЛНО покрай петте карти · слънцето слиза по нея (uProgress) и свети до текущия слот.
+     Геометрията идва от страницата всеки кадър през uNodes: [0..4] t на петте възела · [5] y горе · [6] y долу · [7] x на нишката.
+     cls: 0 нишка (position.x = t по нишката −0.05→1.05 · y = страничен разсей) · 1 слънце · 2 лъчи · 3 възли на слотовете
+     (data = k/4) · 4 искри от слънцето надясно по текущата карта · 5 прах */
+  function genThread(home, cls, data, N, rand) {
+    var nН = Math.floor(N * 0.34), nСл = Math.floor(N * 0.16), nЛ = Math.floor(N * 0.08), nВ = Math.floor(N * 0.14), nИ = Math.floor(N * 0.10), i = 0, k, a, r;
+    for (k = 0; k < nН; k++, i++) { home[i * 3] = -0.05 + rand() * 1.10; home[i * 3 + 1] = (rand() - 0.5); home[i * 3 + 2] = (rand() - 0.5) * 0.03; cls[i] = 0; data[i] = rand(); }
+    for (k = 0; k < nСл; k++, i++) {
+      a = rand() * TAU; r = 0.14 * Math.sqrt(rand());
+      home[i * 3] = r * Math.cos(a); home[i * 3 + 1] = r * Math.sin(a); home[i * 3 + 2] = (rand() - 0.5) * 0.05;
+      cls[i] = 1; data[i] = r / 0.14;
+    }
+    for (k = 0; k < nЛ; k++, i++) {
+      var л = Math.floor(rand() * 12); a = (л + 0.5) * TAU / 12 + (rand() - 0.5) * 0.04; var t = rand(); r = 0.17 + t * 0.14;
+      home[i * 3] = r * Math.cos(a); home[i * 3 + 1] = r * Math.sin(a); home[i * 3 + 2] = 0;
+      cls[i] = 2; data[i] = t;
+    }
+    for (k = 0; k < nВ; k++, i++) {
+      a = rand() * TAU; r = 0.05 * Math.sqrt(rand());
+      home[i * 3] = r * Math.cos(a); home[i * 3 + 1] = r * Math.sin(a); home[i * 3 + 2] = 0;
+      cls[i] = 3; data[i] = Math.floor(rand() * 5) / 4;
+    }
+    for (k = 0; k < nИ; k++, i++) { home[i * 3] = rand(); home[i * 3 + 1] = rand(); home[i * 3 + 2] = rand(); cls[i] = 4; data[i] = rand(); }
+    for (; i < N; i++) { home[i * 3] = (rand() * 2 - 1); home[i * 3 + 1] = (rand() * 2 - 1); home[i * 3 + 2] = (rand() - 0.5) * 0.6; cls[i] = 5; data[i] = rand(); }
+  }
+
+  /* ══ ИСКРАТА НА ФОРМАТА (v2.2 · златният мотив и тук: лека искра при фокус) ══
+     Тихо поле от златен прах зад картата; при фокус върху поле (uProgress → 1) прахът се стича към мястото на фокуса
+     (uNodes[0..1]) и светва. uNodes: [5] y горе · [6] y долу · [7] половин ширина (моделни единици). cls 0 прах · 1 едри искри */
+  function genSpark(home, cls, data, N, rand) {
+    var nЕдри = Math.floor(N * 0.03), i = 0, k;
+    for (k = 0; k < N - nЕдри; k++, i++) { home[i * 3] = rand() * 2 - 1; home[i * 3 + 1] = rand() * 2 - 1; home[i * 3 + 2] = (rand() - 0.5) * 0.5; cls[i] = 0; data[i] = rand(); }
+    for (; i < N; i++) { home[i * 3] = rand() * 2 - 1; home[i * 3 + 1] = rand() * 2 - 1; home[i * 3 + 2] = 0; cls[i] = 1; data[i] = rand(); }
   }
 
   /* ══════════════ ШЕЙДЪРИ · един блок на фигура · чете (seedv, clsv, datv, cls2, dat2) ══════════════
@@ -1308,42 +1396,163 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
     '  }'
   ].join('\n');
 
-  var СКАЛА_GLSL = [
-    '  float mm = smoothstep(0.0, 1.0, clamp((uProgress - seedv * 0.25) / 0.75, 0.0, 1.0));',
-    '  float st = 1.0 - mm;',
-    '  vec3 src = position;',
-    '  src += st * 0.32 * vec3(sin(uTime * 2.2 + seedv * 31.0), cos(uTime * 1.7 + seedv * 23.0) * 0.6, sin(uTime * 2.6 + seedv * 13.0) * 0.5);',
-    '  if (clsv > 0.5) { src.y = position.y - (mod(uTime * 1.1 + datv * 3.0, 1.6) - 0.8); }',
-    '  vec3 tg = aTarget;',
-    '  if (cls2 < 0.5) { tg.xy = vec2(0.0, 0.40) + (tg.xy - vec2(0.0, 0.40)) * (1.0 + 0.04 * sin(uTime * 1.3)); }',
-    '  hp = mix(src, tg, mm);',
-    '  a = asm2(uAssembly, seedv, 0.0);',
-    '  vec3 colA = (clsv < 0.5) ? mix(uShadow * 0.8, uPal[2] * 1.15, datv) : uPal[2] * 1.4;',
-    '  float ray = 0.5 + 0.5 * sin(uTime * 1.2 - dat2 * 9.0);',
-    '  float tw = 0.5 + 0.5 * sin(uTime * 2.0 + seedv * 50.0);',
-    '  vec3 colB = (cls2 < 0.5) ? mix(uPal[0] * 1.55, uPal[1] * 1.5, dat2)',
-    '            : (cls2 < 1.5) ? uPal[0] * (0.6 + 0.6 * ray)',
-    '            : (cls2 < 2.5) ? mix(uPal[3] * 0.75, uPal[5] * 0.55, dat2)',
-    '            : uPal[0] * (0.5 + 0.5 * tw);',
-    '  col = mix(colA, colB, mm);',
-    '  float szA = (clsv < 0.5) ? 1.0 : 0.8;',
-    '  float szB = (cls2 < 0.5) ? 1.35 : ((cls2 < 2.5) ? 1.0 : 0.9);',
-    '  sizeF = mix(szA, szB, mm) * (1.0 + (1.0 - abs(2.0 * mm - 1.0)) * 0.3);',
-    '  alphaF = mix(0.85, 0.95, mm);'
+  var ЦИФЕРБЛАТ_GLSL = [
+    '  float b = clamp(uAux.y, 0.0, 1.0); float eb = smoothstep(0.0, 1.0, b);',
+    '  float trans = step(0.01, abs(uAux.x - uProgress)) * (1.0 - step(0.999, b));',       /* има ли смяна в момента */
+    '  float pp = mix(uAux.x, uProgress, eb);',                                              /* гладката стойност (стрелка · пръстен) */
+    '  float th = 2.8274334 - 2.5132741 * pp;',                                              /* ъгълът на стрелката · 0.9π − 0.8π·p */
+    '  float uCur = 0.05 + 0.40 * pp, uOld = 0.05 + 0.40 * uAux.x, uNew = 0.05 + 0.40 * uProgress;', /* места по обиколката */
+    '  float glow = 0.5 + 0.5 * sin(uTime * 2.0 + seedv * 30.0);',
+    '  if (clsv < 0.5) {',                                                                   /* пръстенът: свети до стъпалото · трепти */
+    '    float upper = 1.0 - step(0.5, datv);',
+    '    float lit = (1.0 - smoothstep(uCur, uCur + 0.02, datv)) * upper;',
+    '    float near = exp(-pow((datv - uCur) * 40.0, 2.0)) * upper;',
+    '    a = asm2(uAssembly, seedv, 0.0);',
+    '    hp.xy *= 1.0 + 0.012 * sin(uTime * 1.5 + datv * 25.0);',
+    '    col = mix(uBone * 0.35, uPal[0] * (1.0 + 0.5 * glow), lit) + uPal[1] * near * 1.2;',
+    '    sizeF = mix(0.75, 1.15, lit) + near * 1.2; alphaF = mix(0.35, 0.9, lit) + near * 0.2;',
+    '  } else if (clsv < 1.5) {',                                                            /* искрите: при смяна пътуват по дъгата · после трепкат при стрелката */
+    '    a = asm2(uAssembly, seedv, 0.05);',
+    '    float f = clamp((eb - position.x * 0.35) / 0.65, 0.0, 1.0);',
+    '    float uu = mix(uOld, uNew, f); float rr = 1.18 + (position.y - 0.5) * 0.22 + 0.06 * sin(uTime * 3.0 + seedv * 20.0);',
+    '    if (trans < 0.5) { uu = uCur + (position.y - 0.5) * 0.05 * (0.5 + 0.5 * sin(uTime * 0.7 + seedv * 9.0)); rr = 1.08 + position.z * 0.28 + 0.03 * sin(uTime * 2.0 + seedv * 40.0); }',
+    '    float ang = 3.14159265 - uu * 6.2831853;',
+    '    hp = vec3(rr * cos(ang), rr * sin(ang), 0.0);',
+    '    float fly = trans * (1.0 - eb);',
+    '    col = uPal[0] * (1.2 + 0.8 * glow) + uPal[1] * fly * 1.5;',
+    '    sizeF = 1.1 + fly * 1.4 + glow * 0.3; alphaF = (0.55 + 0.45 * glow) * (0.35 + 0.65 * max(fly, 1.0 - trans));',
+    '  } else if (clsv < 2.5) {',                                                            /* буря → зора: прахът около циферблата */
+    '    a = asm2(uAssembly, seedv, 0.10 + datv * 0.10);',
+    '    float storm = 1.0 - pp;',
+    '    vec2 sh = vec2(sin(uTime * 2.4 + seedv * 31.0), cos(uTime * 1.9 + seedv * 23.0) * 0.6) * 0.06 * storm;',
+    '    float rise = fract(uTime * 0.05 * (0.5 + datv) + seedv);',
+    '    hp.xy = hp.xy * 1.32 + sh; hp.y += (rise - 0.5) * 0.25 * pp - storm * 0.30 * fract(uTime * 0.25 + seedv * 3.0);',
+    '    col = mix(mix(uShadow * 0.8, uPal[2] * 0.9, datv), mix(uPal[0] * 0.9, uPal[1] * 0.8, datv), pp);',
+    '    sizeF = mix(0.9, 1.1, pp); alphaF = mix(0.55, 0.45, pp) * (0.5 + 0.5 * glow);',
+    '  } else if (clsv < 3.5) {',                                                            /* стрелката: комета от центъра към сектора */
+    '    a = asm2(uAssembly, seedv, 0.0);',
+    '    float c = cos(th), s = sin(th);',
+    '    vec2 q = vec2(hp.x, hp.y * (1.0 + 0.8 * trans * (1.0 - eb)));',
+    '    hp.xy = mat2(c, s, -s, c) * q;',
+    '    float tip = smoothstep(0.6, 1.0, datv);',
+    '    col = mix(uPal[0] * 0.9, uPal[1] * 1.6, tip) + uPal[0] * glow * 0.3;',
+    '    sizeF = mix(0.8, 1.6, tip) + trans * 0.4; alphaF = mix(0.55, 1.0, tip);',
+    '  } else {',                                                                            /* секторният прах: текущият сектор свети */
+    '    a = asm2(uAssembly, seedv, 0.05);',
+    '    float cur = 1.0 - smoothstep(0.08, 0.20, abs(datv - pp));',
+    '    hp.xy *= 1.32;',
+    '    col = mix(uBone * 0.28, uPal[0] * (0.9 + 0.5 * glow), cur);',
+    '    sizeF = mix(0.7, 1.1, cur); alphaF = mix(0.22, 0.75, cur);',
+    '  }'
   ].join('\n');
 
-  var СЛЪНЦЕ_GLSL = [
-    '  float ang = 3.14159265 * (1.0 - uProgress);',
-    '  vec2 sc = vec2(1.25 * cos(ang), 0.78 * sin(ang)) + vec2(0.0, -0.42);',
-    '  if (clsv < 0.5) { a = asm2(uAssembly, seedv, 0.0); hp.xy = hp.xy * (1.0 + 0.05 * sin(uTime * 1.4)) + sc; col = mix(uPal[0] * 1.6, uPal[1] * 1.5, datv); sizeF = 1.5; alphaF = 1.0; }',
-    '  else if (clsv < 1.5) { a = asm2(uAssembly, seedv, 0.05); float rot = uTime * 0.25; float c = cos(rot), s = sin(rot); hp.xy = mat2(c, s, -s, c) * hp.xy + sc; col = uPal[0] * (0.6 + 0.5 * (0.5 + 0.5 * sin(uTime * 1.6 - datv * 7.0))); sizeF = 0.9; alphaF = 0.7; }',
-    '  else if (clsv < 2.5) { float lit = 1.0 - smoothstep(uProgress, uProgress + 0.03, datv); a = asm2(uAssembly, seedv, 0.08); col = mix(uBone * 0.35, uPal[0] * 1.3, lit); sizeF = mix(0.8, 1.15, lit); alphaF = mix(0.5, 0.95, lit); }',
-    '  else if (clsv < 3.5) { a = asm2(uAssembly, seedv, 0.12); col = uBone * 0.4; sizeF = 0.8; alphaF = 0.6; }',
-    '  else { float lit = 1.0 - smoothstep(uProgress + 0.02, uProgress + 0.06, datv); a = asm2(uAssembly, seedv, 0.1); col = mix(uBone * 0.5, uPal[0] * 1.6, lit); sizeF = mix(1.2, 1.9, lit); alphaF = 1.0; }'
+  var ЧАСОВНИК_GLSL = [
+    '  float b = clamp(uAux.y, 0.0, 1.0); float eb = smoothstep(0.0, 1.0, b);',
+    '  float trans = step(0.001, abs(uAux.x - uProgress)) * (1.0 - step(0.999, b));',
+    '  float dU = fract(uProgress - uAux.x + 0.5) - 0.5;',                                   /* най-късият път по пръстена */
+    '  float uNow = fract(uAux.x + dU * eb);',                                               /* мястото на слънцето точно сега */
+    '  float glow = 0.5 + 0.5 * sin(uTime * 2.2 + seedv * 25.0);',
+    '  if (clsv < 0.5) {',                                                                   /* ореолът на пръстена · диша · по-светъл при слънцето */
+    '    a = asm2(uAssembly, seedv, 0.0);',
+    '    float dd = abs(fract(datv - uNow + 0.5) - 0.5);',
+    '    float near = exp(-dd * dd * 300.0);',
+    '    hp.xy *= 1.0 + 0.012 * sin(uTime * 1.3 + datv * 30.0);',
+    '    col = uPal[0] * (0.45 + 0.25 * glow) + uPal[1] * near * 1.2;',
+    '    sizeF = 0.85 + near * 1.0; alphaF = 0.45 + near * 0.4;',
+    '  } else if (clsv < 1.5) {',                                                            /* зърното: пътува по пръстена при смяна · после свети под слънцето */
+    '    a = asm2(uAssembly, seedv, 0.02);',
+    '    float f = clamp((eb - position.x * 0.4) / 0.6, 0.0, 1.0);',
+    '    float uu = fract(uAux.x + dU * f);',
+    '    float rr = 1.0 + (position.y - 0.5) * 0.10 * (1.0 + trans);',
+    '    float ang = 1.5707963 - uu * 6.2831853;',
+    '    hp = vec3(rr * cos(ang), rr * sin(ang), 0.0);',
+    '    float fly = trans * (1.0 - eb);',
+    '    col = uPal[0] * (1.1 + 0.6 * glow) + uPal[1] * fly * 1.6;',
+    '    sizeF = 1.2 + fly * 1.5; alphaF = 0.6 + 0.4 * glow;',
+    '  } else if (clsv < 2.5) {',                                                            /* искрици: вдигат се от пръстена край слънцето */
+    '    a = asm2(uAssembly, seedv, 0.08);',
+    '    float ph = fract(uTime * 0.18 + seedv * 5.0);',
+    '    float uu = uNow + (datv - 0.5) * 0.10;',
+    '    float ang = 1.5707963 - uu * 6.2831853;',
+    '    float rr = 1.0 + ph * 0.28;',
+    '    hp = vec3(rr * cos(ang) + sin(uTime * 2.0 + seedv * 30.0) * 0.02, rr * sin(ang), 0.0);',
+    '    col = uPal[0] * 1.3; sizeF = 0.9; alphaF = (1.0 - ph) * 0.8;',
+    '  } else if (clsv < 3.5) {',                                                            /* концентричните кръгове върху образа · бавен шимър */
+    '    a = asm2(uAssembly, seedv, 0.04);',
+    '    float rot = uTime * 0.06 * (datv < 0.34 ? 1.0 : (datv < 0.67 ? -0.7 : 0.5));',
+    '    float c = cos(rot), s = sin(rot); hp.xy = mat2(c, s, -s, c) * hp.xy;',
+    '    float sh = 0.5 + 0.5 * sin(uTime * 1.6 + seedv * 60.0);',
+    '    col = uPal[0] * (0.5 + 0.5 * sh); sizeF = 0.7; alphaF = 0.35 + 0.3 * sh;',
+    '  } else if (clsv < 4.5) {',                                                            /* лъчите зад слънцето */
+    '    a = asm2(uAssembly, seedv, 0.05);',
+    '    float ang = 1.5707963 - uNow * 6.2831853;',
+    '    float rot = uTime * 0.2; float c = cos(rot), s = sin(rot);',
+    '    hp.xy = vec2(cos(ang), sin(ang)) + mat2(c, s, -s, c) * hp.xy;',
+    '    col = uPal[0] * (0.6 + 0.5 * (0.5 + 0.5 * sin(uTime * 1.6 - datv * 7.0))); sizeF = 0.85; alphaF = 0.6;',
+    '  } else {',                                                                            /* прах извън пръстена */
+    '    a = asm2(uAssembly, seedv, 0.12);',
+    '    hp.xy *= 1.30; col = uBone * 0.3; sizeF = 0.8; alphaF = 0.35;',
+    '  }'
   ].join('\n');
+
+  var НИШКА_GLSL = [
+    '  float yT = uNodes[5], yB = uNodes[6], rx = uNodes[7];',
+    '  float glow = 0.5 + 0.5 * sin(uTime * 2.0 + seedv * 30.0);',
+    '  float ySun = mix(yT, yB, uProgress);',
+    '  if (clsv < 0.5) {',                                                                   /* нишката: свети до слънцето */
+    '    a = asm2(uAssembly, seedv, 0.0);',
+    '    float t = position.x;',
+    '    float lit = 1.0 - smoothstep(uProgress, uProgress + 0.015, t);',
+    '    hp = vec3(rx + position.y * 0.05 + 0.01 * sin(uTime * 1.5 + t * 40.0), mix(yT, yB, t), 0.0);',
+    '    col = mix(uBone * 0.30, uPal[0] * (0.9 + 0.5 * glow), lit);',
+    '    sizeF = mix(0.7, 1.1, lit); alphaF = mix(0.30, 0.85, lit);',
+    '  } else if (clsv < 1.5) {',                                                            /* слънцето */
+    '    a = asm2(uAssembly, seedv, 0.0);',
+    '    hp.xy = hp.xy * (1.0 + 0.05 * sin(uTime * 1.4)) + vec2(rx, ySun);',
+    '    col = mix(uPal[0] * 1.6, uPal[1] * 1.5, datv); sizeF = 1.5; alphaF = 1.0;',
+    '  } else if (clsv < 2.5) {',                                                            /* лъчите */
+    '    a = asm2(uAssembly, seedv, 0.05);',
+    '    float rot = uTime * 0.25; float c = cos(rot), s = sin(rot);',
+    '    hp.xy = mat2(c, s, -s, c) * hp.xy + vec2(rx, ySun);',
+    '    col = uPal[0] * (0.6 + 0.5 * (0.5 + 0.5 * sin(uTime * 1.6 - datv * 7.0))); sizeF = 0.9; alphaF = 0.7;',
+    '  } else if (clsv < 3.5) {',                                                            /* възлите на петте слота */
+    '    a = asm2(uAssembly, seedv, 0.06);',
+    '    float tk = uNodes[int(datv * 4.0 + 0.5)];',
+    '    float lit = smoothstep(tk - 0.02, tk + 0.01, uProgress);',
+    '    float cur = exp(-pow((uProgress - tk) * 12.0, 2.0));',
+    '    hp.xy += vec2(rx, mix(yT, yB, tk));',
+    '    col = mix(uBone * 0.45, uPal[0] * 1.5, lit) + uPal[1] * cur; sizeF = mix(1.0, 1.7, lit) + cur * 0.6; alphaF = 0.9;',
+    '  } else if (clsv < 4.5) {',                                                            /* искрите: от слънцето надясно по текущата карта */
+    '    a = asm2(uAssembly, seedv, 0.10);',
+    '    float ph = fract(uTime * 0.22 + seedv * 7.0);',
+    '    hp = vec3(rx + ph * 1.6 * (0.5 + datv), ySun + (position.y - 0.5) * 0.12 + sin(uTime * 3.0 + seedv * 40.0) * 0.02, 0.0);',
+    '    col = uPal[0] * 1.2; sizeF = 0.9; alphaF = (1.0 - ph) * 0.7;',
+    '  } else {',                                                                            /* прах */
+    '    a = asm2(uAssembly, seedv, 0.12); hp.xy = vec2(hp.x * abs(rx) * 2.0, mix(yT, yB, hp.y * 0.5 + 0.5)); col = uBone * 0.3; sizeF = 0.8; alphaF = 0.3;',
+    '  }'
+  ].join('\n');
+
+  var ИСКРА_GLSL = [
+    '  float glow = 0.5 + 0.5 * sin(uTime * 1.8 + seedv * 40.0);',
+    '  vec2 fp = vec2(uNodes[0], uNodes[1]);',                                              /* фокусът (моделни) */
+    '  float hw = uNodes[2], hh = uNodes[3], cy = uNodes[4];',                              /* картата: половин ширина · половин височина · център y */
+    '  float yT = uNodes[5], yB = uNodes[6], xH = uNodes[7];',
+    '  vec2 base = vec2(position.x * xH, mix(yT, yB, position.y * 0.5 + 0.5));',
+    '  base += vec2(0.06 * sin(uTime * 0.3 + seedv * 20.0), 0.05 * sin(uTime * 0.4 + seedv * 13.0));',
+    '  vec2 rel = base - vec2(0.0, cy);',
+    '  vec2 q = clamp(rel, vec2(-hw, -hh), vec2(hw, hh));',                                 /* най-близката точка от рамката на картата */
+    '  if (abs(rel.x) < hw && abs(rel.y) < hh) { vec2 dd = vec2(hw - abs(rel.x), hh - abs(rel.y)); q = (dd.x < dd.y) ? vec2(sign(rel.x) * hw, rel.y) : vec2(rel.x, sign(rel.y) * hh); }',
+    '  vec2 frame = q + vec2(0.0, cy);',
+    '  float dy = abs(base.y - fp.y);',
+    '  float w = uProgress * exp(-dy * dy * 1.4);',                                         /* по-силно на височината на фокуса */
+    '  hp = vec3(mix(base, frame, w * (0.8 + 0.2 * seedv)), 0.0);',
+    '  float near = w * exp(-pow(length(hp.xy - frame) * 5.0, 2.0));',
+    '  a = asm2(uAssembly, seedv, 0.05);',
+    '  if (clsv < 0.5) { col = uPal[0] * (0.35 + 0.35 * glow) + uPal[1] * near * 1.3; sizeF = 0.75 + near * 1.3; alphaF = 0.28 + 0.6 * near + 0.1 * glow; }',
+    '  else { float orb = uTime * 0.5 + seedv * 6.28; hp.xy += vec2(cos(orb), sin(orb)) * 0.05 * uProgress; col = uPal[0] * (1.0 + 0.5 * glow) + uPal[1] * near; sizeF = 1.2 + near; alphaF = 0.5 + 0.5 * glow; }'  ].join('\n');
 
   function върхов() {
-    var верига = [ГЕРОИНЯ_GLSL, СЪЗВЕЗДИЕ_GLSL, ЧУДОВИЩЕ_GLSL, СКАЛА_GLSL, СЛЪНЦЕ_GLSL].map(function (тяло, i) {
+    var верига = [ГЕРОИНЯ_GLSL, СЪЗВЕЗДИЕ_GLSL, ЧУДОВИЩЕ_GLSL, ЦИФЕРБЛАТ_GLSL, ЧАСОВНИК_GLSL, НИШКА_GLSL, ИСКРА_GLSL].map(function (тяло, i) {
       return (i ? 'else ' : '') + 'if (uExhibit < ' + i + '.5) {\n' + тяло + '\n}';
     }).join('\n    ');
     return [
@@ -1361,6 +1570,7 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
       'uniform vec3 uOffset, uPointer, uBone, uShadow;',
       'uniform vec3 uPal[8];',
       'uniform vec4 uAux;',
+      'uniform float uNodes[8];',   /* v2.2 · геометрия от страницата (възли · ръбове · нишка · фокус) */
       'varying vec3 vColor;',
       'varying float vAlpha;',
       '',
@@ -1368,7 +1578,7 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
       '  return smoothstep(0.0, 1.0, u * (1.35 + d) - (s * 0.35 + d));',
       '}',
       'vec3 shade3(float f) {',   /* центровете на трите сенки на Спирачката · дословно СЕНКИ */
-      '  return f < 0.25 ? vec3(-0.78, 0.0, -0.15) : (f < 0.75 ? vec3(0.0, 0.0, 0.10) : vec3(0.78, 0.0, -0.15));',
+      '  return f < 0.25 ? vec3(-0.82, 0.0, -0.15) : (f < 0.75 ? vec3(0.0, 0.0, 0.10) : vec3(0.82, 0.0, -0.15));',
       '}',
       '',
       'void main() {',
@@ -1450,7 +1660,7 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
   var A = {}, U = {};
   ['position', 'aTarget', 'aDust', 'aSeed', 'aClass', 'aClass2', 'aData', 'aData2'].forEach(function (n) { A[n] = gl.getAttribLocation(прогр, n); });
   ['modelViewMatrix', 'projectionMatrix', 'uTime', 'uAssembly', 'uProgress', 'uFocus', 'uSwirl', 'uExhibit', 'uReduced',
-    'uSizeBase', 'uPx', 'uScale', 'uOffset', 'uPointer', 'uBone', 'uShadow', 'uPal[0]', 'uAux'].forEach(function (n) { U[n] = gl.getUniformLocation(прогр, n); });
+    'uSizeBase', 'uPx', 'uScale', 'uOffset', 'uPointer', 'uBone', 'uShadow', 'uPal[0]', 'uAux', 'uNodes[0]'].forEach(function (n) { U[n] = gl.getUniformLocation(прогр, n); });
 
   gl.disable(gl.DEPTH_TEST);
   gl.enable(gl.SCISSOR_TEST);
@@ -1472,9 +1682,10 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
   function вбо(данни) { var b = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, b); gl.bufferData(gl.ARRAY_BUFFER, данни, gl.STATIC_DRAW); return b; }
   var прахВБО = вбо(прах), семеВБО = вбо(семе);
 
-  /* ══════════════ ПЕТТЕ ФИГУРИ · рецепти ══════════════
+  /* ══════════════ ФИГУРИТЕ · рецепти (v2.2: осем вида · един контекст · златният мотив, изигран различно) ══════════════
      ген = форма А (position) · ген2 = форма Б (aTarget) · драйвер 'авто' (hero) | 'външен' (страницата подава цел)
-     височина = дял от екрана [мин, макс] (телефон | десктоп) */
+     височина = дял от екрана [мин, макс] (телефон | десктоп) · 'auto' = сцената е висока колкото HTML-съдържанието си
+     hero (морф) · path (комета) · monster (жарава) · dial (искри по дъгата) · clock (пръстен) · thread (нишка) · spark (искра при фокус) */
   var РЕЦЕПТИ = {
     hero:    { индекс: 0, семе: 20260912, ген: genHourglass(false), ген2: genWoman, драйвер: 'авто', скорост: 1.3,
                височина: ТЕЛЕФОН ? [0.34, 0.42] : [0.60, 0.88] },
@@ -1482,8 +1693,14 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
     /* Спирачката: сглобява се по скрол (сглобяване 'скрол' · целта идва от страницата) · лицето е дискретно (0 · ½ · 1) ·
        смяната пуска преход „разпад в жарава → събиране“ с дължина бум секунди (uAux) */
     monster: { индекс: 2, семе: 20260913, ген: genMonster, драйвер: 'външен', скорост: 3.0, дискретен: true, сглобяване: 'скрол', бум: 1.15, височина: [0.50, 0.78] },
-    scale:   { индекс: 3, семе: 20260914, ген: genStorm, ген2: genDawn, драйвер: 'външен', скорост: 2.2, височина: [0.52, 0.80] },
-    sunarc:  { индекс: 4, семе: 20260915, ген: genSunArc, драйвер: 'външен', скорост: 4.0, височина: [0.28, 0.42] }
+    /* Циферблатът: дискретен · стрелката се върти гладко в шейдъра през uAux (бум 1.0 s) · искрите пътуват по дъгата */
+    dial:    { индекс: 3, семе: 20260914, ген: genDial, драйвер: 'външен', скорост: 2.2, дискретен: true, бум: 1.0, височина: [0.52, 0.80] },
+    /* Часовникът на деня: дискретен · зърното пътува по най-късия път (бум 0.9 s) · сцената живее в лепкавия часовник */
+    clock:   { индекс: 4, семе: 20260916, ген: genClock, драйвер: 'външен', скорост: 3.0, дискретен: true, бум: 0.9, височина: ТЕЛЕФОН ? [0.30, 0.44] : [0.36, 0.50] },
+    /* Нишката: сцената е зад петте карти (auto) · слънцето слиза плавно (скорост 4) */
+    thread:  { индекс: 5, семе: 20260917, ген: genThread, драйвер: 'външен', скорост: 4.0, височина: 'auto' },
+    /* Искрата: зад формата (auto) · uProgress = фокус 0/1 */
+    spark:   { индекс: 6, семе: 20260918, ген: genSpark, драйвер: 'външен', скорост: 3.0, височина: 'auto' }
   };
 
   function сглоби(ген, семеЧисло) {
@@ -1510,7 +1727,7 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
     if (!РЕЦЕПТИ[вид]) return null;
     return { платно: платно, дъска: платно.getContext('2d'), вид: вид, сцена: платно.parentNode,
       роден: false, буден: false, време: 0, сглоб: 0, сглобЦел: 0, ръст: 0, цел: 0, предиЦел: 0, aux0: 0, бум: 1, ръчно: false, авто: 0,
-      фокус: 0, вихър: 0, пкх: 0, пкy: 0, ш: 0, в: 0, държи: false, камZ: 3.2, слуш: [] };
+      фокус: 0, вихър: 0, пкх: 0, пкy: 0, ш: 0, в: 0, държи: false, камZ: 3.2, слуш: [], пар: new Float32Array(8) };
   }).filter(Boolean);
   if (!фигури.length) return;
 
@@ -1532,7 +1749,7 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
   }
   function премери(ф) {
     var сцена = ф.сцена, екранВ = window.innerHeight || document.documentElement.clientHeight, дял = РЕЦЕПТИ[ф.вид].височина;
-    if (ф.mx > 0 && екранВ > 0) {
+    if (дял !== 'auto' && ф.mx > 0 && екранВ > 0) { /* 'auto' (v2.2): сцената е висока колкото съдържанието си (нишката · искрата) */
       var идеал = сцена.getBoundingClientRect().width * (ф.my / ф.mx);
       var H = Math.round(Math.max(дял[0] * екранВ, Math.min(дял[1] * екранВ, идеал)));
       if (сцена.style.height !== H + 'px') сцена.style.height = H + 'px';
@@ -1639,6 +1856,7 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
       gl.uniform3f(U.uShadow, СЯНКА3[0], СЯНКА3[1], СЯНКА3[2]);
       gl.uniform3fv(U['uPal[0]'], ПАЛ);
       gl.uniform4f(U.uAux, ф.aux0, ф.бум, 0, 0);
+      gl.uniform1fv(U['uNodes[0]'], ф.пар);
 
       вържи(ф.формаА.поз, A.position, 3);
       вържи(ф.формаБ.поз, A.aTarget, 3);
@@ -1665,9 +1883,12 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
 
   /* ══════════════ ВРАТА КЪМ СТРАНИЦАТА · и верификационна кука ══════════════ */
   window.__мфиг = {
-    режим: 'webgl', фигури: фигури, брой: БРОЙ, възли: ВЪЗЛИ, качулки: СЕНКИ, намери: намери,
+    режим: 'webgl', фигури: фигури, брой: БРОЙ, възли: ВЪЗЛИ, качулки: СЕНКИ, намери: намери, версия: '2.2',
     задай: function (вид, цел, ръчно) { var ф = намери(вид); if (!ф) return; ф.цел = Math.max(0, Math.min(1, цел)); if (ръчно) ф.ръчно = true; пусни(); },
     сглоби: function (вид, u) { var ф = намери(вид); if (!ф) return; ф.сглобЦел = Math.max(0, Math.min(1, u)); пусни(); },
+    параметри: function (вид, arr) { /* v2.2 · геометрия от страницата → uNodes[8] (възли · ръбове · нишка · фокус) */
+      var ф = намери(вид); if (!ф) return; for (var i = 0; i < 8; i++) ф.пар[i] = +arr[i] || 0; пусни();
+    },
     обратно: function (вид, px, py) {  /* пиксели в сцената → моделни координати (обратното на проектирай) */
       var ф = намери(вид); if (!ф) return null;
       var r = ф.сцена.getBoundingClientRect(), asp = ф.ш / Math.max(1, ф.в), z = ф.камZ || 3.2;
@@ -1782,6 +2003,7 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
   $('#st-prev').addEventListener('click',()=>{pathDrv.тап(cur-1); видяно('#fig-path')});
   $('#st-next').addEventListener('click',()=>{pathDrv.тап(cur+1); видяно('#fig-path')});
   setSt(0);
+  if(/[?&]map=nz/.test(location.search)){ const pm=$('#pathmap'); pm.src='img/nz/path-8.webp'; $$('.mapcard img').forEach(i=>i.src='img/nz/path-8.webp') } /* v2.2 · сравнение за ЧАКА ДУМА (Екран 2) */
   /* етикетите до звездите · позиции от двигателя · само когато кадърът се смени */
   let labKey='';
   function placeLabels(ф){
@@ -1821,7 +2043,10 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
   const monAssembly=()=>{ if(наЕкран(monStage,400)) сглоби('monster',напредък(monStage,1.0,0.40)) };
   setFace(0);
 
-  /* ══ СКАЛАТА 1→5 · степента расте по скрол · тап = следващо стъпало · плъзгачът остава ══ */
+  /* ══ ПЕТТЕ СТЪПАЛА · циферблатът от V1b (дума 12.09: „да използваме директно този контрол“) ══
+     Сменя се САМ на всеки 2.5 s, докато сцената е на екрана (IntersectionObserver · спира извън него) · тап = СПИРА,
+     за да четете · следващ тап = следващо стъпало · секторът е тап-цел · 12 s без тап → пак сам. Лентата долу е махната (1/10).
+     Златната анимация е в двигателя ('dial'): стрелка от частици · искри по дъгата при смяна · буря→зора прах около циферблата. */
   const W=[
     ['Побъркват ме','Същите ситуации, същите хора — и всеки път експлодирам отвътре.'],
     ['Дразнят ме','Вече не експлодирам. Само тлея. Уморително е.'],
@@ -1829,20 +2054,45 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
     ['Радват ме','Същите ситуации — а вече ми носят усмивка. Очите почват да светят.'],
     ['Вдъхновяват ме','Ситуациите стават материал за творене. Тиха радост. Спокойствие.']
   ];
-  const scStage=$('#fig-scale'), sc=$('#sc'), dawn=$('#sc-dawn');
-  function setScale(v){
-    const p=(v-1)/4; dawn.style.opacity=p*.46; $('.scalepics .storm').style.opacity=.40*(1-p);
-    $('#sc-w').textContent=W[v-1][0]; $('#sc-d').textContent=W[v-1][1]; $('#sc-step').textContent=`${v} / 5`;
-    $('#sc-w').style.color=['#c9c2d6','#d9d0bd','#e6dcc2','#f4e6bf','#ffe1a0'][v-1];
-    $$('#ticks span').forEach((t,i)=>t.classList.toggle('on',i===v-1));
-    if(+sc.value!==v) sc.value=v;
-    задай('scale',p,true);
+  const scStage=$('#fig-scale'), dialEl=$('#dial'), dialSvg=$('#dialsvg'), dawn=$('#sc-dawn'), storm=$('.dial .storm');
+  const secs=$('#secs'), r1=122, r2=156, cx=160, cy=160;
+  const pt=(r,a)=>[cx+r*Math.cos(rad(a)),cy+r*Math.sin(rad(a))];
+  const secEls=W.map((w,i)=>{
+    const st=180+i*36, en=st+36, mid=st+18;
+    const [x1,y1]=pt(r2,st),[x2,y2]=pt(r2,en),[x3,y3]=pt(r1,en),[x4,y4]=pt(r1,st);
+    const g=document.createElementNS(NS,'g');
+    const p=document.createElementNS(NS,'path'); p.setAttribute('class','sec'+(i===0?' on':'')); p.setAttribute('d',`M${x1} ${y1} A${r2} ${r2} 0 0 1 ${x2} ${y2} L${x3} ${y3} A${r1} ${r1} 0 0 0 ${x4} ${y4} Z`);
+    const t=document.createElementNS(NS,'text'); const [tx,ty]=pt((r1+r2)/2,mid); t.setAttribute('class','sn'); t.setAttribute('x',tx); t.setAttribute('y',ty); t.textContent=i+1;
+    g.append(p,t); secs.appendChild(g);
+    const go=e=>{e.stopPropagation(); scTap(i)}; p.addEventListener('click',go); t.addEventListener('click',go);
+    return p;
+  });
+  let scCur=-1, scPaused=false, scTimer=null, scIdle=null, scHere=false, scDown=0;
+  function setScale(i){
+    scCur=i; const p=i/4;
+    dawn.style.opacity=p; storm.style.filter=`saturate(${(.45+p*.55).toFixed(2)}) brightness(${(.85+p*.15).toFixed(2)})`;
+    $('#sc-w').textContent=W[i][0]; $('#sc-d').textContent=W[i][1]; $('#sc-step').textContent=`${i+1} / 5`;
+    $('#sc-w').style.color=['#c9c2d6','#d9d0bd','#e6dcc2','#f4e6bf','#ffe1a0'][i];
+    secEls.forEach((s,k)=>s.classList.toggle('on',k===i));
+    задай('dial',p,true);
   }
-  const scDrv=драйвер(5,()=>наЕкран(scStage)?clamp(Math.floor(напредък(scStage,0.82,0.08)*4.999),0,4):null,i=>setScale(i+1),0);
-  sc.addEventListener('input',()=>{scDrv.тап(+sc.value-1); видяно('#fig-scale')});
-  let scDown=0; scStage.addEventListener('pointerdown',()=>{scDown=performance.now()});
-  scStage.addEventListener('click',()=>{ if(performance.now()-scDown>320) return; scDrv.следващ() });
-  setScale(1);
+  function scTick(){ if(!scHere||scPaused||document.hidden) return; setScale((scCur+1)%5) }
+  function scRun(){ clearInterval(scTimer); scTimer=setInterval(scTick,2500) }
+  function scTap(i){ scPaused=true; setScale(i===undefined?(scCur+1)%5:i); видяно('#fig-scale'); clearTimeout(scIdle); scIdle=setTimeout(()=>{scPaused=false; if(scHere) scRun()},12000) }
+  if(STATIC) scHere=true; else new IntersectionObserver(es=>es.forEach(e=>{scHere=e.isIntersecting; if(scHere) scRun(); else clearInterval(scTimer)}),{threshold:.45}).observe(scStage);
+  scStage.addEventListener('pointerdown',()=>{scDown=performance.now()});
+  scStage.addEventListener('click',()=>{ if(performance.now()-scDown>320) return; scTap() });
+  setScale(0);
+  /* наместване на циферблата (образ + сектори) по кадъра на двигателя: 1 моделна единица = пръстенът r 118 във viewBox 320 */
+  let dialKey='';
+  function placeDial(ф){
+    const m=МФ(); if(!m||!m.проектирай) return;
+    const key=ф.ш+'x'+ф.в+'@'+(ф.камZ||0).toFixed(2); if(key===dialKey) return; dialKey=key;
+    const c=m.проектирай('dial',0,0), e=m.проектирай('dial',1,0); if(!c||!e) return;
+    const S=(e.x-c.x)*320/118;
+    [dialEl,dialSvg].forEach(el=>{el.style.width=el.style.height=S+'px'; el.style.left=(c.x-S/2)+'px'; el.style.top=(c.y-S/2)+'px'; el.style.transform='none'});
+  }
+  const dialHook=()=>{const m=МФ(); if(m&&m.слушай) m.слушай('dial',placeDial); else setTimeout(dialHook,200)}; dialHook();
 
   /* locked cards + rail dots */
   $$('.deck.locked').forEach(c=>c.addEventListener('click',()=>{c.classList.remove('shake'); void c.offsetWidth; c.classList.add('shake'); c.classList.add('told')}));
@@ -1850,23 +2100,43 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
   function railDots(){const i=Math.round(rail.scrollLeft/(cards[0].offsetWidth+14)); $$('#railhint i').forEach((d,k)=>d.classList.toggle('on',k===clamp(i,0,cards.length-1)))}
   rail.addEventListener('scroll',railDots,{passive:true}); railDots();
 
-  /* ══ ЕДИН ДЕН · часовникът е лепкав по средата · моментите текат над и под него и го въртят · тап = следващ момент ══ */
-  const mos=$$('#moments .mo'), imgs=$$('#ccenter img'), sung=$('#sung'), cdots=$('#cdots'), NM=mos.length, clockEl=$('#clock'), cw=$('#clockwrap');
+  /* ══ ЕДИН ДЕН · часовникът от V1b + игра (дума 12.09: „НЕЩО УАУ … скрити картите … обръщаш картата и прочиташ“) ══
+     Картите са скрити (гръб от деката) · скролът обръща тази, която е под часовника · тапът обръща избраната ·
+     тап на часовника/точка = следващият/избраният момент · зърното и слънцето минават по пръстена (двигател 'clock'). */
+  const mos=$$('#moments .mo'), imgs=$$('#ccenter img'), sung=$('#sung'), cdots=$('#cdots'), NM=mos.length, clockEl=$('#clock'), clockImg=$('#clockimg'), cw=$('#clockwrap'), clockStage=$('#fig-clock');
   function measureClock(){ const h=cw.offsetHeight; if(h>0) document.documentElement.style.setProperty('--ch',h+'px') }
-  function goMo(i){ const r=mos[i].getBoundingClientRect(); scrollTo({top:scrollY+r.top+r.height/2-vh()/2, behavior:reduce?'auto':'smooth'}) }
-  const cd=mos.map((m,i)=>{const a=-90+i*360/NM; const d=document.createElementNS(NS,'circle'); d.setAttribute('class','dot'+(i===0?' on':'')); d.setAttribute('r','6'); d.setAttribute('cx',150+132*Math.cos(rad(a))); d.setAttribute('cy',150+132*Math.sin(rad(a))); cdots.appendChild(d); d.addEventListener('click',e=>{e.stopPropagation(); goMo(i)}); return d});
+  const cd=mos.map((m,i)=>{const a=-90+i*360/NM; const d=document.createElementNS(NS,'circle'); d.setAttribute('class','dot'+(i===0?' on':'')); d.setAttribute('r','6'); d.setAttribute('cx',150+132*Math.cos(rad(a))); d.setAttribute('cy',150+132*Math.sin(rad(a))); cdots.appendChild(d); d.addEventListener('click',e=>{e.stopPropagation(); dayTap(i)}); return d});
   function setMo(i){
     sung.style.transform=`rotate(${i*360/NM}deg)`;
-    imgs.forEach((im,k)=>im.classList.toggle('on',k===i)); cd.forEach((d,k)=>d.classList.toggle('on',k===i)); mos.forEach((m,k)=>m.classList.toggle('on',k===i));
-    const m=mos[i]; $('#cl-tm').textContent=$('.tm',m).textContent; $('#cl-h').textContent=$('h3',m).textContent; $('#cl-p').textContent=$('p',m).textContent;
+    imgs.forEach((im,k)=>im.classList.toggle('on',k===i)); cd.forEach((d,k)=>d.classList.toggle('on',k===i));
+    mos.forEach((m,k)=>{m.classList.toggle('on',k===i); if(k===i) m.classList.add('seenall')});
+    $('#cl-tm').textContent=$('.front .tm',mos[i]).textContent;
+    задай('clock',i/NM,true);
   }
-  const moAuto=()=>{ /* картата, чийто център е най-близо до средата на екрана */
-    if(!наЕкран($('#moments'),vh())) return null; const mid=vh()/2; let best=0, bd=1e9;
-    mos.forEach((m,k)=>{const r=m.getBoundingClientRect(); const d=Math.abs((r.top+r.bottom)/2-mid); if(d<bd){bd=d;best=k}}); return best;
+  const moAuto=()=>{ /* телефон (картите ПОД часовника): текущата = първата, излязла изпод него (≥ 35 % под лепкавия ръб) · след последната остава последната ·
+                         десктоп (картите ДО часовника): текущата = картата, чийто център е най-близо до горната третина на часовника */
+    if(!наЕкран($('#moments'),vh()*0.5)) return null; const cwr=cw.getBoundingClientRect();
+    if($('#moments').getBoundingClientRect().left>=cwr.right-4){ const ref=cwr.top+cwr.height*0.32; let best=0, bd=1e9; mos.forEach((m,k)=>{const r=m.getBoundingClientRect(); const d=Math.abs((r.top+r.bottom)/2-ref); if(d<bd){bd=d;best=k}}); return best }
+    const cb=clamp(cwr.bottom,0,vh()*0.62);
+    for(let k=0;k<NM;k++){ const r=mos[k].getBoundingClientRect(); if(r.top+r.height*0.35>=cb) return (r.top<vh()*0.92||k===0)?k:Math.max(0,k-1) }
+    return NM-1;
   };
-  const dayDrv=драйвер(NM,moAuto,setMo,0);
-  clockEl.addEventListener('click',()=>goMo(((dayDrv.тек===null?0:dayDrv.тек)+1)%NM));
-  mos.forEach((m,i)=>m.addEventListener('click',()=>goMo(i)));
+  const dayDrv=драйвер(NM,moAuto,setMo,null);
+  function dayTap(i){ const k=((i%NM)+NM)%NM; dayDrv.тап(k); видяно('#fig-clock'); const r=mos[k].getBoundingClientRect(); if(r.top<cw.getBoundingClientRect().bottom-4||r.bottom>vh()) mos[k].scrollIntoView({behavior:reduce?'auto':'smooth',block:'nearest'}) }
+  mos.forEach((m,i)=>m.addEventListener('click',()=>dayTap(i)));
+  clockStage.addEventListener('click',()=>dayTap((dayDrv.тек===null?0:dayDrv.тек)+1));
+  if(STATIC) mos.forEach(m=>m.classList.add('on'));
+  /* наместване на часовника (образ + пръстен) по кадъра на двигателя: 1 моделна единица = пръстенът r 132 във viewBox 300 */
+  let clockKey='';
+  function placeClock(ф){
+    const m=МФ(); if(!m||!m.проектирай) return;
+    const key=ф.ш+'x'+ф.в+'@'+(ф.камZ||0).toFixed(2); if(key===clockKey) return; clockKey=key;
+    const c=m.проектирай('clock',0,0), e=m.проектирай('clock',1,0); if(!c||!e) return;
+    const S=(e.x-c.x)*300/132;
+    [clockImg,clockEl].forEach(el=>{el.style.width=el.style.height=S+'px'; el.style.left=(c.x-S/2)+'px'; el.style.top=(c.y-S/2)+'px'; el.style.transform='none'});
+    measureClock(); onScroll();  /* лейаутът се смени → драйверите се пре-мерват */
+  }
+  const clockHook=()=>{const m=МФ(); if(m&&m.слушай) m.слушай('clock',placeClock); else setTimeout(clockHook,200)}; clockHook();
   measureClock(); addEventListener('load',measureClock); if(document.fonts&&document.fonts.ready) document.fonts.ready.then(measureClock);
 
   /* video facades */
@@ -1874,24 +2144,41 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
     const id=v.dataset.yt; const f=document.createElement('iframe'); f.src=`https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0&modestbranding=1`; f.allow='accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture'; f.allowFullscreen=true; f.title='Видео'; v.innerHTML=''; v.appendChild(f);
   }));
 
-  /* ══ РАЗПИСАНИЕ · режими · слънцето върви по скрол · докоснете/влачете слънцето по дъгата (играта „докосни") ══ */
-  $$('#modes button').forEach(b=>b.addEventListener('click',()=>{$$('#modes button').forEach(x=>x.classList.remove('on')); b.classList.add('on'); $('#sched').dataset.mode=b.dataset.m}));
-  const sunStage=$('#fig-sun'), slots=$$('.slot');
-  let sunMan=null, sunAnchor=0;
+  /* ══ РАЗПИСАНИЕ · режими · златната НИШКА покрай петте карти (дума 12.09: „да се вплете с 5-те карти“) ══
+     Двигател 'thread': сцената е зад картите (auto-височина) · слънцето слиза по скрол · свети до текущия слот ·
+     тап на карта = скок · влачене по релсата вляво (touch-action:none) · геометрията (възли · ръбове · x на нишката)
+     се мери от DOM-а и се подава на шейдъра през __мфиг.параметри. */
+  $$('#modes button').forEach(b=>b.addEventListener('click',()=>{$$('#modes button').forEach(x=>x.classList.remove('on')); b.classList.add('on'); $('#sched').dataset.mode=b.dataset.m; setTimeout(measureThread,50)}));
+  const sunStage=$('#fig-sun'), slots=$$('.slot'), slotsEl=$('#slots');
+  const railHit=document.createElement('div'); railHit.className='railhit'; sunStage.appendChild(railHit);
+  let sunMan=null, sunAnchor=0, thrKey='', thrY0=0, thrY1=1;
+  function measureThread(){
+    const m=МФ(); if(!m||!m.обратно) return;
+    const r=sunStage.getBoundingClientRect(); if(r.height<10) return;
+    const cs=slots.map(s=>{const b=s.getBoundingClientRect(); return (b.top+b.bottom)/2-r.top});
+    thrY0=cs[0]; thrY1=cs[cs.length-1]; const span=Math.max(1,thrY1-thrY0);
+    const sl=slotsEl.getBoundingClientRect().left-r.left, rail=sl+20;
+    const t=cs.map(y=>(y-thrY0)/span); slots.forEach((s,i)=>{s.dataset.p=t[i].toFixed(3)});
+    railHit.style.left=(sl-8)+'px'; railHit.style.width='52px';
+    const q0=m.обратно('thread',rail,thrY0), q1=m.обратно('thread',rail,thrY1); if(!q0||!q1) return;
+    m.параметри('thread',[t[0],t[1],t[2],t[3],t[4],q0.y,q1.y,q0.x]); onScroll();
+  }
   function applySun(p){
-    задай('sunarc',p,false); let act=-1;
+    задай('thread',p,false); let act=-1;
     slots.forEach((s,i)=>{const on=+s.dataset.p<=p+0.02; s.classList.toggle('on',on); if(on) act=i});
     slots.forEach((s,i)=>s.classList.toggle('now',i===act));
   }
-  const sunAuto=()=>{const r=$('#slots').getBoundingClientRect(); return clamp((vh()*0.9-r.top)/(r.height+vh()*0.35),0,1)};
+  const sunAuto=()=>{const r=slotsEl.getBoundingClientRect(); return clamp((vh()*0.70-r.top)/Math.max(1,r.height*0.92),0,1)};
   function sunScroll(){ const a=sunAuto(); if(sunMan!==null&&Math.abs(a-sunAnchor)>0.10) sunMan=null; applySun(sunMan!==null?sunMan:a) }
   function sunSet(p){ sunMan=clamp(p,0,1); sunAnchor=sunAuto(); applySun(sunMan) }
-  const sunFrom=e=>{const m=МФ(); if(!m||!m.обратно) return null; const r=sunStage.getBoundingClientRect(); const q=m.обратно('sunarc',e.clientX-r.left,e.clientY-r.top); return q?clamp((q.x+1.25)/2.5,0,1):null};
+  const sunFrom=e=>{const r=sunStage.getBoundingClientRect(); return clamp((e.clientY-r.top-thrY0)/Math.max(1,thrY1-thrY0),0,1)};
   let sunDrag=false;
-  sunStage.addEventListener('pointerdown',e=>{sunDrag=true; const p=sunFrom(e); if(p!==null) sunSet(p)});
-  sunStage.addEventListener('pointermove',e=>{ if(!sunDrag) return; const p=sunFrom(e); if(p!==null) sunSet(p) });
-  ['pointerup','pointercancel','pointerleave'].forEach(n=>sunStage.addEventListener(n,()=>{sunDrag=false}));
+  railHit.addEventListener('pointerdown',e=>{sunDrag=true; railHit.setPointerCapture&&railHit.setPointerCapture(e.pointerId); sunSet(sunFrom(e)); видяно('#fig-sun')});
+  railHit.addEventListener('pointermove',e=>{ if(!sunDrag) return; sunSet(sunFrom(e)) });
+  ['pointerup','pointercancel'].forEach(n=>railHit.addEventListener(n,()=>{sunDrag=false}));
   slots.forEach(s=>s.addEventListener('click',()=>{sunSet(+s.dataset.p); видяно('#fig-sun')}));
+  const thrHook=()=>{const m=МФ(); if(m&&m.слушай){ m.слушай('thread',ф=>{const key=ф.ш+'x'+ф.в+'@'+(ф.камZ||0).toFixed(2); if(key!==thrKey){thrKey=key; measureThread()}}) } else setTimeout(thrHook,200)}; thrHook();
+  addEventListener('load',measureThread); if(document.fonts&&document.fonts.ready) document.fonts.ready.then(measureThread);
 
   /* ══ ЛЕПКАВОТО CTA · „Заявете място" · в Проблем·Чудовище·Скала → „Задайте въпрос" + обаждане ══ */
   const fab=$('#fab'), heroH=()=>$('#hero').offsetHeight, QS=['#pain','#monster','#scale'].map(id=>$(id));
@@ -1904,11 +2191,11 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
     requestAnimationFrame(()=>{
       const y=scrollY, fr=$('#form').getBoundingClientRect();
       fab.classList.toggle('show', y>heroH()*0.8 && !(fr.top<vh() && fr.bottom>0)); fabMode();
-      pathDrv.скрол(); monDrv.скрол(); monAssembly(); scDrv.скрол(); dayDrv.скрол(); sunScroll();
+      pathDrv.скрол(); monDrv.скрол(); monAssembly(); dayDrv.скрол(); sunScroll();  /* v2.2: циферблатът се сменя по време, не по скрол */
       ticking=false;
     });
   }
-  addEventListener('scroll',onScroll,{passive:true}); addEventListener('resize',()=>{measureClock(); onScroll()}); onScroll(); setTimeout(onScroll,400);
+  addEventListener('scroll',onScroll,{passive:true}); addEventListener('resize',()=>{measureClock(); measureThread(); onScroll()}); onScroll(); setTimeout(onScroll,400);
 
   /* ══ ЦЕНАТА · в евро (дума 12.09: „1527 евро, не лева · лева няма отдавна в БГ") ══
      Числото е от транскрипцията → ЧАКА ДУМА. Сметката (капаро · вноски) идва от доер Б като nova-zhena-цени.json —
@@ -1923,6 +2210,21 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
   priceUI();
   fetch('nova-zhena-цени.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(j=>{ if(j&&typeof j==='object'){ ЦЕНИ=Object.assign(ЦЕНИ,j); priceUI() } }).catch(()=>{});
   $$('#pay button').forEach(b=>b.addEventListener('click',()=>{$$('#pay button').forEach(x=>x.classList.remove('on')); b.classList.add('on'); const g=+b.dataset.g; const gn=$('#g-n'); gn.style.transform='scale(1.15)'; setTimeout(()=>gn.style.transform='',250); gn.textContent=g===2?'2 подаръчни курса':g===1?'1 подаръчен курс':'0 подаръчни курса'; $('#g-t').textContent=b.dataset.t}));
+
+  /* ══ ИСКРА ПРИ ФОКУС · златният мотив във формата (двигател 'spark' · сцената е зад картата) ══ */
+  const formStage=$('#fig-form'), fcardEl=$('#fcard'); let sparkPar=[0,0,0,0,0,0,0,1], sparkKey='';
+  function sparkField(){ /* полето (ръбове) + рамката на картата в моделни единици → uNodes[2..7] */
+    const m=МФ(); if(!m||!m.обратно) return false; const r=formStage.getBoundingClientRect(), c=fcardEl.getBoundingClientRect();
+    const t=m.обратно('spark',0,0), z=m.обратно('spark',0,r.height), a=m.обратно('spark',c.left-r.left,c.top-r.top), b=m.обратно('spark',c.right-r.left,c.bottom-r.top); if(!t||!z||!a||!b) return false;
+    sparkPar[2]=Math.abs(b.x-a.x)/2; sparkPar[3]=Math.abs(a.y-b.y)/2; sparkPar[4]=(a.y+b.y)/2; sparkPar[5]=t.y; sparkPar[6]=z.y; sparkPar[7]=Math.abs(t.x)||1; return true }
+  function sparkAt(el){
+    const m=МФ(); if(!m||!m.обратно||!sparkField()) return; const r=formStage.getBoundingClientRect(), b=el.getBoundingClientRect();
+    const q=m.обратно('spark',b.left+b.width/2-r.left,b.top+b.height/2-r.top); if(!q) return;
+    sparkPar[0]=q.x; sparkPar[1]=q.y; m.параметри('spark',sparkPar); задай('spark',1,true);
+  }
+  $$('#lead input,#lead button').forEach(el=>{el.addEventListener('focus',()=>sparkAt(el)); el.addEventListener('blur',()=>задай('spark',0,true))});
+  $$('#lead .choice span').forEach(el=>el.addEventListener('pointerdown',()=>sparkAt(el)));
+  const sparkHook=()=>{const m=МФ(); if(m&&m.слушай){ m.слушай('spark',ф=>{const key=ф.ш+'x'+ф.в+'@'+(ф.камZ||0).toFixed(2); if(key!==sparkKey&&sparkField()){sparkKey=key; m.параметри('spark',sparkPar)}}) } else setTimeout(sparkHook,200)}; sparkHook();
 
   /* form shell — SEAM v2: Yespo segment (фаза 2) */
   $('#lead').addEventListener('submit',e=>{

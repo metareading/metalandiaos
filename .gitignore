@@ -2,3 +2,6 @@ _screenshots/
 
 # Нова Жена V1 · self-contained data-URI варианти (rebuild: nova-zhena-build-inline.py)
 *.inline.html
+
+# Нова Жена V2.1 · доер Б · генерирани preview-копия в тест-папката (rebuild: nova-zhena-seam-патч.py)
+nova-zhena-tests/_*.html

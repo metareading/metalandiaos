@@ -1,0 +1,258 @@
+{
+  "name": "Нова Жена · сеп 2026 · форма (страница V2)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "nova-zhena-sep2026",
+        "options": {
+          "allowedOrigins": "*"
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -1248,
+        -64
+      ],
+      "name": "Webhook"
+    },
+    {
+      "parameters": {
+        "url": "=https://api.hubapi.com/crm/v3/objects/contacts/{{ $('Webhook').item.json.body.email }}?idProperty=email",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "hubspotAppToken",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -608,
+        -176
+      ],
+      "name": "Get Info Client",
+      "credentials": {
+        "hubspotAppToken": {
+          "id": "wsx3gsHsNAOVtn26",
+          "name": "HubSpot account"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "=https://api.hubapi.com/crm/v3/objects/contacts/{{ $('Webhook').item.json.body.email}}?idProperty=email",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "hubspotAppToken",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"properties\": {\n\"firstname\": \"{{ $('Webhook').item.json.body.name }}\",\n\"phone\": \"{{ $('Webhook').item.json.body.phone }}\",\n    \"brain_building_2332\":  \"210лв вместо 420лв за 20 посещения\",\n\"n89_8_\":\"{{ $('Code in JavaScript').item.json.body.problem }} и сферите {{ $('Webhook').item.json.body.spheres }}\",\n    \"an_keta\":\"Интерес Нова Жена · сеп 2026 · страница\",\n    \"hubspot_owner_id\":\"82944336\"\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -352,
+        -304
+      ],
+      "name": "HubSpot Start and Name",
+      "credentials": {
+        "hubspotAppToken": {
+          "id": "wsx3gsHsNAOVtn26",
+          "name": "HubSpot account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.hubapi.com/crm/v3/objects/contacts",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "hubspotAppToken",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"properties\": {\n    \"email\": \"{{ $('Webhook').item.json.body.email}}\",\n    \"firstname\": \"{{ $('Webhook').item.json.body.name }}\",\n    \"phone\": \"{{ $('Webhook').item.json.body.phone }}\",\n    \"brain_building_2332\":  \"210лв вместо 420лв за 20 посещения\",\n\"n89_8_\":\"{{ $('Code in JavaScript').item.json.body.problem }} и сферите {{ $('Webhook').item.json.body.spheres }}\",\n\"an_keta\":\"Интерес Нова Жена · сеп 2026 · страница\",\n\n    \"hubspot_owner_id\":\"82944336\"\n  }\n}\n ",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -368,
+        -128
+      ],
+      "name": "HubSpot Create Contact",
+      "credentials": {
+        "hubspotAppToken": {
+          "id": "wsx3gsHsNAOVtn26",
+          "name": "HubSpot account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://yespo.io/api/v1/contact",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBasicAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"channels\": [\n    {\n      \"type\": \"email\",\n      \"value\": \"{{ $json.body.email}}\"\n    },\n    {{ $json.body.phone ? '{\"type\":\"sms\",\"value\":\"' + $json.body.phone + '\"}' : '' }}\n  ],\n  \"groups\": [\n    {\n      \"type\": \"Static\",\n      \"name\": \"Нова Жена · сеп 2026\"\n    }\n  ],\n    \"firstName\": \"{{ String($json.body.name || '').replace(/[^\\\\p{L}\\\\s\\'-]/gu, '').trim().slice(0, 60) || 'Гост' }}\",\n  \"lastName\": \" \"\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -608,
+        96
+      ],
+      "name": "Yespo POST ADD Segment",
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "s0vGKEkwgunV6KkQ",
+          "name": "Yespo API"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        -816,
+        96
+      ],
+      "name": "Wait"
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $input.item;\n\nconst body = item.json.body || {};\n\nconst raw = body.problem ?? \"\";\n\nconst cleaned = String(raw)\n  .replace(/\\r?\\n/g, \" \")\n  .replace(/\\s+/g, \" \")\n  .replace(/\"/g, '\\\\\"')\n  .trim();\n\nbody.problem = cleaned;\n\nitem.json.body = body;\nreturn item;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -992,
+        -112
+      ],
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://yespo.io/api/v1/message/email",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBasicAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"from\": \"start@metareading.com\",\n  \"subject\": \"Нова Жена · сеп 2026 · нова заявка от страницата ({{ $json.body.mode }})\",\n  \"htmlText\": \"<html><body style=\\\"font-family: Arial, sans-serif; color: #333;\\\"><h2>Ново запитване За Нова Жена</h2><p><strong>Име:</strong> {{ $json.body.name }}</p><p><strong>Email:</strong> {{ $json.body.email }}</p><p><strong>Телефон:</strong> {{ $json.body.phone }}</p><p><strong>Как участва:</strong> {{ $json.body.spheres }} ({{ $json.body.mode }})</p><p><strong>Пълна програма и специални цени:</strong> {{ $json.body.full ? 'Да' : 'Не' }}</p><p><strong>Въпрос:</strong> {{ $json.body.question }}</p><p><strong>Източник:</strong> {{ $json.body.source }} · {{ $json.body.page }} · {{ $json.body.ts }}</p><p><strong>Иска индивидуално внимание:</strong> {{ $json.body.want_individual_attention ? 'Да' : 'Не' }}</p><p><strong>Иска само имейли и ресурси:</strong> {{ $json.body.want_resources_email_only ? 'Да' : 'Не' }}</p><p><strong>Причина:</strong> {{ $json.body.problem }}</p></body></html>\",\n  \"emails\": [\"karamanchev@metareading.com\"]\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -784,
+        -112
+      ],
+      "name": "YESPO SEND MESSAGE",
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "s0vGKEkwgunV6KkQ",
+          "name": "Yespo API"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Info Client": {
+      "main": [
+        [
+          {
+            "node": "HubSpot Start and Name",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HubSpot Create Contact",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Yespo POST ADD Segment",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "YESPO SEND MESSAGE",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "YESPO SEND MESSAGE": {
+      "main": [
+        [
+          {
+            "node": "Get Info Client",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null
+}

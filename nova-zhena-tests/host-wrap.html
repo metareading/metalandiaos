@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="bg" class="light theme-switch builder-page">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Skillplate host-обвивка · тест · Нова Жена V2</title>
+<style>
+/* nova-zhena-tests/host-wrap.html · v0.1 · 12.09.2026 · доер Б · емулация на Skillplate custom-code host:
+   собствен body-стил · sticky хедър 64px · контейнер max-width 1140 + padding 20 + overflow-x:hidden · шрифт Outfit.
+   Страницата се ВГРАЖДА в #custom-code (стилове → head · тяло → блока · скриптовете се пускат наново). Нула iframe. */
+html{--palette-background:#F4F4F4;--palette-main-text:#151D32}
+body{margin:0;font-family:Outfit,system-ui,sans-serif;background:var(--palette-background);color:var(--palette-main-text)}
+.sp-header{position:sticky;top:0;z-index:50;height:64px;background:#fff;border-bottom:1px solid #e5e5e5;display:flex;align-items:center;padding:0 20px;font-weight:600;font-size:.9rem}
+.sp-page{max-width:1140px;margin:0 auto;padding:0 20px;overflow-x:hidden}
+.sp-block{padding:24px 0}
+.sp-footer{padding:40px 20px;text-align:center;font-size:.85rem;color:#666}
+</style>
+</head>
+<body>
+<div class="sp-header">metareading.skillplate.com · host-обвивка (емулация · тест)</div>
+<div class="sp-page"><div class="sp-block" id="custom-code"></div></div>
+<div class="sp-footer">Skillplate footer (емулация)</div>
+<script>
+(async () => {
+  const src = new URLSearchParams(location.search).get('src') || '../nova-zhena-v2.html';
+  const html = await (await fetch(src)).text();
+  const doc = new DOMParser().parseFromString(html, 'text/html');
+  const host = document.getElementById('custom-code');
+  doc.querySelectorAll('style').forEach(s => { const n = document.createElement('style'); n.textContent = s.textContent.replace(/url\((['"]?)img\//g, 'url($1../img/'); document.head.appendChild(n); });
+  const scripts = [...doc.body.querySelectorAll('script')]; scripts.forEach(s => s.remove());
+  [...doc.body.children].forEach(el => host.appendChild(document.importNode(el, true)));
+  host.querySelectorAll('img[src^="img/"]').forEach(i => i.src = '../' + i.getAttribute('src'));
+  for (const s of scripts) { const n = document.createElement('script'); n.textContent = s.textContent; document.body.appendChild(n); }
+  window.__hostWrapReady = true;
+})();
+</script>
+</body>
+</html>

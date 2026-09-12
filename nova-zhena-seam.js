@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════════════════════════
-   nova-zhena-seam.js · v0.2.0 · 12.09.2026 (вечер · дума: варианти без цена · „свържете се с мен“) · SEAM v2 · формата → n8n webhook → Yespo (+HubSpot)
+   nova-zhena-seam.js · v0.2.1 · 12.09.2026 (дума: 4 варианта без цена · режимът Банско/онлайн само за пълна/ритрийт · вариантът по избор · „свържете се с мен“) · SEAM v2 · формата → n8n webhook → Yespo (+HubSpot)
    ───────────────────────────────────────────────────────────────────────────
    Доер Б · MET-621 · Модел: Fable 5.1 (дума на Митрандир 12.09).
    Шевът НЕ носи ключ. Браузърът POST-ва JSON към n8n webhook (публичен URL, без ключ);
@@ -135,7 +135,16 @@
     if (r) { r.checked = true; }
     else { var h = f.querySelector('input[name="variant"][type="hidden"]'); if (!h) { h = document.createElement('input'); h.type = 'hidden'; h.name = 'variant'; f.appendChild(h); } h.value = v; }
     document.querySelectorAll('[data-нж-вариант]').forEach(function (b) { b.classList.toggle('on', b.getAttribute('data-нж-вариант') === v); b.setAttribute('aria-pressed', b.getAttribute('data-нж-вариант') === v ? 'true' : 'false'); });
+    приложиВариант(f, v);
     document.dispatchEvent(new CustomEvent('нж:вариант', { detail: { variant: v, label: ВАРИАНТ[v] || v } }));
+  }
+  /* дума 12.09: режимът (Банско/онлайн/още не знам) остава САМО за пълна програма и ритрийт; курсът е присъствен, онлайн-курсът е онлайн */
+  function приложиВариант(f, v) {
+    var радио = f.querySelector('input[name="mode"][type="radio"]'), кутия = радио && (радио.closest('[data-нж-режим-избор]') || радио.closest('.choice'));
+    var фикс = v === 'course' ? 'live' : v === 'online' ? 'online' : null;
+    if (фикс) { var r = f.querySelector('input[name="mode"][value="' + фикс + '"]'); var h = f.querySelector('input[name="mode"][type="hidden"]'); if (h && h.value !== 'question') h.remove(); if (r) r.checked = true; }
+    if (кутия) { кутия.hidden = !!фикс; var ет = кутия.previousElementSibling; if (ет && ет.tagName === 'LABEL' && !ет.querySelector('input')) ет.hidden = !!фикс; }
+    f.setAttribute('data-вариант', v);
   }
 
   function върже(f) {
@@ -170,5 +179,5 @@
   function старт() { var f = форма(); if (f) върже(f); вържеЛинкове(); }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', старт); else старт();
 
-  window.НЖшев = { конфиг: К, режим: режим, вариант: вариант, ВАРИАНТ: ВАРИАНТ, изпрати: изпрати, товар: function (f) { return товар(събери(f || форма())); }, провери: function (f) { f = f || форма(); return провери(събери(f), f); }, тел: телЛинк, viber: viberЛинк, версия: '0.2.0' };
+  window.НЖшев = { конфиг: К, режим: режим, вариант: вариант, ВАРИАНТ: ВАРИАНТ, изпрати: изпрати, товар: function (f) { return товар(събери(f || форма())); }, провери: function (f) { f = f || форма(); return провери(събери(f), f); }, тел: телЛинк, viber: viberЛинк, версия: '0.2.1' };
 })();

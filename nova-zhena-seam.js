@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════════════════════════
-   nova-zhena-seam.js · v0.1.1 · 12.09.2026 · SEAM v2 · формата → n8n webhook → Yespo (+HubSpot)
+   nova-zhena-seam.js · v0.2.0 · 12.09.2026 (вечер · дума: варианти без цена · „свържете се с мен“) · SEAM v2 · формата → n8n webhook → Yespo (+HubSpot)
    ───────────────────────────────────────────────────────────────────────────
    Доер Б · MET-621 · Модел: Fable 5.1 (дума на Митрандир 12.09).
    Шевът НЕ носи ключ. Браузърът POST-ва JSON към n8n webhook (публичен URL, без ключ);
@@ -22,6 +22,7 @@
   }, window.НЖ_ШЕВ_КОНФИГ || {});
 
   var ЕТИКЕТ = { live: 'Присъствено · Банско', online: 'Онлайн · Zoom', unsure: 'Още не знам', question: 'Въпрос' };
+  var ВАРИАНТ = { full: 'Пълната програма · ритрийт + 12 месеца срещи + курс', retreat: 'Само ритрийтът · 18–22 сеп', course: 'Само курсът · присъствен', online: 'Онлайн курс' };   /* дума 12.09: вариантите се избират, цена НЕ се показва */
   var ИМЕЙЛ = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
   function чист(t) { return String(t || '').replace(/[^\d+]/g, ''); }
@@ -33,6 +34,8 @@
     var d = {}; new FormData(f).forEach(function (v, k) { if (typeof v === 'string') d[k] = v.trim(); });
     d.full = !!f.querySelector('[name="full"]:checked');
     var h = f.querySelector('input[name="mode"][type="hidden"]'); if (h && h.value) d.mode = h.value;   /* скритият режим (fab „Задайте въпрос“) печели пред радиото */
+    d.contact = !!f.querySelector('[name="contact"]:checked');                                   /* „имам въпроси — свържете се с мен“ */
+    var v = f.querySelector('[name="variant"]:checked') || f.querySelector('input[name="variant"][type="hidden"]'); d.variant = v ? v.value : (d.variant || '');
     return d;
   }
   function провери(d, f) {
@@ -41,6 +44,7 @@
     if (!ИМЕЙЛ.test(d.email || '')) г.push(['email', 'Проверете имейла — на него отговаряме.']);
     if (d.phone && чист(d.phone).replace(/\D/g, '').length < 9) г.push(['phone', 'Телефонът изглежда непълен.']);
     if (d.mode === 'question' && имаВъпрос && !(d.question || '').trim()) г.push(['question', 'Напишете въпроса си — отговаряме лично.']);
+    if (f && f.hasAttribute('data-нж-вариант-задължителен') && !d.variant) г.push(['variant', 'Изберете вариант — кой път Ви е по-близък?']);
     return г;
   }
   function товар(d) {
@@ -48,12 +52,13 @@
     return {
       /* легаси · сегашният n8n поток (известие · HubSpot n89_8_ · Yespo contact) */
       name: d.name, email: (d.email || '').toLowerCase(), phone: телЧист(d.phone),
-      spheres: ЕТИКЕТ[режим] || режим,
+      spheres: [ВАРИАНТ[d.variant] || d.variant, ЕТИКЕТ[режим] || режим].filter(Boolean).join(' · '),   /* вариант + режим в едно легаси-поле */
       problem: въпрос,
-      want_individual_attention: режим !== 'question' && !!d.full,
+      want_individual_attention: !!d.contact || режим === 'question',                                 /* „свържете се с мен“ · всички минават през краткия разговор */
       want_resources_email_only: false,
       /* нови · за потока „Нова Жена · сеп 2026" (сегашният ги подминава без грешка) */
       mode: режим, full: !!d.full, question: въпрос,
+      variant: d.variant || '', variant_label: ВАРИАНТ[d.variant] || d.variant || '', contact: !!d.contact,
       source: К.източник, page: location.href.split('#')[0], ts: new Date().toISOString(), consent: true
     };
   }
@@ -123,6 +128,16 @@
 
   function форма() { return document.getElementById(К.форма) || document.querySelector('form[data-нж-шев]'); }
 
+  /* ── вариантите (дума 12.09): бутони data-нж-вариант · без цена · стойността влиза в скрит input `variant` ── */
+  function вариант(v, el) {
+    var f = форма(); if (!f) return;
+    var r = f.querySelector('input[name="variant"][value="' + v + '"]');
+    if (r) { r.checked = true; }
+    else { var h = f.querySelector('input[name="variant"][type="hidden"]'); if (!h) { h = document.createElement('input'); h.type = 'hidden'; h.name = 'variant'; f.appendChild(h); } h.value = v; }
+    document.querySelectorAll('[data-нж-вариант]').forEach(function (b) { b.classList.toggle('on', b.getAttribute('data-нж-вариант') === v); b.setAttribute('aria-pressed', b.getAttribute('data-нж-вариант') === v ? 'true' : 'false'); });
+    document.dispatchEvent(new CustomEvent('нж:вариант', { detail: { variant: v, label: ВАРИАНТ[v] || v } }));
+  }
+
   function върже(f) {
     if (f.__нжШев) return; f.__нжШев = true;
     f.setAttribute('novalidate', '');
@@ -145,6 +160,8 @@
     var m = (location.search.match(/[?&]mode=(live|online|unsure|question)/) || [])[1]; if (m) режим(m);
   }
   function вържеЛинкове() {
+    document.querySelectorAll('[data-нж-вариант]').forEach(function (b) { b.addEventListener('click', function (e) { if (b.tagName === 'A') e.preventDefault(); вариант(b.getAttribute('data-нж-вариант'), b); }); });
+    var пред = document.querySelector('[data-нж-вариант].on'); if (пред) вариант(пред.getAttribute('data-нж-вариант'), пред);
     document.querySelectorAll('#fab a[href="#form"], #fab a.cta').forEach(function (a) { if (a.hasAttribute('data-нж-режим')) return; a.addEventListener('click', function () { var fab = a.closest('#fab'); if (fab && fab.classList.contains('q')) режим('question'); }); });  /* V2.1 · доер А: fab.q = „Задайте въпрос“ */
     document.querySelectorAll('[data-нж-режим]').forEach(function (el) { el.addEventListener('click', function (e) { e.preventDefault(); режим(el.getAttribute('data-нж-режим')); }); });
     document.querySelectorAll('a[data-нж-тел]').forEach(function (a) { a.href = телЛинк(a.getAttribute('data-нж-тел')); });
@@ -153,5 +170,5 @@
   function старт() { var f = форма(); if (f) върже(f); вържеЛинкове(); }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', старт); else старт();
 
-  window.НЖшев = { конфиг: К, режим: режим, изпрати: изпрати, товар: function (f) { return товар(събери(f || форма())); }, провери: function (f) { f = f || форма(); return провери(събери(f), f); }, тел: телЛинк, viber: viberЛинк, версия: '0.1.1' };
+  window.НЖшев = { конфиг: К, режим: режим, вариант: вариант, ВАРИАНТ: ВАРИАНТ, изпрати: изпрати, товар: function (f) { return товар(събери(f || форма())); }, провери: function (f) { f = f || форма(); return провери(събери(f), f); }, тел: телЛинк, viber: viberЛинк, версия: '0.2.0' };
 })();

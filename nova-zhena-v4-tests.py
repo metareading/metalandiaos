@@ -12,7 +12,7 @@ MET-633 (PRD v1.0 · § Testing Decisions) · роден в Т0 = MET-659 · 13.
   Т5 → ритрийт-рейлът (#zalog .rail)              Т6 → дуелът (#duel) · средната линия (#midline) · dial2
   Т7 → обръщащата се карта в Еликсира (#elixir .mo)  Т8 → речникът (0 забранени думи)
   Т9 → всичко зелено + Browser pane (390/1280 · console 0 · FPS · reduced) — това тестът не мери.
-Зелени от Т0: шевът (1-ви <script>) байт-идентичен с базата 167dd08 · деплой-копието = източник · хедър v4.0 · 0 „оферта" · 0 цени.
+Зелени от Т0: шевът (1-ви <script>) байт-идентичен с базата 167dd08 · деплой-копието = източник · хедър v4.0 · 0 „оферта" · 0 цени · нула външен <script src>.
 
 Пускане:  cd /Users/user/metalandiaos && python3 nova-zhena-v4-tests.py -v
 Без зависимости (stdlib) · prior art: metabrain/evals/**/kb-zayavka-tests.py · test_funiya.py
@@ -43,7 +43,7 @@ def чети(p: pathlib.Path) -> str:
 
 
 def скриптове(t: str):
-    return re.findall(r'<script>(.*?)</script>', t, re.S)
+    return re.findall(r'<script\b[^>]*>(.*?)</script>', t, re.S)
 
 
 def тяло(t: str) -> str:
@@ -57,7 +57,7 @@ def без_коментари(t: str) -> str:
 def видим_текст(t: str) -> str:
     """Тялото без скриптове, стилове и коментари, с махнати тагове — това, което жената чете."""
     b = без_коментари(тяло(t))
-    b = re.sub(r'<script>.*?</script>', ' ', b, flags=re.S)
+    b = re.sub(r'<script\b[^>]*>.*?</script>', ' ', b, flags=re.S)
     b = re.sub(r'<style>.*?</style>', ' ', b, flags=re.S)
     return re.sub(r'<[^>]+>', ' ', b)
 
@@ -135,14 +135,18 @@ class Т0_Основа(Основа):
         self.assertEqual(без, [], f'секции без data-стъпка: {без}')
         self.assertTrue(all(1 <= st <= 8 for _, st, _ in s), 'data-стъпка ∈ 1..8')
 
+    def test_07_нула_външни_скриптове(self):
+        self.assertEqual(re.findall(r'<script\b[^>]*src=', self.src), [],
+                         'външен <script src> в страница, която събира лични данни')
+
 
 class Т1_Подредба(Основа):
     """Червени до Т1."""
 
     def test_10_редът_е_1_до_8(self):
         поредица = [st for _, st, _ in секции(self.src)]
-        self.assertEqual(sorted(set(поредица)), list(range(1, 9)), f'липсват стъпки: {поредица}')
-        self.assertEqual(поредица, sorted(поредица), f'секциите не са в ред 1→8: {поредица}')
+        self.assertEqual(поредица, list(range(1, 9)),
+                         f'договор: точно 8 секции · по една на стъпка · в ред 1→8 · има: {поредица}')
 
     def test_11_формата_е_стъпка_5_между_4_и_6(self):
         s = секции(self.src)

@@ -73,10 +73,19 @@ def секции(t: str):
     return out
 
 
-def блок_на_секция(t: str, sid: str) -> str:
-    b = без_коментари(тяло(t))
-    m = re.search(r'<section\b[^>]*id="%s"[^>]*>(.*?)</section>' % re.escape(sid), b, re.S)
-    return m.group(1) if m else ''
+def блок_по_id(t: str, sid: str) -> str:
+    """Съдържанието на елемента с id=sid — section ИЛИ div, с балансирани тагове.
+    Т1 (MET-660): договорът „точно 8 секции · по една на стъпка" (test_10) прави старите секции .blk-дивове ВЪТРЕ в стъпките — #marks3 е такъв."""
+    b = re.sub(r'<script\b[^>]*>.*?</script>', ' ', без_коментари(тяло(t)), flags=re.S)   # <div в скрипт не бива да размества баланса
+    m = re.search(r'<(section|div)\b[^>]*\bid="%s"[^>]*>' % re.escape(sid), b)
+    if not m:
+        return ''
+    таг, дълбочина, начало = m.group(1), 1, m.end()
+    for mm in re.finditer(r'<(/?)%s\b[^>]*>' % таг, b[начало:]):
+        дълбочина += -1 if mm.group(1) else 1
+        if дълбочина == 0:
+            return b[начало:начало + mm.start()]
+    return ''
 
 
 def блок_на_стъпка(t: str, n: int) -> str:
@@ -166,8 +175,8 @@ class Т1_Подредба(Основа):
         self.assertEqual(липсват, [], f'kicker без името на стъпката: {липсват}')
 
     def test_13_белезите_са_един_голям_образ(self):
-        блок = блок_на_секция(self.src, 'marks3')
-        self.assertTrue(блок != '', 'секцията на белезите (#marks3) липсва')
+        блок = блок_по_id(self.src, 'marks3')
+        self.assertTrue(блок != '', 'блокът на белезите (#marks3) липсва')
         self.assertEqual(len(re.findall(r'<img\b', блок)), 1, 'трите белега = ЕДИН голям образ')
 
 

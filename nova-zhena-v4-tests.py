@@ -136,7 +136,7 @@ class Т0_Основа(Основа):
         self.assertTrue(all(1 <= st <= 8 for _, st, _ in s), 'data-стъпка ∈ 1..8')
 
     def test_07_нула_външни_скриптове(self):
-        self.assertEqual(re.findall(r'<script\b[^>]*src=', self.src), [],
+        self.assertEqual(re.findall(r'<script\b[^>]*src=', без_коментари(self.src)), [],
                          'външен <script src> в страница, която събира лични данни')
 
 

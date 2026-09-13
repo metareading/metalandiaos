@@ -11,7 +11,11 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Inter:wght@300;400;500;600&display=swap&subset=cyrillic" rel="stylesheet">
 <!--
   ══════════════════════════════════════════════════════════════════════
-  НОВА ЖЕНА · V2 „Холограма“ · v2.4 · 2026-09-13 · 03:17 · MET-621 · доер V2.4 (Fable 5.1 · дума на Митрандир 13.09 „Продължи като Fable“) по ПЕТАТА дума на Митрандир (13.09 · A1–A7)
+  НОВА ЖЕНА · V4 „По 8-те стъпки на метаезика“ · v4.0 · 2026-09-13 · 07:22 · MET-633 · Т0 (MET-659) · доер V4 (Fable 5.1 · дума на Митрандир 13.09 03:4x „чип за ф5.1, който да завърши версия 4“)
+  v4.0 · Т0 делта (префактор): структурният ШЕВ nova-zhena-v4-tests.py (unittest · червено→зелено по тикети Т1–Т8) · data-стъпка върху 12-те секции
+  (ЦЕЛЕВАТА стъпка · редът се пренарежда в Т1: 1 Героиня → 2 Чудовище → 3 Водач → 4 План → 5 Призив/формата по средата → 6 Залог → 7 Съкровище → 8 Еликсир) ·
+  речник-делта V4 (стълба · дуел · печат · нива дух→душа→тяло · компас за втори път · средна линия) · PRD = описанието на MET-633.
+  предишен ред: v2.4 · 2026-09-13 · 03:17 · MET-621 · доер V2.4 (Fable 5.1 · дума на Митрандир 13.09 „Продължи като Fable“) по ПЕТАТА дума на Митрандир (13.09 · A1–A7)
   v2.4 делта (доер · петата дума 13.09): „Всяка жена носи в себе си цяла трупа“ = 1 ред в hero (замества кикера · датите отиват в реда „кога“) ·
   #path без текст-блок (3-думно заглавие) · #monster без inline CTA („тук е рано за Call to Action“) · Пътят: златната ОПАШКА от осмата
   звезда СЛИЗА до героинята в картата (cls 5 · котвата през uNodes[0..1] · телефон = сърцето ѝ в cover-fit картата · десктоп = долният ръб над картата) ·
@@ -522,7 +526,7 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
 </div>
 
 <!-- ═══ 1 · HERO · героиня с мисия · преди → сега ═══ -->
-<section class="hero" id="hero">
+<section class="hero" id="hero" data-стъпка="1">
   <div class="grid">
     <div class="wrap">
       <p class="troupe">Всяка жена носи в себе си <em>цяла трупа.</em></p>
@@ -544,7 +548,7 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
 </section>
 
 <!-- ═══ 1б · ТРИ БЕЛЕГА · екран 2 · карти с образи (дума 13.09) ═══ -->
-<section class="marks3" id="marks3">
+<section class="marks3" id="marks3" data-стъпка="1">
   <div class="wrap">
     <p class="lead" data-reveal>Три белега на пробуждането:</p>
     <div class="mcards">
@@ -556,7 +560,7 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
 </section>
 
 <!-- ═══ 2 · ПРОБЛЕМ · снимката цяла · редовете под нея ═══ -->
-<section class="pain" id="pain">
+<section class="pain" id="pain" data-стъпка="2">
   <div class="wrap">
     <div class="kicker" data-reveal>Познавате ли я?</div>
     <h2 data-reveal>Тя не е спала. <em>Пак.</em></h2>
@@ -574,7 +578,7 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
 </section>
 
 <!-- ═══ 3 · ГЕРОИНЯТА · 8 етапа · съзвездие от частици · v2.4: без текст-блок (текстът е в hero) · опашката слиза до героинята ═══ -->
-<section class="path" id="path">
+<section class="path" id="path" data-стъпка="1">
   <div class="wrap">
     <div class="kicker" data-reveal>Героинята</div>
     <h2 data-reveal>Пътят <em>на героинята</em></h2>
@@ -603,7 +607,7 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
 </section>
 
 <!-- ═══ 4 · ЧУДОВИЩЕТО · пясъчен часовник от частици · 3 лица · v2.4: без inline CTA („тук е рано“ · петата дума 13.09) ═══ -->
-<section class="monster" id="monster">
+<section class="monster" id="monster" data-стъпка="2">
   <div class="wrap">
     <div class="kicker" data-reveal>Етап 2 · Чудовището · семейство Илюзоркови</div>
     <h2 data-reveal>Его Илюзорков</h2>
@@ -641,7 +645,7 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
 </section>
 
 <!-- ═══ 5 · ПЕТ СТЪПАЛА · циферблатът от V1b (v2.2 · дума 12.09: „директно този контрол“ · сменя се сам · тап спира) ═══ -->
-<section class="scale" id="scale">
+<section class="scale" id="scale" data-стъпка="2">
   <svg class="dialthread" id="dialthread" aria-hidden="true"><path class="ln" id="dt-ln" d=""/><path class="ln2" id="dt-ln2" d=""/><circle class="tip" id="dt-tip" r="3.5" cx="-20" cy="-20"/><circle class="knot" id="dt-knot" r="4" cx="-20" cy="-20"/></svg>
   <div class="wrap">
     <div class="kicker" data-reveal>Къде сте сега?</div>
@@ -663,7 +667,7 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
 </section>
 
 <!-- ═══ 6 · ДЕГУСТАЦИЯ ОТ ДЕКАТА ═══ -->
-<section class="tasting" id="deck">
+<section class="tasting" id="deck" data-стъпка="6">
   <div class="wrap">
     <div class="kicker" data-reveal>Деката</div>
     <h2 data-reveal>Част от картите — <em>за да поискате всички</em></h2>
@@ -726,7 +730,7 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
 </section>
 
 <!-- ═══ 7 · ЕДИН ДЕН · слънчев часовник · 4 момента ═══ -->
-<section class="day" id="day">
+<section class="day" id="day" data-стъпка="4">
   <div class="wrap">
     <div class="kicker" data-reveal>Един ден от Вашия път</div>
     <h2 data-reveal>Приказната <em>дъга</em></h2>
@@ -790,7 +794,7 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
 </section>
 
 <!-- ═══ 8 · КОТВЕНО ВИДЕО ═══ -->
-<section class="video" id="video">
+<section class="video" id="video" data-стъпка="3">
   <div class="wrap">
     <div class="kicker" data-reveal>Реална история</div>
     <h2 data-reveal>Пет години по два часа. <em>Осем часа след един сеанс.</em></h2>
@@ -815,7 +819,7 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
 </section>
 
 <!-- ═══ 9 · РИТЪМ НА ДЕНЯ · слънцето от частици ═══ -->
-<section class="sched" id="sched" data-mode="live">
+<section class="sched" id="sched" data-mode="live" data-стъпка="6">
   <div class="wrap">
     <div class="kicker" data-reveal>Ритъм на деня</div>
     <h2 data-reveal>15:30 → 20:00, <em>пет дни подред</em></h2>
@@ -852,7 +856,7 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
 </section>
 
 <!-- ═══ 10 · ФОРМА (главно CTA · визуален shell) ═══ -->
-<section class="form" id="form">
+<section class="form" id="form" data-стъпка="5">
   <div class="wrap">
     <div class="kicker" data-reveal>Последната карта</div>
     <h2 data-reveal>Кандидат<em>ствайте</em></h2>
@@ -1088,7 +1092,7 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
 </section>
 
 <!-- ═══ 11 · ПРЕДЛОЖЕНИЕ ═══ -->
-<section class="offer" id="offer">
+<section class="offer" id="offer" data-стъпка="8">
   <div class="bgw" aria-hidden="true"><img src="/img/nz3/hero-wide.webp" alt="" width="1600" height="900" loading="lazy" decoding="async"></div>
   <div class="wrap">
     <div class="kicker" data-reveal>Кандидатстване</div>

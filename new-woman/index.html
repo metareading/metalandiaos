@@ -11,7 +11,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Inter:wght@300;400;500;600&display=swap&subset=cyrillic" rel="stylesheet">
 <!--
   ══════════════════════════════════════════════════════════════════════
-  НОВА ЖЕНА · V2 „Холограма“ · v2.4 · 2026-09-13 · 02:51 · MET-621 · доер V2.4 (Fable 5.1 · дума на Митрандир 13.09 „Продължи като Fable“) по ПЕТАТА дума на Митрандир (13.09 · A1–A7)
+  НОВА ЖЕНА · V2 „Холограма“ · v2.4 · 2026-09-13 · 03:17 · MET-621 · доер V2.4 (Fable 5.1 · дума на Митрандир 13.09 „Продължи като Fable“) по ПЕТАТА дума на Митрандир (13.09 · A1–A7)
   v2.4 делта (доер · петата дума 13.09): „Всяка жена носи в себе си цяла трупа“ = 1 ред в hero (замества кикера · датите отиват в реда „кога“) ·
   #path без текст-блок (3-думно заглавие) · #monster без inline CTA („тук е рано за Call to Action“) · Пътят: златната ОПАШКА от осмата
   звезда СЛИЗА до героинята в картата (cls 5 · котвата през uNodes[0..1] · телефон = сърцето ѝ в cover-fit картата · десктоп = долният ръб над картата) ·
@@ -25,7 +25,8 @@
   (въпрос+фигура · после трите белега като карти с образи) · CTA „Кандидатствайте“ · циферблатът ПО СКРОЛ (таймерът махнат) + тап/сектор ·
   денят: повече въздух в картите · benefit образ · разписанието с 5 малки образа · БРОЙ десктоп 30 000 · формата РЕАЛНА (шев nova-zhena-seam.js
   v0.2.1 → n8n /webhook/new-woman → Yespo/HubSpot) · цените СКРИТИ · 4 варианта без цена + CTA-блок „Попълнете формата и:“ + чекбокс „свържете се“.
-  ЧАКА ДУМА (не пипано · v2.4: нишките Q1 e5975b5f и Q2 11725011 в MET-621 не са Resolved): името „Спирачка“ (→ „Его Илюзорков“?) · частиковите криле на hero-анимацията.
+  A6 (дума на Митрандир 13.09 02:4x · Reply в MET-621 · Q1 94794a8f · Q2 3ec6ebe8 · приложено 03:17): „Спирачката“ → „Его Илюзорков“ (семейство Илюзоркови) + подзаглавие
+  „Страхът на Ума за Оцеляването“ (h2 · deck-картите ×2 · ST[2] описанието · aria/alt) · „остават“ = крилете в hero-морфа и 6-те копи-микротекста НЕ са пипани.
   v2.2 делта: 14-те образа + постерите в img/nz3 (стил B · Сорола · ИСТИНСКО ИЗКУСТВО в един стил) · Спирачката = три
   качулати ФИГУРИ (роба-камбана · заоблена качулка · ръкави отпред), не стрелки · „Пет стъпала“ = циферблатът от V1b
   ДИРЕКТНО (сектори 1–5 · стрелка от частици · сменя се САМ на всеки 2.5 s, докато сте там · тап спира, за да четете ·
@@ -211,6 +212,9 @@ html:where(.js) .note{opacity:0;transform:translateY(16px) scale(.98)}
 
 /* ── MONSTER ── */
 .monster{background:radial-gradient(100% 60% at 50% 20%,#2a1610 0%,var(--bg) 65%)}
+/* v2.4 · A6 (дума 13.09 02:4x · Q1): името „Его Илюзорков“ + подзаглавие „Страхът на Ума за Оцеляването“ */
+.monster .sub{font-family:var(--serif);font-style:italic;font-size:1.18rem;color:var(--gold);margin:-2px 0 8px}
+.deck .body .sub{font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:#6b4a2b;margin:2px 0 6px}
 .faces{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:8px 0 10px}
 .faces button{background:rgba(255,255,255,.04);border:1px solid rgba(232,199,126,.3);color:var(--ink2);border-radius:12px;padding:10px 6px;font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;transition:all .3s}
 .faces button.on{background:linear-gradient(120deg,#ffe1a0,#e2a458);color:#2a1908;border-color:transparent;font-weight:600}
@@ -601,13 +605,14 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
 <!-- ═══ 4 · ЧУДОВИЩЕТО · пясъчен часовник от частици · 3 лица · v2.4: без inline CTA („тук е рано“ · петата дума 13.09) ═══ -->
 <section class="monster" id="monster">
   <div class="wrap">
-    <div class="kicker" data-reveal>Етап 2 · Чудовището</div>
-    <h2 data-reveal>Спирачката</h2>
+    <div class="kicker" data-reveal>Етап 2 · Чудовището · семейство Илюзоркови</div>
+    <h2 data-reveal>Его Илюзорков</h2>
+    <p class="sub" data-reveal>Страхът на Ума за Оцеляването</p>
     <p class="lead" data-reveal>Едно чудовище, три лица. Времето изтича, старите начини изморяват. На ритрийта го рисуваме, назоваваме и му излизаме насреща — заедно.</p>
   </div>
   <div class="mfig tapable" id="fig-monster" data-bleed="always" data-tap>
-    <canvas data-фигура="monster" role="img" aria-label="Трите сенки на Спирачката — вътрешна, външна, философска — се сглобяват по скрол; избраната се разпада в жарава и се събира като следващата"></canvas>
-    <img class="poster" src="/img/nz3/monster-poster.webp" alt="Трите сенки на Спирачката" width="896" height="1195" hidden loading="lazy" decoding="async">
+    <canvas data-фигура="monster" role="img" aria-label="Трите сенки на Его Илюзорков — вътрешна, външна, философска — се сглобяват по скрол; избраната се разпада в жарава и се събира като следващата"></canvas>
+    <img class="poster" src="/img/nz3/monster-poster.webp" alt="Трите сенки на Его Илюзорков" width="896" height="1195" hidden loading="lazy" decoding="async">
     <div class="tap" aria-hidden="true"><i></i><span>докоснете — следващото лице</span></div>
   </div>
   <div class="wrap">
@@ -627,8 +632,8 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
         <span class="corner c1">✦</span><span class="corner c2">✦</span><span class="corner c3">✦</span><span class="corner c4">✦</span>
         <div class="inner">
           <div class="banner"><span>Чудовището</span></div>
-          <div class="art"><img src="/img/nz/card-spirachka.webp" alt="Картата „Спирачката“ от деката" width="597" height="800" loading="lazy" decoding="async"></div>
-          <div class="body"><h3>Спирачката</h3><div class="rule"></div><p>Светът се мени по-бързо от усещанията ни — старите начини изморяват, а времето не стига.</p></div>
+          <div class="art"><img src="/img/nz/card-spirachka.webp" alt="Картата „Его Илюзорков“ от деката" width="597" height="800" loading="lazy" decoding="async"></div>
+          <div class="body"><h3>Его Илюзорков</h3><div class="sub">Страхът на Ума за Оцеляването</div><div class="rule"></div><p>Светът се мени по-бързо от усещанията ни — старите начини изморяват, а времето не стига.</p></div>
         </div>
       </div>
     </div>
@@ -676,7 +681,7 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
         <span class="corner c1">✦</span><span class="corner c2">✦</span><span class="corner c3">✦</span><span class="corner c4">✦</span>
         <div class="inner"><div class="banner"><span>Чудовището</span></div>
         <div class="art"><img src="/img/nz/card-spirachka.webp" alt="" width="597" height="800" loading="lazy" decoding="async"></div>
-        <div class="body"><h3>Спирачката</h3><div class="rule"></div><p>Светът се мени по-бързо от усещанията ни — старите начини изморяват, а времето не стига.</p></div></div>
+        <div class="body"><h3>Его Илюзорков</h3><div class="sub">Страхът на Ума за Оцеляването</div><div class="rule"></div><p>Светът се мени по-бързо от усещанията ни — старите начини изморяват, а времето не стига.</p></div></div>
       </div>
       <div class="deck" data-reveal>
         <span class="corner c1">✦</span><span class="corner c2">✦</span><span class="corner c3">✦</span><span class="corner c4">✦</span>
@@ -2250,7 +2255,7 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
   /* ══ 8 ЕТАПА · пътят на героинята (скрол сменя етапа · тап на звезда = скок · тап другаде = следващ) ══ */
   const ST=[
     {n:'РазЛичност',m:'се събужда Любка',l:'„Приета съм такава, каквато съм.“',d:'Първата сцена: избирате си име, роля и ментор. Ролята пази — в нея смеете повече.'},
-    {n:'ЧудоВище',m:'се събужда Екопътечко',l:'„Срещам сянката си — в три пласта.“',d:'Вътрешен, външен, философски. Едно чудовище, три лица — Спирачката.'},
+    {n:'ЧудоВище',m:'се събужда Екопътечко',l:'„Срещам сянката си — в три пласта.“',d:'Вътрешен, външен, философски. Едно чудовище, три лица — Его Илюзорков.'},
     {n:'Водач',m:'се събужда Куражку',l:'„Намирам ментор и резонанс.“',d:'Водачът не води. Той върви до Вас, докато познаете собствения си глас.'},
     {n:'Планът',m:'се събужда Обемко',l:'„Хоризонтът се разширява.“',d:'Виждате повече за същото време — без умора. Планът се пише сам.'},
     {n:'Прагът',m:'се събужда Хола',l:'„Стъпвам без карта.“',d:'Свободният избор. Преходът в тишина: мурата, езерото, конете.'},

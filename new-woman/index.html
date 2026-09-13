@@ -11,13 +11,21 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Inter:wght@300;400;500;600&display=swap&subset=cyrillic" rel="stylesheet">
 <!--
   ══════════════════════════════════════════════════════════════════════
-  НОВА ЖЕНА · V2 „Холограма“ · v2.3 · 2026-09-13 · 00:54 · MET-621 · МО3-ризолвър (Opus 4.8) по ЧЕТВЪРТАТА дума на Митрандир (13.09) + шев на доер Б
+  НОВА ЖЕНА · V2 „Холограма“ · v2.4 · 2026-09-13 · 02:51 · MET-621 · доер V2.4 (Fable 5.1 · дума на Митрандир 13.09 „Продължи като Fable“) по ПЕТАТА дума на Митрандир (13.09 · A1–A7)
+  v2.4 делта (доер · петата дума 13.09): „Всяка жена носи в себе си цяла трупа“ = 1 ред в hero (замества кикера · датите отиват в реда „кога“) ·
+  #path без текст-блок (3-думно заглавие) · #monster без inline CTA („тук е рано за Call to Action“) · Пътят: златната ОПАШКА от осмата
+  звезда СЛИЗА до героинята в картата (cls 5 · котвата през uNodes[0..1] · телефон = сърцето ѝ в cover-fit картата · десктоп = долният ръб над картата) ·
+  десктоп ≥720px: часовникът на деня остава в колоната си и не закрива картите (bleed-ът е за телефона) · циферблатът = МЕТАКОМПАС
+  (обод #E8C77E · 4 румба · 5 деления) + златна нишка от върха на стрелката до отворената карта (.dialword · пренасочва се при смяна) ·
+  „Пълната програма“ на диета (≤3 реда · „попълнете формата“ веднъж · без звездичка · вариантите без цена остават) ·
+  речник във видимия текст: продукция/трупа/кандидатстване (ключовете data-нж-вариант и картата ВАРИАНТ на шева НЕ са пипани · „курсисти“ остава).
+  предишен ред: v2.3 · 00:54 · МО3-ризолвър (Opus 4.8) по ЧЕТВЪРТАТА дума на Митрандир (13.09) + шев на доер Б
   v2.3 делта (МО3 · дума 13.09): hero-now без криле · Пътят отгоре надолу (етап 1 горе → 8 долу) + пулс на панела + тап на етикет ·
   будечители по нов ред (1 Любка · 2 Екопътечко · 3 Куражку · 4 Обемко · 5 Хола · 6 Фибоначко · 7 Творея · 8 Доверка) · hero на ДВА екрана
   (въпрос+фигура · после трите белега като карти с образи) · CTA „Кандидатствайте“ · циферблатът ПО СКРОЛ (таймерът махнат) + тап/сектор ·
   денят: повече въздух в картите · benefit образ · разписанието с 5 малки образа · БРОЙ десктоп 30 000 · формата РЕАЛНА (шев nova-zhena-seam.js
   v0.2.1 → n8n /webhook/new-woman → Yespo/HubSpot) · цените СКРИТИ · 4 варианта без цена + CTA-блок „Попълнете формата и:“ + чекбокс „свържете се“.
-  ЧАКА ДУМА (не пипано): името „Спирачка“ (→ „блукаш“?) · частиковите криле на hero-анимацията.
+  ЧАКА ДУМА (не пипано · v2.4: нишките Q1 e5975b5f и Q2 11725011 в MET-621 не са Resolved): името „Спирачка“ (→ „Его Илюзорков“?) · частиковите криле на hero-анимацията.
   v2.2 делта: 14-те образа + постерите в img/nz3 (стил B · Сорола · ИСТИНСКО ИЗКУСТВО в един стил) · Спирачката = три
   качулати ФИГУРИ (роба-камбана · заоблена качулка · ръкави отпред), не стрелки · „Пет стъпала“ = циферблатът от V1b
   ДИРЕКТНО (сектори 1–5 · стрелка от частици · сменя се САМ на всеки 2.5 s, докато сте там · тап спира, за да четете ·
@@ -38,6 +46,7 @@
   Образи: img/nz3/ (v2.2 · стил B · Сорола · същите 14 имена като img/nz2, който остава за сравнение) + img/nz/card-*.webp (деката · канон)
   + img/nz/vodach.webp (реален портрет) + img/nz/yt-*.webp. Инлайн: nova-zhena-v2.inline.html
   Модел: Fable 5.1 (Max) — изрична дума на Митрандир (12.09 · MET-621).
+  Модел v2.4: Fable 5.1 (дума: Митрандир 13.09 в чат-таба „Продължи като Fable — дума на Митрандир 13.09“ · промптът на МО искаше Sonnet 4.8 · NEXT ред 6).
   ══════════════════════════════════════════════════════════════════════
 -->
 <style>
@@ -112,6 +121,9 @@ html:where(.js) [data-reveal].in{opacity:1;transform:none}
 .hero .toggle button.on{background:linear-gradient(120deg,#ffe1a0,#e2a458);color:#2a1908;border-color:transparent;font-weight:600}
 .hero .lead{max-width:520px;margin:6px 0 6px;font-size:.94rem}
 .hero .kicker .long{display:none}
+/* v2.4 · трупа-редът в hero (петата дума 13.09): замества кикера · 1 ред · hero не става по-дълъг */
+.hero .troupe{font-family:var(--serif);font-style:italic;font-size:1.12rem;line-height:1.2;color:var(--gold);margin:0 0 2px;letter-spacing:.01em}
+.hero .troupe em{color:#fff}
 .marks{list-style:none;padding:0;margin:4px 0 10px;display:grid;gap:5px;max-width:560px}
 .marks li{display:flex;gap:10px;align-items:flex-start;background:rgba(255,255,255,.035);border:1px solid rgba(232,199,126,.26);border-radius:12px;padding:7px 10px;transition:all .8s ease}
 html:where(.js) .marks li{opacity:0;transform:translateX(-14px)}
@@ -226,6 +238,19 @@ html:where(.js) .note{opacity:0;transform:translateY(16px) scale(.98)}
 .dialsvg .sec.on{fill:rgba(232,199,126,.34)}
 .dialsvg .sn{font-family:var(--serif);font-weight:700;font-size:16px;fill:var(--ink);text-anchor:middle;dominant-baseline:central;pointer-events:none;transition:fill .4s}
 .dialsvg .on + .sn{fill:#fff}
+/* v2.4 · метакомпас (петата дума 13.09): обод #E8C77E · 4 румба · 5 деления · нишка от върха на стрелката до отворената карта (.dialword) */
+.dialsvg .rim{fill:none;stroke:#E8C77E;stroke-width:1.6;opacity:.85;filter:drop-shadow(0 0 4px rgba(232,199,126,.55))}
+.dialsvg .rim2{fill:none;stroke:rgba(232,199,126,.32);stroke-width:.8;stroke-dasharray:2 4}
+.dialsvg .tick{stroke:#E8C77E;stroke-width:1.5;stroke-linecap:round;opacity:.85}
+.dialsvg .rhumb{fill:#E8C77E;opacity:.9}
+.dialsvg .rhumb.n{fill:#fff5d6;filter:drop-shadow(0 0 5px rgba(232,199,126,.9))}
+.dialthread{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:4;overflow:visible}
+.dialthread .ln{fill:none;stroke:#E8C77E;stroke-width:1.6;stroke-linecap:round;opacity:.92;filter:drop-shadow(0 0 6px rgba(232,199,126,.95))}
+.dialthread .ln2{fill:none;stroke:#fff5d6;stroke-width:.7;stroke-linecap:round;opacity:.85}
+.dialthread .tip{fill:#fff5d6;filter:drop-shadow(0 0 9px rgba(232,199,126,1))}
+.dialthread .knot{fill:#ffe1a0;filter:drop-shadow(0 0 9px rgba(232,199,126,1))}
+@keyframes dtpulse{0%{box-shadow:0 0 0 0 rgba(232,199,126,0)}40%{box-shadow:0 0 0 2px rgba(232,199,126,.6),0 0 22px rgba(232,199,126,.5)}100%{box-shadow:0 0 0 0 rgba(232,199,126,0)}}
+.dialword.lit .step{animation:dtpulse .7s ease}
 .dialword{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:baseline;margin-top:4px}
 .dialword .step{font-family:var(--serif);font-size:1.1rem;color:var(--gold);border:1px solid rgba(232,199,126,.4);border-radius:20px;padding:3px 12px;white-space:nowrap}
 .dialword .w{font-family:var(--serif);font-size:2.2rem;font-weight:600;color:#fff;line-height:1;transition:color .4s}
@@ -444,7 +469,7 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
   #bar .when{display:inline}
   .hero{padding:26px 0 40px}
   .hero .wrap{max-width:1100px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);grid-template-areas:"k s" "h s" "c s" "w s";column-gap:36px;align-items:center;padding:0 40px}
-  .hero .kicker{grid-area:k}.hero h1{grid-area:h}.hero .stage{grid-area:s;align-self:center}.hero .kicker .long{display:inline}.hero .ctarow{grid-area:c}.hero .when{grid-area:w}
+  .hero .kicker{grid-area:k}.hero .troupe{grid-area:k;font-size:1.4rem}.hero h1{grid-area:h}.hero .stage{grid-area:s;align-self:center}.hero .kicker .long{display:inline}.hero .ctarow{grid-area:c}.hero .when{grid-area:w}
   .hero h1{font-size:3.2rem}
   .hero .lead{font-size:1.06rem}
   .hero .stage{margin:0}
@@ -460,6 +485,7 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
   .daygrid{grid-template-columns:340px 1fr;gap:28px;align-items:start}
   #fig-clock{min-height:340px}
   .clockwrap{top:80px;background:transparent;padding:0}
+  .daygrid #fig-clock{width:100%!important;margin-left:0!important} /* v2.4 · петата дума 13.09: кръгът остава в колоната си и не закрива картите (bleed-ът е за телефона) */
   .clockwrap::after{display:none}
   .moments{gap:14px;padding:8px 0 0}
   .mo .front{min-height:200px}
@@ -495,7 +521,7 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
 <section class="hero" id="hero">
   <div class="grid">
     <div class="wrap">
-      <div class="kicker">Хибриден ритрийт · 18–22 септември<span class="long"> · Банско + онлайн · 2026</span></div>
+      <p class="troupe">Всяка жена носи в себе си <em>цяла трупа.</em></p>
       <h1><span>Искате ли да се събудите?</span><span>Как ще разберете?</span></h1>
       <div class="stage mfig tapable" id="fig-hero" data-bleed="mobile" data-tap>
         <div class="glow"></div>
@@ -508,7 +534,7 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
         <a class="cta" href="#form">Кандидатствайте ✦</a>
         <a class="cta ghost" href="#day">Един ден от пътя ↓</a>
       </div>
-      <p class="when">Пет дни · 15:30 → 20:00 · присъствено в Банско <span class="gold">или</span> онлайн — Вие избирате.</p>
+      <p class="when">18–22 септември · 15:30 → 20:00 · присъствено в Банско <span class="gold">или</span> онлайн — Вие избирате.</p>
     </div>
   </div>
 </section>
@@ -543,19 +569,18 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
   </div>
 </section>
 
-<!-- ═══ 3 · ГЕРОИНЯТА · 8 етапа · съзвездие от частици ═══ -->
+<!-- ═══ 3 · ГЕРОИНЯТА · 8 етапа · съзвездие от частици · v2.4: без текст-блок (текстът е в hero) · опашката слиза до героинята ═══ -->
 <section class="path" id="path">
   <div class="wrap">
     <div class="kicker" data-reveal>Героинята</div>
-    <h2 data-reveal>Всяка жена носи в себе си <em>цяла трупа.</em></h2>
-    <p class="lead" data-reveal>„Нова Жена“ е път по осемте етапа на метаезика — осем сцени, през които минава всяка героиня в приказките и всяка жена в живота. Не гледаме — играем. На всеки етап се събужда по един от осемте будители у Вас.</p>
+    <h2 data-reveal>Пътят <em>на героинята</em></h2>
   </div>
   <div class="mfig tapable" id="fig-path" data-bleed="always" data-tap>
     <!-- v2.2 · Екран 2 (дума 12.09: „да запазим този ефект … мегаяк и мазен“): картата на осемте етапа ЗАД живия път ·
          същата сцена в стил B (img/nz3/path-poster) · ?map=nz показва оригиналната акварелна карта img/nz/path-8.webp -->
     <img class="map" id="pathmap" src="/img/nz3/path-poster.webp" alt="" width="896" height="1195" loading="lazy" decoding="async" aria-hidden="true">
     <div class="mapveil" aria-hidden="true"></div>
-    <canvas data-фигура="path" role="img" aria-label="Пътят на героинята: осем златни звезди по пътека нагоре — светват по скрол, искрата върви по пътя"></canvas>
+    <canvas data-фигура="path" role="img" aria-label="Пътят на героинята: осем златни звезди по пътека отгоре надолу — светват по скрол, светлината слиза до героинята"></canvas>
     <img class="poster" src="/img/nz3/path-poster.webp" alt="Осем златни звезди по пътека нагоре над Пирин" width="896" height="1195" hidden loading="lazy" decoding="async">
     <div class="stlabs" id="stlabs" aria-hidden="true"></div>
     <div class="tap" aria-hidden="true"><i></i><span>докоснете звезда или име — вижте етапа</span></div>
@@ -573,7 +598,7 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
   </div>
 </section>
 
-<!-- ═══ 4 · ЧУДОВИЩЕТО · пясъчен часовник от частици · 3 лица · CTA №2 ═══ -->
+<!-- ═══ 4 · ЧУДОВИЩЕТО · пясъчен часовник от частици · 3 лица · v2.4: без inline CTA („тук е рано“ · петата дума 13.09) ═══ -->
 <section class="monster" id="monster">
   <div class="wrap">
     <div class="kicker" data-reveal>Етап 2 · Чудовището</div>
@@ -607,15 +632,12 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
         </div>
       </div>
     </div>
-    <div class="cta2" data-reveal>
-      <div><div class="big">Познахте ли чудовището си? Тогава пътят вече е започнал.</div><p class="muted" style="margin-top:4px">Пет дни · Банско или онлайн · отговаряме лично.</p></div>
-      <div class="ctarow" style="margin:0"><a class="cta" href="#form">Кандидатствайте ✦</a><a class="cta ghost" href="#scale">Къде сте сега? ↓</a></div>
-    </div>
   </div>
 </section>
 
 <!-- ═══ 5 · ПЕТ СТЪПАЛА · циферблатът от V1b (v2.2 · дума 12.09: „директно този контрол“ · сменя се сам · тап спира) ═══ -->
 <section class="scale" id="scale">
+  <svg class="dialthread" id="dialthread" aria-hidden="true"><path class="ln" id="dt-ln" d=""/><path class="ln2" id="dt-ln2" d=""/><circle class="tip" id="dt-tip" r="3.5" cx="-20" cy="-20"/><circle class="knot" id="dt-knot" r="4" cx="-20" cy="-20"/></svg>
   <div class="wrap">
     <div class="kicker" data-reveal>Къде сте сега?</div>
     <h2 data-reveal>Пет стъпала <em>нагоре</em></h2>
@@ -627,7 +649,7 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
     </div>
     <canvas data-фигура="dial" role="img" aria-label="Циферблатът на петте стъпала: стрелка от златни частици, искри по дъгата при всяка смяна, буря около циферблата, която става зора"></canvas>
     <img class="poster" src="/img/nz3/scale-dawn.webp" alt="Героинята на зазоряване в планинска поляна" width="896" height="1195" hidden loading="lazy" decoding="async">
-    <svg class="dialsvg" id="dialsvg" viewBox="0 0 320 320" aria-hidden="true"><g id="secs"></g></svg>
+    <svg class="dialsvg" id="dialsvg" viewBox="0 0 320 320" aria-hidden="true"><g id="compass"><circle class="rim2" cx="160" cy="160" r="118"/><circle class="rim" cx="160" cy="160" r="155"/><g id="ticks"></g><path class="rhumb n" d="M160 46 L164 53 L160 60 L156 53 Z"/><path class="rhumb" d="M274 160 L267 164 L260 160 L267 156 Z"/><path class="rhumb" d="M160 274 L164 267 L160 260 L156 267 Z"/><path class="rhumb" d="M46 160 L53 164 L60 160 L53 156 Z"/></g><g id="secs"></g></svg>
     <div class="tap" aria-hidden="true"><i></i><span>докоснете — спира · следващо</span></div>
   </div>
   <div class="wrap">
@@ -754,7 +776,7 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
       <div class="ph" data-reveal="l"><img src="/img/nz/vodach.webp" alt="Димитър Караманчев — водещ на „Нова Жена“" width="900" height="1125" loading="lazy" decoding="async"></div>
       <div data-reveal="r">
         <div class="nm">Димитър Караманчев</div>
-        <div class="rl">Сугестопедагог · последната група, обучена лично от проф. д-р Георги Лозанов</div>
+        <div class="rl">Сугестопедагог · последният випуск, обучен лично от проф. д-р Георги Лозанов</div>
         <p>От 2012 г. прилага сугестопедията като педагогическа форма на изкуство. Създател на „Метачетене“ — над 200 курса, 2000+ курсисти, средно четирикратно повишение на измерените входящи показатели. Прилага „книгата“ тринайсет години — и в най-трудните моменти, и на опашката в магазина.</p>
         <div class="quote">„Спокойната концентрация е визитната картичка на правилната личност за дейността.“<small>проф. д-р Георги Лозанов</small></div>
       </div>
@@ -820,7 +842,7 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
       <div><div class="d">22</div><div class="wd">вт</div></div>
     </div>
     <p class="muted center" style="margin-top:8px" data-reveal>Септември 2026 · Банско, Пирин · и Zoom</p>
-    <div class="nextd" data-reveal><b style="color:var(--mute);font-weight:500">Следващи групи:</b> <span>есен 2026</span> <span>зима 2026/27</span> <em style="font-size:.78rem">— точните дати получавате лично в отговора на формата.</em></div>
+    <div class="nextd" data-reveal><b style="color:var(--mute);font-weight:500">Следващи трупи:</b> <span>есен 2026</span> <span>зима 2026/27</span> <em style="font-size:.78rem">— точните дати получавате лично в отговора на формата.</em></div>
   </div>
 </section>
 
@@ -1064,32 +1086,30 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
 <section class="offer" id="offer">
   <div class="bgw" aria-hidden="true"><img src="/img/nz3/hero-wide.webp" alt="" width="1600" height="900" loading="lazy" decoding="async"></div>
   <div class="wrap">
-    <div class="kicker" data-reveal>Предложението</div>
+    <div class="kicker" data-reveal>Кандидатстване</div>
     <h2 data-reveal>Пълната програма <em>„Нова Жена“</em></h2>
-    <p class="lead" data-reveal>Нова Жена е първият курс от поредицата — без предусловие. Оттук се започва.</p>
-    <!-- v2.3 · цените СКРИТИ (втора дума 12.09) · вариантите се разцъкват без цена · шевът чете data-нж-вариант -->
+    <p class="lead" data-reveal>Първата продукция от поредицата. Оттук се започва.</p>
+    <!-- v2.4 · петата дума 13.09: нула текст-стена · „попълнете формата“ веднъж · ≤3 реда · без звездичка · цените остават скрити (v2.3) · шевът чете data-нж-вариант -->
     <div class="price">
       <div class="why" data-reveal>
-        <h3>Попълнете формата и:</h3>
+        <h3>Попълнете формата и получавате:</h3>
         <ul>
-          <li>получавате достъп до подробната програма</li>
-          <li>ако имате въпроси и искате да се свържем с Вас — можете да отбележите</li>
-          <li>получавате възможност за индивидуално внимание* на специална цена</li>
-          <li>получавате достъп до практични подходи и полезни материали</li>
+          <li>подробните материали</li>
+          <li>индивидуално внимание · кратък разговор</li>
+          <li>мястото си в трупата</li>
         </ul>
-        <p class="foot">* Всички кандидати преминават през интервю/кастинг под формата на кратък разговор. Целта му е да определим дали програмата е подходяща и дали имаме група, подходяща за Вас. Допълнително получавате структуриран персонален план за развитие и 1 техника от Съкровищницата на Металандия, подбрана според личната Ви цел.</p>
       </div>
       <div class="variants" role="group" aria-label="Кой път Ви е по-близък" data-reveal>
-        <button type="button" data-нж-вариант="full" class="on">Пълната програма<small>ритрийт + 12 месеца срещи + курс</small></button>
+        <button type="button" data-нж-вариант="full" class="on">Пълната програма<small>ритрийт + 12 месеца срещи + продукция</small></button>
         <button type="button" data-нж-вариант="retreat">Само ритрийтът<small>18–22 сеп · Банско</small></button>
-        <button type="button" data-нж-вариант="course">Само курсът<small>присъствен</small></button>
-        <button type="button" data-нж-вариант="online">Онлайн курс<small>Zoom</small></button>
-        <p class="q">Условията — в краткия разговор. <span class="mark">?</span></p>
+        <button type="button" data-нж-вариант="course">Само продукцията<small>присъствена</small></button>
+        <button type="button" data-нж-вариант="online">Продукцията онлайн<small>Zoom</small></button>
+        <p class="q">Условията — в разговора. <span class="mark">?</span></p>
       </div>
       <div class="pbox" data-reveal>
         <div class="tag">Поредицата</div>
         <p class="chain"><span class="first">Нова Жена</span><i>→</i>Метачетене<i>→</i>Метаписане</p>
-        <p style="font-size:.9rem;margin-top:10px">Всеки следващ курс иска минат предишен. Нова Жена не иска нищо — освен да дойдете.</p>
+        <p style="font-size:.9rem;margin-top:10px">Всяка следваща иска мината предишна. Нова Жена — само да дойдете.</p>
         <p class="center" style="margin-top:14px"><a class="cta" href="#form">Кандидатствайте ✦</a></p>
       </div>
     </div>
@@ -1382,8 +1402,8 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
   function път(t) { return [0.80 * Math.sin(Math.PI * (1.5 * t - 0.5)), 0.86 - 1.72 * t, 0.06 * Math.sin(t * 9.0)]; }  /* v2.3: y обърнат — етап 1 горе, етап 8 долу (дума 13.09) */
   var ВЪЗЛИ = []; for (var вк = 0; вк < 8; вк++) ВЪЗЛИ.push(път(вк / 7));
   function genConstellation(home, cls, data, N, rand) {
-    var ЯДРО = 34, ОРЕОЛ = 110, nЛента = Math.floor(N * 0.22), nИскри = Math.floor(N * 0.06);
-    var nПоле = N - 8 * (ЯДРО + ОРЕОЛ) - nЛента - nИскри, i = 0, k, m, a, r, q;
+    var ЯДРО = 34, ОРЕОЛ = 110, nЛента = Math.floor(N * 0.22), nИскри = Math.floor(N * 0.06), nОпашка = Math.floor(N * 0.05);  /* v2.4: опашката до героинята */
+    var nПоле = N - 8 * (ЯДРО + ОРЕОЛ) - nЛента - nИскри - nОпашка, i = 0, k, m, a, r, q;
     for (k = 0; k < 8; k++) {
       var v = ВЪЗЛИ[k];
       for (m = 0; m < ЯДРО; m++, i++) {
@@ -1412,6 +1432,11 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
       var t2 = rand(); q = път(t2);
       home[i * 3] = q[0] + (rand() - 0.5) * 0.12; home[i * 3 + 1] = q[1]; home[i * 3 + 2] = q[2];
       cls[i] = 3; data[i] = t2;
+    }
+    for (m = 0; m < nОпашка; m++, i++) { /* v2.4 · опашката: от осмата звезда до героинята · геометрията е в шейдъра (uNodes[0..1] = котвата) · x = s по опашката · y/z = разсей · 18 % се сгъстяват в сърцето ѝ */
+      var s = rand() < 0.18 ? 0.955 + 0.045 * rand() : Math.pow(rand(), 0.85);
+      home[i * 3] = s; home[i * 3 + 1] = rand() - 0.5; home[i * 3 + 2] = rand() - 0.5;
+      cls[i] = 5; data[i] = s;
     }
     for (k = 0; k < nПоле; k++, i++) { /* топла мъгла · по-гъста долу · не по-широка от пътя, за да не смалява кадъра */
       home[i * 3] = (rand() * 2 - 1) * 0.92; home[i * 3 + 1] = -0.95 + Math.pow(rand(), 1.8) * 1.9; home[i * 3 + 2] = (rand() - 0.5) * 0.6;
@@ -1551,8 +1576,9 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
   ].join('\n');
 
   var СЪЗВЕЗДИЕ_GLSL = [
-    '  float litN = uProgress * 7.0;',                                  /* текущият етап · непрекъснато */
-    '  if (clsv < 0.5 || clsv > 3.5) {',                                /* ядро + ореол/лъчи на звезда */
+    '  float up = min(uProgress * (1.0 / 0.86), 1.0), tp = clamp((uProgress - 0.86) * (1.0 / 0.14), 0.0, 1.0);',  /* v2.4: 0–0.86 = осемте звезди · 0.86–1 = опашката до героинята */
+    '  float litN = up * 7.0;',                                        /* текущият етап · непрекъснато */
+    '  if (clsv < 0.5 || (clsv > 3.5 && clsv < 4.5)) {',               /* ядро + ореол/лъчи на звезда */
     '    float kk = datv * 7.0;',
     '    float lit = 1.0 - smoothstep(litN + 0.2, litN + 0.7, kk);',     /* минатите и текущата светят */
     '    float cur = exp(-(kk - litN) * (kk - litN) * 4.0);',            /* текущата — най-силно */
@@ -1568,15 +1594,33 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
     '    a = asm2(uAssembly, seedv, 0.12 + datv * 0.10);',
     '    col = mix(uPal[5] * 0.35, uPal[0] * 0.30, datv); alphaF = 0.30; sizeF = mix(0.9, 1.5, datv);',
     '  } else if (clsv < 2.5) {',                                        /* лентата на пътя · искрата пътува по нея */
-    '    float lit = 1.0 - smoothstep(uProgress - 0.01, uProgress + 0.02, datv);',
+    '    float lit = 1.0 - smoothstep(up - 0.01, up + 0.02, datv);',
     '    a = asm2(uAssembly, seedv, 0.05);',
-    '    float dcur = datv - uProgress;',
+    '    float dcur = datv - up;',
     '    float comet = exp(-dcur * dcur * 900.0) + 0.6 * exp(-max(0.0, -dcur) * 14.0) * step(0.0, -dcur);',
     '    float shimmer = 0.6 + 0.4 * sin(uTime * 2.4 - datv * 50.0);',
     '    col = mix(uBone * 0.32, uPal[0] * (0.9 + 0.5 * shimmer), lit) + uPal[1] * comet * 1.8;',
     '    alphaF = mix(0.28, 0.85, lit) + comet * 0.3; sizeF = mix(0.75, 1.2, lit) + comet * 2.2;',
+    '  } else if (clsv > 4.5) {',                                     /* v2.4 · опашката: от осмата звезда до героинята (uNodes[0..1]) · свети след етап 8 */
+    '    float s = datv;',
+    '    vec2 A = vec2(0.0, -0.86), B = vec2(uNodes[0], uNodes[1]);',
+    '    vec2 AB = B - A; vec2 nrm = normalize(vec2(-AB.y, AB.x) + 1e-5);',
+    '    vec2 C = A + AB * 0.5 + nrm * 0.16 * length(AB);',
+    '    float s1 = 1.0 - s; vec2 P = A * s1 * s1 + C * 2.0 * s1 * s + B * s * s;',
+    '    float heart = smoothstep(0.94, 1.0, s);',
+    '    float sway = (1.0 - heart) * 0.035 + heart * 0.06;',
+    '    P += nrm * hp.y * sway + AB * 0.02 * hp.z;',
+    '    hp = vec3(P, hp.z * 0.03);',
+    '    a = asm2(uAssembly, seedv, 0.05);',
+    '    float lit = 1.0 - smoothstep(tp - 0.01, tp + 0.03, s);',
+    '    float dcur = s - tp;',
+    '    float comet = exp(-dcur * dcur * 700.0) * step(0.001, tp) * (1.0 - step(0.999, tp));',
+    '    float pulse = 0.5 + 0.5 * sin(uTime * 2.6 + seedv * 5.0);',
+    '    float arrived = step(0.999, tp) * heart;',
+    '    col = mix(uBone * 0.22, uPal[0] * (1.0 + 0.4 * pulse), lit) + uPal[1] * comet * 1.8 + uPal[0] * arrived * (0.6 + 0.6 * pulse);',
+    '    alphaF = mix(0.16, 0.85, lit) + comet * 0.3; sizeF = mix(0.6, 1.15, lit) + comet * 2.2 + arrived * (0.8 + 0.6 * pulse);',
     '  } else {',                                                        /* искри от светналия път */
-    '    float lit = step(datv, uProgress);',
+    '    float lit = step(datv, up);',
     '    a = asm2(uAssembly, seedv, 0.1);',
     '    float ph = fract(uTime * 0.16 + seedv * 3.0);',
     '    hp.y += ph * 0.35; hp.x += sin(uTime * 1.5 + seedv * 20.0) * 0.03;',
@@ -2224,7 +2268,7 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
     const ln=$('#st-ln'); ln.style.opacity=0; setTimeout(()=>{ln.textContent=s.l; $('#st-ds').textContent=s.d; ln.style.opacity=1},160);
     $$('#st-dots i').forEach((d,k)=>d.classList.toggle('on',k===cur));
     LAB.forEach((d,k)=>{d.classList.toggle('on',k===cur); d.classList.toggle('lit',k<cur)});
-    задай('path',cur/7,true);
+    задай('path',cur===7?1.0:(cur/7)*0.86,true);  /* v2.4: 0–0.86 = звездите · етап 8 → 1.0 = опашката слиза до героинята */
   }
   const pathDrv=драйвер(8,()=>наЕкран(pathStage)?clamp(Math.round(напредък(pathStage,0.92,0.06)*7.4-0.2),0,7):null,setSt,0);
   ST.forEach((s,i)=>{const d=document.createElement('i'); d.addEventListener('click',()=>{pathDrv.тап(i); видяно('#fig-path')}); dots.appendChild(d)});
@@ -2240,7 +2284,19 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
     const key=ф.ш+'x'+ф.в+'@'+(ф.камZ||0).toFixed(2); if(key===labKey) return; labKey=key;
     m.възли.forEach((n,k)=>{const q=m.проектирай('path',n[0],n[1]); if(!q) return; const d=LAB[k]; d.classList.toggle('r',n[0]<0.15); d.style.left=q.x+'px'; d.style.top=q.y+'px'});
   }
-  const pathHook=()=>{const m=МФ(); if(m&&m.слушай) m.слушай('path',placeLabels); else setTimeout(pathHook,200)}; pathHook();
+  /* v2.4 · опашката на Пътя стига до героинята (петата дума 13.09): котвата = сърцето на жената в картата зад Пътя
+     (телефон · cover-fit · object-position center 42 % · образът е 896×1195 · сърцето ≈ 31 % / 71 %) · десктоп (картата е встрани
+     от панела) = долният ръб на сцената над картата · моделни единици през __мфиг.обратно → uNodes[0..1] на 'path' */
+  let womanKey='';
+  function placeWoman(ф){
+    const m=МФ(); if(!m||!m.обратно||!m.параметри||!(ф.ш>0)||!(ф.в>0)) return;
+    const key=ф.ш+'x'+ф.в+'@'+(ф.камZ||0).toFixed(2); if(key===womanKey) return; womanKey=key;
+    const st=pathStage.getBoundingClientRect(), pm=$('#pathmap'); let px, py;
+    if(pm&&getComputedStyle(pm).display!=='none'){ const W=st.width, H=st.height, sc=Math.max(W/896,H/1195), rw=896*sc, rh=1195*sc; px=(W-rw)/2+0.31*rw; py=(H-rh)*0.42+0.71*rh }
+    else { const mc=$('.mapcard'); const r=(mc&&getComputedStyle(mc).display!=='none')?mc.getBoundingClientRect():null; px=r?(r.left+r.width/2-st.left):st.width*0.5; py=st.height*0.985 }
+    const q=m.обратно('path',px,py); if(!q) return; m.параметри('path',[q.x,q.y,0,0,0,0,0,0]);
+  }
+  const pathHook=()=>{const m=МФ(); if(m&&m.слушай){ m.слушай('path',placeLabels); m.слушай('path',placeWoman) } else setTimeout(pathHook,200)}; pathHook();
   let pathDown=0; pathStage.addEventListener('pointerdown',()=>{pathDown=performance.now()});
   pathStage.addEventListener('click',e=>{
     if(performance.now()-pathDown>320) return;
@@ -2296,6 +2352,27 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
     const go=e=>{e.stopPropagation(); scDrv.тап(i); видяно('#fig-scale')}; p.addEventListener('click',go); t.addEventListener('click',go);
     return p;
   });
+  /* v2.4 · МЕТАКОМПАС (петата дума 13.09): 5 деления на обода + НИШКАТА от върха на стрелката до отворената карта (.dialword) ·
+     при смяна на сектора се пренасочва (tween 420 ms · reduced = скок) · нула нова механика · нула нов canvas (SVG-наслойка в section#scale) */
+  (()=>{ const tk=$('#ticks'); if(!tk) return; for(let i=0;i<5;i++){ const a=rad(198+i*36); const l=document.createElementNS(NS,'line'); l.setAttribute('class','tick'); l.setAttribute('x1',(cx+147*Math.cos(a)).toFixed(1)); l.setAttribute('y1',(cy+147*Math.sin(a)).toFixed(1)); l.setAttribute('x2',(cx+155*Math.cos(a)).toFixed(1)); l.setAttribute('y2',(cy+155*Math.sin(a)).toFixed(1)); tk.appendChild(l) } })();
+  const dtLn=$('#dt-ln'), dtLn2=$('#dt-ln2'), dtTip=$('#dt-tip'), dtKnot=$('#dt-knot'), dword=$('.dialword'), dstep=$('#sc-step'), scSec=$('#scale');
+  let dtAng=null, dtRaf=0; const dtF=v=>(+v).toFixed(1);
+  function dtTarget(){ const s=scSec.getBoundingClientRect(), r=dstep.getBoundingClientRect(); return {x:r.left+r.width/2-s.left, y:r.top-s.top+1} }
+  /* геометрията на нишката за ъгъл a (моделни · y нагоре): върхът на стрелката (r .96) → навън през сектора до обода (r 1.30 · на 390 секторите опират ръба) → дъга по обода
+     до лявата точка (180°) → надолу до отворената карта · нищо не пресича портрета · преди първото премерване asp=0 → null (не -Infinity) */
+  function dtGeo(a){ const m=МФ(); if(!m||!m.проектирай) return null; const ф=m.намери?m.намери('dial'):null; if(!ф||!(ф.ш>0)||!(ф.в>0)) return null;
+    const s=scSec.getBoundingClientRect(), st=scStage.getBoundingClientRect(), ox=st.left-s.left, oy=st.top-s.top;
+    const P=(x,y)=>{ const q=m.проектирай('dial',x,y); return (q&&isFinite(q.x)&&isFinite(q.y))?{x:q.x+ox,y:q.y+oy}:null };
+    const c=P(0,0), tip=P(0.96*Math.cos(a),0.96*Math.sin(a)), rp=P(1.30*Math.cos(a),1.30*Math.sin(a)), lp=P(-1.30,0); if(!c||!tip||!rp||!lp) return null;
+    return {tip,rp,lp,r:Math.hypot(rp.x-c.x,rp.y-c.y)} }
+  function dtDraw(g,t){ const d=`M${dtF(g.tip.x)} ${dtF(g.tip.y)} L${dtF(g.rp.x)} ${dtF(g.rp.y)} A${dtF(g.r)} ${dtF(g.r)} 0 0 0 ${dtF(g.lp.x)} ${dtF(g.lp.y)} C${dtF(g.lp.x-26)} ${dtF(g.lp.y+44)} ${dtF(t.x)} ${dtF(t.y-58)} ${dtF(t.x)} ${dtF(t.y)}`;
+    dtLn.setAttribute('d',d); dtLn2.setAttribute('d',d); dtTip.setAttribute('cx',dtF(g.tip.x)); dtTip.setAttribute('cy',dtF(g.tip.y)); dtKnot.setAttribute('cx',dtF(t.x)); dtKnot.setAttribute('cy',dtF(t.y)) }
+  function dtUpdate(anim){ if(scCur<0||!dtLn) return; const a=Math.PI-(scCur+0.5)*Math.PI/5, t=dtTarget(); if(!t) return;
+    if(!anim||reduce||dtAng===null){ cancelAnimationFrame(dtRaf); dtRaf=0; const g=dtGeo(a); if(!g) return; dtAng=a; dtDraw(g,t); return }
+    cancelAnimationFrame(dtRaf); const a0=dtAng, t0=performance.now();
+    const step=now=>{ const k=clamp((now-t0)/420,0,1), e=1-Math.pow(1-k,3), A=a0+(a-a0)*e; const g=dtGeo(A); if(g){ dtAng=A; dtDraw(g,t) } dtRaf=k<1?requestAnimationFrame(step):0 }; dtRaf=requestAnimationFrame(step) }
+  addEventListener('resize',()=>dtUpdate(false)); addEventListener('load',()=>dtUpdate(false)); if(document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>dtUpdate(false));
+  if(dword) dword.addEventListener('transitionend',()=>{ if(!dtRaf) dtUpdate(false) });
   let scCur=-1, scDown=0;
   function setScale(i){
     scCur=i; const p=i/4;
@@ -2304,6 +2381,8 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
     $('#sc-w').style.color=['#c9c2d6','#d9d0bd','#e6dcc2','#f4e6bf','#ffe1a0'][i];
     secEls.forEach((s,k)=>s.classList.toggle('on',k===i));
     задай('dial',p,true);
+    if(dword){ dword.classList.remove('lit'); void dword.offsetWidth; dword.classList.add('lit') }  /* v2.4: отворената карта светва · нишката се пренасочва */
+    dtUpdate(true);
   }
   /* v2.3 (дума 13.09): БЕЗ таймер — циферблатът напредва ПО СКРОЛ (драйвер) + тап/сектор (законът) */
   const scDrv=драйвер(5,()=>наЕкран(scStage)?clamp(Math.round(напредък(scStage,0.86,0.12)*4),0,4):null,setScale,0);
@@ -2318,6 +2397,7 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
     const c=m.проектирай('dial',0,0), e=m.проектирай('dial',1,0); if(!c||!e) return;
     const S=(e.x-c.x)*320/118;
     [dialEl,dialSvg].forEach(el=>{el.style.width=el.style.height=S+'px'; el.style.left=(c.x-S/2)+'px'; el.style.top=(c.y-S/2)+'px'; el.style.transform='none'});
+    dtUpdate(false);  /* v2.4: кадърът се смени → нишката се пре-мерва */
   }
   const dialHook=()=>{const m=МФ(); if(m&&m.слушай) m.слушай('dial',placeDial); else setTimeout(dialHook,200)}; dialHook();
 

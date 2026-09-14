@@ -178,6 +178,7 @@ class Т1_Подредба(Основа):
         блок = блок_по_id(self.src, 'marks3')
         self.assertTrue(блок != '', 'блокът на белезите (#marks3) липсва')
         self.assertEqual(len(re.findall(r'<img\b', блок)), 1, 'трите белега = ЕДИН голям образ')
+        self.assertEqual(len(re.findall(r'<li\b', блок)), 3, 'трите реда под образа')
 
 
 class Т2_Т7_Контроли(Основа):

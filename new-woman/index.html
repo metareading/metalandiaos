@@ -11,7 +11,12 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Inter:wght@300;400;500;600&display=swap&subset=cyrillic" rel="stylesheet">
 <!--
   ══════════════════════════════════════════════════════════════════════
-  НОВА ЖЕНА · V4 „По 8-те стъпки на метаезика“ · v4.1.1 · 2026-09-14 · 05:32 · MET-660 (Т1 довършване · след независимото 0-ctx Opus ревю · коментар 28f30b66) · доер (Fable 5.1 Max · дума на Митрандир 13.09 · къде: /implement MET-660 · сесия 91818c92)
+  НОВА ЖЕНА · V4 „По 8-те стъпки на метаезика“ · v4.2 · 2026-09-14 · 10:01 · MET-661 (Т2 · вариант А = буквата на спека · Водач: сърцето · осма рецепта · 5 печата · видеото от печата) · доер (Fable 5.1 Max · дума на Митрандир 13.09 · къде: /implement MET-661 · worktree t2a-spek · сесия faa96164)
+  v4.2 · Т2 делта: осма рецепта heart в двигателя (v2.3 · genHeart от app.js Exhibit II · обвивка 68 % · три зъбчати пръстена 11/10/9 % · стрелка 2 % · шейдър-клон uExhibit 7 · драйвер авто + дискретен при тап · бум 0.9 s · височина телефон [0.46, 0.60] · десктоп [0.52, 0.72] · семе 20260919 · m.печати) ·
+  секция 3: сърцето се върти непрекъснато · тап = спира, стрелката пада на най-близкия печат · петте печата (HTML .seal · по __мфиг.проектирай около сърцето · r 1.40/1.50 · в 1.40-рамката на фигурата · телефон: само печатът, името е в панела · десктоп: надпис) · печатът се отваря под сърцето (#sealbook) · тап на печат = скок · втори тап на сърцето = пак се върти (доер-дефолт · иначе спира завинаги) ·
+  портретът до сърцето (телефон: над него · data-bleed="mobile" · двуколонно ≥900px = ТЕЛЕФОН-прагът на двигателя) · котвеното видео = печат IV (фасада по клик · „2 ч → 8 ч“ под него) · второто видео напуска стъпка 3 (Т6 го взима) · ?reduced=1 / без WebGL = постерът (портретът) + петте печата отворени наведнъж · мъртъв CSS (.leader · .video · .vgrid) махнат · шевът (1-ви script) непокътнат ·
+  ревю-поправки (Skill code-review · Standards + Spec · Opus ×2 · PASS-WITH-NOTES ×2): орбитата от частици ВЪН (пропорциите дословно 68/11/10/9/2 · сърцето ~21 % по-голямо в кадъра) · transition само opacity/transform · Ω през uNodes[6] · клас .poster от страницата вместо :has() · „Създател на „Метачетене““ в печат II · без ускорение при задържане.
+  предишен ред: v4.1.1 · 2026-09-14 · 05:32 · MET-660 (Т1 довършване · след независимото 0-ctx Opus ревю · коментар 28f30b66) · доер (Fable 5.1 Max · дума на Митрандир 13.09 · къде: /implement MET-660 · сесия 91818c92)
   v4.1.1 · Т1 довършване-делта (само тестът и хедър-следата · разметката, CSS и JS на страницата НЕ са пипани): test_13 пази и трите реда под образа (редовете li в #marks3 = 3 · до v4.1 само образът img = 1 → изтрит списък ol.mlines оставаше зелен) ·
   hero = 745px = 88vh ПРИЕТ с дума на Митрандир 14.09 („приемаме 88vh · AC се коригира“ → AC ≤ 90vh · целта 65vh се отлага за полиране Т8/Т9) ·
   поправка на следата за позицията на „Познавате ли я?“ (числото в съобщението на комит 6e650de не се възпроизвежда): премерено 14.09 в Browser pane 390×844 (Chrome · localhost:8899 · стейджът на фигурата оразмерен на 354px · offsetTop-верига, без транслацията на reveal) →
@@ -346,15 +351,54 @@ html:where(.js) .note{opacity:0;transform:translateY(16px) scale(.98)}
 .benefit ul{list-style:none;padding:0;margin:12px 0 0;display:grid;gap:6px}
 .benefit li{display:flex;gap:10px;align-items:baseline;font-size:.95rem;color:var(--ink2)}
 .benefit li::before{content:"◆";color:var(--em);font-size:.7rem}
-.leader{display:grid;gap:16px;margin-top:26px;align-items:center}
-.leader .ph{width:min(100%,300px);margin:0 auto;border-radius:200px 200px 22px 22px;overflow:hidden;border:1px solid rgba(232,199,126,.6);box-shadow:0 0 0 6px rgba(13,10,8,1),0 0 0 7px rgba(232,199,126,.35),0 30px 60px -30px #000;aspect-ratio:4/5}
-.leader .ph img{width:100%;height:100%;object-fit:cover;object-position:center 15%}
-.leader .nm{font-family:var(--serif);font-size:1.7rem;font-weight:600;color:#fff}
-.leader .rl{font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin:2px 0 8px}
-.leader p{font-size:.93rem}
+/* ── ВОДАЧ · сърцето и петте печата (v4.2 · Т2 · MET-661) · портретът до сърцето (телефон: над него) · печатите по __мфиг.проектирай · печатът се отваря под сърцето ── */
+.vodach{background:linear-gradient(180deg,var(--bg),#15100c 45%,var(--bg))}
+.vodgrid{display:grid;gap:14px;margin-top:22px}
+.portrait{display:grid;grid-template-columns:112px 1fr;gap:16px;align-items:center;margin:0;padding:0 18px}
+.portrait .ph{width:112px;aspect-ratio:4/5;border-radius:90px 90px 16px 16px;overflow:hidden;border:1px solid rgba(232,199,126,.6);box-shadow:0 0 0 5px rgba(13,10,8,1),0 0 0 6px rgba(232,199,126,.35),0 24px 48px -24px #000}
+.portrait .ph img{width:100%;height:100%;object-fit:cover;object-position:center 15%}
+.portrait .nm{display:block;font-family:var(--serif);font-size:1.45rem;font-weight:600;color:#fff;line-height:1.1}
+.portrait .rl{display:block;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-top:6px}
+#fig-heart{min-height:300px}
+#fig-heart .poster{object-position:center 18%}
+.vodgrid.poster .portrait{display:none} /* постер-режим (reduced · без WebGL · класът идва от страницата): портретът е самата сцена — не се показва два пъти */
+.seals{position:absolute;inset:0;pointer-events:none;z-index:3}
+.seals[hidden]{display:none}
+.seals .seal{position:absolute;left:-100px;top:-100px;width:38px;height:38px;margin:0;padding:0;border:0;transform:translate(-50%,-50%);border-radius:50%;pointer-events:auto;cursor:pointer;opacity:.86;color:#fff2d0;font-family:var(--serif);font-weight:700;font-size:.8rem;background:radial-gradient(circle at 38% 32%,#e3ab77 0,#a8663d 46%,#6b3d22 100%);box-shadow:0 0 0 1px rgba(232,199,126,.55),inset 0 0 0 3px rgba(60,32,16,.55),inset 0 0 6px rgba(0,0,0,.6),0 6px 16px -8px #000;transition:transform .45s cubic-bezier(.2,.7,.2,1),opacity .45s}
+.seals .seal b{display:block;line-height:38px;text-align:center;letter-spacing:-.02em;text-shadow:0 1px 2px rgba(0,0,0,.7)}
+.seals .seal span{display:none;position:absolute;left:50%;top:100%;transform:translate(-50%,3px);white-space:nowrap;font-family:var(--sans);font-weight:600;font-size:.56rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(240,235,224,.58);text-shadow:0 1px 8px #000,0 0 14px rgba(13,10,8,.9)}
+.seals .seal.on{opacity:1;transform:translate(-50%,-50%) scale(1.16);color:#fff;box-shadow:0 0 0 1px #fff5d6,0 0 0 4px rgba(232,199,126,.35),0 0 26px rgba(232,199,126,.75),inset 0 0 0 3px rgba(60,32,16,.4)}
+.seals .seal.on span{color:#fff5d6}
+.sealbook{margin-top:16px;min-height:5.4em}
+.sealbook .hint{font-family:var(--serif);font-style:italic;font-size:1.05rem;color:var(--mute);margin:0}
+.sealbook.open .hint{display:none}
+.sp .sk{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.sp .num{font-family:var(--serif);font-size:1.05rem;color:var(--gold);border:1px solid rgba(232,199,126,.4);border-radius:20px;padding:3px 12px;white-space:nowrap}
+.sp .ttl{font-family:var(--serif);font-size:1.9rem;font-weight:600;color:#fff;line-height:1.05}
+.sp p{margin-top:10px}
+.sp .quote{margin-top:12px}
+.sp .vf{margin-top:14px}
+.nums{display:grid;grid-template-columns:1fr 1fr;gap:10px 16px;margin:12px 0 0}
+.nums div{border-top:1px solid rgba(232,199,126,.25);padding-top:8px}
+.nums dt{font-family:var(--serif);font-size:1.7rem;font-weight:600;color:var(--gold);line-height:1}
+.nums dd{margin:4px 0 0;font-size:.82rem;color:var(--ink2)}
+@keyframes sealin{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.sealbook.lit .sp:not([hidden]){animation:sealin .55s cubic-bezier(.2,.7,.2,1)}
+.sealbook.all .sp{margin-top:22px}
+@media (min-width:900px){
+  .vodgrid{grid-template-columns:280px minmax(0,1fr);align-items:center;gap:32px;max-width:900px;margin:22px auto 0;padding:0 40px}
+  .portrait{grid-template-columns:1fr;text-align:center;padding:0}
+  .portrait .ph{width:240px;margin:0 auto;border-radius:160px 160px 20px 20px}
+  .portrait .rl{margin-top:8px}
+  .seals .seal{width:46px;height:46px;font-size:.92rem}
+  .seals .seal b{line-height:46px}
+  .seals .seal span{display:block;font-size:.64rem;transform:translate(-50%,5px)}
+  .seals .seal[data-k="2"] span{left:100%;top:50%;transform:translate(8px,-50%)} /* долните два: навън, встрани от подсказката „докоснете“ */
+  .seals .seal[data-k="3"] span{left:auto;right:100%;top:50%;transform:translate(-8px,-50%)}
+  .nums{grid-template-columns:repeat(4,1fr)}
+}
 
-/* ── VIDEO ── */
-.video{background:linear-gradient(180deg,var(--bg),#0f1512 50%,var(--bg))}
+/* ── VIDEO · фасадата (по клик) живее в печат IV на Водача (Т2) ── */
 .vf{position:relative;border-radius:var(--r);overflow:hidden;aspect-ratio:16/9;border:1px solid rgba(232,199,126,.35);box-shadow:0 30px 70px -30px #000;margin-top:16px;cursor:pointer;background:#000}
 .vf img{width:100%;height:100%;object-fit:cover;opacity:.85;transition:transform .6s ease}
 .vf:hover img{transform:scale(1.03)}
@@ -362,7 +406,6 @@ html:where(.js) .note{opacity:0;transform:translateY(16px) scale(.98)}
 .vf:hover .play{transform:translate(-50%,-50%) scale(1.08)}
 .vf .cap{position:absolute;left:12px;right:12px;bottom:12px;font-size:.78rem;color:#f0e8d6;text-shadow:0 1px 8px #000;letter-spacing:.04em}
 .vf iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
-.vgrid{display:grid;gap:14px}
 .sleep{display:grid;grid-template-columns:96px 1fr;gap:14px;align-items:center;margin-top:16px;background:rgba(255,255,255,.035);border:1px solid rgba(232,199,126,.22);border-radius:var(--r);padding:12px}
 .sleep img{width:96px;aspect-ratio:3/4;object-fit:cover;border-radius:10px;border:1px solid rgba(232,199,126,.4)}
 .sleep .n{font-family:var(--serif);font-size:1.6rem;color:var(--gold);line-height:1}
@@ -518,8 +561,6 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
   .clockwrap::after{display:none}
   .moments{gap:14px;padding:8px 0 0}
   .mo .front{min-height:200px}
-  .leader{grid-template-columns:260px 1fr}
-  .vgrid{grid-template-columns:1.6fr 1fr;align-items:start}
   .fgrid{grid-template-columns:1fr 1.1fr;align-items:center}
   .form .eli{display:block}
   .price{grid-template-columns:1fr 1fr}
@@ -703,47 +744,72 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
 
 </section>
 
-<!-- ═══ СТЪПКА 3 · ВОДАЧ · портрет + текст + котвеното видео ═══ -->
+<!-- ═══ СТЪПКА 3 · ВОДАЧ · сърцето (осма рецепта · Exhibit II) + петте печата + котвеното видео от печата (Т2 · MET-661 · вариант А = буквата на спека) ═══ -->
 <section class="stepwrap" id="step-3" data-стъпка="3">
 
-<!-- ═══ 3а · ВОДАЧЪТ · режисьорът · портретът + текстът (преместени от Деня · Т1) · сърцето и 5-те печата идват в Т2 ═══ -->
+<!-- ═══ 3 · ВОДАЧЪТ · режисьорът · сърце от частици, което се върти непрекъснато · тап = спира и стрелката ляга на един от петте печата ·
+     печатът се отваря ПОД сърцето (#sealbook) · тап на печат = скок · портретът до сърцето (телефон: над него) · ?reduced=1 = постерът (портретът) ═══ -->
 <div class="blk vodach" id="vodach">
   <div class="wrap">
     <div class="kicker" data-reveal>Водачът · режисьорът на продукцията</div>
-    <h2 data-reveal>Защо <em>Ви разбира</em></h2>
-    <div class="leader">
-      <div class="ph" data-reveal="l"><img src="/img/nz/vodach.webp" alt="Димитър Караманчев — водещ на „Нова Жена“" width="900" height="1125" loading="lazy" decoding="async"></div>
-      <div data-reveal="r">
-        <div class="nm">Димитър Караманчев</div>
-        <div class="rl">Сугестопедагог · последният випуск, обучен лично от проф. д-р Георги Лозанов</div>
-        <p>От 2012 г. прилага сугестопедията като педагогическа форма на изкуство. Създател на „Метачетене“ — над 200 продукции, 2000+ курсисти, средно четирикратно повишение на измерените входящи показатели. Прилага „книгата“ тринайсет години — и в най-трудните моменти, и на опашката в магазина.</p>
-        <div class="quote">„Спокойната концентрация е визитната картичка на правилната личност за дейността.“<small>проф. д-р Георги Лозанов</small></div>
+    <h2 data-reveal>Сърцето на <em>режисьора</em></h2>
+    <p class="lead" data-reveal>Димитър Караманчев. Преди кастинга Ви дава пет печата — пет парчета от себе си. Сърцето му се върти. Докоснете го: стрелката спира на един печат и той се отваря под сърцето.</p>
+  </div>
+  <div class="vodgrid">
+    <figure class="portrait" data-reveal="l">
+      <div class="ph"><img src="/img/nz/vodach.webp" alt="Димитър Караманчев — режисьорът на „Нова Жена“" width="900" height="1125" loading="lazy" decoding="async"></div>
+      <figcaption><span class="nm">Димитър Караманчев</span><span class="rl">Сугестопедагог · режисьор на продукцията</span></figcaption>
+    </figure>
+    <div class="mfig tapable" id="fig-heart" data-bleed="mobile" data-tap>
+      <canvas data-фигура="heart" role="img" aria-label="Сърце от златни частици с три зъбчати пръстена и стрелка: върти се непрекъснато; докоснете го — спира и стрелката ляга на един от петте печата около него"></canvas>
+      <img class="poster" src="/img/nz/vodach.webp" alt="Димитър Караманчев — режисьорът на продукцията" width="900" height="1125" hidden loading="lazy" decoding="async">
+      <div class="seals" id="seals">
+        <button type="button" class="seal" data-k="0" aria-label="Печат I · Защо Ви разбира"><b>13</b><span>Ви разбира</span></button>
+        <button type="button" class="seal" data-k="1" aria-label="Печат II · Авторитетът"><b>2012</b><span>авторитетът</span></button>
+        <button type="button" class="seal" data-k="2" aria-label="Печат III · Числата"><b>×4</b><span>числата</span></button>
+        <button type="button" class="seal" data-k="3" aria-label="Печат IV · Видеото"><b>▶</b><span>видеото</span></button>
+        <button type="button" class="seal" data-k="4" aria-label="Печат V · Спокойната концентрация"><b>❝</b><span>концентрация</span></button>
       </div>
+      <div class="tap" aria-hidden="true"><i></i><span>докоснете — сърцето спира</span></div>
     </div>
   </div>
-</div>
-
-<!-- ═══ 3б · КОТВЕНО ВИДЕО ═══ -->
-<div class="blk video" id="video">
   <div class="wrap">
-    <div class="kicker" data-reveal>Реална история</div>
-    <h2 data-reveal>Пет години по два часа. <em>Осем часа след един сеанс.</em></h2>
-    <p class="lead" data-reveal>Курсистка, която пет години не е спала повече от два часа на нощ. След концертния сеанс с Моцарт — осем часа. Чуйте я — и хората около нея.</p>
-    <div class="vgrid">
-      <div class="vf" data-yt="PLa6RTOYvsA" data-reveal>
-        <img src="/img/nz/yt-anchor.webp" alt="Видео: Метаритрийти в сърцето на Пирин" width="1280" height="720" loading="lazy" decoding="async">
-        <div class="play">▶</div>
-        <div class="cap">▶ Метаритрийти в сърцето на Пирин · реални курсисти</div>
+    <div class="sealbook" id="sealbook" aria-live="polite">
+      <p class="hint">Пет печата около сърцето — по един за всяко парче от режисьора.</p>
+      <div class="sp" data-k="0" hidden>
+        <div class="sk"><span class="num">Печат I</span><span class="ttl">Защо Ви разбира</span></div>
+        <p>Прилага „книгата“ тринайсет години — и в най-трудните моменти, и на опашката в магазина.</p>
       </div>
-      <div class="vf small" data-yt="0EAgnm1CqxE" data-reveal>
-        <img src="/img/nz/yt-second.webp" alt="Видео: просто, приказно и пречистващо преживяване" width="1280" height="720" loading="lazy" decoding="async">
-        <div class="play">▶</div>
-        <div class="cap">▶ Просто, приказно и пречистващо преживяване</div>
+      <div class="sp" data-k="1" hidden>
+        <div class="sk"><span class="num">Печат II</span><span class="ttl">Авторитетът</span></div>
+        <p>Последният випуск, обучен лично от проф. д-р Георги Лозанов. От 2012 г. прилага сугестопедията като педагогическа форма на изкуство. Създател на „Метачетене“.</p>
       </div>
-    </div>
-    <div class="sleep" data-reveal>
-      <img src="/img/nz3/sleep-dawn.webp" alt="Спокоен сън в планинска стая на зазоряване" width="896" height="1195" loading="lazy" decoding="async">
-      <div><div class="n">2 ч → 8 ч <small>сън</small></div><p style="font-size:.9rem;margin-top:4px">Числото не убеждава. То се случва — след един концертен сеанс.</p></div>
+      <div class="sp" data-k="2" hidden>
+        <div class="sk"><span class="num">Печат III</span><span class="ttl">Числата</span></div>
+        <dl class="nums">
+          <div><dt>200+</dt><dd>продукции</dd></div>
+          <div><dt>2000+</dt><dd>курсисти</dd></div>
+          <div><dt>×4</dt><dd>средно повишение на измерените входящи показатели</dd></div>
+          <div><dt>4 200</dt><dd>индивидуални разговора</dd></div>
+        </dl>
+      </div>
+      <div class="sp" data-k="3" hidden>
+        <div class="sk"><span class="num">Печат IV</span><span class="ttl">Видеото</span></div>
+        <p>Курсистка, която пет години не е спала повече от два часа на нощ. След концертния сеанс с Моцарт — осем часа. Чуйте я — и хората около нея.</p>
+        <div class="vf" data-yt="PLa6RTOYvsA">
+          <img src="/img/nz/yt-anchor.webp" alt="Видео: Метаритрийти в сърцето на Пирин" width="1280" height="720" loading="lazy" decoding="async">
+          <div class="play">▶</div>
+          <div class="cap">▶ Метаритрийти в сърцето на Пирин · реални курсисти</div>
+        </div>
+        <div class="sleep">
+          <img src="/img/nz3/sleep-dawn.webp" alt="Спокоен сън в планинска стая на зазоряване" width="896" height="1195" loading="lazy" decoding="async">
+          <div><div class="n">2 ч → 8 ч <small>сън</small></div><p style="font-size:.9rem;margin-top:4px">След един концертен сеанс. Числото не убеждава — то се случва.</p></div>
+        </div>
+      </div>
+      <div class="sp" data-k="4" hidden>
+        <div class="sk"><span class="num">Печат V</span><span class="ttl">Спокойната концентрация</span></div>
+        <div class="quote">„Спокойната концентрация е визитната картичка на правилната личност за дейността.“<small>проф. д-р Георги Лозанов</small></div>
+      </div>
     </div>
   </div>
 </div>
@@ -1214,7 +1280,7 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
 
 <script>
 /* ═══════════════════════════════════════════════════════════════════════════
-   МЕТА-ФИГУРА · V2 „Холограма“ · двигателят на фигурите · v2.2 · 12.09.2026 (пет → осем вида · един контекст)
+   МЕТА-ФИГУРА · V2 „Холограма“ · двигателят на фигурите · v2.3 · 14.09.2026 (осем рецепти: седемте на V2.4 + сърцето на Водача · Т2 MET-661 · един контекст)
    ───────────────────────────────────────────────────────────────────────────
    Изведен от хоума на maitapp (app.js · Three.js Points + ShaderMaterial) през
    ЕП4-извадения (същите генератори и шейдъри БЕЗ Three.js). Тук се надгражда:
@@ -1631,6 +1697,72 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
     for (; i < N; i++) { home[i * 3] = rand() * 2 - 1; home[i * 3 + 1] = rand() * 2 - 1; home[i * 3 + 2] = 0; cls[i] = 1; data[i] = rand(); }
   }
 
+  /* ══ СЪРЦЕТО НА ВОДАЧА (v2.3 · Т2 · MET-661): генераторът от app.js Exhibit II „Сърцето, което тиктака“ · същите пропорции ══
+     Кривата 16 sin³t · 13 cos t − 5 cos 2t − 2 cos 3t − cos 4t · мащаб HEART_SCALE · отместване HEART_YOFF (центърът на пръстените = 0,0).
+     cls: 0 обвивка 68 % (data = t по кривата · два z-контура + пълнеж, наклонен навътре) · 1–3 три зъбчати пръстена r 0.40/0.58/0.74
+     (11/10/9 % · зъби 9/7/5 · data = r/R0 · шейдърът ги върти 1.6/0.85/0.42) · 4 стрелка r 0.05→1.02 по +x (data = дял от дължината ·
+     шейдърът я върти). Печатите НЕ са частици — HTML .seal, наместени по __мфиг.проектирай върху ПЕЧАТИ (както етикетите на звездите
+     при Пътя), вътре в 1.40-рамката на самото сърце (mx ≈ 1.27 · my ≈ 1.16 → кадърът стига до ≈ ±1.78). */
+  var HEART_SCALE = 0.0760633694313386, HEART_YOFF = 0.19307728033275595;
+  /* петте печата: [обороти u (0.5 = горе · по часовника · 0.2 = 72°), радиус] → [x, y, u] · редът е този на страницата (I..V) ·
+     горният е по-навътре (1.40 · кадърът на десктоп е по-широк, отколкото висок), останалите на 1.50 (чисти от лобовете на сърцето · r ≈ 1.31 при 22°) */
+  var ПЕЧАТИ = [[0.5, 1.40], [0.7, 1.50], [0.9, 1.50], [0.1, 1.50], [0.3, 1.50]].map(function (p) {
+    var a = Math.PI / 2 - (p[0] - 0.5) * TAU; return [p[1] * Math.cos(a), p[1] * Math.sin(a), p[0]];
+  });
+  function heartRaw(t) {
+    return [16 * Math.pow(Math.sin(t), 3), 13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t)];
+  }
+  function heartTangent(t) {
+    return [48 * Math.sin(t) * Math.sin(t) * Math.cos(t), -13 * Math.sin(t) + 10 * Math.sin(2 * t) + 6 * Math.sin(3 * t) + 4 * Math.sin(4 * t)];
+  }
+  function heartArcTable(M) {
+    var pts = [], total = 0, prev = heartRaw(0), i, t, p, len;
+    for (i = 0; i <= M; i++) {
+      t = (i / M) * TAU; p = heartRaw(t);
+      len = i === 0 ? 0 : Math.hypot(p[0] - prev[0], p[1] - prev[1]);
+      total += len; pts.push({ t: t, acc: total }); prev = p;
+    }
+    return { pts: pts, total: total };
+  }
+  function arcLookup(pts, d) { /* двоично търсене: първият запис с acc ≥ d · равномерно по дължината на кривата */
+    var lo = 0, hi = pts.length - 1, mid;
+    while (lo < hi) { mid = (lo + hi) >> 1; if (pts[mid].acc < d) lo = mid + 1; else hi = mid; }
+    return pts[lo];
+  }
+  function genHeart(home, cls, data, N, rand) {
+    var nОбв = Math.floor(N * 0.68), nП1 = Math.floor(N * 0.11), nП2 = Math.floor(N * 0.10), nП3 = Math.floor(N * 0.09);
+    var nСтр = N - nОбв - nП1 - nП2 - nП3;   /* остатъкът (2 %) = стрелката · дословно Exhibit II */
+    var table = heartArcTable(500), WALL_JITTER = 0.028, Z_DEPTH = 0.22, i = 0, k;
+    for (k = 0; k < nОбв; k++, i++) {
+      var seg = arcLookup(table.pts, rand() * table.total), t = seg.t, p0 = heartRaw(t), tg = heartTangent(t);
+      var tl = Math.hypot(tg[0], tg[1]) || 1, nx = -tg[1] / tl, ny = tg[0] / tl;
+      /* обемно тяло: два контура + пълнеж, наклонен навътре към зъбчатото ядро (Exhibit II · дословно) */
+      var shell = (rand() - 0.5) * (WALL_JITTER * 4.0 / HEART_SCALE);
+      var inward = -Math.pow(rand(), 2.1) * (0.52 / HEART_SCALE);
+      var j = shell + (rand() < 0.55 ? inward : 0);
+      home[i * 3] = (p0[0] + nx * j) * HEART_SCALE;
+      home[i * 3 + 1] = (p0[1] + ny * j) * HEART_SCALE + HEART_YOFF;
+      var zu = rand(); /* два z-контура (предна/задна черупка) + лек пълнеж между тях */
+      home[i * 3 + 2] = zu < 0.72 ? (rand() < 0.5 ? -1 : 1) * Z_DEPTH * (0.30 + 0.20 * rand()) : (rand() - 0.5) * Z_DEPTH;
+      cls[i] = 0; data[i] = t / TAU;
+    }
+    function пръстен(n, clsVal, R0, зъби, kk) {
+      for (var m = 0; m < n; m++, i++) {
+        var phi = rand() * TAU, r = R0 * (1 - kk * Math.abs(Math.sin(phi * зъби))) + (rand() - 0.5) * 0.03;
+        home[i * 3] = r * Math.cos(phi); home[i * 3 + 1] = r * Math.sin(phi); home[i * 3 + 2] = (rand() - 0.5) * 0.03;
+        cls[i] = clsVal; data[i] = r / R0;
+      }
+    }
+    пръстен(nП1, 1, 0.40, 9, 0.22); /* най-вътрешният · най-бърз (1.6) */
+    пръстен(nП2, 2, 0.58, 7, 0.16); /* средният (0.85) */
+    пръстен(nП3, 3, 0.74, 5, 0.12); /* външният · най-бавен (0.42) */
+    for (; i < N; i++) { /* стрелката: статична спица по +x · шейдърът я върти · върхът по-гъст (data = дял от дължината) */
+      var u = rand(), r = 0.05 + (1.02 - 0.05) * u;
+      home[i * 3] = r; home[i * 3 + 1] = (rand() - 0.5) * 0.010; home[i * 3 + 2] = (rand() - 0.5) * 0.010;
+      cls[i] = 4; data[i] = u;
+    }
+  }
+
   /* ══════════════ ШЕЙДЪРИ · един блок на фигура · чете (seedv, clsv, datv, cls2, dat2) ══════════════
      и пише hp · a · col · sizeF · alphaF. position = форма А, aTarget = форма Б. */
   var ГЕРОИНЯ_GLSL = [
@@ -1907,8 +2039,51 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
     '  if (clsv < 0.5) { col = uPal[0] * (0.35 + 0.35 * glow) + uPal[1] * near * 1.3; sizeF = 0.75 + near * 1.3; alphaF = 0.28 + 0.6 * near + 0.1 * glow; }',
     '  else { float orb = uTime * 0.5 + seedv * 6.28; hp.xy += vec2(cos(orb), sin(orb)) * 0.05 * uProgress; col = uPal[0] * (1.0 + 0.5 * glow) + uPal[1] * near; sizeF = 1.2 + near; alphaF = 0.5 + 0.5 * glow; }'  ].join('\n');
 
+  /* v2.3 · Т2 (MET-661): СЪРЦЕТО НА ВОДАЧА · Exhibit II от app.js (обвивка с вълна по стрелката · три зъбчати пръстена · стрелка).
+     uNodes (пише ги страницата всеки кадър): [0] дял на пръстените (плавно 0↔1 · спират при тап) · [1] време на пръстените · [2] време на стрелката
+     (замръзва при тап) · [3] фаза (обороти) · [4] режим 1 върти / 0 спряло · [5] откъде пада: 1 = от замръзналото въртене · 0 = от предния печат (uAux.x) · [6] скорост на стрелката (оборота/s).
+     uProgress = печатът, на който ляга стрелката (обороти · 0.5 = горе · по часовника) · uAux.y = фазата на падането (бум 0.9 s). */
+  var СЪРЦЕ_GLSL = [
+    '  float breathe = 1.0 + 0.028 * sin(uTime * 0.55);',                                      /* цялото сърце диша като едно тяло */
+    '  float tr = uNodes[1];',                                                                /* времето на пръстените · спира плавно при тап */
+    '  float thSpin = fract(uNodes[2] * uNodes[6] + uNodes[3]);',                             /* стрелката: оборота/s идват от страницата (uNodes[6] · 1 rad/s) · по часовника */
+    '  float thFrom = uNodes[5] > 0.5 ? thSpin : uAux.x;',
+    '  float eb = 1.0 - pow(1.0 - clamp(uAux.y, 0.0, 1.0), 3.0);',                            /* падането върху печата: ease-out */
+    '  float dU = fract(uProgress - thFrom + 0.5) - 0.5;',                                    /* най-късият път до печата */
+    '  float th = uNodes[4] > 0.5 ? thSpin : fract(thFrom + dU * eb);',
+    '  float ang = 1.5707963 - (th - 0.5) * 6.2831853;',                                      /* обороти → радиани (0.5 = горе) */
+    '  float glow = 0.5 + 0.5 * sin(uTime * 2.0 + seedv * 30.0);',
+    '  if (clsv < 0.5) {',                                                                    /* обвивката: вълна, която следва стрелката (Exhibit II) */
+    '    a = asm2(uAssembly, seedv, 0.0);',
+    '    float thetaP = atan(hp.y, hp.x);',
+    '    float dAng = thetaP - ang; dAng = atan(sin(dAng), cos(dAng));',
+    '    float sigma = mix(0.35, 0.9, uFocus);',
+    '    float gauss = exp(-(dAng * dAng) / (2.0 * sigma * sigma));',
+    '    float gearAmp = 1.0 - 0.22 * abs(sin(thetaP * 9.0 - tr * 1.6));',
+    '    float waveAmp = min(gauss * gearAmp * 0.42, 0.22 * max(length(hp.xy), 1e-4));',      /* таван спрямо ЛОКАЛНИЯ радиус — прорезът не се пълни */
+    '    vec2 dir = hp.xy / max(length(hp.xy), 1e-4);',
+    '    hp.xy += dir * waveAmp; hp *= breathe;',
+    '    col = mix(uPal[1] * 0.60, uPal[1] * 1.05, datv * 0.5 + waveAmp * 1.1);',
+    '    col = mix(col, uPal[0] * 1.45, smoothstep(0.05, 0.30, waveAmp));',                   /* гребенът на вълната свети в злато */
+    '    alphaF = 0.85; sizeF = 1.0 + waveAmp * 0.6;',
+    '  } else if (clsv < 3.5) {',                                                             /* трите зъбчати пръстена · 1.6 / 0.85 / 0.42 */
+    '    float ring = floor(clsv + 0.5);',
+    '    a = asm2(uAssembly, seedv, 0.05 + 0.04 * ring);',
+    '    float w = ring < 1.5 ? 1.6 : (ring < 2.5 ? 0.85 : 0.42);',
+    '    float rc = cos(tr * w), rs = sin(tr * w); hp.xy = mat2(rc, rs, -rs, rc) * hp.xy; hp *= breathe;',
+    '    float lo = ring < 1.5 ? 0.55 : (ring < 2.5 ? 0.38 : 0.24);',
+    '    float hi = ring < 1.5 ? 0.85 : (ring < 2.5 ? 0.60 : 0.40);',
+    '    col = uPal[1] * mix(lo, hi, datv); sizeF = ring < 1.5 ? 1.05 : (ring < 2.5 ? 1.0 : 0.95); alphaF = 0.9;',
+    '  } else {',                                                                             /* стрелката: златна · върхът по-едър и по-светъл */
+    '    a = asm2(uAssembly, seedv, 0.18);',
+    '    float c = cos(ang), s = sin(ang); hp.xy = mat2(c, s, -s, c) * hp.xy; hp *= breathe;',
+    '    col = mix(uPal[1] * 1.2, uPal[0] * 1.6, datv) + uPal[0] * glow * 0.25 * datv;',
+    '    sizeF = mix(1.8, 2.6, datv); alphaF = 1.0;',
+    '  }'
+  ].join('\n');
+
   function върхов() {
-    var верига = [ГЕРОИНЯ_GLSL, СЪЗВЕЗДИЕ_GLSL, ЧУДОВИЩЕ_GLSL, ЦИФЕРБЛАТ_GLSL, ЧАСОВНИК_GLSL, НИШКА_GLSL, ИСКРА_GLSL].map(function (тяло, i) {
+    var верига = [ГЕРОИНЯ_GLSL, СЪЗВЕЗДИЕ_GLSL, ЧУДОВИЩЕ_GLSL, ЦИФЕРБЛАТ_GLSL, ЧАСОВНИК_GLSL, НИШКА_GLSL, ИСКРА_GLSL, СЪРЦЕ_GLSL].map(function (тяло, i) {
       return (i ? 'else ' : '') + 'if (uExhibit < ' + i + '.5) {\n' + тяло + '\n}';
     }).join('\n    ');
     return [
@@ -2038,10 +2213,10 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
   function вбо(данни) { var b = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, b); gl.bufferData(gl.ARRAY_BUFFER, данни, gl.STATIC_DRAW); return b; }
   var прахВБО = вбо(прах), семеВБО = вбо(семе);
 
-  /* ══════════════ ФИГУРИТЕ · рецепти (v2.2: осем вида · един контекст · златният мотив, изигран различно) ══════════════
+  /* ══════════════ ФИГУРИТЕ · рецепти (v2.3: осем рецепти · един контекст · златният мотив, изигран различно) ══════════════
      ген = форма А (position) · ген2 = форма Б (aTarget) · драйвер 'авто' (hero) | 'външен' (страницата подава цел)
      височина = дял от екрана [мин, макс] (телефон | десктоп) · 'auto' = сцената е висока колкото HTML-съдържанието си
-     hero (морф) · path (комета) · monster (жарава) · dial (искри по дъгата) · clock (пръстен) · thread (нишка) · spark (искра при фокус) */
+     hero (морф) · path (комета) · monster (жарава) · dial (искри по дъгата) · clock (пръстен) · thread (нишка) · spark (искра при фокус) · heart (сърцето на Водача · Т2) */
   var РЕЦЕПТИ = {
     hero:    { индекс: 0, семе: 20260912, ген: genHourglass(false), ген2: genWoman, драйвер: 'авто', скорост: 1.3,
                височина: ТЕЛЕФОН ? [0.34, 0.42] : [0.60, 0.88] },
@@ -2056,7 +2231,10 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
     /* Нишката: сцената е зад петте карти (auto) · слънцето слиза плавно (скорост 4) */
     thread:  { индекс: 5, семе: 20260917, ген: genThread, драйвер: 'външен', скорост: 4.0, височина: 'auto' },
     /* Искрата: зад формата (auto) · uProgress = фокус 0/1 */
-    spark:   { индекс: 6, семе: 20260918, ген: genSpark, драйвер: 'външен', скорост: 3.0, височина: 'auto' }
+    spark:   { индекс: 6, семе: 20260918, ген: genSpark, драйвер: 'външен', скорост: 3.0, височина: 'auto' },
+    /* Сърцето на Водача (v2.3 · Т2 · MET-661): върти се само (уTime · часовниците идват от страницата през uNodes) · дискретен при тап —
+       стрелката „пада“ на печата (uProgress = обороти) с бум 0.9 s · телефон [0.46, 0.60] · десктоп [0.52, 0.72] */
+    heart:   { индекс: 7, семе: 20260919, ген: genHeart, драйвер: 'авто', скорост: 3.0, дискретен: true, бум: 0.9, височина: ТЕЛЕФОН ? [0.46, 0.60] : [0.52, 0.72] }
   };
 
   function сглоби(ген, семеЧисло) {
@@ -2239,8 +2417,10 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
 
   /* ══════════════ ВРАТА КЪМ СТРАНИЦАТА · и верификационна кука ══════════════ */
   window.__мфиг = {
-    режим: 'webgl', фигури: фигури, брой: БРОЙ, възли: ВЪЗЛИ, качулки: СЕНКИ, намери: намери, версия: '2.2',
-    задай: function (вид, цел, ръчно) { var ф = намери(вид); if (!ф) return; ф.цел = Math.max(0, Math.min(1, цел)); if (ръчно) ф.ръчно = true; пусни(); },
+    режим: 'webgl', фигури: фигури, брой: БРОЙ, възли: ВЪЗЛИ, качулки: СЕНКИ, печати: ПЕЧАТИ, намери: намери, версия: '2.3',
+    задай: function (вид, цел, ръчно, наново) { /* наново (v2.3): дискретният преход тръгва пак дори при същата цел (сърцето: „падане“ върху същия печат) */
+      var ф = намери(вид); if (!ф) return; ф.цел = Math.max(0, Math.min(1, цел)); if (ръчно) ф.ръчно = true; if (наново) ф.предиЦел = -1; пусни();
+    },
     сглоби: function (вид, u) { var ф = намери(вид); if (!ф) return; ф.сглобЦел = Math.max(0, Math.min(1, u)); пусни(); },
     параметри: function (вид, arr) { /* v2.2 · геометрия от страницата → uNodes[8] (възли · ръбове · нишка · фокус) */
       var ф = намери(вид); if (!ф) return; for (var i = 0; i < 8; i++) ф.пар[i] = +arr[i] || 0; пусни();
@@ -2284,7 +2464,7 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
   const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
   const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
   const МФ=()=>window.__мфиг||null;
-  const задай=(вид,v,ръчно)=>{const m=МФ(); if(m&&m.задай) m.задай(вид,v,ръчно)};
+  const задай=(вид,v,ръчно,наново)=>{const m=МФ(); if(m&&m.задай) m.задай(вид,v,ръчно,наново)};
   const сглоби=(вид,u)=>{const m=МФ(); if(m&&m.сглоби) m.сглоби(вид,u)};
   const NS='http://www.w3.org/2000/svg', rad=d=>d*Math.PI/180;
   const STATIC=/[?&]static=1/.test(location.search);  /* QA: всичко видимо без IO */
@@ -2485,6 +2665,66 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
     dtUpdate(false);  /* v2.4: кадърът се смени → нишката се пре-мерва */
   }
   const dialHook=()=>{const m=МФ(); if(m&&m.слушай) m.слушай('dial',placeDial); else setTimeout(dialHook,200)}; dialHook();
+
+  /* ══ ВОДАЧ · СЪРЦЕТО И ПЕТТЕ ПЕЧАТА (v4.2 · Т2 · MET-661 · буквата на спека) ══
+     Двигател 'heart' (осмата рецепта · Exhibit II от app.js): върти се непрекъснато · тап = СПИРА, стрелката „пада“ на най-близкия печат ·
+     печатът се отваря под сърцето (#sealbook) · тап на печат = скок (спряло) или спиране върху него (върти се) · втори тап на сърцето = пак се върти.
+     Часовниците към шейдъра (uNodes · пишат се в слушателя всеки кадър): [0] дял на пръстените (плавно 0↔1) · [1] време на пръстените ·
+     [2] време на стрелката (замръзва мигновено при тап) · [3] фаза (обороти) · [4] режим 1 върти / 0 спряло ·
+     [5] откъде пада: 1 = от замръзналото въртене · 0 = от предния печат (uAux.x) · [6] скорост на стрелката (оборота/s). Печатите (.seal) се наместват
+     по __мфиг.проектирай около сърцето (m.печати · r 1.40 горе · 1.50 останалите · в 1.40-рамката на фигурата) — както етикетите на звездите при Пътя.
+     Без WebGL / reduced: постерът (портретът) + петте печата отворени наведнъж. */
+  const hStage=$('#fig-heart'), sealEls=$$('#seals .seal'), book=$('#sealbook'), pages=$$('#sealbook .sp'), sealsBox=$('#seals');
+  const ОМЕГА=0.1591549, ПЕРИОД=628.3185;   /* ОМЕГА = оборота/s на стрелката (1 rad/s · Exhibit II · подава се на шейдъра през uNodes[6]) · ПЕРИОД = 100·2π = общ период на трите пръстена (1.6 · 0.85 · 0.42) и 100 оборота на стрелката */
+  const frac=x=>x-Math.floor(x);
+  let hMode='spin', hCur=-1, hAmt=1, hT=0, hTa=0, hPhase=0, hFromSpin=1, hLast=null, hDown=0, sealKey='';
+  const hFig=()=>{const m=МФ(); return m&&m.намери?m.намери('heart'):null};
+  const hU=k=>МФ().печати[k][2];                                              /* оборотите на печата k · единствен източник = двигателят */
+  function placeSeals(ф){
+    const m=МФ(); if(!m||!m.проектирай||!m.печати) return;
+    const key=ф.ш+'x'+ф.в+'@'+(ф.камZ||0).toFixed(2); if(key===sealKey) return; sealKey=key;
+    m.печати.forEach((p,k)=>{const q=m.проектирай('heart',p[0],p[1]); if(!q||!isFinite(q.x)||!isFinite(q.y)) return; sealEls[k].style.left=q.x+'px'; sealEls[k].style.top=q.y+'px'});
+  }
+  function heartTick(ф){
+    const now=ф.време, dt=hLast===null?0:clamp(now-hLast,0,0.05); hLast=now;
+    const on=hMode==='spin'?1:0;
+    hAmt+=(on-hAmt)*(1-Math.exp(-dt*3.2));                                  /* пръстените забавят / тръгват плавно */
+    hT+=dt*hAmt; if(hT>ПЕРИОД) hT-=ПЕРИОД;                                      /* пръстените: часовникът им се навива по периода */
+    if(on){ hTa+=dt; if(hTa>ПЕРИОД) hTa-=ПЕРИОД }                               /* стрелката: 1 rad/s · замръзва при спиране */
+    const p=ф.пар; p[0]=hAmt; p[1]=hT; p[2]=hTa; p[3]=hPhase; p[4]=on; p[5]=hFromSpin; p[6]=ОМЕГА;
+    placeSeals(ф);
+  }
+  const thNow=()=>frac(hTa*ОМЕГА+hPhase);                                     /* къде сочи стрелката в този миг (обороти · 0.5 = горе) */
+  function openSeal(k){
+    if(k===hCur) return; hCur=k;
+    sealEls.forEach((s,i)=>s.classList.toggle('on',i===k));
+    pages.forEach((p,i)=>{p.hidden=i!==k});
+    book.classList.add('open'); book.classList.remove('lit'); void book.offsetWidth; book.classList.add('lit');
+    видяно('#fig-heart');
+  }
+  function heartStop(k){                                                      /* върти се → спира: стрелката пада на печата k (или на най-близкия) */
+    const ф=hFig(); if(!ф) return;
+    const th=thNow();
+    if(k<0){ let bd=1; for(let i=0;i<5;i++){ const d=Math.abs(frac(hU(i)-th+0.5)-0.5); if(d<bd){bd=d;k=i} } }
+    hMode='stop'; hFromSpin=1;                                                  /* слушателят пише режима в ф.пар преди кадъра */
+    задай('heart',hU(k),true,ф.цел===hU(k)); openSeal(k);                       /* наново: същият печат като преди → пак „падане“, не скок */
+  }
+  function heartJump(k){                                                      /* спряло → друг печат по най-късия път */
+    const ф=hFig(); if(!ф) return;
+    hFromSpin=0; задай('heart',hU(k),true); openSeal(k);
+  }
+  function heartSpin(){                                                       /* пак се върти · фазата продължава от мястото, където стои стрелката */
+    const ф=hFig(); if(!ф) return;
+    const from=hFromSpin?thNow():ф.aux0, eb=1-Math.pow(1-clamp(ф.бум,0,1),3), dU=frac(ф.цел-from+0.5)-0.5, th=frac(from+dU*eb);
+    hPhase=frac(th-frac(hTa*ОМЕГА)); hMode='spin';
+  }
+  hStage.addEventListener('pointerdown',()=>{hDown=performance.now()});
+  hStage.addEventListener('click',()=>{ if(performance.now()-hDown>320) return; if(hMode==='spin') heartStop(-1); else heartSpin() });
+  sealEls.forEach((s,k)=>s.addEventListener('click',e=>{e.stopPropagation(); if(hMode==='spin') heartStop(k); else heartJump(k)}));
+  const heartHook=()=>{const m=МФ(); if(!m){setTimeout(heartHook,200); return}
+    if(m.режим!=='webgl'||!m.слушай||!hFig()){ book.classList.add('all','open'); pages.forEach(p=>{p.hidden=false}); sealsBox.hidden=true; hStage.parentNode.classList.add('poster'); return }   /* постер: всичко отворено · портретът е самата сцена · нула движение */
+    m.слушай('heart',heartTick) };
+  heartHook();
 
   /* locked cards + rail dots */
   $$('.deck.locked').forEach(c=>c.addEventListener('click',()=>{c.classList.remove('shake'); void c.offsetWidth; c.classList.add('shake'); c.classList.add('told')}));

@@ -324,8 +324,9 @@ class Т6_ФиксКръг1(Основа):
     def test_55_колелото_по_голямо_и_pop(self):
         m = re.search(r'\.wheel\{[^}]*\}', self.src)
         self.assertIsNotNone(m, 'правилото .wheel')
-        self.съдържа(m.group(0), 'width:min(94vw,440px)', 'колелото е уголемено спрямо v1.0 (беше min(88%,360px))')
-        self.assertNotIn('min(88%,360px)', self.src, 'старият размер е махнат')
+        self.съдържа(m.group(0), 'width:min(97vw,470px)', 'колелото е уголемено (фикс-кръг 2: 94vw,440 → 97vw,470)')
+        self.assertNotIn('88%,360px', m.group(0), 'v1.0 размерът е махнат от правилото')
+        self.assertNotIn('94vw,440px', m.group(0), 'v1.1 размерът е надминат в правилото')
         self.съдържа(self.b, 'id="cardpop"', 'има елемент за POP на картата')
         self.съдържа(self.src, '#cardpop.show', 'CSS за изскачащата карта')
         self.assertIn('function popCard(', self.sc[3], 'popCard в драйвера')
@@ -335,6 +336,40 @@ class Т6_ФиксКръг1(Основа):
         for текст in ('Petroff', 'ул. Пирин 125', 'Топко Машинков', 'Меттамъж',
                       'Да живееш означава да се радваш', 'Първа репетиция', 'Втора репетиция', 'Генерална репетиция'):
             self.съдържа(self.txt, текст, f'Notion-съдържание: {текст}')
+
+
+class Т7_ФиксКръг2(Основа):
+    """Втора вълна казуси (16.09 · v1.2): дигитален багаж · колело голямо · Пирин · card-vapros."""
+
+    def test_60_дигиталният_багаж_приложения_и_декларация(self):
+        b = блок_по_id(self.src, 'bring')
+        self.съдържа(b, 'class="digi"', 'блокът „дигиталният багаж“')
+        for app in ('Таблици на Шулте', 'Storytel', 'Spreeder', 'Живко Шофьорков', 'Claude', 'Obsidian', 'Декларация'):
+            self.съдържа(b, app, f'приложение/декларация: {app}')
+        for url in ('storytel.com/bg', 'spreeder.com', 'claude.ai/download', 'obsidian.md', 'docs.google.com/forms'):
+            self.съдържа(b, url, f'линк: {url}')
+        self.assertNotIn('МетаТийн', b, 'декларацията за детето (МетаТийн) е махната')
+        self.assertNotIn('(МетаЧетене)', b, 'скобите на декларацията са махнати')
+        digi = b.split('class="digi"', 1)[1]
+        self.assertRegex(digi, r'Попълване с\s*<b>\s*ДА\s*</b>', 'декларацията иска ДА')
+        self.съдържа(digi, 'филмова продукция', 'ДА за целите на филмовата продукция')
+        self.съдържа(digi, 'питаме изрично', 'кадри за сайт/социални → питаме изрично')
+
+    def test_61_колелото_голямо_геометрия(self):
+        др = self.sc[3]
+        self.assertRegex(др, r'R_IN=128,\s*R_OUT=152,\s*R_N=112', 'геометрията на колелото е изнесена навън (беше 112/134/96)')
+        self.assertRegex(др, r"svgel\('image',\{x:-24,y:-24,width:48,height:48", 'портретите на възлите са по-големи (48px)')
+        self.съдържа(self.b, 'scale(1.32)', 'сърцето в центъра е уголемено')
+        m = re.search(r'\.wheel\{[^}]*\}', self.src)
+        self.съдържа(m.group(0), '97vw', 'кутията на колелото е по-широка')
+
+    def test_62_пирин_панорама(self):
+        p = блок_по_id(self.src, 'path')
+        self.съдържа(self.b, 'class="pirinband"', 'банд със снимка на Пирин')
+        self.съдържа(self.src, 'img/nz/journey-panorama.webp', 'панорамата на Пирин от старата страница')
+
+    def test_63_карта_въпрос_специалната_картинка(self):
+        self.assertIn("'въпрос':{n:'Въпросът · изпратен',img:'img/nz/card-vapros.webp'", self.sc[3], '21-вата карта ползва специалната card-vapros')
 
 
 if __name__ == '__main__':

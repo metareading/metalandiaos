@@ -12,7 +12,10 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Inter:wght@300;400;500;600&display=swap&subset=cyrillic" rel="stylesheet">
 <!--
   ══════════════════════════════════════════════════════════════════════
-  НОВА ЖЕНА · РЕТРИЙТ · 18–22 септември 2026 · страницата за записаните · v1.1 · 2026-09-16 · 11:31 · MET-786 · фикс-кръг 1 (доер · Opus 4.8 High · казуси на Митрандир 16.09) върху v1.0 (Fable 5.1 High · сесия f34be1ba)
+  НОВА ЖЕНА · РЕТРИЙТ · 18–22 септември 2026 · страницата за записаните · v1.2 · 2026-09-16 · 12:16 · MET-786 · фикс-кръг 2 (доер · Opus 4.8 High · втора вълна казуси на Митрандир 16.09) върху v1.1
+  ФИКС-КРЪГ 2 (v1.2): (8) дигиталният багаж в „Какво да носите“ — Шулте · Storytel · Spreeder · Живко · Claude · Obsidian · Декларация (ДА-съгласие за филмовата продукция · без МетаТийн · източник metateen/retreat/sep2026) ·
+    (9) колелото ГОЛЯМО и завършено — геометрия навън (R_N 96→112 · R_OUT 134→152 · възли 38→48px · сърце ×1.32 · .wheel min(97vw,470px)) на нивото на сърцето/атентиометъра ·
+    (10) снимки на Пирин — панорама-банд (journey-panorama) в пътечката · (11) 21-вата карта = card-vapros.webp (специалната карта вместо presence).
   Модел: Fable 5.1 High (v1.0) → фикс-кръг 1 Opus 4.8 High (дума: Митрандир 16.09 · 7 таргетирани корекции · сесия 4d0e705b)
   ФИКС-КРЪГ 1 (v1.1 · 7 корекции): (1) 21-ва карта „въпрос“ отключвана от формата (нж:изпратено · HUD N/21) · (2) дневен ритъм = три пояса 15:30→17:30 · вечеря 17:30→18:30 · 18:30→20:00 ·
     (3) концертният сеанс = само Д1 (нула „свещи“) · (4) стъпка „План“ → „Сценарий“ (продукция-рамка) · (5) атентиометър ниво 5 = „Вдъхновение“ (не „Съзнание“) ·
@@ -377,11 +380,11 @@ html:where(.js) [data-reveal].in{opacity:1;transform:none}
 #fig-wheel{min-height:0;overflow:visible;padding:14px 0 6px;touch-action:auto;cursor:auto}
 #fig-wheel canvas{pointer-events:none}
 #fig-wheel .tap{bottom:auto;top:0;left:auto;right:12px;transform:none}
-.wheel{position:relative;z-index:2;width:min(94vw,440px);aspect-ratio:1;margin:0 auto}
+.wheel{position:relative;z-index:2;width:min(97vw,470px);aspect-ratio:1;margin:0 auto}
 .wheel svg{width:100%;height:100%;overflow:visible;display:block}
 .wheel .sect{fill:rgba(255,245,214,.05);stroke:rgba(255,245,214,.35);stroke-width:1;transition:fill .8s,stroke .8s}
 .wheel .sect.lit{fill:rgba(255,245,214,.22);stroke:#fff5d6;filter:drop-shadow(0 0 8px rgba(255,245,214,.6))}
-.wheel .sl{font-family:var(--sans);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;fill:rgba(255,245,214,.55);text-anchor:middle;pointer-events:none;transition:fill .8s}
+.wheel .sl{font-family:var(--sans);font-size:11px;letter-spacing:.12em;text-transform:uppercase;fill:rgba(255,245,214,.6);text-anchor:middle;pointer-events:none;transition:fill .8s}
 .wheel .sect.lit + .sl{fill:#fff5d6}
 .wheel .spoke{stroke:rgba(232,199,126,.25);stroke-width:1;transition:stroke .6s}
 .wheel .spoke.lit{stroke:var(--gold);filter:drop-shadow(0 0 4px rgba(232,199,126,.8))}
@@ -390,13 +393,13 @@ html:where(.js) [data-reveal].in{opacity:1;transform:none}
 .wheel .node image{opacity:.55;filter:grayscale(.6);transition:opacity .5s,filter .5s}
 .wheel .node.lit circle.ring{stroke:var(--gold);stroke-width:2;filter:drop-shadow(0 0 9px rgba(232,199,126,.9))}
 .wheel .node.lit image{opacity:1;filter:none}
-.wheel .node text{font-family:var(--serif);font-size:11px;fill:rgba(240,235,224,.75);text-anchor:middle;pointer-events:none}
+.wheel .node text{font-family:var(--serif);font-size:12.5px;fill:rgba(240,235,224,.82);text-anchor:middle;pointer-events:none}
 .wheel .node.lit text{fill:#fff}
 .wheel .heartc{transform-origin:180px 180px;animation:hbeat var(--beat,1.6s) ease-in-out infinite}
 .wheel .heartc path{fill:#D4895E;filter:drop-shadow(0 0 10px rgba(232,199,126,.7))}
-.wheel .lvl{font-family:var(--serif);font-size:15px;font-weight:700;fill:var(--light);text-anchor:middle;dominant-baseline:central}
-.wheel .lvl2{font-family:var(--sans);font-size:7.5px;letter-spacing:.16em;text-transform:uppercase;fill:rgba(255,245,214,.7);text-anchor:middle}
-.wheel .halo{fill:none;stroke:rgba(255,245,214,.0);stroke-width:14;transition:stroke .8s;filter:blur(8px)}
+.wheel .lvl{font-family:var(--serif);font-size:16.5px;font-weight:700;fill:var(--light);text-anchor:middle;dominant-baseline:central}
+.wheel .lvl2{font-family:var(--sans);font-size:8px;letter-spacing:.16em;text-transform:uppercase;fill:rgba(255,245,214,.7);text-anchor:middle}
+.wheel .halo{fill:none;stroke:rgba(255,245,214,.0);stroke-width:16;transition:stroke .8s;filter:blur(8px)}
 @keyframes hbeat{0%,100%{transform:scale(1)}18%{transform:scale(1.13)}36%{transform:scale(1)}}
 .wheel .wire{fill:none;stroke:rgba(232,199,126,.2);stroke-width:.8;stroke-dasharray:2 4}
 .wgrid{display:grid;gap:10px;margin-top:14px;position:relative;z-index:3}
@@ -467,6 +470,20 @@ html:where(.js) [data-reveal].in{opacity:1;transform:none}
 .item.lit .ic{filter:none}
 .item.lit .w::after{content:" ✓";color:var(--gold)}
 @media (min-width:720px){.groups{grid-template-columns:1fr 1fr}}
+.digi{margin-top:16px;border:1px solid rgba(232,199,126,.22);border-radius:14px;padding:12px 14px;background:rgba(255,255,255,.025);position:relative;z-index:3}
+.digi .dh{display:flex;align-items:baseline;gap:10px;margin-bottom:10px;flex-wrap:wrap}
+.digi .dh b{font-family:var(--serif);font-size:1.2rem;color:var(--gold)}
+.digi .dh span{font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--mute)}
+.digi .applist{list-style:none;display:grid;gap:11px;margin:0;padding:0}
+.digi .applist li{display:flex;gap:10px;align-items:flex-start}
+.digi .applist .ic{font-size:1.1rem;flex:0 0 auto;width:24px;text-align:center;line-height:1.4}
+.digi .applist .w{font-weight:600;color:var(--ink)}
+.digi .applist .c{font-size:.82rem;color:var(--ink2);line-height:1.5}
+.digi .applist a{color:var(--gold);text-decoration:underline}
+@media (min-width:720px){.digi .applist{grid-template-columns:1fr 1fr}}
+.pirinband{position:relative;margin:24px 0 0;width:100%}
+.pirinband img{width:100%;height:clamp(170px,44vw,340px);object-fit:cover;display:block}
+.pirinband figcaption{position:absolute;left:0;right:0;bottom:0;padding:20px 16px 11px;font-size:.76rem;color:rgba(255,245,214,.92);background:linear-gradient(0deg,rgba(10,8,6,.82),transparent);text-align:center;letter-spacing:.02em}
 
 /* ── ЦЕНИТЕ · злато primary · евро secondary ── */
 .price{background:var(--bg);overflow:hidden}
@@ -666,6 +683,10 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
       </li>
     </ol>
   </div>
+  <figure class="pirinband" data-reveal>
+    <img src="/img/nz/journey-panorama.webp" alt="Панорама на Пирин — планината на ретрийта" width="2200" height="909" loading="lazy" decoding="async">
+    <figcaption>Пирин · планината на ретрийта — Банско, Байкушева мура и минералните извори</figcaption>
+  </figure>
 </section>
 
 <!-- ═══ 3 · ДЕН-ЧАСОВНИКЪТ · рамката на един ден (рецепта clock · 4 момента) · части: 4 карти ═══ -->
@@ -849,16 +870,16 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
     <div class="wheel" id="wheelbox">
       <svg viewBox="0 0 360 360" id="wheelsvg" aria-label="Светлозлатното колело: четири светли сектора Метта, осем златни възела Мета, сърце в центъра">
         <defs>
-          <clipPath id="cp-node"><circle cx="0" cy="0" r="19"/></clipPath>
+          <clipPath id="cp-node"><circle cx="0" cy="0" r="24"/></clipPath>
         </defs>
-        <circle class="halo" id="whalo" cx="180" cy="180" r="128"/>
+        <circle class="halo" id="whalo" cx="180" cy="180" r="150"/>
         <g id="wsects"></g>
         <g id="wspokes"></g>
-        <circle class="wire" cx="180" cy="180" r="96"/>
+        <circle class="wire" cx="180" cy="180" r="112"/>
         <g id="wnodes"></g>
-        <g class="heartc" id="wheart"><path d="M180 205 C 160 190, 146 178, 146 164 C 146 153, 155 146, 164 146 C 171 146, 177 150, 180 156 C 183 150, 189 146, 196 146 C 205 146, 214 153, 214 164 C 214 178, 200 190, 180 205 Z"/></g>
-        <text class="lvl" id="wlvl" x="180" y="222">1 / 5</text>
-        <text class="lvl2" x="180" y="236">атентиометър</text>
+        <g class="heartc" id="wheart"><g transform="translate(180 181) scale(1.32) translate(-180 -181)"><path d="M180 205 C 160 190, 146 178, 146 164 C 146 153, 155 146, 164 146 C 171 146, 177 150, 180 156 C 183 150, 189 146, 196 146 C 205 146, 214 153, 214 164 C 214 178, 200 190, 180 205 Z"/></g></g>
+        <text class="lvl" id="wlvl" x="180" y="228">1 / 5</text>
+        <text class="lvl2" x="180" y="243">атентиометър</text>
       </svg>
     </div>
     <div class="tap" aria-hidden="true"><i></i><span>докоснете будечител</span></div>
@@ -940,6 +961,18 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
         <div class="item" data-item="7"><span class="ic">👗</span><div><div class="w">Дрехи за сцена</div><div class="c">Плюс нещо празнично, приказно и вдъхновяващо за снимките в петия ден.</div></div></div>
         <div class="item" data-item="8"><span class="ic">🧘‍♀️</span><div><div class="w">Нещо меко за сядане на земя</div><div class="c">За движенческите практики.</div></div></div>
       </div></div>
+    </div>
+    <div class="digi" data-reveal>
+      <div class="dh"><b>Преди да дойдете</b><span>свалете и попълнете · дигиталният багаж</span></div>
+      <ul class="applist">
+        <li><span class="ic">🔢</span><div><div class="w">Таблици на Шулте</div><div class="c">Schulte Table — за iPhone и за Android.</div></div></li>
+        <li><span class="ic">🟧</span><div><div class="w">Storytel</div><div class="c">Свалено и работещо приложение · <a href="https://www.storytel.com/bg" target="_blank" rel="noopener">storytel.com/bg</a></div></div></li>
+        <li><span class="ic">⚡</span><div><div class="w">Spreeder</div><div class="c">Дигиталният треньор за скоростно четене с дълбоко разбиране — на PDF-и и статии · <a href="https://www.spreeder.com" target="_blank" rel="noopener">spreeder.com</a></div></div></li>
+        <li><span class="ic">🚗</span><div><div class="w">Живко Шофьорков</div><div class="c">Вашият изкуствен и удивително естествен съюзник в метаприключението · <a href="https://chatgpt.com/g/g-680a67d6d4f0819187da68152cd6a6d4-zhivko" target="_blank" rel="noopener">отворете Живко</a></div></div></li>
+        <li><span class="ic">🤖</span><div><div class="w">Claude</div><div class="c">Вашият дигитален мета-асистент и входът към света на AI агентите в Металандия. Инсталирайте на телефона и по възможност на лаптопа · <a href="https://claude.ai/download" target="_blank" rel="noopener">claude.ai/download</a><br><b>Първата стъпка:</b> отворете Claude и напишете „Аз съм [приказното Ви име] и моята мета е [Вашата мета]. Как можеш да ми помогнеш?“</div></div></li>
+        <li><span class="ic">📓</span><div><div class="w">Obsidian</div><div class="c">Тетрадката на метамозъка — бележки и връзки · <a href="https://obsidian.md" target="_blank" rel="noopener">obsidian.md</a></div></div></li>
+        <li><span class="ic">🗳️</span><div><div class="w">Декларация</div><div class="c">Попълване с <b>ДА</b> за целите на процеса, в който създаваме истинска филмова продукция. Ако поискаме да използваме някои кадри за сайта или социалните мрежи — питаме изрично · <a href="https://docs.google.com/forms/d/1F6tjHenUkhky74tnsODkd2hnmzSQodJ1Pxe3g9DYLvg/viewform" target="_blank" rel="noopener">попълнете тук</a></div></div></li>
+      </ul>
     </div>
   </div>
 </section>
@@ -2445,7 +2478,7 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
     'будечител-6':{n:'Творея',img:'/img/w/p-tvoreya.webp',l:1,g:5},
     'будечител-7':{n:'Доверка',img:'/img/w/p-doverka.webp',l:1,g:5},
     'багаж':{n:'Багажът · стегнат',img:'/img/nz/card-sakrovishte.webp',l:3,g:3},
-    'въпрос':{n:'Въпросът · изпратен',img:'/img/nz3/presence.webp',l:2,g:2}   /* 21-вата карта · отключва се при изпращане на формата (нж:изпратено · шевът) · не се събира по скрол */
+    'въпрос':{n:'Въпросът · изпратен',img:'/img/nz/card-vapros.webp',l:2,g:2}   /* 21-вата карта · отключва се при изпращане на формата (нж:изпратено · шевът) · не се събира по скрол */
   };
   const ВСИЧКО=Object.keys(КАРТИ).length;
   let ИГРА={светлина:0,злато:0,карти:{},ниво:0,багаж:{}};
@@ -2743,16 +2776,16 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
   const МЕТА_IMG=['lyubka','ekopatechko','kurajku','obemko','hola','fibonachko','tvoreya','doverka'];
   const ПРАГ=[8,16,26,38];
   const wsects=$('#wsects'), wspokes=$('#wspokes'), wnodes=$('#wnodes'), whalo=$('#whalo'), wheart=$('#wheart'), wlvl=$('#wlvl'), wheelStage=$('#fig-wheel'), wheelBox=$('#wheelbox');
-  const WC=180, R_IN=112, R_OUT=134, R_N=96;
+  const WC=180, R_IN=128, R_OUT=152, R_N=112;   /* фикс-кръг 2: колелото по-голямо · пълни рамката като сърцето/атентиометъра (беше 112/134/96) */
   const ann=(a0,a1)=>{ const p=(r,a)=>[WC+r*Math.cos(rad(a)),WC+r*Math.sin(rad(a))]; const [x1,y1]=p(R_OUT,a0),[x2,y2]=p(R_OUT,a1),[x3,y3]=p(R_IN,a1),[x4,y4]=p(R_IN,a0); return `M${x1.toFixed(1)} ${y1.toFixed(1)} A${R_OUT} ${R_OUT} 0 0 1 ${x2.toFixed(1)} ${y2.toFixed(1)} L${x3.toFixed(1)} ${y3.toFixed(1)} A${R_IN} ${R_IN} 0 0 0 ${x4.toFixed(1)} ${y4.toFixed(1)} Z` };
-  const sectEls=МЕТТА.map((n,k)=>{ const a0=-90+k*90+4, a1=-90+(k+1)*90-4; const p=svgel('path',{class:'sect',d:ann(a0,a1)}); wsects.appendChild(p); const am=(a0+a1)/2; const t=svgel('text',{class:'sl',x:(WC+150*Math.cos(rad(am))).toFixed(1),y:(WC+150*Math.sin(rad(am))+3).toFixed(1)}); t.textContent=n; wsects.appendChild(t); return p });
+  const sectEls=МЕТТА.map((n,k)=>{ const a0=-90+k*90+4, a1=-90+(k+1)*90-4; const p=svgel('path',{class:'sect',d:ann(a0,a1)}); wsects.appendChild(p); const am=(a0+a1)/2; const t=svgel('text',{class:'sl',x:(WC+168*Math.cos(rad(am))).toFixed(1),y:(WC+168*Math.sin(rad(am))+3).toFixed(1)}); t.textContent=n; wsects.appendChild(t); return p });
   const spokeEls=[], nodeEls=МЕТА.map((n,k)=>{ const a=-90+k*45, x=WC+R_N*Math.cos(rad(a)), y=WC+R_N*Math.sin(rad(a));
     const sp=svgel('line',{class:'spoke',x1:WC,y1:WC,x2:x.toFixed(1),y2:y.toFixed(1)}); wspokes.appendChild(sp); spokeEls.push(sp);
     const g=svgel('g',{class:'node',transform:`translate(${x.toFixed(1)} ${y.toFixed(1)})`,role:'button',tabindex:'0','aria-label':'Будечител '+n});
-    g.appendChild(svgel('circle',{class:'ring',r:21}));
-    const im=svgel('image',{x:-19,y:-19,width:38,height:38,'clip-path':'url(#cp-node)',preserveAspectRatio:'xMidYMin slice'}); im.setAttributeNS(XL,'xlink:href','/img/w/p-'+МЕТА_IMG[k]+'.webp'); im.setAttribute('href','/img/w/p-'+МЕТА_IMG[k]+'.webp'); g.appendChild(im);
-    const t=svgel('text',{y:34}); t.textContent=n; g.appendChild(t);
-    g.appendChild(svgel('circle',{r:22,fill:'transparent'}));
+    g.appendChild(svgel('circle',{class:'ring',r:26}));
+    const im=svgel('image',{x:-24,y:-24,width:48,height:48,'clip-path':'url(#cp-node)',preserveAspectRatio:'xMidYMin slice'}); im.setAttributeNS(XL,'xlink:href','/img/w/p-'+МЕТА_IMG[k]+'.webp'); im.setAttribute('href','/img/w/p-'+МЕТА_IMG[k]+'.webp'); g.appendChild(im);
+    const t=svgel('text',{y:41}); t.textContent=n; g.appendChild(t);
+    g.appendChild(svgel('circle',{r:27,fill:'transparent'}));
     const go=e=>{ e.preventDefault(); nodeTap(k,g) }; g.addEventListener('click',go); g.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' ') go(e) });
     wnodes.appendChild(g); return g });
   let sparkPar=[0,0,0,0,0,0,0,1], sparkKey='';

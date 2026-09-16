@@ -1,0 +1,277 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+nova-zhena-retreat-tests.py · структурният ШЕВ на страницата за записаните „Нова Жена · ретрийт · 18–22 септември 2026"
+MET-786 (спек § Testing Decisions · шев 1) · 16.09.2026 · Fable 5.1 High (дума на Митрандир 16.09)
+
+Чете ДВАТА HTML файла като текст (nova-zhena-retreat-sep2026.html + new-woman/retreat/sep2026/index.html) и проверява договора:
+  • 5-те дни / 8-те стъпки в ред (Д1 = 1+2 · Д2 = 3+4 · Д3 = 5+6 · Д4 = 7 · Д5 = 8) · датите 18–22 септември · дъгата Отделяне → Представление
+  • цените 1597 / 1321 / 789 / 610 присъстват в евро И в грамове злато (грамовете = евро / курс от страницата, до 0,01 g)
+  • *-обяснението (желязо → злато / страдание → съзнание · Мета = злато · Метта = светлина)
+  • чеклистът „какво да носят" с артикулите, вързани за дни
+  • точковият HUD (светлина + злато) в ъглите + броячът на картите
+  • преизползваните рецепти (hero · path · monster · dial · clock · thread · spark · heart) · двигателят дословен (без 5-възловата параметризация)
+  • шевът (nova-zhena-seam.js v0.2.1) байт-идентичен с 1-вия script на nova-zhena-v2.html · нула външен script src
+  • 0 срещания на „оферта" · хедърът носи версия + дата/час · деплой-копието = източник след обратен sed
+Шев 2 (API на двигателя) и шев 3 (Browser pane 390/1280 · console 0 · тапове) тестът НЕ мери — те са в хендофа.
+
+Пускане:  cd /Users/user/metalandiaos && python3 nova-zhena-retreat-tests.py -v
+Без зависимости (stdlib) · prior art: nova-zhena-v4-tests.py · test_funiya.py
+"""
+import pathlib
+import re
+import unittest
+
+ROOT = pathlib.Path(__file__).resolve().parent
+SRC = ROOT / 'nova-zhena-retreat-sep2026.html'
+DEPLOY = ROOT / 'new-woman' / 'retreat' / 'sep2026' / 'index.html'
+ИЗВОР = ROOT / 'nova-zhena-v2.html'           # READ-ONLY извор на двигателя и шева
+
+ДНИ = [('Отделяне', '18', ['1', '2']), ('Потапяне', '19', ['3', '4']), ('Посвещение', '20', ['5', '6']),
+       ('Завръщане', '21', ['7']), ('Представление', '22', ['8'])]
+СТЪПКИ = ['Героиня', 'Чудовище', 'Водач', 'План', 'Призив', 'Залог', 'Съкровище', 'Еликсир']
+ЦЕНИ = {'full': 1597, 'retreat': 1321, 'course': 789, 'online': 610}
+РЕЦЕПТИ = ['hero', 'path', 'monster', 'dial', 'clock', 'thread', 'spark', 'heart']
+АРТИКУЛИ = ['Планинарски обувки', 'Тенис ракета', 'Бански и кърпа', 'бележник', 'Лаптоп', 'Слушалки', 'Дрехи за сцена', 'крем', 'меко за сядане']
+ЗАБРАНЕНИ = ['оферта', 'офертата', 'оферти']
+ХЕДЪР_ИД = 'НОВА ЖЕНА · РЕТРИЙТ'
+
+_КЕШ = {}
+
+
+def чети(p):
+    if p not in _КЕШ:
+        _КЕШ[p] = p.read_text(encoding='utf-8')
+    return _КЕШ[p]
+
+
+def скриптове(t):
+    return re.findall(r'<script\b[^>]*>(.*?)</script>', t, re.S)
+
+
+def тяло(t):
+    return t.split('</head>', 1)[1]
+
+
+def без_коментари(t):
+    return re.sub(r'<!--.*?-->', '', t, flags=re.S)
+
+
+def видим_текст(t):
+    b = без_коментари(тяло(t))
+    b = re.sub(r'<script\b[^>]*>.*?</script>', ' ', b, flags=re.S)
+    b = re.sub(r'<style>.*?</style>', ' ', b, flags=re.S)
+    return re.sub(r'<[^>]+>', ' ', b)
+
+
+def блок_по_id(t, sid):
+    b = re.sub(r'<script\b[^>]*>.*?</script>', ' ', без_коментари(тяло(t)), flags=re.S)
+    m = re.search(r'<(section|div|ol|li)\b[^>]*\bid="%s"[^>]*>' % re.escape(sid), b)
+    if not m:
+        return ''
+    таг, дълбочина, начало = m.group(1), 1, m.end()
+    for mm in re.finditer(r'<(/?)%s\b[^>]*>' % таг, b[начало:]):
+        дълбочина += -1 if mm.group(1) else 1
+        if дълбочина == 0:
+            return b[начало:начало + mm.start()]
+    return ''
+
+
+def секции(t):
+    return [re.search(r'id="([^"]+)"', m.group(1)).group(1) for m in re.finditer(r'<section\b([^>]*)>', без_коментари(тяло(t))) if 'id="' in m.group(1)]
+
+
+class Основа(unittest.TestCase):
+    def setUp(self):
+        self.src = чети(SRC)
+        self.b = без_коментари(тяло(self.src))
+        self.txt = видим_текст(self.src)
+        self.sc = скриптове(self.src)
+
+    def съдържа(self, купа, игла, msg):
+        self.assertTrue(игла in купа, msg)
+
+
+class Т1_Идентичност(Основа):
+    def test_01_хедърът_носи_версия_дата_час(self):
+        head = '\n'.join(self.src.splitlines()[:40])
+        заглавни = [l for l in head.splitlines() if l.lstrip().startswith(ХЕДЪР_ИД)]
+        self.assertEqual(len(заглавни), 1, f'точно един ред, започващ с „{ХЕДЪР_ИД}“ · намерени {len(заглавни)}')
+        self.assertIsNotNone(re.search(r'v1\.\d+(?:\.\d+)?[^\n]*2026-09-\d\d[^\n]*\d\d:\d\d', заглавни[0]), 'първият ред: v1.X + дата + час')
+        self.съдържа(head, 'Модел: Fable 5.1', 'хедърът носи модела (М2Q32)')
+
+    def test_02_деплой_копието_е_източникът_след_обратен_sed(self):
+        dep = чети(DEPLOY)
+        self.assertEqual(len(re.findall(r'["\']img/', dep)), 0, 'деплоят няма относителни img/ пътища')
+        обр = re.sub(r'(src=|href=)"/img/', r'\1"img/', dep).replace("'/img/w/p-'", "'img/w/p-'").replace("img:'/img/", "img:'img/")
+        self.assertEqual(обр, self.src, 'деплой-копието след обратен sed ≠ източникът')
+
+    def test_03_четири_скрипта_нула_външен_src(self):
+        self.assertEqual(len(self.sc), 4, 'конфиг на шева · шев · двигател · драйвер')
+        self.assertEqual(re.findall(r'<script\b[^>]*\bsrc=', без_коментари(self.src)), [], 'нула външен script src')
+
+    def test_04_нула_оферта(self):
+        low = self.txt.lower()
+        for д in ЗАБРАНЕНИ:
+            self.assertNotIn(д, low, f'забранена дума: {д}')
+        self.съдържа(low, 'предложени', 'речник: „предложение“')
+
+    def test_05_рутът_и_датите(self):
+        self.съдържа(self.src, '/new-woman/retreat/sep2026', 'рутът в хедъра')
+        self.съдържа(self.txt, '18–22 септември 2026', 'датите в hero')
+
+
+class Т2_Програма(Основа):
+    def test_10_пет_дни_в_ред_с_осемте_стъпки(self):
+        дни = re.findall(r'<li class="dayc part" data-ден="(\d)" data-стъпки="([^"]+)"', self.b)
+        self.assertEqual([д[0] for д in дни], ['1', '2', '3', '4', '5'], 'петте дни в ред 1→5')
+        self.assertEqual([д[1].split() for д in дни], [д[2] for д in ДНИ], 'Д1=1+2 · Д2=3+4 · Д3=5+6 · Д4=7 · Д5=8')
+        блок = блок_по_id(self.src, 'days')
+        poz = [блок.find(д[0]) for д in ДНИ]
+        self.assertTrue(all(p >= 0 for p in poz) and poz == sorted(poz), 'дъгата Отделяне → Потапяне → Посвещение → Завръщане → Представление в ред')
+        for _, дата, _ in ДНИ:
+            self.съдържа(блок, f'{дата} септември', f'датата {дата} септември в деня')
+        for i, ст in enumerate(СТЪПКИ):
+            self.assertRegex(блок, r'<span>%d %s</span>' % (i + 1, ст), f'стъпка {i+1} {ст} е етикет в деня')
+
+    def test_11_сутрешните_дейности_по_дни(self):
+        блок = блок_по_id(self.src, 'days')
+        for д, текст in ((2, 'Байкушева мура'), (3, 'Тенис'), (3, 'колела'), (4, 'минерални басейни'), (5, 'Снимане на филм')):
+            ден = re.search(r'data-ден="%d".*?</li>' % д, блок, re.S).group(0)
+            self.съдържа(ден, текст, f'Д{д}: {текст}')
+
+    def test_12_ден_часовникът_и_ядрото(self):
+        блок = блок_по_id(self.src, 'day')
+        self.assertEqual(len(re.findall(r'class="mo part"', блок)), 4, 'четири момента')
+        for т in ('Сутрин · дейността', 'Следобед · пространство', '15:30 → 20:00', 'Вечер · тишина'):
+            self.съдържа(блок, т, т)
+        self.съдържа(блок, 'data-фигура="clock"', 'рецепта clock')
+
+    def test_13_чудовището_д1_водачът_д2(self):
+        self.assertIn('data-ден="1"', re.search(r'<section[^>]*id="monster"[^>]*>', self.b).group(0), 'чудовището е Д1')
+        self.assertIn('data-ден="2"', re.search(r'<section[^>]*id="vodach"[^>]*>', self.b).group(0), 'водачът е Д2')
+        self.съдържа(блок_по_id(self.src, 'monster'), 'data-фигура="monster"', 'рецепта monster')
+        v = блок_по_id(self.src, 'vodach')
+        self.съдържа(v, 'data-фигура="heart"', 'рецепта heart')
+        self.assertEqual(len(re.findall(r'class="seal" data-k=', v)), 5, 'петте печата = петте неща')
+        for н in ('Преходът', 'Планински колела', 'Спа и минерални басейни', 'Тенис', 'Концертният сеанс на свещи'):
+            self.съдържа(v, н, f'нещо: {н}')
+
+    def test_14_атентиометърът_1_до_5(self):
+        s = блок_по_id(self.src, 'scale')
+        self.съдържа(s, 'data-фигура="dial"', 'рецепта dial')
+        стъпала = re.findall(r'<li class="part" data-i="(\d)"><span class="n">\d</span><span class="w">([^<]+)<', s)
+        self.assertEqual([w.strip() for _, w in стъпала], ['Побъркват ме', 'Дразнят ме', 'Приемам', 'Радост', 'Съзнание'], 'скалата 1→5')
+
+    def test_15_редът_на_секциите(self):
+        ids = секции(self.src)
+        очаквано = ['hero', 'path', 'day', 'monster', 'vodach', 'scale', 'wheel', 'sched', 'bring', 'price', 'form']
+        self.assertEqual(ids, очаквано, 'редът на 11-те секции')
+
+
+class Т3_Игра(Основа):
+    def test_20_HUD_светлина_злато_в_ъглите(self):
+        bar = блок_по_id(self.src, 'bar')
+        self.assertIn('id="hud-light"', bar); self.assertIn('id="hud-gold"', bar)
+        self.assertIn('id="hud-l"', bar); self.assertIn('id="hud-g"', bar)
+        self.assertRegex(self.src, r'\.hud\.l\{justify-self:start\}\.hud\.g\{justify-self:end\}', 'светлината вляво · златото вдясно')
+        self.assertRegex(self.src, r'#cards\{position:fixed;left:12px;bottom:12px', 'броячът на картите долу вляво')
+        self.assertIn('id="hud-c"', self.b, 'броячът на картите')
+
+    def test_21_метаконтролът_колелото(self):
+        w = блок_по_id(self.src, 'wheel')
+        self.съдържа(w, 'data-фигура="spark"', 'рецепта spark под колелото')
+        self.assertIn('id="wheelsvg"', w); self.assertIn('id="wheart"', w)
+        for м in ('Здраве', 'Призвание', 'Характер', 'Визия'):
+            self.съдържа(w, м, f'Метта: {м}')
+        for а in ('Любка', 'Екопътечко', 'Куражку', 'Обемко', 'Хола', 'Фибоначко', 'Творея', 'Доверка'):
+            self.съдържа(w, а, f'Мета: {а}')
+        др = self.sc[3]
+        self.assertEqual(len(re.findall(r"'будечител-\d':\{", др)), 8, '8 карти-будечители')
+        self.assertEqual(len(re.findall(r"'ден-\d':\{", др)), 5, '5 карти-дни')
+        self.assertEqual(len(re.findall(r"'нещо-\d':\{", др)), 5, '5 карти-неща')
+        self.assertIn("'чудовище':{", др); self.assertIn("'багаж':{", др)
+        self.assertIn("img/w/p-lyubka.webp", др, 'картите-будечители от хоума (img/w)')
+
+    def test_22_чеклистът_по_дни(self):
+        b = блок_по_id(self.src, 'bring')
+        self.assertEqual(len(re.findall(r'class="item" data-item="\d"', b)), 9, 'девет артикула')
+        for а in АРТИКУЛИ:
+            self.съдържа(b, а, f'артикул: {а}')
+        групи = b.split('<div class="grp part"')[1:]
+        self.assertEqual(len(групи), 4, 'четири групи по ден')
+        for д, а in (('Ден 2', 'Планинарски обувки'), ('Ден 3', 'Тенис ракета'), ('Ден 4', 'Бански и кърпа'), ('Всеки ден', 'Слушалки')):
+            грп = [g for g in групи if f'<b>{д}</b>' in g]
+            self.assertEqual(len(грп), 1, f'група {д}')
+            self.съдържа(грп[0], а, f'{а} е в групата {д}')
+
+
+class Т4_Цени(Основа):
+    def курс(self):
+        m = re.search(r"КУРС=\{дата:'([^']+)',usdOz:([\d.]+),usdEur:([\d.]+),гр:([\d.]+)\}", self.sc[3])
+        self.assertIsNotNone(m, 'курсът е в драйвера')
+        return float(m.group(2)) * float(m.group(3)) / float(m.group(4))
+
+    def test_30_четирите_цени_в_евро_и_злато(self):
+        p = блок_по_id(self.src, 'price')
+        eurg = self.курс()
+        for v, e in ЦЕНИ.items():
+            карта = re.search(r'<button[^>]*data-нж-вариант="%s"[^>]*data-eur="(\d+)"[^>]*>.*?</button>' % v, p, re.S)
+            self.assertIsNotNone(карта, f'предложение {v}')
+            self.assertEqual(int(карта.group(1)), e, f'{v} = {e} €')
+            self.съдържа(карта.group(0), f'{e} €', f'{v}: еврото е видимо')
+            g = ('%.2f' % (e / eurg)).replace('.', ',')
+            self.съдържа(карта.group(0), f'{g}<small> g</small>', f'{v}: {g} g злато (статично = курса)')
+        self.assertNotIn('оферта', p.lower())
+
+    def test_31_звездичката_и_курсът(self):
+        p = блок_по_id(self.src, 'price')
+        self.съдържа(p, 'Не превръщаме желязото в злато, а страданието в съзнание', '*-обяснението')
+        self.съдържа(p, 'всичко Мета при нас е в злато, а всичко Метта — в светлина', 'Мета = злато · Метта = светлина')
+        self.assertRegex(p, r'Курс: \d+,\d\d € за грам злато · \d\d\.\d\d\.2026', 'курсът с дата')
+        self.assertAlmostEqual(self.курс(), 120.60, delta=0.01, msg='курсът 16.09: 120,60 €/g')
+
+    def test_32_без_срокове_капаро_планове(self):
+        p = видим_текст('<head></head>' + блок_по_id(self.src, 'price')).lower()
+        for д in ('капаро', 'вноск', 'до 15', 'подаръч', '%'):
+            self.assertNotIn(д, p, f'чистите цени: без „{д}“')
+
+
+class Т5_Двигател(Основа):
+    def test_40_осемте_рецепти_на_платната(self):
+        for р in РЕЦЕПТИ:
+            self.assertEqual(self.b.count(f'data-фигура="{р}"'), 1, f'една сцена {р}')
+
+    def test_41_двигателят_е_дословен_с_петвъзлова_параметризация(self):
+        извор = скриптове(чети(ИЗВОР))[1]
+        дв = self.sc[2]
+        self.assertIn('ВЪЗЛИ_N = 5', дв, 'петте дни = 5 възела')
+        # обратната замяна връща извора дословно (плюс един ред в хедъра на двигателя)
+        обр = дв
+        обр = обр.replace("var ВЪЗЛИ_N = 5; /* ретрийт · петте дни (v4.2 носеше твърдо 8) */ var ВЪЗЛИ = []; for (var вк = 0; вк < ВЪЗЛИ_N; вк++) ВЪЗЛИ.push(път(вк / (ВЪЗЛИ_N - 1)));",
+                        "var ВЪЗЛИ = []; for (var вк = 0; вк < 8; вк++) ВЪЗЛИ.push(път(вк / 7));")
+        обр = обр.replace("N - ВЪЗЛИ_N * (ЯДРО + ОРЕОЛ)", "N - 8 * (ЯДРО + ОРЕОЛ)").replace("for (k = 0; k < ВЪЗЛИ_N; k++) {\n      var v = ВЪЗЛИ[k];", "for (k = 0; k < 8; k++) {\n      var v = ВЪЗЛИ[k];")
+        обр = обр.replace("data[i] = k / (ВЪЗЛИ_N - 1);", "data[i] = k / 7;")
+        обр = обр.replace("'  float litN = up * ' + (ВЪЗЛИ_N - 1).toFixed(1) + ';',", "'  float litN = up * 7.0;',").replace("'    float kk = datv * ' + (ВЪЗЛИ_N - 1).toFixed(1) + ';',", "'    float kk = datv * 7.0;',")
+        обр = re.sub(r'\n   РЕТРИЙТ \(MET-786[^\n]*', '', обр, count=1)
+        self.assertEqual(обр, извор, 'двигателят ≠ изворът след обратната параметризация')
+
+    def test_42_шевът_е_байт_идентичен(self):
+        self.assertEqual(self.sc[1], скриптове(чети(ИЗВОР))[0], 'шевът (nova-zhena-seam.js v0.2.1) не е дословен')
+        self.assertIn("window.НЖ_ШЕВ_КОНФИГ = { източник: 'nova-zhena-retreat-sep2026", self.sc[0], 'източникът на формата е тази страница')
+        f = блок_по_id(self.src, 'form')
+        self.assertIn('id="lead"', f); self.assertIn('name="question"', f)
+        self.assertEqual(len(re.findall(r'data-нж-вариант="', self.b)), 4, 'четирите предложения са и вариантите на шева')
+
+    def test_43_канонът_магичен_контрол_части_свързване(self):
+        for sid in ('hero', 'path', 'day', 'monster', 'vodach', 'scale', 'wheel', 'sched', 'bring', 'price'):
+            sec = re.search(r'<section[^>]*id="%s"[^>]*>' % sid, self.b).group(0)
+            self.assertIn('magic', sec, f'{sid} е магичен блок')
+            n = len(re.findall(r'class="[^"]*\bpart\b', блок_по_id(self.src, sid)))
+            self.assertGreaterEqual(n, 3, f'{sid}: ≥3 части (има {n})')
+        self.assertIn("section.magic", self.sc[3]); self.assertIn('animateMotion', self.sc[3], 'златните частици по нишките')
+        self.assertEqual(self.b.count('class="tap"'), 8, 'подсказка „докоснете“ на осемте сцени')
+
+
+if __name__ == '__main__':
+    unittest.main()

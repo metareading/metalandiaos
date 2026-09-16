@@ -12,8 +12,11 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Inter:wght@300;400;500;600&display=swap&subset=cyrillic" rel="stylesheet">
 <!--
   ══════════════════════════════════════════════════════════════════════
-  НОВА ЖЕНА · РЕТРИЙТ · 18–22 септември 2026 · страницата за записаните · v1.0 · 2026-09-16 · 06:47 · MET-786 · доер (Fable 5.1 High · дума на Митрандир 16.09 · къде: /implement по спека MET-786 като единица · сесия f34be1ba)
-  Модел: Fable 5.1 High (дума на Митрандир 16.09 · „първият да е на High и ако има нужда пускаме втори на Макс“)
+  НОВА ЖЕНА · РЕТРИЙТ · 18–22 септември 2026 · страницата за записаните · v1.1 · 2026-09-16 · 11:31 · MET-786 · фикс-кръг 1 (доер · Opus 4.8 High · казуси на Митрандир 16.09) върху v1.0 (Fable 5.1 High · сесия f34be1ba)
+  Модел: Fable 5.1 High (v1.0) → фикс-кръг 1 Opus 4.8 High (дума: Митрандир 16.09 · 7 таргетирани корекции · сесия 4d0e705b)
+  ФИКС-КРЪГ 1 (v1.1 · 7 корекции): (1) 21-ва карта „въпрос“ отключвана от формата (нж:изпратено · HUD N/21) · (2) дневен ритъм = три пояса 15:30→17:30 · вечеря 17:30→18:30 · 18:30→20:00 ·
+    (3) концертният сеанс = само Д1 (нула „свещи“) · (4) стъпка „План“ → „Сценарий“ (продукция-рамка) · (5) атентиометър ниво 5 = „Вдъхновение“ (не „Съзнание“) ·
+    (6) колелото по-голямо (min(94vw,440px)) + POP на избраната карта (#cardpop ≥1,5 s) · (7) Notion-съдържание: Petroff/ул. Пирин 125 · Топко Машинков · филм „Нова Жена и Меттамъж“ · метаидея Лозанов · репетиции по вечери.
   Рут: /new-woman/retreat/sep2026 · сестра на живата НЖ страница (nova-zhena-v2.html · v4.2 · READ-ONLY извор) · НЕ форк на V4.
   ДВИГАТЕЛ: 2-рият script (третият елемент script в документа · след конфига на шева и шева) е двигателят на фигурите от nova-zhena-v2.html v4.2 (осем рецепти · един WebGL контекст · window.__мфиг · версия 2.3),
     пренесен ДОСЛОВНО с една параметризация: съзвездието (path) носи ВЪЗЛИ.length възела вместо твърдо 8 → тук 5 (петте дни);
@@ -23,8 +26,8 @@
     (златни частици по нишки от контрола към 3–5 инфо-части · SVG-наслойка .links · reduced = само тихи линии) · 95 % телефон: скролът сменя, тапът отваря ·
     подсказка „докоснете“ пулсира до първата интеракция · нула hover · нула iframe за фигури · прозрачни платна · reduced-motion / без WebGL = постери.
   СВЕТЛОЗЛАТНАТА ИГРА (итерация 2): Метта = светлина (4 области: Здраве · Призвание · Характер · Визия) · Мета = злато (8-те будечители) ·
-    атентиометърът (1 → 5: побъркват ме → дразнят ме → приемам → радост → съзнание) е входът към механиката · картите (5 дни · 5 неща · чудовището ·
-    8 будечители · багажът = 20) дават светлина + злато → HUD в ъглите на екрана (без профил/трупа · localStorage само за този браузър) ·
+    атентиометърът (1 → 5: побъркват ме → дразнят ме → приемам → радост → вдъхновение) е входът към механиката · картите (5 дни · 5 неща · чудовището ·
+    8 будечители · багажът · въпросът от формата = 21) дават светлина + злато → HUD в ъглите на екрана (без профил/трупа · localStorage само за този браузър) ·
     МЕТАКОНТРОЛ = Светлозлатното колело (#wheel · SVG + рецепта spark отдолу): навръзва сърцето (пулс по нивото на атентиометъра) + атентиометъра
     (ниво = сияние на колелото) + Метта/Мета (4 светли сектора · 8 златни възела-будечители) и после цялата страница (всяка събрана карта свети тук).
   ЦЕНИ: primary = грамове злато · secondary = евро · курс заземен 2026-09-16 (api.gold-api.com XAU 4328,40 $/oz · frankfurter USD→EUR 0,86663 → 120,60 €/g) ·
@@ -103,6 +106,11 @@ html:where(.js) [data-reveal].in{opacity:1;transform:none}
 #fly img{width:100%;height:100%;object-fit:cover}
 #fly.go{transition:left .9s cubic-bezier(.3,.8,.2,1),top .9s cubic-bezier(.3,.8,.2,1),transform .9s ease,opacity .9s ease;opacity:0;transform:translate(-50%,-50%) scale(.15)}
 #fly.at{opacity:1;transform:translate(-50%,-50%) scale(1)}
+#cardpop{position:fixed;left:50%;top:42%;z-index:95;pointer-events:none;width:min(58vw,210px);aspect-ratio:597/800;border-radius:14px;overflow:hidden;border:1.5px solid var(--gold);box-shadow:0 0 0 1px #000,0 30px 70px -12px #000,0 0 50px rgba(232,199,126,.65);opacity:0;transform:translate(-50%,-50%) scale(.32);transition:opacity .5s cubic-bezier(.2,.7,.2,1),transform .5s cubic-bezier(.2,.7,.2,1)}
+#cardpop img{width:100%;height:100%;object-fit:cover}
+#cardpop b{position:absolute;left:0;right:0;bottom:0;padding:12px 8px 10px;font-family:var(--serif);font-size:1rem;color:#fff;background:linear-gradient(0deg,rgba(0,0,0,.82),transparent);text-align:center}
+#cardpop.show{opacity:1;transform:translate(-50%,-50%) scale(1)}
+#cardpop.go{transition:left .7s cubic-bezier(.3,.8,.2,1),top .7s cubic-bezier(.3,.8,.2,1),transform .7s ease,opacity .7s ease;opacity:0;transform:translate(-50%,-50%) scale(.12)}
 #toast{position:fixed;left:50%;bottom:64px;z-index:80;transform:translate(-50%,20px);opacity:0;transition:all .5s cubic-bezier(.2,.7,.2,1);background:rgba(21,16,12,.95);border:1px solid rgba(232,199,126,.5);border-radius:14px;padding:8px 14px;font-size:.82rem;color:var(--ink);white-space:nowrap;box-shadow:0 14px 30px -12px #000;pointer-events:none;max-width:calc(100vw - 24px);overflow:hidden;text-overflow:ellipsis}
 #toast.show{transform:translate(-50%,0);opacity:1}
 #toast b{color:var(--gold)} #toast i{font-style:normal;color:var(--light)}
@@ -369,7 +377,7 @@ html:where(.js) [data-reveal].in{opacity:1;transform:none}
 #fig-wheel{min-height:0;overflow:visible;padding:14px 0 6px;touch-action:auto;cursor:auto}
 #fig-wheel canvas{pointer-events:none}
 #fig-wheel .tap{bottom:auto;top:0;left:auto;right:12px;transform:none}
-.wheel{position:relative;z-index:2;width:min(88%,360px);aspect-ratio:1;margin:0 auto}
+.wheel{position:relative;z-index:2;width:min(94vw,440px);aspect-ratio:1;margin:0 auto}
 .wheel svg{width:100%;height:100%;overflow:visible;display:block}
 .wheel .sect{fill:rgba(255,245,214,.05);stroke:rgba(255,245,214,.35);stroke-width:1;transition:fill .8s,stroke .8s}
 .wheel .sect.lit{fill:rgba(255,245,214,.22);stroke:#fff5d6;filter:drop-shadow(0 0 8px rgba(255,245,214,.6))}
@@ -552,9 +560,10 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
     <div class="hud g" id="hud-gold" title="Мета · злато"><i class="ico">◆</i><b id="hud-g">0</b><span>злато</span></div>
   </div>
 </div>
-<div id="cards" role="button" aria-label="Събраните карти" title="Събраните карти"><div class="stack"><i></i><i></i><i></i></div><div><b id="hud-c">0</b> / <span id="hud-ct">20</span> карти</div></div>
+<div id="cards" role="button" aria-label="Събраните карти" title="Събраните карти"><div class="stack"><i></i><i></i><i></i></div><div><b id="hud-c">0</b> / <span id="hud-ct">21</span> карти</div></div>
 <div id="toast" aria-live="polite"></div>
 <div id="fly" aria-hidden="true"><img alt=""></div>
+<div id="cardpop" aria-hidden="true"><img alt=""><b></b></div>
 <div id="album" aria-hidden="true"><button class="close" type="button">затвори ✕</button><h3>Вашите карти</h3><p class="sum" id="album-sum"></p><div class="grid" id="album-grid"></div></div>
 
 <!-- ═══ 1 · HERO · пясъчният часовник → жената с искра и криле (рецепта hero · авто-морф) · части: 3 ═══ -->
@@ -571,7 +580,7 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
       <div class="tap" aria-hidden="true"><i></i><span>докоснете · преди → сега</span></div>
       <div class="toggle" id="hero-toggle" aria-label="Преди и сега"><button data-s="0">Преди</button><button data-s="1" class="on">Сега</button></div>
     </div>
-    <p class="lead">Тази страница не продава — тя е програмата. Скролвате и минавате през петте дни; по пътя събирате карти, а всяка носи светлина и злато в ъглите на екрана. Така ретрийтът започва, преди да сте дошла.</p>
+    <p class="lead"><em>„Да живееш означава да се радваш.“ — д-р Лозанов.</em> Тази страница не продава — тя е програмата. Скролвате и минавате през петте дни; по пътя събирате карти, а всяка носи светлина и злато в ъглите на екрана. Така ретрийтът започва, преди да сте дошла.</p>
     <div class="ctarow">
       <a class="cta" href="#path">Петте дни ↓</a>
       <a class="cta ghost" href="#bring">Какво да носите</a>
@@ -580,8 +589,8 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
   </div>
   <div class="wrap">
     <div class="parts three">
-      <div class="part pbox2" data-reveal><div class="t"><b>5 дни</b> = 8 стъпки</div><p>Петдневната дъга Отделяне → Представление минава по осемте стъпки на метаезика: Героиня, Чудовище, Водач, План, Призив, Залог, Съкровище, Еликсир.</p></div>
-      <div class="part pbox2" data-reveal><div class="t"><b>15:30 → 20:00</b> ядрото</div><p>Всеки ден: мека сутрешна дейност, следобед-пространство, което диша, и ядрото — сугестопедичното занятие „Нова Жена“.</p></div>
+      <div class="part pbox2" data-reveal><div class="t"><b>5 дни</b> = 8 стъпки</div><p>Петдневната дъга Отделяне → Представление минава по осемте стъпки на метаезика: Героиня, Чудовище, Водач, Сценарий, Призив, Залог, Съкровище, Еликсир. Меттаритрийтът е ролева игра в реалността: Вие сте актриса и помощник-сценарист във вълшебна продукция.</p></div>
+      <div class="part pbox2" data-reveal><div class="t"><b>15:30 → 20:00</b> ядрото</div><p>Всеки ден: мека сутрешна дейност, следобед-пространство, което диша, и ядрото — сугестопедичното занятие „Нова Жена“. Предизвикателството: ако не се радвате, не сте в правилната личност за дейността.</p></div>
       <div class="part pbox2" data-reveal><div class="t"><b>Светлина</b> и злато</div><p>Всичко Метта при нас е в светлина, всичко Мета — в злато. Картите, които събирате тук, ги трупат в ъглите на екрана — както в игра.</p></div>
     </div>
   </div>
@@ -607,19 +616,20 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
       <li class="dayc part" data-ден="1" data-стъпки="1 2" data-reveal>
         <div class="hd"><div class="num">1<small>ден</small></div><div><div class="arc">Отделяне</div><div class="date">петък · 18 септември</div></div><div class="steps"><span>1 Героиня</span><span>2 Чудовище</span></div></div>
         <div class="body">
-          <div class="mo2"><img src="/img/nz3/presence.webp" alt="" width="896" height="1200" loading="lazy" decoding="async"><div><div class="tm">Сутрин · дейността</div><div class="w">Пристигане и настаняване</div><div class="c">Банско Ви посреща. Оставяте багажа — и тежестта на седмицата.</div></div></div>
-          <div class="mo2 core"><img src="/img/nz3/troupe.webp" alt="" width="1200" height="896" loading="lazy" decoding="async"><div><div class="tm">15:30 → 20:00 · ядрото</div><div class="w">Първата сцена: име, роля, ментор</div><div class="c">Героинята влиза в образ. Чудовището — Его Илюзорков — получава име, за да го срещнете.</div></div></div>
-          <div class="mo2"><img src="/img/nz3/concert.webp" alt="" width="1200" height="896" loading="lazy" decoding="async"><div><div class="tm">Вечер</div><div class="w">Откриваща вечеря</div><div class="c">Трупата на една маса. Без телефони.</div></div></div>
+          <div class="mo2"><img src="/img/nz3/presence.webp" alt="" width="896" height="1200" loading="lazy" decoding="async"><div><div class="tm">Сутрин · дейността</div><div class="w">Пристигане и настаняване</div><div class="c">Банско Ви посреща — ул. Пирин 125, Petroff Apartments. Оставяте багажа и тежестта на седмицата; сугестопедия — свръхсън, свръххрана, присъствие.</div></div></div>
+          <div class="mo2 core"><img src="/img/nz3/troupe.webp" alt="" width="1200" height="896" loading="lazy" decoding="async"><div><div class="tm">15:30 → 20:00 · ядрото</div><div class="w">Първата сцена: нова разЛичност</div><div class="c">Влизате в нова разЛичност — име, мисия, умения — и избирате 1 от 8 образа за свой ментор. Чудовището, Его Илюзорков, получава име, за да го срещнете.</div></div></div>
+          <div class="mo2"><img src="/img/nz3/concert.webp" alt="" width="1200" height="896" loading="lazy" decoding="async"><div><div class="tm">Вечер · първата вечер</div><div class="w">Откриваща вечеря и концертен сеанс</div><div class="c">Трупата на една маса, без телефони — после класика и Моцарт на живо.</div></div></div>
           <p class="ln">„Приета съм такава, каквато съм.“</p>
           <div class="nav"><button type="button" data-go="1">напред →</button><span class="got" hidden>карта събрана ✦</span></div>
         </div>
       </li>
       <li class="dayc part" data-ден="2" data-стъпки="3 4" data-reveal>
-        <div class="hd"><div class="num">2<small>ден</small></div><div><div class="arc">Потапяне</div><div class="date">събота · 19 септември</div></div><div class="steps"><span>3 Водач</span><span>4 План</span></div></div>
+        <div class="hd"><div class="num">2<small>ден</small></div><div><div class="arc">Потапяне</div><div class="date">събота · 19 септември</div></div><div class="steps"><span>3 Водач</span><span>4 Сценарий</span></div></div>
         <div class="body">
-          <div class="mo2"><img src="/img/nz3/transition.webp" alt="" width="1200" height="896" loading="lazy" decoding="async"><div><div class="tm">Сутрин · дейността</div><div class="w">Преход до Байкушева мура</div><div class="c">Около час от Шилигарник до най-старото дърво в Пирин. Присъствие, писане и приказване по пътя.</div></div></div>
+          <div class="mo2"><img src="/img/nz3/transition.webp" alt="" width="1200" height="896" loading="lazy" decoding="async"><div><div class="tm">Сутрин · дейността</div><div class="w">Преход до Байкушева мура</div><div class="c">Около час от паркинг Шилигарник до най-старото дърво в Пирин. „Присъствие, Писане, Приказване“ по пътя.</div></div></div>
           <div class="mo2"><img src="/img/nz/presence-lake.webp" alt="" width="771" height="1008" loading="lazy" decoding="async"><div><div class="tm">Следобед · пространство</div><div class="w">Обяд и тишина</div><div class="c">Времето диша. Нищо не е задължително.</div></div></div>
-          <div class="mo2 core"><img src="/img/nz3/troupe.webp" alt="" width="1200" height="896" loading="lazy" decoding="async"><div><div class="tm">15:30 → 20:00 · ядрото</div><div class="w">Водачът и планът</div><div class="c">Сърцето на режисьора и петте неща на ретрийта. Хоризонтът се разширява — без умора.</div></div></div>
+          <div class="mo2 core"><img src="/img/nz3/troupe.webp" alt="" width="1200" height="896" loading="lazy" decoding="async"><div><div class="tm">15:30 → 20:00 · ядрото</div><div class="w">Водачът и сценарият</div><div class="c">Сърцето на режисьора и петте неща, от които се плете сценарият. Всеки дописва 1 от 8 сцени. Хоризонтът се разширява — без умора.</div></div></div>
+          <div class="mo2"><img src="/img/nz3/troupe.webp" alt="" width="1200" height="896" loading="lazy" decoding="async"><div><div class="tm">Вечер</div><div class="w">Първа репетиция</div><div class="c">Сцените се пробват за първи път. Вечеряме заедно, без телефони.</div></div></div>
           <p class="ln">„Намирам ментор и резонанс.“</p>
           <div class="nav"><button type="button" data-go="0">← назад</button><button type="button" data-go="2">напред →</button><span class="got" hidden>карта събрана ✦</span></div>
         </div>
@@ -627,9 +637,9 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
       <li class="dayc part" data-ден="3" data-стъпки="5 6" data-reveal>
         <div class="hd"><div class="num">3<small>ден</small></div><div><div class="arc">Посвещение</div><div class="date">неделя · 20 септември</div></div><div class="steps"><span>5 Призив</span><span>6 Залог</span></div></div>
         <div class="body">
-          <div class="mo2"><img src="/img/nz/pirin-sun.webp" alt="" width="1000" height="1115" loading="lazy" decoding="async"><div><div class="tm">Сутрин · дейността</div><div class="w">Тенис или планински колела</div><div class="c">Тенис за не/напреднали в Hot Springs, с. Баня — или колела по пиринските пътеки. Вие избирате.</div></div></div>
+          <div class="mo2"><img src="/img/nz/pirin-sun.webp" alt="" width="1000" height="1115" loading="lazy" decoding="async"><div><div class="tm">Сутрин · дейността</div><div class="w">Тенис или планински колела</div><div class="c">Тенис за не/напреднали с метатреньор Топко Машинков в Hot Springs, с. Баня (ракети под наем) — или колела по пиринските пътеки. Вие избирате.</div></div></div>
           <div class="mo2 core"><img src="/img/nz3/troupe.webp" alt="" width="1200" height="896" loading="lazy" decoding="async"><div><div class="tm">15:30 → 20:00 · ядрото</div><div class="w">Призивът и залогът</div><div class="c">Стъпвате без карта. Една досадна ситуация от живота — изиграна иначе. Цяло-част-цяло.</div></div></div>
-          <div class="mo2"><img src="/img/nz/mozart-night.webp" alt="" width="1143" height="683" loading="lazy" decoding="async"><div><div class="tm">18:30 · концертен сеанс</div><div class="w">Класика и Моцарт на свещи</div><div class="c">Всяка вечер. Тук залогът се чува.</div></div></div>
+          <div class="mo2"><img src="/img/nz3/troupe.webp" alt="" width="1200" height="896" loading="lazy" decoding="async"><div><div class="tm">Вечер</div><div class="w">Втора репетиция</div><div class="c">Сцените се задълбочават. Вечеряме заедно, без телефони.</div></div></div>
           <p class="ln">„Стъпвам без карта.“</p>
           <div class="nav"><button type="button" data-go="1">← назад</button><button type="button" data-go="3">напред →</button><span class="got" hidden>карта събрана ✦</span></div>
         </div>
@@ -647,8 +657,8 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
       <li class="dayc part" data-ден="5" data-стъпки="8" data-reveal>
         <div class="hd"><div class="num">5<small>ден</small></div><div><div class="arc">Представление</div><div class="date">вторник · 22 септември</div></div><div class="steps"><span>8 Еликсир</span></div></div>
         <div class="body">
-          <div class="mo2"><img src="/img/nz3/hero-wide.webp" alt="" width="1600" height="893" loading="lazy" decoding="async"><div><div class="tm">Сутрин · дейността</div><div class="w">Снимане на филм — 8 сцени</div><div class="c">Осемте стъпки, изиграни от Вас. Дрехите за сцена са за днес.</div></div></div>
-          <div class="mo2 core"><img src="/img/nz3/troupe.webp" alt="" width="1200" height="896" loading="lazy" decoding="async"><div><div class="tm">15:30 → 20:00 · ядрото</div><div class="w">Еликсирът</div><div class="c">Връщате дара — творите. Очите почват да светят.</div></div></div>
+          <div class="mo2"><img src="/img/nz3/hero-wide.webp" alt="" width="1600" height="893" loading="lazy" decoding="async"><div><div class="tm">Сутрин · дейността</div><div class="w">Снимаме филм „Нова Жена и Меттамъж“ — 8 сцени</div><div class="c">Осемте стъпки, изиграни от Вас. Дрехите за сцена са за днес. После обяд.</div></div></div>
+          <div class="mo2 core"><img src="/img/nz3/troupe.webp" alt="" width="1200" height="896" loading="lazy" decoding="async"><div><div class="tm">15:30 → 20:00 · ядрото</div><div class="w">Еликсирът</div><div class="c">Връщате дара — 21 минути самостоятелно творене. Очите почват да светят.</div></div></div>
           <div class="mo2"><img src="/img/nz3/concert.webp" alt="" width="1200" height="896" loading="lazy" decoding="async"><div><div class="tm">Вечер</div><div class="w">Празненство</div><div class="c">Игри и кадри зад кулисите. Постпродукцията започва у дома.</div></div></div>
           <p class="ln">„Връщам дара — творя.“</p>
           <div class="nav"><button type="button" data-go="3">← назад</button><span class="got" hidden>карта събрана ✦</span></div>
@@ -689,7 +699,7 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
       <div class="moments" id="moments">
         <div class="mo part" data-i="0"><div class="inner"><div class="back" aria-hidden="true"><img src="/img/nz/deck-back.webp" alt="" width="720" height="894" loading="lazy" decoding="async"><span class="cue">докоснете — обърнете</span></div><div class="front"><div class="tm">Сутрин · дейността · мека</div><h3>08:00 → 12:00</h3><p>Денят започва навън, с тялото. Всеки ден различно:</p><ul><li><b>Д2</b> преход до Байкушева мура</li><li><b>Д3</b> тенис или планински колела</li><li><b>Д4</b> спа и минерални басейни</li><li><b>Д5</b> снимане на филм — 8 сцени</li></ul></div></div></div>
         <div class="mo part" data-i="1"><div class="inner"><div class="back" aria-hidden="true"><img src="/img/nz/deck-back.webp" alt="" width="720" height="894" loading="lazy" decoding="async"><span class="cue">докоснете — обърнете</span></div><div class="front"><div class="tm">Следобед · пространство · диша</div><h3>12:00 → 15:30</h3><p>Обяд, почивка, дневник, разходка. Пространство, в което нищо не е задължително — и затова всичко се случва.</p></div></div></div>
-        <div class="mo part" data-i="2"><div class="inner"><div class="back" aria-hidden="true"><img src="/img/nz/deck-back.webp" alt="" width="720" height="894" loading="lazy" decoding="async"><span class="cue">докоснете — обърнете</span></div><div class="front"><div class="tm">Ядрото · занятието „Нова Жена“</div><h3>15:30 → 20:00</h3><p>Сугестопедичното занятие: влизане в образ, сеанс и игра на метаезика, вечеря заедно, концертен сеанс на свещи. Присъствено или онлайн — едно и също ядро.</p></div></div></div>
+        <div class="mo part" data-i="2"><div class="inner"><div class="back" aria-hidden="true"><img src="/img/nz/deck-back.webp" alt="" width="720" height="894" loading="lazy" decoding="async"><span class="cue">докоснете — обърнете</span></div><div class="front"><div class="tm">Ядрото · занятието „Нова Жена“</div><h3>15:30 → 20:00</h3><p>Сугестопедичното занятие в две части: 15:30 → 17:30 и 18:30 → 20:00, а по средата — вечеря заедно, без телефони (17:30 → 18:30). Присъствено или онлайн — едно и също ядро.</p></div></div></div>
         <div class="mo part" data-i="3"><div class="inner"><div class="back" aria-hidden="true"><img src="/img/nz/deck-back.webp" alt="" width="720" height="894" loading="lazy" decoding="async"><span class="cue">докоснете — обърнете</span></div><div class="front"><div class="tm">Вечер · тишина</div><h3>20:00 → сън</h3><p>Краят е тишина до сутринта. Сънят е част от програмата — не почивка от нея.</p></div></div></div>
       </div>
     </div>
@@ -738,9 +748,9 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
 <!-- ═══ 5 · ВОДАЧЪТ · Ден 2 · сърцето (рецепта heart) · петте печата = петте неща на ретрийта · части: 5 неща ═══ -->
 <section class="vodach magic" id="vodach" data-ден="2">
   <div class="wrap">
-    <div class="kicker" data-reveal>Ден 2 · Водачът и планът</div>
+    <div class="kicker" data-reveal>Ден 2 · Водачът и сценарият</div>
     <h2 data-reveal>Сърцето на <em>режисьора</em></h2>
-    <p class="lead" data-reveal>Димитър Караманчев води ретрийта. Сърцето му се върти; докоснете го — стрелката спира на едно от петте неща на ретрийта, от които се плете планът. Всяко събрано нещо е карта.</p>
+    <p class="lead" data-reveal>Димитър Караманчев води ретрийта — режисьорът на продукцията, а Вие сте актриса и помощник-сценарист. Сърцето му се върти; докоснете го — стрелката спира на едно от петте неща на ретрийта, от които се плете сценарият. Всяко събрано нещо е карта.</p>
   </div>
   <div class="vodgrid">
     <figure class="portrait" data-reveal="l">
@@ -755,7 +765,7 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
         <button type="button" class="seal" data-k="1" aria-label="II · Планинските колела"><b>II</b><span>колелата</span></button>
         <button type="button" class="seal" data-k="2" aria-label="III · Спа и минерални басейни"><b>III</b><span>спа</span></button>
         <button type="button" class="seal" data-k="3" aria-label="IV · Тенис"><b>IV</b><span>тенис</span></button>
-        <button type="button" class="seal" data-k="4" aria-label="V · Концертният сеанс на свещи"><b>V</b><span>сеансът</span></button>
+        <button type="button" class="seal" data-k="4" aria-label="V · Концертният сеанс"><b>V</b><span>сеансът</span></button>
       </div>
       <div class="tap" aria-hidden="true"><i></i><span>докоснете — сърцето спира</span></div>
     </div>
@@ -769,7 +779,7 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
       <button type="button" class="part" data-k="4"><b>V</b>сеанс</button>
     </div>
     <div class="sealbook" id="sealbook" aria-live="polite">
-      <p class="hint">Пет неща около сърцето — петте неща на ретрийта, от които се плете планът.</p>
+      <p class="hint">Пет неща около сърцето — петте неща на ретрийта, от които се плете сценарият.</p>
       <div class="sp" data-k="0" hidden>
         <div class="sk"><span class="num">I · Ден 2</span><span class="ttl">Преходът до Байкушева мура</span></div>
         <p>Около час пеша от Шилигарник до най-старото дърво в Пирин. Преходът на Творея „Присъствие, писане и приказване“: вървите, спирате, пишете едно изречение, разказвате го.</p>
@@ -791,8 +801,8 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
         <div class="pic"><img src="/img/nz/pirin-sun.webp" alt="" width="1000" height="1115" loading="lazy" decoding="async"><div><div class="d">Носите</div><div class="w">Тенис ракета</div><p>Ако имате. Може и да се наеме на място.</p></div></div>
       </div>
       <div class="sp" data-k="4" hidden>
-        <div class="sk"><span class="num">V · всяка вечер</span><span class="ttl">Концертният сеанс на свещи</span></div>
-        <p>Класика и Моцарт, на живо, на свещи, в залата — всяка вечер в 18:30. Онлайн: слушалки и приглушена светлина. Тук се случва сънят от два часа към осем.</p>
+        <div class="sk"><span class="num">V · Ден 1</span><span class="ttl">Концертният сеанс</span></div>
+        <p>Класика и Моцарт, на живо, в залата — вечерта на първия ден, 18 септември, в 18:30. Онлайн: слушалки и приглушена светлина. Тук залогът се чува и сънят тръгва от два часа към осем.</p>
         <div class="pic"><img src="/img/nz/mozart-night.webp" alt="" width="1143" height="683" loading="lazy" decoding="async"><div><div class="d">Носите</div><div class="w">Слушалки и дневник</div><p>Слушалките са ключови за онлайн. Дневникът — за всички.</p></div></div>
       </div>
     </div>
@@ -803,7 +813,7 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
 <section class="scale magic" id="scale">
   <div class="wrap">
     <div class="kicker" data-reveal>Сърцето на темата · атентиометърът</div>
-    <h2 data-reveal>Побъркват ме → <em>съзнание</em></h2>
+    <h2 data-reveal>Побъркват ме → <em>вдъхновение</em></h2>
     <p class="lead" data-reveal>Не превръщаме желязото в злато, а страданието в съзнание. Всяка дейност, преместена едно стъпало нагоре по скалата, печели светлина и злато. Скролвате — стрелката се качва; докоснете — спира.</p>
   </div>
   <div class="mfig tapable" id="fig-scale" data-bleed="always" data-tap>
@@ -822,7 +832,7 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
       <li class="part" data-i="1"><span class="n">2</span><span class="w">Дразнят ме<small>вече само тлея</small></span><span class="pts"><i>+2 ✧</i> · <i>+2 ◆</i></span></li>
       <li class="part" data-i="2"><span class="n">3</span><span class="w">Приемам<small>виждам и правя следващата стъпка</small></span><span class="pts"><i>+2 ✧</i> · <i>+2 ◆</i></span></li>
       <li class="part" data-i="3"><span class="n">4</span><span class="w">Радост<small>същите неща — усмивка</small></span><span class="pts"><i>+2 ✧</i> · <i>+2 ◆</i></span></li>
-      <li class="part" data-i="4"><span class="n">5</span><span class="w">Съзнание<small>материал за творене · тиха радост</small></span><span class="pts"><i>+2 ✧</i> · <i>+2 ◆</i></span></li>
+      <li class="part" data-i="4"><span class="n">5</span><span class="w">Вдъхновение<small>материал за творене · тиха радост</small></span><span class="pts"><i>+2 ✧</i> · <i>+2 ◆</i></span></li>
     </ol>
   </div>
 </section>
@@ -857,8 +867,8 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
     <div class="wgrid">
       <div class="wbox light part" data-reveal><div class="t"><b>Метта</b> = светлина</div><p>Четирите области на любящата доброта. Светват, докато трупате светлина.</p><div class="row" id="w-metta"><span data-s="0">Здраве</span><span data-s="1">Призвание</span><span data-s="2">Характер</span><span data-s="3">Визия</span></div></div>
       <div class="wbox part" data-reveal><div class="t"><b>Мета</b> = злато</div><p>Осемте будечители — целите в действие. Всеки събран носи злато.</p><div class="row" id="w-meta"><span data-a="0">Любка</span><span data-a="1">Екопътечко</span><span data-a="2">Куражку</span><span data-a="3">Обемко</span><span data-a="4">Хола</span><span data-a="5">Фибоначко</span><span data-a="6">Творея</span><span data-a="7">Доверка</span></div></div>
-      <div class="wbox part" data-reveal><div class="t"><b>Механиката</b></div><p>Дейност минава побърква → дразни → приемам → радост → съзнание. Всяко стъпало нагоре = светлина + злато. Атентиометърът е входът; сърцето бие по-спокойно с всяко ниво.</p></div>
-      <div class="wbox part" data-reveal><div class="t"><b>Картите</b></div><p>Пет дни, пет неща, чудовището, осем будечители и багажът — 20 карти по страницата. Броячът долу вляво ги пази в този браузър; профил и трупа идват след ретрийта.</p></div>
+      <div class="wbox part" data-reveal><div class="t"><b>Механиката</b></div><p>Дейност минава побърква → дразни → приемам → радост → вдъхновение. Всяко стъпало нагоре = светлина + злато. Атентиометърът е входът; сърцето бие по-спокойно с всяко ниво.</p></div>
+      <div class="wbox part" data-reveal><div class="t"><b>Картите</b></div><p>Пет дни, пет неща, чудовището, осем будечители, багажът и въпросът от формата — 21 карти по страницата. Броячът долу вляво ги пази в този браузър; профил и трупа идват след ретрийта.</p></div>
     </div>
   </div>
 </section>
@@ -876,11 +886,9 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
     <img class="poster" src="/img/nz3/dawn-wide.webp" alt="Изгрев над Пирин" width="1600" height="900" hidden loading="lazy" decoding="async">
     <div class="wrap">
     <div class="slots" id="slots">
-      <div class="slot part" data-p="0"><div class="t">15:30</div><div><div class="w">Влизане в образ</div><div class="c"><span class="live">Трупата се събира в залата в Банско.</span><span class="online">В Zoom — с включена камера, в своя ъгъл.</span></div></div><img class="si" src="/img/nz3/troupe.webp" alt="" width="1200" height="896" loading="lazy" decoding="async"></div>
-      <div class="slot part" data-p="0.25"><div class="t">16:00</div><div><div class="w">Сеанс и игра · метаезикът на живо</div><div class="c"><span class="live">Карти, сценарий, роли — на маса, заедно.</span><span class="online">Същите карти — на екрана и в ръцете Ви.</span></div></div><img class="si" src="/img/nz3/presence.webp" alt="" width="896" height="1200" loading="lazy" decoding="async"></div>
-      <div class="slot dinner part" data-p="0.48"><div class="t">17:30</div><div><div class="w">Вечеря · заедно, без телефони</div><div class="c"><span class="live">До 18:30 — на една маса, в Банско.</span><span class="online">До 18:30 — вечеряте у дома, без екран.</span></div></div><img class="si" src="/img/nz3/concert.webp" alt="" width="1200" height="896" loading="lazy" decoding="async"></div>
-      <div class="slot part" data-p="0.72"><div class="t">18:30</div><div><div class="w">Концертен сеанс · класика и Моцарт на свещи</div><div class="c"><span class="live">На живо, на свещи, в залата.</span><span class="online">Слушалки, приглушена светлина.</span></div></div><img class="si" src="/img/nz/mozart-night.webp" alt="" width="1143" height="683" loading="lazy" decoding="async"></div>
-      <div class="slot part" data-p="1"><div class="t">20:00</div><div><div class="w">Край · и тишина до сутринта</div><div class="c"><span class="live">Сутрините са за дейностите: мурата, спа-то, ракетата.</span><span class="online">Сутрините са Ваши — с дневника.</span></div></div><img class="si" src="/img/nz3/sleep-dawn.webp" alt="" width="896" height="1200" loading="lazy" decoding="async"></div>
+      <div class="slot part" data-p="0"><div class="t">15:30 → 17:30</div><div><div class="w">Част 1 · занятието „Нова Жена“</div><div class="c"><span class="live">Трупата в залата в Банско: влизане в образ, сеанс и игра на метаезика.</span><span class="online">В Zoom, с камера: същите карти, сценарий и роли.</span></div></div><img class="si" src="/img/nz3/troupe.webp" alt="" width="1200" height="896" loading="lazy" decoding="async"></div>
+      <div class="slot dinner part" data-p="0.5"><div class="t">17:30 → 18:30</div><div><div class="w">Вечеря · заедно, без телефони</div><div class="c"><span class="live">На една маса в Банско — всяка вечер.</span><span class="online">Вечеряте у дома, без екран.</span></div></div><img class="si" src="/img/nz3/concert.webp" alt="" width="1200" height="896" loading="lazy" decoding="async"></div>
+      <div class="slot part" data-p="1"><div class="t">18:30 → 20:00</div><div><div class="w">Част 2 · до 20:00, после тишина</div><div class="c"><span class="live">Втора част на занятието; първата вечер — концертният сеанс.</span><span class="online">Втора част на екрана; после дневникът и тишината.</span></div></div><img class="si" src="/img/nz3/sleep-dawn.webp" alt="" width="896" height="1200" loading="lazy" decoding="async"></div>
     </div>
     </div>
     <div class="tap" aria-hidden="true"><i></i><span>докоснете слънцето</span></div>
@@ -2426,7 +2434,7 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
     'нещо-1':{n:'II · Колелата',img:'/img/nz/pirin-river.webp',l:2,g:3},
     'нещо-2':{n:'III · Спа',img:'/img/nz/presence-lake.webp',l:2,g:3},
     'нещо-3':{n:'IV · Тенис',img:'/img/nz/pirin-sun.webp',l:2,g:3},
-    'нещо-4':{n:'V · Сеансът на свещи',img:'/img/nz/mozart-night.webp',l:2,g:3},
+    'нещо-4':{n:'V · Концертният сеанс',img:'/img/nz/mozart-night.webp',l:2,g:3},
     'чудовище':{n:'Его Илюзорков',img:'/img/nz/card-spirachka.webp',l:5,g:0},
     'будечител-0':{n:'Любка',img:'/img/w/p-lyubka.webp',l:1,g:5},
     'будечител-1':{n:'Екопътечко',img:'/img/w/p-ekopatechko.webp',l:1,g:5},
@@ -2436,7 +2444,8 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
     'будечител-5':{n:'Фибоначко',img:'/img/w/p-fibonachko.webp',l:1,g:5},
     'будечител-6':{n:'Творея',img:'/img/w/p-tvoreya.webp',l:1,g:5},
     'будечител-7':{n:'Доверка',img:'/img/w/p-doverka.webp',l:1,g:5},
-    'багаж':{n:'Багажът · стегнат',img:'/img/nz/card-sakrovishte.webp',l:3,g:3}
+    'багаж':{n:'Багажът · стегнат',img:'/img/nz/card-sakrovishte.webp',l:3,g:3},
+    'въпрос':{n:'Въпросът · изпратен',img:'/img/nz3/presence.webp',l:2,g:2}   /* 21-вата карта · отключва се при изпращане на формата (нж:изпратено · шевът) · не се събира по скрол */
   };
   const ВСИЧКО=Object.keys(КАРТИ).length;
   let ИГРА={светлина:0,злато:0,карти:{},ниво:0,багаж:{}};
@@ -2474,6 +2483,8 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
   function албум(open){ album.classList.toggle('open',open); album.setAttribute('aria-hidden',open?'false':'true'); if(!open) return;
     $$('#album .c').forEach(c=>c.classList.toggle('on',!!ИГРА.карти[c.dataset.id])); $('#album-sum').textContent=`${броиКарти()} от ${ВСИЧКО} · ${ИГРА.светлина} светлина · ${ИГРА.злато} злато`; }
   cardsBox.addEventListener('click',()=>албум(true)); $('#album .close').addEventListener('click',()=>албум(false)); album.addEventListener('click',e=>{ if(e.target===album) албум(false) });
+  /* 21-вата карта · „въпросът“ · отключва се САМО при успешно изпращане на формата (шевът dispatch-ва нж:изпратено · не се пипа шевът) */
+  document.addEventListener('нж:изпратено',()=>{ карта('въпрос', $('#lead')||$('#fcard')); });
 
   /* ══ МАГИЧНО СВЪРЗВАНЕ · златни частици по нишки от контрола към частите (канон v2.3) ══ */
   const ВРЪЗКИ=[];
@@ -2679,7 +2690,7 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
     ['Дразнят ме','Вече не експлодирам. Само тлея. Уморително е.'],
     ['Приемам','Виждам ситуацията такава, каквато е. И правя следващата стъпка.'],
     ['Радост','Същите ситуации — а вече ми носят усмивка. Очите почват да светят.'],
-    ['Съзнание','Ситуациите стават материал за творене. Тиха радост. Спокойствие.']
+    ['Вдъхновение','Ситуациите стават материал за творене. Тиха радост. Спокойствие.']
   ];
   const scStage=$('#fig-scale'), dialEl=$('#dial'), dialSvg=$('#dialsvg'), dawn=$('#sc-dawn'), storm=$('.dial .storm'), ladder=$$('#ladder li');
   const secs=$('#secs'), r1=122, r2=156, cx=160, cy=160;
@@ -2755,7 +2766,21 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
     sparkPar[0]=q.x; sparkPar[1]=q.y; m.параметри('spark',sparkPar); задай('spark',1,true); clearTimeout(sparkAt.t); sparkAt.t=setTimeout(()=>задай('spark',0,true),1800);
   }
   const sparkHook=()=>{const m=МФ(); if(m&&m.слушай){ m.слушай('spark',ф=>{const key=ф.ш+'x'+ф.в+'@'+(ф.камZ||0).toFixed(2); if(key!==sparkKey&&sparkField()){sparkKey=key; m.параметри('spark',sparkPar)}}) } else setTimeout(sparkHook,200)}; sparkHook();
-  function nodeTap(k,g){ видяно('#fig-wheel'); sparkAt(g); if(!карта('будечител-'+k,g)) кажи(`<b>${МЕТА[k]}</b> вече е при Вас`); обновиКолело(); }
+  /* POP на картата (итерация 2 · дума 16.09): тап на будечител → картата изскача по-голяма, стои ≥1,5 s, после отлита към брояча */
+  const cardpop=$('#cardpop'), cpImg=cardpop&&cardpop.querySelector('img'), cpName=cardpop&&cardpop.querySelector('b'); let cpT1=0,cpT2=0;
+  function popCard(k){
+    if(reduce||!cardpop) return;
+    cpImg.src=k.img; cpName.textContent=k.n;
+    cardpop.classList.remove('go'); cardpop.style.left='50%'; cardpop.style.top='42%';
+    void cardpop.offsetWidth; cardpop.classList.add('show');
+    clearTimeout(cpT1); clearTimeout(cpT2);
+    cpT1=setTimeout(()=>{ const t=cardsBox.getBoundingClientRect(); cardpop.style.left=(t.left+t.width/2)+'px'; cardpop.style.top=(t.top+t.height/2)+'px'; cardpop.classList.add('go'); },1500);
+    cpT2=setTimeout(()=>{ cardpop.classList.remove('show','go'); },2250);
+  }
+  function nodeTap(k,g){ видяно('#fig-wheel'); sparkAt(g); const id='будечител-'+k, ново=!ИГРА.карти[id];
+    if(!карта(id,(ново&&!reduce)?null:g)) кажи(`<b>${МЕТА[k]}</b> вече е при Вас`);
+    else if(!reduce) popCard(КАРТИ[id]);
+    обновиКолело(); }
   function обновиКолело(){
     if(!готовоКолело) return;
     sectEls.forEach((p,k)=>p.classList.toggle('lit',ИГРА.светлина>=ПРАГ[k]));
@@ -2782,7 +2807,9 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
     const t=cs.map(y=>(y-thrY0)/span); slots.forEach((s,i)=>{s.dataset.p=t[i].toFixed(3)});
     railHit.style.left=(sl-8)+'px'; railHit.style.width='52px';
     const q0=m.обратно('thread',rail,thrY0), q1=m.обратно('thread',rail,thrY1); if(!q0||!q1) return;
-    m.параметри('thread',[t[0],t[1],t[2],t[3],t[4],q0.y,q1.y,q0.x]); onScroll();
+    /* шейдърът чете uNodes[0..4] като 5 маркер-мъниста · три пояса (15:30→17:30 · вечеря · 18:30→20:00) → мъниста към трите позиции */
+    const mk=[t[0],t[0],t[(t.length-1)>>1],t[t.length-1],t[t.length-1]];
+    m.параметри('thread',[mk[0],mk[1],mk[2],mk[3],mk[4],q0.y,q1.y,q0.x]); onScroll();
   }
   function applySun(p){
     задай('thread',p,false); let act=-1;

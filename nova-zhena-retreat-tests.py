@@ -330,7 +330,9 @@ class Т6_ФиксКръг1(Основа):
         self.съдържа(self.b, 'id="cardpop"', 'има елемент за POP на картата')
         self.съдържа(self.src, '#cardpop.show', 'CSS за изскачащата карта')
         self.assertIn('function popCard(', self.sc[3], 'popCard в драйвера')
-        self.assertRegex(self.sc[3], r'(?s)function nodeTap\(k,g\)\{.*?popCard\(', 'тапът на будечител вика popCard')
+        # фикс-кръг 3: popCard вече се вика от карта() за ВСИЧКИ карти (не само будечители); nodeTap минава през карта()
+        self.assertRegex(self.sc[3], r'(?s)function карта\(id,from\)\{.*?popCard\(', 'карта() вика popCard (задържане+оголване за всички карти)')
+        self.assertRegex(self.sc[3], r'(?s)function nodeTap\([^)]*\)\{.*?карта\(', 'тапът на будечител минава през карта()')
 
     def test_56_notion_съдържание(self):
         for текст in ('Petroff', 'ул. Пирин 125', 'Топко Машинков', 'Меттамъж',
@@ -370,6 +372,134 @@ class Т7_ФиксКръг2(Основа):
 
     def test_63_карта_въпрос_специалната_картинка(self):
         self.assertIn("'въпрос':{n:'Въпросът · изпратен',img:'img/nz/card-vapros.webp'", self.sc[3], '21-вата карта ползва специалната card-vapros')
+
+
+class Т8_ФиксКръг3(Основа):
+    """Контрол-фикс пас П5 (v1.3 · Opus 4.8 High): гладки контроли + правилни имена · нула нова архитектура."""
+
+    def test_70_именуване_ритмомер(self):
+        # „часовник“ → РИТМОМЕР във видимия текст (двигателят/aria остават непокътнати вътрешно)
+        self.assertNotIn('часовник', self.txt.lower(), 'нула видима дума „часовник“ (стана РИТМОМЕР)')
+        d = блок_по_id(self.src, 'day')
+        self.съдържа(d, 'Ден-<em>ритмомер</em>', 'заглавието на деня е „Ден-ритмомер“')
+        self.съдържа(d, 'Докоснете ритмомера', 'подсказката ползва „ритмомера“')
+        self.съдържа(d, 'data-фигура="clock"', 'рецептата clock (двигателят) е непокътната')
+
+    def test_71_метаконтрол_махнат_протагонисти(self):
+        self.assertNotIn('метаконтрол', self.txt.lower(), 'видимата дума „метаконтрол“ е махната от UI')
+        w = блок_по_id(self.src, 'wheel')
+        self.съдържа(w, 'Протагонисти · светлозлатната нишка', 'kicker-ът на колелото → „протагонисти“')
+        self.assertNotIn('Метаконтрол ·', w, 'старият kicker „Метаконтрол ·“ го няма във видимия блок')
+        self.съдържа(w, 'Светлозлатното <em>колело</em>', 'контролът остава „Светлозлатното колело“')
+
+    def test_72_сърцето_на_колелото_Вие(self):
+        w = блок_по_id(self.src, 'wheel')
+        self.съдържа(w, '>Вие</text>', 'в сърцето на колелото стои „Вие“')
+        self.assertNotIn('>атентиометър</text>', w, 'старият лейбъл „атентиометър“ в сърцето е сменен')
+
+    def test_73_attentiometer_латиница_двойно_t(self):
+        s = блок_по_id(self.src, 'scale')
+        self.assertRegex(s, r'\bAttentiometer\b', 'латинско „Attentiometer“ (двойно t) присъства')
+        self.assertNotIn('Atentiometer', s, 'нула единично-t „Atentiometer“')
+        # позиция: атентиометърът (scale) е НАД будечителите (wheel)
+        ids = секции(self.src)
+        self.assertLess(ids.index('scale'), ids.index('wheel'), 'атентиометърът е над колелото/будечителите')
+
+    def test_74_петте_полета_на_атентиометъра_пълни(self):
+        s = блок_по_id(self.src, 'scale')
+        малки = re.findall(r'<li class="part" data-i="\d"><span class="n">\d</span><span class="w">[^<]+<small>([^<]+)</small>', s)
+        self.assertEqual(len(малки), 5, 'петте стъпала имат под-текст')
+        for m in малки:
+            self.assertTrue(m.strip(), 'полето не е празно')
+
+    def test_75_части_клик_отваря_съдържание(self):
+        # структурно: тапът на нещо/печат минава през openSeal, който показва скритата .sp
+        dr = self.sc[3]
+        self.assertIn("thingEls.forEach((s,k)=>s.addEventListener('click'", dr, 'частите-неща имат click')
+        self.assertIn("sealEls.forEach((s,k)=>s.addEventListener('click'", dr, 'печатите имат click')
+        self.assertRegex(dr, r'(?s)function openSeal\(k\)\{.*?pages\.forEach\(\(p,i\)=>\{p\.hidden=i!==k\}\)', 'openSeal разкрива съответната .sp')
+        v = блок_по_id(self.src, 'vodach')
+        self.assertEqual(len(re.findall(r'<div class="sp" data-k="\d" hidden>', v)), 5, 'петте .sp части със съдържание')
+
+    def test_76_будечител_pattern_за_всички_карти(self):
+        dr = self.sc[3]
+        # карта() пуска popCard (задържане+оголване), а не бързото прелети, когато има #cardpop
+        self.assertRegex(dr, r'if\(!reduce\s*&&\s*cardpop\)\s*popCard\(k\);\s*else\s*прелети\(', 'карта() ползва popCard за всички карти')
+
+    def test_77_скрол_центриране_на_дните(self):
+        self.assertRegex(self.src, r'\.dayc\{[^}]*scroll-margin-top:calc\(var\(--bar\)', '.dayc има scroll-margin под лентата')
+        dr = self.sc[3]
+        self.assertIn('центрирайДен', dr, 'има центриране на отворения ден')
+        self.assertRegex(dr, r"центрирайДен\(d\)\{[^}]*block:'center'", 'денят се центрира (block:center)')
+
+    def test_78_омекотен_преход_на_лицата(self):
+        dr = self.sc[3]
+        self.assertRegex(dr, r"face\.style\.transition='opacity \.5s cubic-bezier", 'кросфейдът на лицата е омекотен (0.5s ease-in-out)')
+        self.assertRegex(self.src, r'\.faces button\{[^}]*transition:all \.5s cubic-bezier', 'бутоните на лицата с по-мазен преход')
+
+    def test_79_дигиталният_багаж_три_глави_динамичен(self):
+        b = блок_по_id(self.src, 'bring')
+        for таг in ('Необходими', 'Силно препоръчителни', 'Препоръчителни'):
+            self.assertRegex(b, r'<span class="tag">%s</span>' % таг, f'глава: {таг}')
+        self.assertEqual(len(re.findall(r'<div class="chapter(?: open)?">', b)), 3, 'три глави')
+        self.assertEqual(len(re.findall(r'<div class="chapter open">', b)), 1, 'първата глава е отворена по подразбиране')
+        # динамика: главите се отварят/скриват при тап
+        self.assertIn("$$('.digi .chapter .ch-h')", self.sc[3], 'главите имат тап-хендлър (отваря/скрива)')
+        self.assertRegex(self.src, r'\.digi \.chapter\.open \.ch-body\{[^}]*max-height', 'CSS за разгъване на главата')
+
+    def test_80_miracle_of_mind(self):
+        b = блок_по_id(self.src, 'bring')
+        self.съдържа(b, 'Miracle of Mind', 'Miracle of Mind е добавен')
+        self.съдържа(b, 'https://isha.sadhguru.org/eu/en/miracle-of-mind', 'линкът към Miracle of Mind')
+        self.съдържа(b, 'class="mom"', 'икона-лого за Miracle of Mind')
+        # Miracle of Mind + Storytel са в главата „Силно препоръчителни“
+        глави = re.split(r'<div class="chapter(?: open)?">', b)
+        силно = [g for g in глави if 'Силно препоръчителни' in g]
+        self.assertEqual(len(силно), 1, 'главата „Силно препоръчителни“')
+        for n in ('Miracle of Mind', 'Storytel'):
+            self.съдържа(силно[0], n, f'{n} е в „Силно препоръчителни“')
+
+    def test_81_протагонист_панел_и_без_дубъл_име(self):
+        # тап на протагонист отваря #wheelinfo (роля + история); картата носи името → без #wi-nm (без 2× текст)
+        self.съдържа(self.b, 'id="wheelinfo"', 'инфо-панелът на протагониста')
+        self.assertNotIn('id="wi-nm"', self.b, 'името е махнато от панела (картата го носи · без 2×)')
+        self.assertIn('id="wi-rl"', self.b); self.assertIn('id="wi-tx"', self.b)
+        dr = self.sc[3]
+        self.assertIn('const РОЛИ=[', dr, 'данните за протагонистите (роля + история)')
+        self.assertEqual(len(re.findall(r"\{r:'[^']+',\s*t:'", dr)), 8, 'осем протагониста с роля+история')
+        self.assertRegex(dr, r'(?s)function nodeTap\([^)]*\)\{[^}]*showInfo\(k\)', 'тапът на протагонист вика showInfo')
+        self.assertNotIn('wiNm', dr, 'панелът не пише име (референцията wiNm е махната · без 2×)')
+        w = блок_по_id(self.src, 'wheel')
+        self.съдържа(w, 'докоснете протагонист', 'подсказката е „докоснете протагонист“')
+        self.съдържа(w, 'Продуценти и Протагонисти', 'будечителите въведени като Продуценти и Протагонисти')
+
+    def test_82_popcard_по_голяма(self):
+        m = re.search(r'#cardpop\{[^}]*\}', self.src)
+        self.assertIsNotNone(m, 'правилото #cardpop')
+        self.съдържа(m.group(0), 'width:min(82vw,330px)', 'popCard е по-голяма (беше 58vw,210)')
+        self.assertNotIn('min(58vw,210px)', m.group(0), 'старият размер е махнат')
+
+    def test_83_водачът_лозанов_и_сърцето(self):
+        v = блок_по_id(self.src, 'vodach')
+        self.съдържа(v, 'Use Your Brain and Follow Your Heart', 'цитатът на д-р Лозанов')
+        self.съдържа(v, 'Лозанов', 'авторът е посочен')
+        self.assertRegex(v, r'<h2[^>]*>Какво Ви е', 'заглавието на Водача е „Какво Ви е на сърце“')
+        self.assertIn('data-фигура="heart"', v, 'рецептата heart е непокътната')
+
+    def test_84_пеперудата_интерактивна(self):
+        b = self.b
+        self.съдържа(b, 'id="butterfly"', 'слотът на пеперудата')
+        self.съдържа(b, 'id="bflycanvas"', 'пеперудата е canvas (интерактивна), не статичен SVG')
+        self.assertNotIn('<svg class="bfly"', b, 'старият статичен SVG е махнат')
+        # пеперудата НЕ е <section> — редът на 11-те секции е непокътнат
+        self.assertEqual(len(секции(self.src)), 11, 'пак 11 секции (пеперудата е div, не section)')
+        dr = self.sc[3]
+        self.assertIn("$('#bflycanvas')", dr, 'анимацията рисува на canvas-а')
+        self.assertRegex(dr, r'getContext\(.2d.\)', 'пеперудата е 2D-canvas (self-contained · нула WebGL/зависимост)')
+        self.assertRegex(dr, r'requestAnimationFrame\(рисувай\)', 'крилете пляскат (rAF цикъл)')
+        self.assertRegex(dr, r"cv\.addEventListener\('pointerdown'", 'тап = литват (интерактивност)')
+        # канонът на self-contained: пак точно 4 script-а, нула външен src
+        self.assertEqual(len(self.sc), 4, 'пак 4 script-а (пеперудата е в 4-тия, не нов таг)')
 
 
 if __name__ == '__main__':

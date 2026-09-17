@@ -31,6 +31,12 @@ STYLES = {
          "IMPORTANT: contemporary natural clothing (linen dress, wool cardigan, simple modern silhouette) rendered as painting — no period costume, no medieval gowns, no draperies of antiquity. "
          "A THIN layer of fairy-tale: one golden thread of light, one spark, soft mist. "
          + PALETTE + NEG + "Museum oil painting on canvas, timeless."),
+  'GOLD': ("Painterly symbolist fine-art in a BLACK-AND-GOLD register: deep dark background, luminous warm golden light modeling the figure "
+         "(Leonardo's chiaroscuro), ethereal fairy-tale atmosphere 'outside of time' in the spirit of Edward Robert Hughes, with the poised dark power of Vrubel. "
+         "Fine visible brushwork, glazes, museum oil-on-canvas quality. Contemporary natural clothing rendered as painting, no period costume. "
+         "Pirin mountains of Bulgaria when outdoors. Cinematic single-subject wellness / self-actualization hero composition, mobile-first vertical, "
+         "generous negative space for a future title, premium luxe emotional mood, painterly NOT stock photo. Warm gold #E8C77E and one emerald spark #6FB59A against deep shadow. "
+         + NEG + "Museum-quality painterly art, black and gold, timeless."),
 }
 STYLE = STYLES[os.environ.get('NZ_STYLE', 'V2')]
 parts = []

@@ -502,5 +502,161 @@ class Т8_ФиксКръг3(Основа):
         self.assertEqual(len(self.sc), 4, 'пак 4 script-а (пеперудата е в 4-тия, не нов таг)')
 
 
+class Т9_КартаНаСвета(Основа):
+    """MET-807 (17.09 · Fable 5.1 Max) · контролът «КАРТА НА СВЕТА» (mettabook) под hero-фигурата: 2 мандали + общо сърце · 12 области · валута светлина/злато ·
+    клик отваря карта · медальон-мап (12-сфери-мап.md) · self-contained 2D-canvas · прахът свързва частите (холограмен принцип) · reduced-motion = постер · нула регресия."""
+    ОЧАКВАН_РЕД = [5, 3, 8, 7, 6, 10, 2, 11, 12, 1, 4, 9]          # дословно от реф-структура-порти-монада.jpg · ред по ред · после Монадата
+    ТРИГРАМИ = {5: '000', 3: '101', 8: '110', 7: '001', 6: '011', 10: '111', 2: '010', 11: '100'}
+    КОЛЕЛО = {1: 'доверка', 2: 'любка', 3: 'еко', 4: 'куражку', 5: 'любка', 6: 'хола', 7: 'хола', 8: 'обемко', 9: 'куражку', 10: 'творея', 11: 'фибо', 12: 'творея'}
+    МЕДАЛЬОНИ = {1: 'nz-sfera-01-хипократ.png', 2: 'nz-sfera-02-бетовен.png', 3: 'nz-sfera-03-кюри.png', 4: 'nz-sfera-04-жана-дарк.png', 5: 'nz-sfera-05-орфей.png',
+                 6: 'nz-sfera-06-деметра.png', 7: 'nz-sfera-07-ботев.png', 8: 'nz-sfera-08-лоренцо.png', 9: 'ЕТАЛОН-леонардо-призвание-светлина.png',
+                 10: 'ЕТАЛОН-моцарт-творчество-злато.png', 11: 'nz-sfera-11a-питагор.png', 12: 'nz-sfera-12-лао-дзъ.png'}
+
+    def _hero(self):
+        return блок_по_id(self.src, 'hero')
+
+    def _блок(self):
+        m = re.search(r'/\* ══ КАРТА НА СВЕТА · mettabook(.*?)/\* верификационна кука', self.sc[3], re.S)
+        self.assertIsNotNone(m, 'блокът на контрола е в 4-тия (драйвер) script')
+        return m.group(1)
+
+    def _таблица(self):
+        m = re.search(r'const ОБЛАСТИ=\[\n(.*?)\n    \];', self._блок(), re.S)
+        self.assertIsNotNone(m, 'таблицата ОБЛАСТИ')
+        return m.group(1)
+
+    def test_90_контролът_е_в_hero_под_фигурата_не_секция(self):
+        h = self._hero()
+        self.съдържа(h, 'id="mettamap"', 'контролът живее ВЪТРЕ в #hero')
+        self.assertLess(h.index('id="fig-hero"'), h.index('id="mettamap"'), 'под hero-фигурата')
+        self.assertLess(h.index('id="mettamap"'), h.index('class="parts three"'), 'преди трите части на hero')
+        self.assertNotIn('<section', h, 'не е вложена секция')
+        self.assertEqual(секции(self.src), ['hero', 'path', 'day', 'monster', 'vodach', 'scale', 'wheel', 'sched', 'bring', 'price', 'form'], 'редът на 11-те секции непокътнат')
+        self.assertIn('<figure class="mettamap" id="mettamap" data-reveal', h, 'блокът е <figure> с reveal')
+
+    def test_91_двете_мандали_общото_сърце_и_12_области_дословно(self):
+        h = self._hero()
+        for м in ('порти', 'сърце', 'монада'):
+            self.съдържа(h, f'data-мандала="{м}"', f'мандалата „{м}“')
+        self.assertLess(h.index('data-мандала="порти"'), h.index('data-мандала="сърце"'))
+        self.assertLess(h.index('data-мандала="сърце"'), h.index('data-мандала="монада"'), 'Порти → общо сърце → Монада')
+        # 12 възела в скелета · същият ред като реф-образа
+        възли = [int(n) for n in re.findall(r'<g class="mm-n" data-n="(\d+)"', h)]
+        self.assertEqual(възли, self.ОЧАКВАН_РЕД, 'подредбата: Любов·Ум·Финанси / Среда·☯·Род / Творчество·Емоции·Мъдрост · Монада: Визия·Здраве / Характер·Призвание')
+        имена = re.findall(r'<text class="nm" x="[\d.]+" y="[\d.]+">([^<]+)</text>', h)
+        self.assertEqual(имена, ['ЛЮБОВ', 'УМ', 'ФИНАНСИ', 'СРЕДА', 'РОД', 'ТВОРЧЕСТВО', 'ЕМОЦИИ', 'МЪДРОСТ', 'ВИЗИЯ', 'ЗДРАВЕ', 'ХАРАКТЕР', 'ПРИЗВАНИЕ'])
+        # 12 хит-бутона в същия ред
+        бутони = [int(n) for n in re.findall(r'<button class="mm-a" type="button" data-n="(\d+)"', h)]
+        self.assertEqual(бутони, self.ОЧАКВАН_РЕД, '12 области = 12 бутона')
+        # багуа-триграмите на 8-те Порти (дословно от образа) · октагонът на Монадата (Фуси · 8 триграми)
+        триг = {int(n): t for n, t in re.findall(r'<g class="mm-n" data-n="(\d+)"[^>]*data-триграма="([01]{3})"', h)}
+        self.assertEqual(триг, self.ТРИГРАМИ)
+        монада = h[h.index('data-мандала="монада"'):]
+        self.assertEqual(len(re.findall(r'<polygon class="oct"', монада)), 1, 'багуа-октагонът')
+        self.assertEqual(len(re.findall(r'<g class="tg"[^>]*transform="rotate\(', монада)), 7, 'октагонът: 8 триграми (7 завъртени + 1 на върха)')
+        self.assertEqual(len(re.findall(r'<circle class="big"', монада)), 2, 'двойният кръг')
+        self.assertEqual(len(re.findall(r'marker-end="url\(#mm-arw\)"', монада)), 4, 'стрелките = кръговрат (2 на кръг)')
+        # холограмният принцип в скелета: 12 умалени сърца (част) + 3 цели (център на Портите · общото сърце · център на Монадата)
+        self.assertEqual(len(re.findall(r'data-сърце="част"', h)), 12, 'във всяка от 12-те области живее умалено ин-ян')
+        self.assertEqual(len(re.findall(r'data-сърце="цяло"', h)), 3, 'три цели сърца')
+        self.assertIn('<path class="lem" d="M', h, 'лемниската (∞) в скелета')
+
+    def test_92_валутата_светлина_4_злато_8(self):
+        h = self._hero()
+        двойки = re.findall(r'<button class="mm-a" type="button" data-n="(\d+)" data-валута="(светлина|злато)"', h)
+        self.assertEqual(sorted(int(n) for n, v in двойки if v == 'светлина'), [1, 4, 9, 12], 'Метта = светлина: Здраве · Характер · Призвание · Визия')
+        self.assertEqual(sorted(int(n) for n, v in двойки if v == 'злато'), [2, 3, 5, 6, 7, 8, 10, 11], 'Мета = злато: 8 области')
+        порти = h[h.index('data-мандала="порти"'):h.index('data-мандала="сърце"')]
+        монада = h[h.index('data-мандала="монада"'):h.index('</svg>')]
+        self.assertEqual(set(re.findall(r'data-валута="([^"]+)"', порти)), {'злато'}, 'Портите са само злато')
+        self.assertEqual(set(re.findall(r'data-валута="([^"]+)"', монада)), {'светлина'}, 'Монадата е само светлина')
+        t = self._таблица()
+        self.assertEqual({int(n): v for n, v in re.findall(r"\{n:(\d+), име:'[^']+', пълно:'[^']+', валута:'(светлина|злато)'", t)},
+                         {n: ('светлина' if n in (1, 4, 9, 12) else 'злато') for n in range(1, 13)}, 'валутата в таблицата на драйвера')
+        self.съдържа(h, 'id="mm-sum-l"', 'легендата светлина'); self.съдържа(h, 'id="mm-sum-g"', 'легендата злато')
+
+    def test_93_клик_отваря_картата_нива_заковани(self):
+        blk = self._блок()
+        self.assertRegex(blk, r"бутони\.forEach\(b=>\{[\s\S]*?b\.addEventListener\('click',\(\)=>\{[^\n]*отвори\(k\)", 'тап/клик на област → отвори(k)')
+        self.assertIn('function отвори(k)', blk); self.assertIn('function затвори()', blk); self.assertIn("e.key==='Escape'", blk)
+        self.assertRegex(blk, r"b\.addEventListener\('pointerenter'", 'hover = фокус (мишка)')
+        self.съдържа(self.b, 'id="mmcard"', 'оверлеят на картата')
+        к = re.search(r'<div id="mmcard"(.*?)\n</div>\n', self.b, re.S).group(1)
+        for част in ('role="dialog"', 'class="mmc-tb"', 'class="mmc-art"', 'class="mmc-bd tl"', 'class="mmc-bd br"', 'class="mmc-ty"', 'class="mmc-tx"', 'class="mmc-ft"', 'class="mmc-x"'):
+            self.съдържа(к, част, f'структурата на card-leonardo.html · {част}')
+        self.assertNotIn('Cinzel', self.src, 'нула нов шрифт (стилът е пренесен инлайн върху Cormorant)')
+        self.assertEqual(len(re.findall(r'<link\b', self.src)), 4, 'нула нов <link>')
+        t = self._таблица()
+        self.assertRegex(t, r"\{n:9, име:'Призвание', пълно:'Призвание и Кариера', валута:'светлина', ниво:8, буд:'куражку'", 'Призвание 8/10 → Куражку (заковано)')
+        self.assertRegex(t, r"\{n:3, име:'Ум', пълно:'Ум и Ментал', валута:'злато', ниво:5, буд:'еко'", 'Ум 5/10 → Екопътечко (заковано)')
+        self.assertIn("цитат:'„Вижда пътя, преди другите да го зърнат.“'", t, 'цитатът на Леонардо от template-а')
+        # нивото в SVG-пръстена = нивото в таблицата (12 области) · легендата = сумите
+        h = self._hero()
+        свг = {int(n): int(l) for n, l in re.findall(r'<g class="mm-n" data-n="(\d+)" data-валута="[^"]+" data-ниво="(\d+)"', h)}
+        js = {int(n): int(l) for n, l in re.findall(r"\{n:(\d+), име:'[^']+', пълно:'[^']+', валута:'[^']+', ниво:(\d+)", t)}
+        self.assertEqual(len(js), 12); self.assertEqual(свг, js, 'пръстените носят нивата на таблицата')
+        L = sum(l for n, l in js.items() if n in (1, 4, 9, 12)); G = sum(l for n, l in js.items() if n not in (1, 4, 9, 12))
+        self.съдържа(h, f'<b id="mm-sum-l">{L}/40</b>', 'статичната легенда = сумата светлина'); self.съдържа(h, f'<b id="mm-sum-g">{G}/80</b>', 'статичната легенда = сумата злато')
+        for n, l in js.items():
+            self.assertRegex(h, rf'<button class="mm-a" type="button" data-n="{n}" [^>]*><span class="vh">[^<]*ниво {l} от 10', f'sr-етикетът на {n} носи нивото')
+
+    def test_94_медальон_мап_будечители_по_колелото_пазач_протагонист(self):
+        t = self._таблица(); blk = self._блок()
+        for n, f in self.МЕДАЛЬОНИ.items():
+            self.assertRegex(t, rf"\{{n:{n}, [^\n]*img:'img/nz-sferi/{re.escape(f)}'", f'медальонът на {n} = {f} (12-сфери-мап.md)')
+            self.assertTrue((ROOT / 'img' / 'nz-sferi' / f).exists(), f'{f} е на диска')
+        self.assertIn("{име:'Питагор',img:'img/nz-sferi/nz-sfera-11a-питагор.png'},{име:'Фибоначи',img:'img/nz-sferi/nz-sfera-11b-фибоначи.png'}", t, 'Мъдрост = 2 образа')
+        self.assertEqual({int(n): b for n, b in re.findall(r"\{n:(\d+), [^\n]*?буд:'([^']+)'", t)}, self.КОЛЕЛО, 'будечител↔област = Колело-СКЕЛЕТ')
+        for ключ, име in (('доверка', 'Доверка'), ('любка', 'Любка'), ('еко', 'Екопътечко'), ('куражку', 'Куражку'), ('обемко', 'Обемко'), ('хола', 'Хола'), ('фибо', 'Фибоначко'), ('творея', 'Творея')):
+            self.assertRegex(blk, rf"{ключ}:\['{име}','..','", f'{име} в БУД')
+        # закованите пазач/протагонист (home index.html · ANTAGS) · нула измислени имена
+        self.assertIn("УМЧО={име:'Умчо Вълчев',роля:'Осъждане',img:'img/ant-умчо.jpg'}", blk); self.assertIn("УМА={име:'Ума Лисева',роля:'Обмисляне',img:'img/ant-ума.jpg'}", blk)
+        self.assertRegex(t, r"\{n:3, [^\n]*пазач:БЕГА, прот:УМЧО\}", 'Ум: протагонист-загатнат Умчо Вълчев · пазач Бега (по Еко)')
+        self.assertRegex(t, r"\{n:11, [^\n]*пазач:УМА, прот:null\}", 'Мъдрост: пазач Ума Лисева')
+        self.assertRegex(t, r"\{n:2, [^\n]*пазач:ЕГО"); self.assertRegex(t, r"\{n:5, [^\n]*пазач:ЕГО")
+        self.assertEqual(len(re.findall(r'пазач:null', t)), 8, 'осем области без закован пазач → „—“ (за дума на Митрандир)')
+        self.assertEqual(len(re.findall(r'прот:null', t)), 11, 'само Ум има загатнат протагонист')
+        for f in ('ant-его.jpg', 'ant-бега.jpg', 'ant-ума.jpg', 'ant-умчо.jpg'):
+            self.assertTrue((ROOT / 'img' / f).exists(), f)
+        self.assertNotIn('Станка', blk); self.assertNotIn('Страхил', blk); self.assertNotIn('Времетрон', blk)
+
+    def test_95_self_contained_2D_canvas_нула_нова_зависимост(self):
+        blk = self._блок()
+        self.assertIn("$('#mettadust')", blk, 'прахът рисува на своя canvas'); self.assertRegex(blk, r"getContext\('2d'\)", '2D-canvas')
+        for з in ('THREE', 'WebGL', 'webgl', 'gl.create', 'importScripts', 'fetch('):
+            self.assertNotIn(з, blk, f'нула {з}')
+        self.assertEqual(len(self.sc), 4, 'пак точно 4 script-а'); self.assertEqual(re.findall(r'<script\b[^>]*\bsrc=', без_коментари(self.src)), [], 'нула външен src')
+        self.assertIn('<canvas class="mm-dust" id="mettadust"', self._hero())
+        self.assertRegex(blk, r'requestAnimationFrame\(кадър\)', 'rAF-цикъл'); self.assertRegex(blk, r"addEventListener\('resize',resize\)")
+
+    def test_96_холограмен_принцип_прахът_свързва_частите(self):
+        blk = self._блок()
+        self.assertIn('const лемниската=t=>', blk, 'потокът тече по лемниската (∞)')
+        self.assertRegex(blk, r'ЛЕМ=\{cx:200,cy:366,a1:191,a2:181,w:130\}', 'същите числа като SVG-пътя')
+        self.assertIn('const ПОТОК=[]', blk); self.assertIn('const ПРАХ=[]', blk)
+        self.assertRegex(blk, r'clamp\(0\.5\+\(y-ЛЕМ\.cy\)/\(ЛЕМ\.a1\+ЛЕМ\.a2\),0,1\)', 'цветът се прелива: злато (Портите) → светлина (Монадата) през сърцето')
+        self.assertRegex(blk, r'n=reduce\?\(4\+v\.обл\.ниво\*2\):\(6\+v\.обл\.ниво\*3\)', 'гъстотата на праха ∝ нивото')
+        self.assertRegex(blk, r'\(0\.22\+0\.55\*lv\)', 'яркостта ∝ нивото')
+        self.assertIn('function фокусирай(k)', blk); self.assertRegex(blk, r'x\+=\(fx\+Math\.cos\(ang\)\*rr-x\)\*k', 'фокус → прахът се стича към областта')
+        self.assertRegex(blk, r'сияние\(ЛЕМ\.cx\*SC,ЛЕМ\.cy\*SC', 'общото сърце диша')
+        # скелетът: лемниската минава през центъра на Портите (200,175) · общото сърце (200,366) · центъра на Монадата (200,547)
+        h = self._hero()
+        лем = re.search(r'<path class="lem" d="M([^"]+)"', h).group(1)
+        for точка in ('200.0,175.0', '200.0,366.0', '200.0,547.0'):
+            self.assertIn(точка, лем, f'∞ минава през {точка}')
+
+    def test_97_reduced_motion_постер_и_деплой(self):
+        blk = self._блок()
+        self.assertRegex(blk, r'if\(reduce\) return;\s*/\* reduced-motion', 'reduced-motion: един статичен кадър, без rAF-цикъл')
+        self.assertIn('if(!ctx){', blk, 'без canvas-контекст → SVG-скелетът остава постер, картата пак работи')
+        h = self._hero()
+        self.assertIn('<svg class="mm-skel" viewBox="0 0 400 750"', h, 'SVG-скелетът е статичен в маркъпа (постерът · 750 = 704 + лента за подсказката)')
+        self.assertIn('<div class="tap mm-tap" aria-hidden="true"><i></i><span>докоснете област · карта</span></div>', h, 'подсказката „докоснете“ (закон в · class="tap mm-tap": test_43 брои точно 8 сцени с class="tap")')
+        self.assertIn("host.classList.add('seen')", blk, 'подсказката гасне при първа интеракция')
+        dep = чети(DEPLOY)
+        self.assertIn('id="mettamap"', dep); self.assertIn("img:'/img/nz-sferi/", dep, 'деплой-копието носи абсолютните пътища')
+        self.assertIn('MET-807', '\n'.join(self.src.splitlines()[:40]), 'хедърът носи тикета')
+
+
 if __name__ == '__main__':
     unittest.main()

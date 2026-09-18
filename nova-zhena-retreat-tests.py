@@ -103,7 +103,7 @@ class Т1_Идентичност(Основа):
     def test_02_деплой_копието_е_източникът_след_обратен_sed(self):
         dep = чети(DEPLOY)
         self.assertEqual(len(re.findall(r'["\']img/', dep)), 0, 'деплоят няма относителни img/ пътища')
-        обр = re.sub(r'(src=|href=)"/img/', r'\1"img/', dep).replace("'/img/w/p-'", "'img/w/p-'").replace("img:'/img/", "img:'img/")
+        обр = re.sub(r'(src=|href=)"/img/', r'\1"img/', dep).replace("'/img/w/p-'", "'img/w/p-'").replace("img:'/img/", "img:'img/").replace("'/img/nz-sferi/thumb/", "'img/nz-sferi/thumb/")
         self.assertEqual(обр, self.src, 'деплой-копието след обратен sed ≠ източникът')
 
     def test_03_четири_скрипта_нула_външен_src(self):
@@ -642,9 +642,10 @@ class Т9_КартаНаСвета(Основа):
         self.assertRegex(blk, r'ъгълЦел=възли\[k\]\.a', 'фокус → стрелката сочи областта'); self.assertIn("стрелка.setAttribute('transform','rotate('", blk, 'стрелката се върти около оста (200,200)')
         self.съдържа(self.b, 'id="mmcard"', 'оверлеят на картата')
         к = re.search(r'<div id="mmcard"(.*?)\n</div>\n', self.b, re.S).group(1)
-        for част in ('role="dialog"', 'class="mmc-tb"', 'class="mmc-art"', 'class="mmc-bd tl"', 'class="mmc-bd tr"', 'id="mmc-nm"', 'class="mmc-ln"', 'class="mmc-x"'):
+        for част in ('role="dialog"', 'class="mmc-tb"', 'class="mmc-art"', 'class="mmc-bd tr"', 'id="mmc-nm"', 'class="mmc-ln"', 'class="mmc-x"'):
             self.съдържа(к, част, f'структурата на изчистената карта · {част}')
-        for махнато in ('mmc-ty', 'mmc-ft', 'mmc-bd bl', 'mmc-bd br', 'class="line"'):
+        # Д5 (MET-813 · дума 18.09): голото ромбче горе-вляво (mmc-bd tl) е МАХНАТО · валутата е обяснена в лентата „◆ злато / ✧ светлина“
+        for махнато in ('mmc-ty', 'mmc-ft', 'mmc-bd tl', 'mmc-bd bl', 'mmc-bd br', 'class="line"'):
             self.assertNotIn(махнато, к, f'картата е изчистена · без {махнато}')
         css = self.src[self.src.index('<style>'):self.src.index('</style>')]
         self.assertIn('.mmc-art{position:relative;z-index:6;border:2px solid var(--gd);border-radius:8px;overflow:hidden;box-shadow:inset 0 0 0 2px rgba(255,240,190,.6);aspect-ratio:4/5;max-height:58vh', css, 'образът е по-голям (4/5 · 58vh · беше 4/4.6 · 44vh)')
@@ -804,7 +805,9 @@ class Т10_ФиналУау(Основа):
 
     def test_108_нишката_дъгата_прахът_по_колелото_прогресът(self):
         др = self.sc[3]
-        self.assertIn("svgel('svg',{class:'pathline'", др); self.assertIn('function нишкаПоПътя()', др); self.assertRegex(др, r"светниЧаст\(dayEls\[cur\]\); нишкаПоПътя\(\);", 'нишката расте с деня')
+        self.assertIn("svgel('svg',{class:'pathline'", др); self.assertIn('function нишкаПоПътя()', др)
+        self.assertRegex(др, r"задай\('path',\(cur/4\)\*0\.86,true\); нишкаПоПътя\(\);", 'нишката расте с деня (v1.9 · Д4 · рефактор: платното и в двете фази)')
+        self.assertIn('светниЧаст(dayEls[cur]);', др, 'връзките светят в карта-фазата')
         self.assertRegex(др, r"const CIRC=2\*Math\.PI\*132, carc=svgel\('circle',\{class:'arc'"); self.assertRegex(др, r"carc\.setAttribute\('stroke-dasharray',\(CIRC\*i/NM\)", 'дъгата на деня следва момента')
         self.assertIn("платно(wheelBox,'wdust','wheeldust')", др); self.assertIn('dn<11) continue', др, 'прахът стои встрани от лейбълите на възлите (MED-V2 · текст извън праха)')
         self.assertIn("document.documentElement.style.setProperty('--beat'", др, 'сърцата (колело + метасфера) бият в един такт')
@@ -830,11 +833,64 @@ class Т10_ФиналУау(Основа):
         for з in ('THREE', 'importScripts', 'fetch('):
             self.assertNotIn(з, self.sc[3], f'нула {з} в драйвера')
         self.assertEqual(len(секции(self.src)), 11, '11 секции'); self.assertEqual(self.b.count('class="tap"'), 8, 'подсказката „докоснете“ на осемте сцени (новите блокове не я дублират)')
-        глава = '\n'.join(self.src.splitlines()[:20]); self.assertIn('v1.8', глава); self.assertIn('MET-812', глава)
+        глава = '\n'.join(self.src.splitlines()[:20]); self.assertIn('v1.9', глава); self.assertIn('MET-813', глава); self.assertIn('Opus 4.8', глава, 'моделът в хедъра')
         for нов in ('id="alband"', 'id="faq"', 'class="bio part"', 'id="sc-hook"', 'id="mm-sf"'):
             self.assertIn(нов, self.b, нов)
         self.assertNotIn('оферта', self.txt.lower()); self.assertNotIn('свещи', self.txt.lower())
         self.assertEqual(len(re.findall(r"getContext\('2d'\)", self.sc[3])), 3, '2D-платна: пеперуда · метасфера · платно() (един помощник за летящи точки + прах по колелото)')
+
+class Т11_ФиксКръг2(Основа):
+    """MET-813 · Опус фикс-кръг 2 (12 дефекта · дума на Митрандир 18.09 · Модел Opus 4.8) · визуалните надграждания."""
+
+    def test_120_медальоните_на_сферите_Д5(self):
+        др = self.sc[3]
+        self.assertIn("src='img/nz-sferi/thumb/sf-'+nn+'.webp'", др, 'медальон-thumbnail на всеки възел (леки webp)')
+        self.assertIn("class:'sfmed'", др, 'медальонът се вгражда в SVG-възела')
+        self.assertRegex(др, r"clipPath.*id:'mm-medclip'|id:'mm-medclip'", 'кръгъл клип за медальона')
+        for n in range(1, 13):
+            f = ROOT / 'img' / 'nz-sferi' / 'thumb' / f'sf-{n:02d}.webp'
+            self.assertTrue(f.exists(), f'thumbnail sf-{n:02d}.webp съществува')
+        css = self.src[self.src.index('<style>'):self.src.index('</style>')]
+        self.assertIn('.mm-skel .sfmed', css, 'CSS за медальоните')
+
+    def test_121_ромбчето_обяснено_Д5(self):
+        self.assertNotIn('class="mmc-bd tl"', self.b, 'голото ромбче горе-вляво е махнато')
+        self.assertIn("св?'✧ светлина':'◆ злато'", self.sc[3], 'валутата е ОБЯСНЕНА в лентата (не голо ромбче)')
+
+    def test_122_пазач_въпрос_при_протагонист_Д7(self):
+        w = блок_по_id(self.src, 'wheel')
+        self.съдържа(w, 'Вие избирате ли го заедно? Вие?', 'пазач-въпросът в колелото (при протагонист)')
+        self.assertIn('id="wi-guard"', w, 'пазач-редът в панела на протагониста')
+        self.assertIn('id="mmc-guard"', self.b, 'пазач-редът в картата на областта')
+        self.assertIn('gq.hidden=!o.прот', self.sc[3], 'пазач-въпросът се показва само когато има протагонист')
+
+    def test_123_обемко_хола_като_доверка_Д10(self):
+        др = self.sc[3]
+        self.assertRegex(др, r"if\(!карта\(id,g\)\)\{ const kk=КАРТИ\[id\]; if\(!reduce&&cardpop&&kk\) popCard\(kk\)", 'вече събран будечител (Обемко/Хола) също изскача мазно (popCard) като Доверка')
+
+    def test_124_пеперудата_надградена_Д12(self):
+        др = self.sc[3]
+        self.assertNotIn('пеперудена крива (Fay)', др, 'слабата крива на Фей е махната')
+        for m in ('wingSample', 'scallop', 'envelope', 'хоботчето', 'антенките'):
+            self.assertIn(m, др, f'истинската геометрия на крилете: „{m}“')
+        self.assertNotIn('THREE', др); self.assertNotIn('WebGLRenderingContext', др)  # канонът: self-contained 2D
+        self.assertIn('id="bflycanvas"', self.b, 'пак 2D-canvas · нула зависимост (test_84)')
+
+    def test_125_компас_разгъване_Д9(self):
+        css = self.src[self.src.index('<style>'):self.src.index('</style>')]
+        for kf in ('@keyframes mmOpenA', '@keyframes mmOpenB', 'figure.mettamap.mm-open'):
+            self.assertIn(kf, css, f'компас-разгъване: {kf}')
+        self.assertIn("host.classList.add('mm-open')", self.sc[3], 'разгъването се пуска при поява в кадър')
+        self.assertIn('prefers-reduced-motion', css)
+
+    def test_126_текст_съкращения_Д1(self):
+        # редундантните обяснения, дублирани от визуалното, са отрязани
+        self.assertNotIn('4 сфери · навътре', self.src, 'al-cur под-бележките са махнати (метасферата ги показва)')
+        self.assertNotIn('осемте златни възела са Мета — Вашите <b>Продуценти и Протагонисти</b>. Докоснете протагонист — отваря се кой е и какво продуцира', self.src, 'колело-лийдът е стегнат')
+        # локнатите текстове остават (не се режат)
+        self.съдържа(блок_по_id(self.src, 'wheel'), 'налива и от двете — светлина и злато', 'заключеният ред (решение 13) остава')
+        self.assertIn('Всяко нещо, преместено нагоре по скалата, разтваря илюзорния образ', блок_по_id(self.src, 'wheel'))
+
 
 if __name__ == '__main__':
     unittest.main()

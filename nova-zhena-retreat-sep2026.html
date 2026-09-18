@@ -213,6 +213,18 @@ html:where(.js) [data-reveal].in{opacity:1;transform:none}
 .mm-stage>svg,.mm-stage>canvas{position:absolute;inset:0;width:100%;height:100%}
 .mm-skel{z-index:1;display:block}
 .mm-skel text{font-family:var(--serif);text-anchor:middle;dominant-baseline:central;pointer-events:none}
+.mm-skel .sfmed{opacity:.94;pointer-events:none;transition:opacity .5s}
+/* Д9 (MET-813 · дума 18.09) · КОМПАС-РАЗГЪВАНЕ: метасферата се отваря като алетиометър — двата пръстена контра-въртят навътре, куполът сяда · мазно-бавно · при поява в кадър */
+.mm-skel .mm-ring,.mm-skel .dome{transform-box:view-box;transform-origin:200px 200px}
+figure.mettamap.mm-open .mm-ring[data-пръстен="мета"]{animation:mmOpenA 1.7s cubic-bezier(.16,.7,.12,1) both}
+figure.mettamap.mm-open .mm-ring[data-пръстен="метта"]{animation:mmOpenB 1.9s cubic-bezier(.16,.7,.12,1) .12s both}
+figure.mettamap.mm-open .dome{animation:mmOpenD 1.6s ease .3s both}
+@keyframes mmOpenA{0%{transform:rotate(-24deg) scale(.84);opacity:0}55%{opacity:1}100%{transform:none;opacity:1}}
+@keyframes mmOpenB{0%{transform:rotate(28deg) scale(.66);opacity:0}100%{transform:none;opacity:1}}
+@keyframes mmOpenD{0%{opacity:0}100%{opacity:1}}
+@media (prefers-reduced-motion: reduce){figure.mettamap.mm-open .mm-ring,figure.mettamap.mm-open .dome{animation:none}}
+.mm-skel .mm-n.dim .sfmed{opacity:.34}
+.mm-skel .mm-n.lit .sfmed,.mm-skel .mm-n.visit .sfmed{opacity:1;filter:drop-shadow(0 0 6px rgba(255,240,190,.8))}
 .mm-skel .nm{font-size:11.5px;font-weight:700;letter-spacing:.05em;fill:var(--ink2)}
 .mm-skel .num{font-size:13px;font-weight:700;fill:var(--gold)}
 .mm-skel .mm-n[data-валута="светлина"] .num{fill:var(--light)}
@@ -257,7 +269,7 @@ html:where(.js) [data-reveal].in{opacity:1;transform:none}
 .mmc-x{position:absolute;right:10px;top:9px;z-index:9;width:30px;height:30px;border-radius:50%;border:1.5px solid var(--gd);background:#fffaf0;color:var(--cink);font-size:14px;line-height:1;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.25)}
 .mmc-tb{position:relative;z-index:6;display:flex;align-items:center;justify-content:space-between;background:linear-gradient(180deg,#fffaf0,#efdcb0);border:1.5px solid var(--gd);border-radius:9px;padding:6px 44px 6px 12px;box-shadow:0 1px 3px rgba(0,0,0,.2)}
 .mmc-lvl{font-weight:700;font-size:1rem;letter-spacing:.06em;text-transform:uppercase}
-.mmc-cur{font-size:20px;filter:drop-shadow(0 0 6px rgba(255,220,120,.9))}
+.mmc-cur{font-size:.72rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;white-space:nowrap;filter:drop-shadow(0 0 5px rgba(255,220,120,.7))}
 .mmc-art{position:relative;z-index:6;border:2px solid var(--gd);border-radius:8px;overflow:hidden;box-shadow:inset 0 0 0 2px rgba(255,240,190,.6);aspect-ratio:4/5;max-height:58vh;background:#e9d9b3}
 .mmc-imgs{display:flex;width:100%;height:100%}
 .mmc-imgs img{flex:1 1 0;min-width:0;width:100%;height:100%;object-fit:cover;display:block;opacity:0;transition:opacity .6s}
@@ -267,6 +279,8 @@ html:where(.js) [data-reveal].in{opacity:1;transform:none}
 .mmc-bd{position:absolute;z-index:7;width:36px;height:36px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fffaf0,#e9d19a);border:1.5px solid var(--gd);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;color:var(--cink);box-shadow:0 2px 6px rgba(0,0,0,.35)}
 .mmc-bd.tl{top:8px;left:8px}.mmc-bd.tr{top:8px;right:8px}
 .mmc-nm{position:relative;z-index:6;font-size:1.65rem;font-weight:700;line-height:1.1;color:var(--cink);text-align:center;padding:2px 6px 0}
+.mmc-guard{position:relative;z-index:6;margin:2px 4px 0;font-size:.86rem;text-align:center;color:#6a5320}
+.mmc-guard b{color:#3a2a12;font-style:italic;font-weight:700}
 .mmc-ln{position:relative;z-index:6;display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:4px 14px;font-size:.88rem;color:#6b5220;padding:0 6px 2px}
 .mmc-ln b{color:var(--cink);font-weight:700}
 .mmc-ln span{display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
@@ -535,6 +549,8 @@ html:where(.js) [data-reveal].in{opacity:1;transform:none}
 .wi-card .wi-rl{font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin:5px 0 9px}
 .wi-card .wi-tx{font-size:.95rem;color:var(--ink2);line-height:1.55}
 .winfo.lit .wi-card{animation:sealin .5s cubic-bezier(.2,.7,.2,1)}
+.wi-guard{margin-top:10px;padding-top:9px;border-top:1px dashed rgba(232,199,126,.3);font-size:.9rem;color:var(--mute)}
+.wi-guard b{color:var(--light);font-family:var(--serif);font-style:italic;font-weight:600}
 /* нова вълна · пеперудата под формата (placeholder-слот за Ф5.1) */
 .butterflyslot{padding:38px 20px 6px;text-align:center;position:relative;z-index:3}
 .butterflyslot .bfly{width:min(78vw,320px);aspect-ratio:6/5;height:auto;margin:0 auto;display:block;cursor:pointer;touch-action:manipulation}
@@ -697,11 +713,17 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
 .al-rail{position:relative;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:10px;margin:0 auto 12px;max-width:420px}
 .al-rail i{font-style:normal;font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;color:var(--mute)}
 .al-rail .al-au{color:var(--gold)}
-.al-line{position:relative;height:2px;border-radius:2px;background:linear-gradient(90deg,#5A4A6B,#8a6a2e 45%,#E8C77E 75%,#fff5d6)}
-.al-mote{position:absolute;top:50%;left:2%;width:9px;height:9px;border-radius:50%;transform:translate(-50%,-50%)}
-.al-mote.l{background:radial-gradient(circle at 40% 35%,#fff,#fff5d6);box-shadow:0 0 10px rgba(255,245,214,.9);animation:almote 6s cubic-bezier(.4,0,.2,1) infinite}
-.al-mote.g{background:radial-gradient(circle at 40% 35%,#fff1c2,#E8C77E);box-shadow:0 0 10px rgba(232,199,126,.9);animation:almote 6s cubic-bezier(.4,0,.2,1) infinite 3s}
-@keyframes almote{0%{left:2%;opacity:0}12%{opacity:1}88%{opacity:1}100%{left:98%;opacity:0}}
+.al-line{position:relative;height:2px;border-radius:2px;background:linear-gradient(90deg,#5A4A6B,#8a6a2e 45%,#E8C77E 75%,#fff5d6);overflow:visible}
+.al-line::after{content:"";position:absolute;inset:0;border-radius:2px;background:linear-gradient(90deg,transparent,rgba(255,245,214,.9),transparent);background-size:40% 100%;background-repeat:no-repeat;animation:alshimmer 3.2s ease-in-out infinite}
+@keyframes alshimmer{0%{background-position:-40% 0}100%{background-position:140% 0}}
+.al-mote{position:absolute;top:50%;left:2%;width:8px;height:8px;border-radius:50%;transform:translate(-50%,-50%);animation:almote 6s cubic-bezier(.4,0,.2,1) infinite}
+.al-mote.l{background:radial-gradient(circle at 40% 35%,#fff,#fff5d6);box-shadow:0 0 10px rgba(255,245,214,.9)}
+.al-mote.g{background:radial-gradient(circle at 40% 35%,#fff1c2,#E8C77E);box-shadow:0 0 10px rgba(232,199,126,.9);animation-delay:3s}
+.al-mote.l2{background:radial-gradient(circle at 40% 35%,#fff,#efe7ff);box-shadow:0 0 9px rgba(200,190,230,.8);animation-duration:5.2s;animation-delay:1.4s}
+.al-mote.g2{background:radial-gradient(circle at 40% 35%,#fff1c2,#E8C77E);box-shadow:0 0 9px rgba(232,199,126,.85);animation-duration:6.8s;animation-delay:4.3s}
+.al-mote.g3{background:radial-gradient(circle at 40% 35%,#fff5d6,#d9a441);box-shadow:0 0 12px rgba(232,199,126,.95);animation-duration:5.8s;animation-delay:2.5s}
+/* Д8 (MET-813) · трансмутация: зрънцето тръгва тъмно/дребно (страдание) и стига едро/златно/светло (съзнание) */
+@keyframes almote{0%{left:2%;opacity:0;transform:translate(-50%,-50%) scale(.5);filter:saturate(.4) brightness(.7)}14%{opacity:1}50%{transform:translate(-50%,-50%) scale(1)}86%{opacity:1}100%{left:98%;opacity:0;transform:translate(-50%,-50%) scale(1.5);filter:saturate(1.2) brightness(1.3)}}
 .al-q{font-family:var(--serif);font-size:1.22rem;line-height:1.35;color:#f7f1e3;margin:0;position:relative}
 .al-q em{display:block;margin-top:8px;color:var(--gold);font-style:italic;font-size:1.08em}
 .al-cur{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:12px;position:relative}
@@ -761,7 +783,7 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
 #cards .pg i{display:block;height:100%;width:0;background:linear-gradient(90deg,#fff5d6,#E8C77E);transition:width .8s cubic-bezier(.2,.7,.2,1)}
 .butterflyslot .bk b{color:var(--light);font-style:normal;font-family:var(--sans);font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;margin-left:8px;vertical-align:middle;font-weight:500}
 .butterflyslot .bk b:empty{display:none}
-@media (prefers-reduced-motion:reduce){.al-mote{left:50%!important;opacity:1!important}.pathline path{animation:none}}
+@media (prefers-reduced-motion:reduce){.al-mote{left:50%!important;opacity:1!important;animation:none!important}.al-line::after{animation:none;opacity:.4}.pathline path{animation:none}}
 
 /* ── desktop ── */
 @media (min-width:720px){
@@ -807,9 +829,10 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
   <div class="mmc" role="dialog" aria-modal="true" aria-labelledby="mmc-lvl">
     <button class="mmc-x" type="button" aria-label="Затвори картата">✕</button>
     <div class="mmc-tb"><span class="mmc-lvl" id="mmc-lvl">Ниво · област</span><span class="mmc-cur">✧</span></div>
-    <div class="mmc-art"><div class="mmc-imgs"></div><div class="wait">картината идва…</div><span class="mmc-bd tl">✧</span><span class="mmc-bd tr">I</span></div>
+    <div class="mmc-art"><div class="mmc-imgs"></div><div class="wait">картината идва…</div><span class="mmc-bd tr" title="ниво от 10">I</span></div>
     <div class="mmc-nm" id="mmc-nm">Личност</div>
     <div class="mmc-ln"><span class="al">Съюзник <b></b></span><span class="paz"></span><span class="pro"></span></div>
+    <p class="mmc-guard" id="mmc-guard" hidden>Пазач при протагониста: <b>Вие избирате ли го заедно? Вие?</b></p>
     <button class="mmc-go" type="button" id="mmc-go">Разширявам се тук ✦</button>
   </div>
 </div>
@@ -843,9 +866,9 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
   <!-- ═══ АЛХИМИЧНАТА ЛЕНТА · V2 (решение 1 · 17.09 · ЗАЩО · двете валути на входа + куката към метасферата) · НЕ е <section> · текстът е HTML-слой извън частиците (MED-V2) · шимърът е CSS · reduced = статична ═══ -->
   <div class="mmwrap">
     <figure class="alband part" id="alband" data-reveal aria-label="Алхимията: страдание в съзнание · Мета = злато · Метта = светлина">
-      <div class="al-rail" aria-hidden="true"><i class="al-fe">страдание</i><span class="al-line"><b class="al-mote l"></b><b class="al-mote g"></b></span><i class="al-au">съзнание</i></div>
+      <div class="al-rail" aria-hidden="true"><i class="al-fe">страдание</i><span class="al-line"><b class="al-mote l"></b><b class="al-mote g"></b><b class="al-mote l2"></b><b class="al-mote g2"></b><b class="al-mote g3"></b></span><i class="al-au">съзнание</i></div>
       <blockquote class="al-q">Алхимията не е желязото в злато, а страданието в съзнание. Затова всичко Мета при нас е злато, всичко Метта — светлина. <em>В коя от 12-те сфери ще се разширявате?</em></blockquote>
-      <div class="al-cur"><span class="l"><i>✧</i> Метта = светлина <small>4 сфери · навътре</small></span><span class="g"><i>◆</i> Мета = злато <small>8 сфери · навън</small></span></div>
+      <div class="al-cur"><span class="l"><i>✧</i> Метта = светлина</span><span class="g"><i>◆</i> Мета = злато</span></div>
       <a class="al-go" href="#mettamap" id="al-go">изберете сфера в метасферата ↓</a>
     </figure>
   </div>
@@ -1023,7 +1046,7 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
   <div class="wrap">
     <div class="kicker" data-reveal>Протагонисти · светлозлатната нишка</div>
     <h2 data-reveal>Светлозлатното <em>колело</em></h2>
-    <p class="lead" data-reveal>Тук всичко се навръзва. В центъра сте <b>Вие</b> — сърцето бие по нивото на атентиометъра. Четирите светли сектора са Метта — светлината; осемте златни възела са Мета — Вашите <b>Продуценти и Протагонисти</b>. Докоснете протагонист — отваря се кой е и какво продуцира, картата му е Ваша, златото влиза в ъгъла. <b>Всяко нещо, преместено нагоре по скалата, разтваря илюзорния образ и налива и от двете — светлина и злато.</b></p>
+    <p class="lead" data-reveal>Тук всичко се навръзва. В центъра сте <b>Вие</b>; четирите светли сектора са Метта, осемте златни възела — Мета. Докоснете протагонист — картата му е Ваша. <b>Всяко нещо, преместено нагоре по скалата, разтваря илюзорния образ и налива и от двете — светлина и злато.</b></p>
   </div>
   <div class="mfig" id="fig-wheel" data-bleed="always" data-height="auto">
     <canvas data-фигура="spark" aria-hidden="true"></canvas>
@@ -1050,12 +1073,13 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
       <div class="wi-card" id="wi-card" hidden>
         <div class="wi-rl" id="wi-rl"></div>
         <div class="wi-tx" id="wi-tx"></div>
+        <div class="wi-guard" id="wi-guard">Пазач: <b>Вие избирате ли го заедно? Вие?</b></div>
       </div>
     </div>
     <div class="wgrid">
       <div class="wbox light part" data-reveal><div class="t"><b>Метта</b> = светлина</div><p>Четирите области на любящата доброта. Светват, докато трупате светлина.</p><div class="row" id="w-metta"><span data-s="0">Здраве</span><span data-s="1">Призвание</span><span data-s="2">Характер</span><span data-s="3">Визия</span></div></div>
       <div class="wbox part" data-reveal><div class="t"><b>Мета</b> = злато</div><p>Осемте будечители са Вашите <b>Продуценти и Протагонисти</b> — целите в действие. Докоснете протагонист горе — отваря се кой е. Всеки събран носи злато.</p><div class="row" id="w-meta"><span data-a="0">Любка</span><span data-a="1">Екопътечко</span><span data-a="2">Куражку</span><span data-a="3">Обемко</span><span data-a="4">Хола</span><span data-a="5">Фибоначко</span><span data-a="6">Творея</span><span data-a="7">Доверка</span></div></div>
-      <div class="wbox part" data-reveal><div class="t"><b>Механиката</b></div><p>Дейност минава побърква → дразни → приемам → радост → вдъхновение. Всяко стъпало нагоре = светлина + злато. Атентиометърът е входът; сърцето бие по-спокойно с всяко ниво.</p></div>
+      <div class="wbox part" data-reveal><div class="t"><b>Механиката</b></div><p>Всяко стъпало нагоре по <a href="#scale">атентиометъра</a> = светлина + злато; сърцето бие по-спокойно.</p></div>
       <div class="wbox part" data-reveal><div class="t"><b>Картите</b></div><p>Пет дни, пет неща, чудовището, осем будечители, багажът и въпросът от формата — 21 карти по страницата. Броячът долу вляво ги пази в този браузър; профил и трупа идват след ретрийта.</p></div>
     </div>
   </div>
@@ -2915,7 +2939,7 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
 
   /* ══ ПЪТЕЧКАТА · 5 дни = 5 възела (рецепта path · ВЪЗЛИ.length = 5) · скрол сменя деня · тап на възел/карта = скок ══ */
   const ДНИ=[{a:'Отделяне',d:'18'},{a:'Потапяне',d:'19'},{a:'Посвещение',d:'20'},{a:'Завръщане',d:'21'},{a:'Представление',d:'22'}];
-  const labs=$('#stlabs'), pathStage=$('#fig-path'), dayEls=$$('#days .dayc');
+  const labs=$('#stlabs'), pathStage=$('#fig-path'), dayEls=$$('#days .dayc'), daysBox=$('#days');
   const LAB=ДНИ.map((s,i)=>{const d=el('div','stlab',`<b>${i+1}</b><span>${s.a}<small>${s.d} септември</small></span>`); labs.appendChild(d); return d});
   let cur=-1;
   /* v1.8 · златната нишка по пътечката: тихата линия минава през петте възела · светлата (пулсираща) расте до текущия ден · събраните дни носят ✦ на етикета */
@@ -2926,27 +2950,35 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
     const d=k=>pts.slice(0,k+1).map((q,i)=>(i?'L':'M')+q.x.toFixed(1)+' '+q.y.toFixed(1)).join(' ');
     plSoft.setAttribute('d',d(pts.length-1)); plLit.setAttribute('d',cur>0?d(Math.min(cur,pts.length-1)):'');
     LAB.forEach((l,k)=>l.classList.toggle('got',!!ИГРА.карти['ден-'+(k+1)])); }
+  /* Д4 (MET-813 · дума 18.09) · фаза-флаг: „сцена“ = гледаме платното (звездите светят 1 → 5) · „карта“ = списъкът с дни е в зоната за четене (акордеон). */
+  let pathScene=false, pathMax=-1;
   function setDay(i,тихо){
     cur=clamp(i,0,4);
-    dayEls.forEach((d,k)=>d.classList.toggle('on',k===cur));
-    LAB.forEach((d,k)=>{d.classList.toggle('on',k===cur); d.classList.toggle('lit',k<cur)});
-    задай('path',(cur/4)*0.86,true);
-    светниЧаст(dayEls[cur]); нишкаПоПътя();
-    if(!тихо){ if(карта('ден-'+(cur+1),dayEls[cur])) { const g=$('.got',dayEls[cur]); if(g) g.hidden=false } }
-    $$('.got',dayEls[cur]).forEach(g=>{ if(ИГРА.карти['ден-'+(cur+1)]) g.hidden=false });
+    LAB.forEach((d,k)=>{d.classList.toggle('on',k===cur); d.classList.toggle('lit',k<cur)});   /* звездите по платното — и в двете фази */
+    задай('path',(cur/4)*0.86,true); нишкаПоПътя();
+    if(pathScene){ dayEls.forEach(d=>d.classList.remove('on')); pathMax=-1; return; }            /* Д4 · СЦЕНА-фаза: само платното · акордеонът затворен · нула трепкане */
+    /* КАРТА-фаза · МОНОТОННО НАТРУПВАНЕ: веднъж отворен по скрол, денят ОСТАВА отворен (никакво свиване → никакво трепкане/осцилация · всяка отворена = събрана) ·
+       спокойно четене — новият ден се разгъва под предишните, а не ги подменя. */
+    pathMax=Math.max(pathMax,cur);
+    dayEls.forEach((d,k)=>d.classList.toggle('on',k<=pathMax));
+    светниЧаст(dayEls[cur]);
+    if(!тихо){ for(let k=0;k<=cur;k++){ if(карта('ден-'+(k+1),dayEls[k])){ const g=$('.got',dayEls[k]); if(g) g.hidden=false } } }
+    dayEls.forEach((d,k)=>{ const g=$('.got',d); if(g && ИГРА.карти['ден-'+(k+1)]) g.hidden=false });
     setTimeout(връзкиНаново,720);
   }
-  /* две фази (95 % телефон): докато сцената е на екрана — възлите светят по нейния ход (1 → 5, както в v2.3) ·
-     слезе ли сцената над екрана — текущият ден е КАРТАТА, минала горната третина (акордеон по скрол · всяка отворена = събрана) */
+  /* две фази (95 % телефон): докато сцената е на екрана — звездите светят по нейния ход (1 → 5) БЕЗ да отварят акордеона ·
+     слезе ли списъкът с дни в зоната за четене — акордеонът се разгъва спокойно, една стъпка на ~0.8 екрана.
+     Д4 · СПОКОЙНА КАСКАДА: старият вариант отваряше акордеона и в сцена-фазата (1 → 3 → 4 → 5 · frantic) + избираше по 0.30·H на всеки event
+     (разгъването сменя оформлението → трепкане). Нов вариант: акордеонът е САМО в карта-фаза, карана от СТАБИЛНА референция (горния ръб на #days). */
   const pathAuto=()=>{
-    const r=pathStage.getBoundingClientRect(), H=vh();
-    let best=null; dayEls.forEach((d,k)=>{ const b=d.getBoundingClientRect(); if(b.top<H*0.30) best=k });   /* карта-фаза: първата карта мина горната третина */
-    if(best!==null) return best;
-    if(r.bottom>0&&r.top<H) return clamp(Math.round(напредък(pathStage,0.92,0.06)*4.4-0.2),0,4);      /* сцена-фаза: възлите 1 → 5 по хода ѝ */
+    const H=vh(), box=daysBox.getBoundingClientRect();
+    if(box.top < H*0.42 && box.bottom > H*0.12){ pathScene=false; return clamp(Math.floor((H*0.42 - box.top) / (H*0.80)), 0, 4); }   /* карта-фаза · ~0.8 екрана/ден · монотонно */
+    const r=pathStage.getBoundingClientRect();
+    if(r.bottom>0&&r.top<H){ pathScene=true; return clamp(Math.round(напредък(pathStage,0.92,0.06)*4.4-0.2),0,4); }                   /* сцена-фаза · само звездите на платното */
     return null;
   };
   const pathDrv=драйвер(5,pathAuto,i=>setDay(i,false),null);
-  dayEls.forEach((d,i)=>{ d.addEventListener('click',e=>{ if(e.target.closest('button')) return; pathDrv.тап(i); видяно('#fig-path'); центрирайДен(d) }); });
+  dayEls.forEach((d,i)=>{ d.addEventListener('click',e=>{ if(e.target.closest('button')) return; pathScene=false; pathDrv.тап(i); видяно('#fig-path'); центрирайДен(d) }); });
   /* фикс-кръг 3 · скрол-центриране: отвореният ден ляга в центъра (block:center + scroll-margin), не изтласква наполовина следващия ·
      заключваме auto за момента, за да не върне скролът избора; центрираме пак след разгъването (акордеонът е .7 s) */
   function центрирайДен(d){
@@ -2955,8 +2987,8 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
     requestAnimationFrame(()=>d.scrollIntoView({behavior:'smooth',block:'center'}));
     setTimeout(()=>{ pathDrv.заключи(400); d.scrollIntoView({behavior:'smooth',block:'center'}); }, 760);
   }
-  $$('#days [data-go]').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation(); pathDrv.тап(+b.dataset.go); видяно('#fig-path'); dayEls[+b.dataset.go].scrollIntoView({behavior:reduce?'auto':'smooth',block:'center'})}));
-  LAB.forEach((d,i)=>d.addEventListener('click',e=>{e.stopPropagation(); pathDrv.тап(i); видяно('#fig-path')}));
+  $$('#days [data-go]').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation(); pathScene=false; pathDrv.тап(+b.dataset.go); видяно('#fig-path'); dayEls[+b.dataset.go].scrollIntoView({behavior:reduce?'auto':'smooth',block:'center'})}));
+  LAB.forEach((d,i)=>d.addEventListener('click',e=>{e.stopPropagation(); pathScene=false; pathDrv.тап(i); видяно('#fig-path'); центрирайДен(dayEls[i])}));
   setDay(0,true);
   let labKey='';
   function placeLabels(ф){
@@ -2971,9 +3003,9 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
     if(performance.now()-pathDown>320) return;
     const m=МФ(); const r=pathStage.getBoundingClientRect(); const x=e.clientX-r.left, y=e.clientY-r.top;
     let best=-1, bd=1e9; if(m&&m.проектирай) m.възли.forEach((n,k)=>{const q=m.проектирай('path',n[0],n[1]); if(!q) return; const d=Math.hypot(q.x-x,q.y-y); if(d<bd){bd=d;best=k}});
-    if(best>=0&&bd<52) pathDrv.тап(best); else pathDrv.следващ();
+    if(best>=0&&bd<52){ pathScene=false; pathDrv.тап(best); центрирайДен(dayEls[best]); } else pathDrv.следващ();
   });
-  window.нжДен=i=>{ pathDrv.тап(i); видяно('#fig-path'); dayEls[i].scrollIntoView({behavior:reduce?'auto':'smooth',block:'center'}) };
+  window.нжДен=i=>{ pathScene=false; pathDrv.тап(i); видяно('#fig-path'); dayEls[i].scrollIntoView({behavior:reduce?'auto':'smooth',block:'center'}) };
 
   /* ══ ДЕН-ЧАСОВНИКЪТ · 4 момента (рецепта clock) · скритите карти се обръщат по скрол/тап ══ */
   const mos=$$('#moments .mo'), imgs=$$('#ccenter img'), sung=$('#sung'), cdots=$('#cdots'), NM=mos.length, clockEl=$('#clock'), clockImg=$('#clockimg'), cw=$('#clockwrap'), clockStage=$('#fig-clock');
@@ -3214,8 +3246,9 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
     cpT2=setTimeout(()=>{ cardpop.classList.remove('show','go'); },2250);
   }
   function nodeTap(k,g){ видяно('#fig-wheel'); sparkAt(g); showInfo(k); const id='будечител-'+k;
-    /* карта() вече изскача (popCard) за ВСИЧКИ карти · фикс-кръг 3 · без двоен pop тук · нова вълна: showInfo отваря текстовото поле */
-    if(!карта(id,g)) кажи(`<b>${МЕТА[k]}</b> вече е при Вас`);
+    /* карта() вече изскача (popCard) за НОВИТЕ карти · Д10 (MET-813 · дума 18.09): и вече събраните (Обемко/Хола) се показват МАЗНО като Доверка —
+       не само тост. Един и същ жест за всичките осем будечители. */
+    if(!карта(id,g)){ const kk=КАРТИ[id]; if(!reduce&&cardpop&&kk) popCard(kk); кажи(`<b>${МЕТА[k]}</b> вече е при Вас`); }
     обновиКолело(); }
   function обновиКолело(){
     if(!готовоКолело) return;
@@ -3333,24 +3366,36 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
   (function(){
     const host=$('#butterfly'), cv=$('#bflycanvas'); if(!cv||!cv.getContext) return;
     const ctx=cv.getContext('2d'), DPR=Math.min(2,window.devicePixelRatio||1);
-    let W=0,H=0; const N=reduce?420:820, P=[];
-    const кр=t=>Math.exp(Math.cos(t))-2*Math.cos(4*t)-Math.pow(Math.sin(t/12),5);   /* пеперудена крива (Fay) */
-    for(let i=0;i<N;i++){ const t=Math.random()*Math.PI*2, u=Math.pow(Math.random(),0.42), r=кр(t)*u;   /* outward-bias → по-пълни криле */
-      P.push({x:Math.sin(t)*r, y:-Math.cos(t)*r*0.92, ph:Math.random()*6.283, sp:0.6+Math.random()*1.1, sz:0.8+Math.random()*1.4}); }
+    let W=0,H=0; const N=reduce?560:1040, P=[]; const R=()=>Math.random();
+    /* Д12 (MET-813 · дума 18.09) · НАДГРАДЕНАТА ПЕПЕРУДА: истинската wingSample-геометрия от app.js Exhibit VI („Пашкулът и крилете“) —
+       портната в СЕЛФ-КОНТЕЙНД 2D-canvas (канонът · нула Three.js/WebGL/зависимост · test_84): два назъбени крила (span·scallop·envelope), космато тяло, антенки и хоботче.
+       Крилете се СГЪВАТ при пляскане (fold) · тялото стои · тап = литва (flick). Заменя слабата крива на Фей. */
+    const nProb=Math.floor(N*0.05), nAnt=Math.floor(N*0.06), nBody=Math.floor(N*0.19), nWing=Math.floor((N-nProb-nAnt-nBody)/2);
+    for(let side=-1;side<=1;side+=2){ for(let k=0;k<nWing;k++){ const u=R(),v=R();                    /* wingSample: назъбен envelope · 6 дяла */
+      const env=Math.sin(Math.min(1,u)*Math.PI*0.92), scallop=0.86+0.14*Math.sin(u*6.0*Math.PI+v*1.4), chord=0.80*env*scallop;
+      P.push({x:side*(0.07+u*1.06), y:0.40*(1.0-u*0.55)-v*chord, cls:1, sz:0.75+R()*1.35, ph:R()*6.283, sp:0.6+R()*1.0}); } }
+    for(let k=0;k<nBody;k++){ const t=R(), y=-0.80+t*1.40, rad=0.085*(0.5+0.5*Math.sin(Math.PI*Math.min(1,t*1.05))), th=R()*6.283, hairy=R()<0.2?(1+R()*1.6):1;
+      P.push({x:rad*hairy*Math.cos(th), y, cls:2, sz:0.7+R()*1.0, ph:R()*6.283, sp:0.7+R()*0.8}); }
+    for(let k=0;k<nProb;k++){ const t=R(), th=t*2.4*6.283, r=0.14*Math.exp(-0.32*th/6.283);              /* хоботчето · логаритмична спирала */
+      P.push({x:r*Math.cos(th), y:0.58-t*0.30+r*Math.sin(th)*0.4, cls:3, sz:0.7, ph:R()*6.283, sp:1}); }
+    for(let side=-1;side<=1;side+=2){ for(let k=0;k<nAnt/2;k++){ const t=R();                            /* антенките · извиват нагоре-навън, с топче на върха */
+      P.push({x:side*(0.02+t*0.30+(t>0.85?0.05:0)), y:0.64+t*0.34, cls:4, sz:t>0.85?1.2:0.7, ph:R()*6.283, sp:1}); } }
     function resize(){ const w=cv.clientWidth||cv.getBoundingClientRect().width; if(!w) return; W=w; H=cv.clientHeight||w*5/6; cv.width=Math.round(W*DPR); cv.height=Math.round(H*DPR); ctx.setTransform(DPR,0,0,DPR,0,0); }
     let flick=0; cv.addEventListener('pointerdown',()=>{flick=1});
-    const t0=performance.now(), прог=()=>броиКарти()/ВСИЧКО;   /* v1.8 · крилете светят по прогреса на картите */
+    const t0=performance.now(), прог=()=>броиКарти()/ВСИЧКО;   /* крилете светят по прогреса на картите */
     function рисувай(now){
       if(!W) resize();
       if(W && наЕкран(host,120)){
-        const t=(now-t0)/1000, cx=W/2, cy=H*0.46, S=Math.min(W,H)*0.115*(1+0.12*прог());
-        const бързина=reduce?0:(3.0+flick*7), flap=Math.sin(t*бързина), fold=reduce?1:(0.40+0.60*Math.abs(flap));
+        const t=(now-t0)/1000, cx=W/2, cy=H*0.50, S=Math.min(W,H)*0.40*(1+0.08*прог());
+        const бързина=reduce?0:(3.2+flick*7), flap=Math.sin(t*бързина), fold=reduce?0.92:(0.46+0.54*Math.abs(flap)), tilt=reduce?0:flap*0.06;
         const burst=flick*(Math.sin(t*20)*0.05); flick*=0.95; if(flick<0.02) flick=0;
         ctx.clearRect(0,0,W,H); ctx.globalCompositeOperation='lighter';
         for(const p of P){
-          const jit=reduce?0:Math.sin(t*2+p.ph)*0.02;
-          const x=cx+(p.x*fold+burst*p.x)*S, y=cy+(p.y+jit)*S, a=0.45+0.45*Math.sin(t*1.6*p.sp+p.ph);
-          ctx.fillStyle='rgba('+(228+((a*27)|0))+','+(196+((a*50)|0))+','+(120+((a*90)|0))+','+Math.min(1,(0.35+a*0.45)*(0.8+0.5*прог())).toFixed(2)+')';
+          const jit=reduce?0:Math.sin(t*2+p.ph)*0.010; let mx=p.x, my=p.y;
+          if(p.cls===1){ mx=p.x*(fold+burst); my=p.y+p.x*tilt; }   /* крилете се сгъват + леко се накланят с пляскането */
+          const x=cx+mx*S, y=cy+(-(my)+jit)*S, a=0.42+0.45*Math.sin(t*1.5*p.sp+p.ph);
+          const b=p.cls===2?[198,150,70]:[228,196,120];
+          ctx.fillStyle='rgba('+(b[0]+((a*24)|0))+','+(b[1]+((a*46)|0))+','+(b[2]+((a*90)|0))+','+Math.min(1,(0.34+a*0.46)*(0.78+0.5*прог())).toFixed(2)+')';
           ctx.fillRect(x,y,p.sz,p.sz);
         }
         ctx.globalCompositeOperation='source-over';
@@ -3389,6 +3434,15 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
     ];
     const карта=$('#mmcard'), к=карта&&карта.querySelector('.mmc'), бутони=$$('.mm-a',hit);
     const възли=$$('.mm-n',skel).map(g=>({n:+g.dataset.n, cx:+g.dataset.cx, cy:+g.dataset.cy, a:+g.dataset.a, da:+g.dataset.da, r0:+g.dataset.r0, r1:+g.dataset.r1, g, hit:бутони.find(b=>b.dataset.n===g.dataset.n)||null, обл:ОБЛАСТИ[+g.dataset.n-1]}));
+    /* Д5 (MET-813 · дума 18.09) · МЕДАЛЬОНИТЕ НА СФЕРИТЕ: всяка от 12-те области носи лицето на своята личност (леки webp-thumbnail-и ~6 KB · пълните PNG-и остават за картата) ·
+       медальонът е кръгло клипнат образ на лицето на възела, ПОД пръстена на нивото · тихият yin-yang „част“ отстъпва на лицето (холограмата остава в централното „цяло“ сърце). */
+    (()=>{ const defs=skel.querySelector('defs'); if(defs && !skel.querySelector('#mm-medclip')){ const cp=svgel('clipPath',{id:'mm-medclip',clipPathUnits:'objectBoundingBox'}); cp.appendChild(svgel('circle',{cx:'0.5',cy:'0.5',r:'0.5'})); defs.appendChild(cp); }
+      възли.forEach(v=>{ const R=10.5, nn=String(v.n).padStart(2,'0'), src='img/nz-sferi/thumb/sf-'+nn+'.webp';
+        const im=svgel('image',{class:'sfmed',x:(v.cx-R).toFixed(1),y:(v.cy-R).toFixed(1),width:(R*2).toFixed(1),height:(R*2).toFixed(1),'clip-path':'url(#mm-medclip)',preserveAspectRatio:'xMidYMid slice'});
+        im.setAttributeNS(XL,'xlink:href',src); im.setAttribute('href',src);
+        const ring=v.g.querySelector('.ring'), yy=v.g.querySelector('.yy[data-сърце="част"]');
+        if(ring) v.g.insertBefore(im,ring); else v.g.appendChild(im);
+        if(yy) yy.style.display='none'; }); })();
     const пряк=n=>възли.findIndex(v=>v.n===n);
     const сумаL=ОБЛАСТИ.filter(o=>o.валута==='светлина').reduce((s,o)=>s+o.ниво,0), сумаG=ОБЛАСТИ.filter(o=>o.валута==='злато').reduce((s,o)=>s+o.ниво,0);
     const eL=$('#mm-sum-l'), eG=$('#mm-sum-g'); if(eL) eL.textContent=сумаL+'/40'; if(eG) eG.textContent=сумаG+'/80';
@@ -3419,13 +3473,14 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
       if(!карта||!к||k<0) return;
       const v=възли[k], o=v.обл, Б=БУД[o.буд], св=o.валута==='светлина';
       последен=v.hit; к.className='mmc '+o.валута;
-      $('#mmc-lvl').textContent='Ниво '+o.ниво+' · '+o.име; к.querySelector('.mmc-cur').textContent=св?'✧':'◆';
+      $('#mmc-lvl').textContent='Ниво '+o.ниво+' · '+o.име; к.querySelector('.mmc-cur').textContent=св?'✧ светлина':'◆ злато';   /* Д5 · знакът вече е ОБЯСНЕН (не голо ромбче) · Метта=светлина · Мета=злато */
       const art=к.querySelector('.mmc-art'), imgs=к.querySelector('.mmc-imgs'); art.classList.remove('ok'); imgs.innerHTML='';
       o.лица.forEach(l=>{ const im=document.createElement('img'); im.alt=l.име; im.decoding='async'; const ок=()=>{im.classList.add('ok'); art.classList.add('ok')}; im.addEventListener('load',ок); im.addEventListener('error',ок); im.src=l.img; if(im.complete&&im.naturalWidth) ок(); imgs.appendChild(im); });
-      к.querySelector('.mmc-bd.tl').textContent=св?'✧':'◆'; к.querySelector('.mmc-bd.tr').textContent=РИМ[o.ниво]||'·';
+      к.querySelector('.mmc-bd.tr').textContent=РИМ[o.ниво]||'·';   /* Д5 · само нивото горе-дясно · голото ромбче горе-вляво е махнато (обяснено в лентата „Ниво · област · ◆ злато“) */
       $('#mmc-nm').textContent=o.лица.map(l=>l.име).join(' + ');
       к.querySelector('.mmc-ln .al b').textContent=Б[0]; к.querySelector('.mmc-ln .al').title=Б[2];
       чип(к.querySelector('.mmc-ln .paz')||к.querySelector('.paz'),'Пазач',o.пазач,'paz'); чип(к.querySelector('.mmc-ln .pro')||к.querySelector('.pro'),'Протагонист',o.прот,'pro');
+      { const gq=к.querySelector('#mmc-guard'); if(gq) gq.hidden=!o.прот; }   /* Д7 · пазач-въпрос само когато има протагонист (ползва съществуващите пазачи · дума 18.09) */
       const go=$('#mmc-go'); if(go){ const е=(ИГРА.сфера|0)===o.n; go.textContent=е?'Избрана сфера ✦ · разширявате се тук':'Разширявам се тук ✦'; go.classList.toggle('on',е); go.dataset.n=o.n }
       карта.hidden=false; карта.setAttribute('aria-hidden','false'); void карта.offsetWidth; карта.classList.add('show'); отворена=true; document.body.style.overflow='hidden';
       setTimeout(()=>{ const x=к.querySelector('.mmc-x'); if(x) x.focus({preventScroll:true}); },60);
@@ -3448,6 +3503,8 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
       const go=$('#mmc-go'); if(go){ go.textContent='Избрана сфера ✦ · разширявате се тук'; go.classList.add('on') } }
     const goBtn=$('#mmc-go'); if(goBtn) goBtn.addEventListener('click',()=>{ const n=+goBtn.dataset.n||0; if(n){ избериСфера(n); setTimeout(затвори,700) } });
     document.addEventListener('нж:точки',обновиПрофил); обновиПрофил(); клас();
+    /* Д9 (MET-813 · дума 18.09) · КОМПАС-РАЗГЪВАНЕ: при всяка поява в кадър пръстените контра-въртят навътре (мазно-бавно · CSS) — уредът „се отваря“ като алетиометър. */
+    try{ const ioOpen=new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting){ host.classList.remove('mm-open'); void host.offsetWidth; host.classList.add('mm-open'); } else host.classList.remove('mm-open'); }),{threshold:0.4}); ioOpen.observe(host); }catch(e){ host.classList.add('mm-open'); }
     /* ── прахът · 2D-canvas (без canvas → SVG-скелетът остава статичен постер · стрелката и картата пак работят) ── */
     const ctx=cv.getContext('2d');
     const ИСКРИ=[];

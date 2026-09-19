@@ -118,13 +118,13 @@ em{font-style:italic}
 /* ===== stage 2 — turret ===== */
 .choose{border-top:1px solid var(--line)}
 .choose-grid{display:grid;gap:36px;align-items:center}
-.turret{position:relative;width:min(84vw,430px);aspect-ratio:1;margin:0 auto;touch-action:none;user-select:none;-webkit-user-select:none;cursor:grab;outline-offset:14px;border-radius:50%}
+.turret{position:relative;width:min(94vw,470px);aspect-ratio:1;margin:0 auto;touch-action:none;user-select:none;-webkit-user-select:none;cursor:grab;outline-offset:14px;border-radius:50%}
 .turret.drag{cursor:grabbing}
 .turret svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
 .turret canvas{position:absolute;left:-10%;top:-10%;width:120%;height:120%;pointer-events:none}
 .lens{cursor:pointer;transition:opacity .3s}
-.lens text{font:500 7px var(--ff-m);letter-spacing:1.4px;fill:var(--ink2);text-transform:uppercase}
-.lens .ctr{font:italic 10px var(--ff-d);letter-spacing:0;fill:var(--ink2);text-transform:none}
+.lens text{font:600 15px var(--ff-m);letter-spacing:.6px;fill:var(--ink);text-transform:uppercase}
+.lens .ctr{font:italic 20px var(--ff-d);letter-spacing:0;fill:var(--ink2);text-transform:none}
 .choose-txt{text-align:center}
 .choose-txt h2{margin:.25em 0 .35em}
 .choose-txt .lede{margin-inline:auto}
@@ -319,6 +319,58 @@ footer{padding:36px var(--gut) calc(36px + env(safe-area-inset-bottom));font:500
 .flip{position:fixed;z-index:61;pointer-events:none;object-fit:cover;border-radius:6px;left:0;top:0}
 @media(min-width:820px){
   .spot-body{grid-template-columns:1fr 1.1fr;gap:48px;margin-top:34px}
+}
+
+/* ===== mobile readability pass — bigger, game-like, level-by-level (дума Митрандир 20.09) ===== */
+@media(max-width:819px){
+  html{font-size:17px}
+  .lede{font-size:1.14rem;line-height:1.6}
+  .eyebrow{font-size:.8rem}
+  .mono{font-size:.78rem}
+  .hint{font-size:.78rem}
+  .btn{font-size:.82rem;padding:16px 22px}
+  /* stage 1 — script + wipe (constrain to the screenplay column, left of the beam) */
+  .script{font-size:.86rem;line-height:1.62;max-width:21ch}
+  .script .act{max-width:21ch}
+  .script .cr{font-size:.78rem;line-height:1.6;margin-top:.85em}
+  .script .stamp{font-size:.78rem;margin-top:.9em}
+  .wipe-handle{width:62px;height:62px;font-size:.72rem}
+  .wipe-cap{font-size:.74rem}
+  /* stage 2 — turret / lenses */
+  .arrow{width:58px;height:58px}
+  .choose-idx button{width:12px;height:12px}
+  .choose-idx{gap:12px;margin-top:26px}
+  /* stage 3 — chaos → order */
+  .doubts li{font-size:1rem;line-height:1.55;padding-left:26px}
+  .chaos-hint{font-size:.76rem;padding:12px 18px}
+  .play-lbl{font-size:.72rem}
+  .trusted-row span{font-size:1.95rem}
+  /* stage 4 — crew roster */
+  .roster li{font-size:.92rem}
+  .roster li span{font-size:.74rem}
+  .roster .foot{font-size:.78rem}
+  /* stage 5 — work cards */
+  .card .n{font-size:.72rem}
+  .card .t{font-size:1.2rem}
+  .card.feat .t{font-size:1.7rem}
+  .seg button{font-size:.76rem;padding:11px 18px}
+  /* chapters + contact */
+  .slot{font-size:.72rem}
+  .slate dl{font-size:.86rem}
+  .slate dt{font-size:.82rem}
+  .based{font-size:1.06rem}
+  .bio{font-size:1.14rem}
+  /* spotlight */
+  .spot-close{font-size:.76rem;padding:13px 18px}
+  .spot-desc{font-size:1.1rem}
+  .credits li{font-size:.88rem}
+  .credits li span:first-child{font-size:.76rem}
+  .crew-toggle{font-size:.8rem}
+  .spot-nav .nt{font-size:1.25rem}
+  /* masthead + footer */
+  .mast .brand{font-size:1.5rem}
+  .mast .cta{font-size:.72rem;padding:11px 15px}
+  footer{font-size:.72rem}
 }
 
 /* reduced motion: less motion, same layout */

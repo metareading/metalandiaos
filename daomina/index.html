@@ -123,8 +123,8 @@ em{font-style:italic}
 .turret svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
 .turret canvas{position:absolute;left:-10%;top:-10%;width:120%;height:120%;pointer-events:none}
 .lens{cursor:pointer;transition:opacity .3s}
-.lens text{font:600 15px var(--ff-m);letter-spacing:.6px;fill:var(--ink);text-transform:uppercase}
-.lens .ctr{font:italic 20px var(--ff-d);letter-spacing:0;fill:var(--ink2);text-transform:none}
+.lens text{font:600 18px var(--ff-m);letter-spacing:.4px;fill:var(--ink);text-transform:uppercase}
+.lens .ctr{font:italic 24px var(--ff-d);letter-spacing:0;fill:var(--ink2);text-transform:none}
 .choose-txt{text-align:center}
 .choose-txt h2{margin:.25em 0 .35em}
 .choose-txt .lede{margin-inline:auto}
@@ -321,56 +321,66 @@ footer{padding:36px var(--gut) calc(36px + env(safe-area-inset-bottom));font:500
   .spot-body{grid-template-columns:1fr 1.1fr;gap:48px;margin-top:34px}
 }
 
-/* ===== mobile readability pass — bigger, game-like, level-by-level (дума Митрандир 20.09) ===== */
+/* ===== mobile readability pass — BOLD, game-like, level-by-level (дума Митрандир 20.09 · v0.3) ===== */
 @media(max-width:819px){
-  html{font-size:17px}
-  .lede{font-size:1.14rem;line-height:1.6}
-  .eyebrow{font-size:.8rem}
-  .mono{font-size:.78rem}
-  .hint{font-size:.78rem}
-  .btn{font-size:.82rem;padding:16px 22px}
+  html{font-size:18.5px}
+  h1{font-size:clamp(3.2rem,12.5vw,5.2rem)}
+  h2{font-size:clamp(2.7rem,9.5vw,4.2rem)}
+  h3{font-size:clamp(1.95rem,6.4vw,2.7rem)}
+  .lede{font-size:1.3rem;line-height:1.5;max-width:34ch}
+  .eyebrow{font-size:1rem;letter-spacing:.12em}
+  .mono{font-size:.94rem}
+  .hint{font-size:1rem}
+  .btn{font-size:1.02rem;padding:21px 30px;gap:14px}
   /* stage 1 — script + wipe (constrain to the screenplay column, left of the beam) */
-  .script{font-size:.86rem;line-height:1.62;max-width:21ch}
-  .script .act{max-width:21ch}
-  .script .cr{font-size:.78rem;line-height:1.6;margin-top:.85em}
-  .script .stamp{font-size:.78rem;margin-top:.9em}
-  .wipe-handle{width:62px;height:62px;font-size:.72rem}
-  .wipe-cap{font-size:.74rem}
-  /* stage 2 — turret / lenses */
-  .arrow{width:58px;height:58px}
-  .choose-idx button{width:12px;height:12px}
-  .choose-idx{gap:12px;margin-top:26px}
+  .script{font-size:.98rem;line-height:1.62;max-width:20ch}
+  .script .act{max-width:20ch}
+  .script .cr,.script .stamp{display:none}
+  .wipe-handle{width:82px;height:82px;font-size:.95rem}
+  .wipe-cap{font-size:.88rem}
+  /* stage 2 — turret / lenses (bigger circles, chunkier controls) */
+  .turret{width:min(96vw,480px)}
+  .choose-txt h2{margin-bottom:.35em}
+  .arrow{width:70px;height:70px;font-size:1.6rem}
+  .choose-idx button{width:15px;height:15px}
+  .choose-idx{gap:16px;margin-top:30px}
+  .choose-ctl{gap:14px;margin-top:34px}
   /* stage 3 — chaos → order */
-  .doubts li{font-size:1rem;line-height:1.55;padding-left:26px}
-  .chaos-hint{font-size:.76rem;padding:12px 18px}
-  .play-lbl{font-size:.72rem}
-  .trusted-row span{font-size:1.95rem}
+  .doubts li{font-size:1.14rem;line-height:1.5;padding-left:30px}
+  .chaos-hint{font-size:.94rem;padding:16px 24px}
+  .play-btn{width:108px;height:108px}
+  .play-lbl{font-size:.88rem}
+  .trusted-row span{font-size:2.2rem}
   /* stage 4 — crew roster */
-  .roster li{font-size:.92rem}
-  .roster li span{font-size:.74rem}
-  .roster .foot{font-size:.78rem}
+  .roster li{font-size:1.04rem;padding:10px 0}
+  .roster li span{font-size:.86rem}
+  .roster .foot{font-size:.9rem}
   /* stage 5 — work cards */
-  .card .n{font-size:.72rem}
-  .card .t{font-size:1.2rem}
-  .card.feat .t{font-size:1.7rem}
-  .seg button{font-size:.76rem;padding:11px 18px}
+  .list{gap:20px 14px}
+  .card .n{font-size:.86rem}
+  .card .t{font-size:1.28rem}
+  .card.feat .t{font-size:1.95rem}
+  .seg button{font-size:.92rem;padding:14px 22px}
   /* chapters + contact */
-  .slot{font-size:.72rem}
-  .slate dl{font-size:.86rem}
-  .slate dt{font-size:.82rem}
-  .based{font-size:1.06rem}
-  .bio{font-size:1.14rem}
+  .slot{font-size:.86rem}
+  .slate{padding:26px}
+  .slate dl{font-size:1.02rem;gap:9px 18px}
+  .slate dt{font-size:.94rem}
+  .based{font-size:1.2rem}
+  .bio{font-size:1.26rem}
+  .contact-links a{padding:20px 0}
   /* spotlight */
-  .spot-close{font-size:.76rem;padding:13px 18px}
-  .spot-desc{font-size:1.1rem}
-  .credits li{font-size:.88rem}
-  .credits li span:first-child{font-size:.76rem}
-  .crew-toggle{font-size:.8rem}
-  .spot-nav .nt{font-size:1.25rem}
+  .spot-close{font-size:.92rem;padding:16px 22px}
+  .spot-desc{font-size:1.24rem}
+  .credits li{font-size:1.02rem}
+  .credits li span:first-child{font-size:.88rem}
+  .crew-toggle{font-size:.96rem}
+  .spot-nav .nt{font-size:1.4rem}
   /* masthead + footer */
-  .mast .brand{font-size:1.5rem}
-  .mast .cta{font-size:.72rem;padding:11px 15px}
-  footer{font-size:.72rem}
+  .mast{gap:12px}
+  .mast .brand{font-size:1.3rem}
+  .mast .cta{font-size:.66rem;padding:9px 11px;letter-spacing:.06em}
+  footer{font-size:.82rem}
 }
 
 /* reduced motion: less motion, same layout */
@@ -886,7 +896,7 @@ fontsReady.then(()=>{ figs.forEach(f=>f.resize&&f.resize()); paintOnce(); wake()
       if(!T.drag) T.rot=lerp(T.rot,T.target,REDUCE?1:.1);
       const moving=T.drag||Math.abs(T.rot-T.target)>.05;
       const acts=[]; let ax=0,ay=0;
-      lenses.forEach((g,i)=>{ const th=(90+i*120+T.rot)*Math.PI/180; const x=200+118*Math.cos(th), y=200+118*Math.sin(th); const act=(Math.cos(th-Math.PI/2)+1)/2; const s=.72+.44*act*act; g.setAttribute('transform',`translate(${x.toFixed(2)} ${y.toFixed(2)}) scale(${s.toFixed(3)})`); g.style.opacity=(.5+.5*act).toFixed(3); acts.push([act,i]); if(i===T.active){ ax=x; ay=y; } });
+      lenses.forEach((g,i)=>{ const th=(90+i*120+T.rot)*Math.PI/180; const x=200+118*Math.cos(th), y=200+118*Math.sin(th); const act=(Math.cos(th-Math.PI/2)+1)/2; const s=.86+.30*act*act; g.setAttribute('transform',`translate(${x.toFixed(2)} ${y.toFixed(2)}) scale(${s.toFixed(3)})`); g.style.opacity=(.62+.38*act).toFixed(3); acts.push([act,i]); if(i===T.active){ ax=x; ay=y; } });
       const key=acts.slice().sort((a,b)=>a[0]-b[0]).map(a=>a[1]).join(''); if(key!==orderKey){ orderKey=key; key.split('').forEach(i=>layer.appendChild(lenses[+i])); }
       /* lens image cycling (commercials lens) */
       if(!REDUCE){ T.lensImgT+=dt; if(T.lensImgT>4200){ T.lensImgT=0; T.lensImgI=(T.lensImgI+1)%FEAT.length; setLensImg(T.lensImgI); } }

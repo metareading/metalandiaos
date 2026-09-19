@@ -1,0 +1,1163 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Daomina Design v0.2 — Gaby Botova · Producer · Production Manager, Sofia</title>
+<meta name="description" content="Gaby Botova — film producer and production manager based in Sofia, Bulgaria, working in film production since 2006. Commercials for Coca-Cola, Apple, Xbox, LEGO, Klarna, Carlsberg, Deliveroo and more.">
+<meta name="theme-color" content="#0a0908">
+<meta property="og:title" content="Gaby Botova — Producer · Production Manager">
+<meta property="og:description" content="Film production since 2006. Sofia, Bulgaria.">
+<meta property="og:image" content="https://i.ytimg.com/vi/rr5FspII01w/maxresdefault.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='15' fill='%230a0908'/%3E%3Ccircle cx='16' cy='16' r='5' fill='%23F0AE55'/%3E%3C/svg%3E">
+<style>
+:root{
+  --bg:#0a0908;--bg2:#131110;--bg3:#1b1816;
+  --ink:#efe9e1;--ink2:#b9b1a7;--mute:#8d857b;
+  --line:rgba(239,233,225,.13);--line2:rgba(239,233,225,.24);
+  --acc:#f0ae55;--acc-rgb:240,174,85;--acc2:rgba(240,174,85,.18);
+  --ff-d:'Instrument Serif',Georgia,'Times New Roman',serif;
+  --ff-b:'DM Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --ff-m:'DM Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+  --gut:20px;--max:1240px;--ease:cubic-bezier(.22,1,.36,1);--mast:64px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--bg);color:var(--ink);scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{font:400 1rem/1.6 var(--ff-b);background:var(--bg);overflow-x:hidden;-webkit-font-smoothing:antialiased;min-height:100vh}
+body.locked{position:fixed;left:0;right:0;overflow:hidden}
+img{display:block;max-width:100%;-webkit-user-drag:none;user-drag:none}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;-webkit-tap-highlight-color:transparent}
+ul{list-style:none}
+:focus-visible{outline:2px solid var(--acc);outline-offset:3px;border-radius:2px}
+::selection{background:var(--acc);color:#1a1207}
+h1,h2,h3,.display{font-family:var(--ff-d);font-weight:400;letter-spacing:-.012em;line-height:.98;text-wrap:balance}
+h1{font-size:clamp(2.7rem,10.5vw,7rem)}
+h2{font-size:clamp(2.35rem,7.6vw,5.2rem)}
+h3{font-size:clamp(1.55rem,4.6vw,2.5rem)}
+em{font-style:italic}
+.eyebrow{font:500 .68rem/1.5 var(--ff-m);letter-spacing:.16em;text-transform:uppercase;color:var(--acc)}
+.mono{font:500 .66rem/1.5 var(--ff-m);letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
+.wrap{width:min(100% - 2*var(--gut),var(--max));margin-inline:auto}
+.stage{position:relative;padding:clamp(72px,12vh,140px) 0;scroll-margin-top:var(--mast)}
+.lede{color:var(--ink2);max-width:40ch;font-size:clamp(1rem,.5vw + .85rem,1.2rem);line-height:1.55}
+.lede+.lede{margin-top:.9em}
+.hint{margin-top:16px;font:500 .64rem/1.5 var(--ff-m);letter-spacing:.14em;text-transform:uppercase;color:var(--mute);display:inline-flex;gap:10px;align-items:center}
+.hint::before{content:'';width:22px;height:1px;background:var(--acc);opacity:.8}
+.rule{height:1px;background:var(--line)}
+.rv{opacity:0;transform:translateY(18px);transition:opacity 1s var(--ease),transform 1s var(--ease)}
+.rv.in{opacity:1;transform:none}
+.btn{display:inline-flex;align-items:center;gap:12px;font:500 .68rem var(--ff-m);letter-spacing:.14em;text-transform:uppercase;color:var(--ink);border:1px solid var(--line2);padding:14px 18px;border-radius:999px;transition:border-color .3s,color .3s,background .3s}
+.btn:hover{border-color:var(--acc);color:var(--acc)}
+.btn.acc{background:var(--acc);color:#1a1207;border-color:var(--acc)}
+.btn.acc:hover{background:#f6c27a;color:#1a1207}
+
+/* grain + progress */
+#grain{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:70;opacity:.055;mix-blend-mode:screen}
+#prog{position:fixed;left:0;top:0;height:2px;width:100%;transform-origin:0 50%;background:var(--acc);z-index:45;transform:scaleX(0);pointer-events:none}
+
+/* masthead */
+.mast{position:fixed;inset:0 0 auto 0;z-index:44;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px var(--gut);padding-top:calc(16px + env(safe-area-inset-top));background:linear-gradient(to bottom,rgba(10,9,8,.82),rgba(10,9,8,0));pointer-events:none}
+.mast>*{pointer-events:auto}
+.mast::before{content:'';position:absolute;inset:0;background:rgba(10,9,8,.88);border-bottom:1px solid var(--line);opacity:0;transition:opacity .4s;pointer-events:none;z-index:-1}
+.mast.solid::before{opacity:1}
+.mast .brand{font:400 1.35rem/1 var(--ff-d);letter-spacing:-.01em}
+.mast .brand small{display:none;font:500 .6rem var(--ff-m);letter-spacing:.14em;text-transform:uppercase;color:var(--ink2);margin-left:14px;vertical-align:middle}
+.mast nav{display:none;gap:26px}
+.mast nav a{font:500 .64rem var(--ff-m);letter-spacing:.14em;text-transform:uppercase;color:var(--ink2);transition:color .3s}
+.mast nav a:hover{color:var(--ink)}
+.mast .cta{font:500 .62rem var(--ff-m);letter-spacing:.14em;text-transform:uppercase;color:var(--acc);border:1px solid rgba(var(--acc-rgb),.45);padding:9px 13px;border-radius:999px;background:rgba(10,9,8,.5);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);transition:background .3s,color .3s}
+.mast .cta:hover{background:var(--acc);color:#1a1207}
+
+/* ===== stage 1 — hero / wipe ===== */
+.hero{min-height:100vh;min-height:100svh;padding:0;display:grid;grid-template-rows:auto 1fr}
+.wipe{position:relative;height:54svh;min-height:380px;overflow:hidden;touch-action:pan-y;user-select:none;-webkit-user-select:none;cursor:ew-resize;background:var(--bg2)}
+.wipe-page{position:absolute;inset:0;background:radial-gradient(120% 90% at 20% 10%,#181513 0%,#0f0d0c 55%,#0a0908 100%)}
+.wipe-page::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(to bottom,transparent 0 27px,rgba(239,233,225,.035) 27px 28px);mask-image:linear-gradient(to bottom,#000 0,#000 70%,transparent);-webkit-mask-image:linear-gradient(to bottom,#000 0,#000 70%,transparent)}
+.script{position:absolute;left:var(--gut);right:var(--gut);top:calc(var(--mast) + 22px + env(safe-area-inset-top));font:400 .76rem/1.75 var(--ff-m);color:var(--ink2);max-width:40ch}
+.script .slug{color:var(--ink);letter-spacing:.06em;display:block;margin-bottom:.6em}
+.script .act{display:block;max-width:34ch}
+.script .cr{display:block;margin-top:1.1em;color:var(--mute);font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;line-height:1.9}
+.script .cr b{font-weight:500;color:var(--ink2)}
+.script .stamp{display:block;margin-top:1.4em;color:var(--acc);font-size:.62rem;letter-spacing:.16em;text-transform:uppercase}
+.script>*{opacity:0;transform:translateY(6px);animation:sc .7s var(--ease) forwards}
+.script>*:nth-child(2){animation-delay:.12s}.script>*:nth-child(3){animation-delay:.24s}.script>*:nth-child(4){animation-delay:.36s}
+@keyframes sc{to{opacity:1;transform:none}}
+.wipe-frame{position:absolute;inset:0;clip-path:inset(0 0 0 56%);will-change:clip-path;background:#000}
+.wipe-frame img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 1.4s ease}
+.wipe-frame img.on{opacity:1}
+.wipe-frame::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(10,9,8,.7) 0%,rgba(10,9,8,.1) 35%,rgba(10,9,8,0) 60%)}
+.wipe-beam{position:absolute;top:0;bottom:0;left:56%;width:2px;margin-left:-1px;background:var(--acc);box-shadow:0 0 16px 2px rgba(var(--acc-rgb),.6),0 0 70px 10px rgba(var(--acc-rgb),.22);will-change:left}
+.wipe-handle{position:absolute;top:52%;left:50%;transform:translate(-50%,-50%);width:46px;height:46px;border-radius:50%;border:1px solid var(--acc);background:rgba(10,9,8,.55);display:grid;place-items:center;font:500 .62rem var(--ff-m);color:var(--acc);letter-spacing:.05em;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);box-shadow:0 0 0 6px rgba(var(--acc-rgb),.08)}
+.wipe-dust{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.wipe-cap{position:absolute;left:var(--gut);bottom:14px;font:500 .6rem/1.5 var(--ff-m);letter-spacing:.14em;text-transform:uppercase;color:var(--ink2);z-index:2;display:flex;gap:10px;align-items:center;max-width:calc(100% - 2*var(--gut))}
+.wipe-cap i{width:6px;height:6px;border-radius:50%;background:var(--acc);box-shadow:0 0 10px var(--acc);flex:none;animation:rec 2s ease-in-out infinite}
+@keyframes rec{50%{opacity:.35}}
+.wipe-cap span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hero-copy{position:relative;z-index:2;padding:34px var(--gut) clamp(36px,6vh,72px)}
+.hero-copy h1{margin:.35em 0 .45em;max-width:11ch}
+.hero-copy .lede{max-width:46ch}
+@media(min-width:820px) and (orientation:landscape){
+  .hero{display:block}
+  .wipe{position:absolute;inset:0;height:auto;min-height:0}
+  .wipe-frame::after{background:linear-gradient(to top,rgba(10,9,8,.86) 0%,rgba(10,9,8,.35) 32%,rgba(10,9,8,0) 62%)}
+  .wipe-page::before{mask-image:linear-gradient(to bottom,#000 0,#000 45%,transparent);-webkit-mask-image:linear-gradient(to bottom,#000 0,#000 45%,transparent)}
+  .script{font-size:.86rem;max-width:44ch;left:max(var(--gut),(100vw - var(--max))/2);top:calc(var(--mast) + 44px)}
+  .wipe-handle{top:46%}
+  .script .stamp{display:none}
+  .wipe-cap{left:auto;right:max(var(--gut),(100vw - var(--max))/2);bottom:auto;top:calc(var(--mast) + 50px);max-width:38vw}
+  .hero-copy{position:absolute;left:0;right:0;bottom:0;padding:0 0 clamp(48px,8vh,96px);pointer-events:none}
+  .hero-copy .wrap{pointer-events:none}.hero-copy a,.hero-copy button{pointer-events:auto}
+  .hero-copy h1{max-width:12ch}
+  .mast nav{display:flex}.mast .brand small{display:inline}
+}
+
+/* ===== stage 2 — turret ===== */
+.choose{border-top:1px solid var(--line)}
+.choose-grid{display:grid;gap:36px;align-items:center}
+.turret{position:relative;width:min(84vw,430px);aspect-ratio:1;margin:0 auto;touch-action:none;user-select:none;-webkit-user-select:none;cursor:grab;outline-offset:14px;border-radius:50%}
+.turret.drag{cursor:grabbing}
+.turret svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.turret canvas{position:absolute;left:-10%;top:-10%;width:120%;height:120%;pointer-events:none}
+.lens{cursor:pointer;transition:opacity .3s}
+.lens text{font:500 7px var(--ff-m);letter-spacing:1.4px;fill:var(--ink2);text-transform:uppercase}
+.lens .ctr{font:italic 10px var(--ff-d);letter-spacing:0;fill:var(--ink2);text-transform:none}
+.choose-txt{text-align:center}
+.choose-txt h2{margin:.25em 0 .35em}
+.choose-txt .lede{margin-inline:auto}
+.choose-ctl{display:flex;gap:10px;justify-content:center;align-items:center;margin-top:28px;flex-wrap:wrap}
+.arrow{width:46px;height:46px;border-radius:50%;border:1px solid var(--line2);display:grid;place-items:center;color:var(--ink2);transition:border-color .3s,color .3s}
+.arrow:hover{border-color:var(--acc);color:var(--acc)}
+.choose-idx{display:flex;gap:8px;justify-content:center;margin-top:22px}
+.choose-idx button{width:8px;height:8px;border-radius:50%;background:var(--line2);transition:background .3s,transform .3s}
+.choose-idx button.on{background:var(--acc);transform:scale(1.35)}
+@media(min-width:820px){
+  .choose-grid{grid-template-columns:1.05fr 1fr;gap:56px}
+  .turret{width:min(42vw,540px)}
+  .choose-txt{text-align:left}.choose-txt .lede{margin-inline:0}
+  .choose-ctl,.choose-idx{justify-content:flex-start}
+}
+
+/* ===== stage 3 — chaos → order ===== */
+.guide{border-top:1px solid var(--line)}
+.doubts{display:grid;gap:12px;margin:26px 0 30px;max-width:44ch}
+.doubts li{font:400 .82rem/1.55 var(--ff-m);color:var(--ink2);padding-left:22px;position:relative}
+.doubts li::before{content:'?';position:absolute;left:0;top:0;color:var(--acc);font-weight:500}
+.chaos{position:relative;height:min(74svh,600px);min-height:420px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);touch-action:pan-y;user-select:none;-webkit-user-select:none;cursor:pointer;background:radial-gradient(90% 70% at 50% 60%,#14110f 0%,#0a0908 100%);overflow:hidden}
+.chaos canvas{position:absolute;inset:0;width:100%;height:100%}
+.chaos-hint{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);font:500 .62rem/1.4 var(--ff-m);letter-spacing:.14em;text-transform:uppercase;color:var(--ink);background:rgba(10,9,8,.55);border:1px solid var(--line2);padding:10px 14px;border-radius:999px;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);white-space:nowrap;transition:opacity .5s;pointer-events:none}
+.chaos.ordered .chaos-hint{opacity:0}
+.answer{display:grid;gap:26px;margin-top:clamp(40px,7vh,80px)}
+.answer h3{max-width:20ch}
+.reel{position:relative;aspect-ratio:16/9;border-radius:6px;overflow:hidden;background:var(--bg3)}
+.reel img,.reel iframe{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border:0}
+.reel .play{position:absolute;inset:0;display:grid;place-items:center;cursor:pointer;background:linear-gradient(to top,rgba(10,9,8,.55),rgba(10,9,8,0) 50%)}
+.play-btn{width:86px;height:86px;border-radius:50%;background:var(--acc);color:#1a1207;display:grid;place-items:center;box-shadow:0 12px 50px rgba(var(--acc-rgb),.35);transition:transform .4s var(--ease)}
+.play:hover .play-btn{transform:scale(1.07)}
+.play-lbl{position:absolute;bottom:14px;left:16px;right:16px;font:500 .62rem/1.5 var(--ff-m);letter-spacing:.14em;text-transform:uppercase;color:var(--ink);display:flex;justify-content:space-between;gap:12px}
+.play-lbl span:last-child{color:var(--ink2)}
+.trusted{margin-top:clamp(40px,7vh,72px);border-top:1px solid var(--line);padding-top:22px}
+.trusted-row{display:flex;gap:44px;width:max-content;animation:marquee 70s linear infinite;margin-top:14px}
+.trusted-row span{font:400 1.6rem/1 var(--ff-d);color:var(--ink2);white-space:nowrap}
+.trusted-row span::after{content:'·';color:var(--acc);margin-left:44px}
+.trusted-clip{overflow:hidden;mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent);-webkit-mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent)}
+@keyframes marquee{to{transform:translateX(-50%)}}
+@media(min-width:820px){
+  .answer{grid-template-columns:1fr 1.25fr;align-items:end;gap:48px}
+  .guide-top{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:end}
+  .doubts{margin-bottom:0}
+}
+
+/* ===== stage 4 — follow-spot crew map ===== */
+.craft{border-top:1px solid var(--line)}
+.craft-grid{display:grid;gap:22px;margin-top:34px}
+.craft-fig{position:relative;height:min(78svh,660px);min-height:460px;border-radius:8px;overflow:hidden;background:#0c0a09;touch-action:pan-y;user-select:none;-webkit-user-select:none}
+.craft-fig canvas{position:absolute;inset:0;width:100%;height:100%}
+.craft-fig .hint{position:absolute;left:16px;bottom:14px;margin:0;color:var(--ink2);pointer-events:none}
+@media(pointer:fine){.craft-fig{cursor:none}}
+.roster{border-top:1px solid var(--line);padding-top:18px}
+.roster h3{margin:.2em 0 .1em}
+.roster ul{columns:2;column-gap:22px;margin-top:14px}
+.roster li{font:400 .72rem/1.5 var(--ff-m);color:var(--ink2);break-inside:avoid;padding:5px 0;border-top:1px solid var(--line)}
+.roster li span{display:block;color:var(--mute);font-size:.64rem;letter-spacing:.1em;text-transform:uppercase}
+.roster li b{font-weight:500;color:var(--ink)}
+.roster li.gb b{color:var(--acc)}
+.roster .foot{margin-top:18px;font:400 .64rem/1.6 var(--ff-m);color:var(--mute)}
+@media(min-width:820px){
+  .craft-grid{grid-template-columns:1.45fr 1fr;gap:36px;align-items:start}
+  .roster{border-top:0;padding-top:0;position:sticky;top:calc(var(--mast) + 16px)}
+  .roster ul{columns:1}
+}
+
+/* ===== stage 5 — the work ===== */
+.work{border-top:1px solid var(--line)}
+.work-head{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:18px 32px}
+.counter{display:none;font:400 clamp(2.6rem,7vw,4.6rem)/1 var(--ff-d);color:var(--mute);white-space:nowrap}
+.counter b{color:var(--ink);font-weight:400;display:inline-block}
+.counter b.roll{animation:roll .45s var(--ease)}
+@keyframes roll{from{transform:translateY(.35em);opacity:0}}
+html.reduce .counter b.roll{animation:none}
+.list{display:grid;grid-template-columns:1fr 1fr;gap:16px 12px;margin-top:30px;padding:0 var(--gut)}
+.card{position:relative;border-radius:6px;overflow:hidden;background:transparent;text-align:left;width:100%;display:block;padding:0}
+.card .ph{position:relative;aspect-ratio:16/9;overflow:hidden;border-radius:6px;background:var(--bg3)}
+.card .ph img{width:100%;height:100%;object-fit:cover;transition:transform .9s var(--ease);will-change:transform}
+.card:hover .ph img{transform:scale(1.04)}
+.card .ph::after{content:'';position:absolute;inset:0;box-shadow:inset 0 0 0 1px rgba(239,233,225,.08);border-radius:6px;pointer-events:none}
+.ph.nop::before{content:attr(data-t);position:absolute;inset:0;display:grid;place-items:center;padding:12px;text-align:center;font:italic 1.1rem/1.2 var(--ff-d);color:var(--ink2);background:radial-gradient(80% 80% at 50% 40%,#1f1b18,#0d0b0a)}
+.card .cap{padding:9px 2px 2px;display:grid;gap:2px}
+.card .n{font:500 .62rem/1.4 var(--ff-m);letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
+.card .t{font:400 1rem/1.15 var(--ff-d);color:var(--ink);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.card.feat{grid-column:1/-1}
+.card.feat .t{font-size:1.55rem}
+.card.feat .n::after{content:'Featured';color:var(--acc);margin-left:10px}
+.card .lock{position:absolute;top:8px;right:8px;font:500 .6rem/1 var(--ff-m);letter-spacing:.12em;text-transform:uppercase;color:var(--ink);background:rgba(10,9,8,.6);padding:6px 8px;border-radius:999px;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.list .card.rv{opacity:0;transform:translateY(22px)}
+.list .card.rv.in{opacity:1;transform:none;transition:opacity .9s var(--ease),transform .9s var(--ease)}
+.track-wrap{display:none}
+.grid-all{display:none}
+.work-foot{display:none}
+@media(min-width:820px) and (orientation:landscape){
+  .list{display:none}
+  .work:not(.all) .track-wrap{display:block}
+  .work.all .grid-all{display:grid}
+  .work-foot{display:flex}
+  .work:not(.all) .counter{display:block}
+  .track-wrap{position:relative;margin-top:44px;overflow:hidden;cursor:grab;user-select:none;-webkit-user-select:none;padding:12px 0 8px;outline-offset:-2px}
+  .track-wrap.drag{cursor:grabbing}
+  .track{display:flex;gap:26px;align-items:flex-start;width:max-content;will-change:transform;padding-left:max(var(--gut),(100vw - var(--max))/2);padding-right:max(var(--gut),(100vw - var(--max))/2)}
+  .track .card{width:372px;flex:none}
+  .track .card.feat{width:560px}
+  .track .card .ph img{transition:none}
+  .track .card:hover .ph img{transform:none}
+  .grid-all{grid-template-columns:repeat(4,1fr);gap:22px 18px;margin-top:44px;width:min(100% - 2*var(--gut),var(--max));margin-inline:auto}
+  .grid-all .card.feat{grid-column:auto}
+  .bar{position:relative;height:2px;background:var(--line);margin-top:26px;cursor:pointer;width:min(100% - 2*var(--gut),var(--max));margin-inline:auto}
+  .bar::before{content:'';position:absolute;inset:-14px 0}
+  .bar i{position:absolute;left:0;top:-1px;height:4px;background:var(--acc);width:10%;border-radius:2px;will-change:transform,width}
+  .work-foot{justify-content:space-between;align-items:center;margin-top:16px;gap:16px;flex-wrap:wrap;width:min(100% - 2*var(--gut),var(--max));margin-inline:auto}
+  .work-foot .mono b{color:var(--ink);font-weight:500}
+}
+.seg{display:inline-flex;border:1px solid var(--line2);border-radius:999px;padding:3px;gap:2px}
+.seg button{padding:8px 14px;border-radius:999px;font:500 .62rem var(--ff-m);letter-spacing:.12em;text-transform:uppercase;color:var(--mute);transition:background .3s,color .3s}
+.seg button.on{background:var(--ink);color:var(--bg)}
+
+/* ===== chapters (film / events) ===== */
+.chapter{padding:clamp(60px,10vh,110px) 0;border-top:1px solid var(--line);scroll-margin-top:var(--mast)}
+.chapter h2{margin:.25em 0 .35em}
+.slot{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:18px;margin-top:34px;font:500 .62rem/1.4 var(--ff-m);letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
+.slot i{height:1px;background:var(--line2)}
+.slot b{font-weight:500;color:var(--ink2)}
+
+/* ===== contact ===== */
+.contact{border-top:1px solid var(--line)}
+.contact-grid{display:grid;gap:40px;margin-top:34px}
+.slate{border:1px solid var(--line2);border-radius:8px;padding:22px;position:relative;overflow:hidden;background:var(--bg2);max-width:520px;cursor:pointer}
+.slate-bar{height:16px;background:repeating-linear-gradient(-45deg,var(--acc) 0 16px,transparent 16px 32px);transform-origin:0 100%;transform:rotate(-16deg);transition:transform .55s cubic-bezier(.34,1.56,.64,1);margin:-22px -22px 20px}
+.slate.clap .slate-bar{transform:none}
+.slate-flash{position:absolute;inset:0;background:var(--ink);opacity:0;pointer-events:none}
+.slate.flash .slate-flash{animation:flash .5s ease-out}
+@keyframes flash{0%{opacity:.25}100%{opacity:0}}
+.slate dl{display:grid;grid-template-columns:auto 1fr;gap:7px 18px;font:400 .72rem/1.5 var(--ff-m)}
+.slate dt{color:var(--mute);letter-spacing:.12em;text-transform:uppercase}
+.slate dd{color:var(--ink)}
+.slate dd.acc{color:var(--acc)}
+.contact-links{margin-top:6px}
+.contact-links a{display:block;font:400 clamp(1.45rem,5.6vw,3.1rem)/1.15 var(--ff-d);color:var(--ink);border-bottom:1px solid var(--line);padding:16px 0;transition:color .3s;word-break:break-word;overflow-wrap:anywhere}
+.contact-links a:hover{color:var(--acc)}
+.contact-links a span{display:block;font:500 .6rem/1.5 var(--ff-m);letter-spacing:.14em;text-transform:uppercase;color:var(--mute);margin-bottom:4px}
+.based{margin-top:18px;color:var(--ink2);font-size:.95rem}
+.bio{margin-top:30px;color:var(--ink2);max-width:44ch;font-size:1.02rem}
+.sig{font:italic 1.9rem/1 var(--ff-d);color:var(--mute);margin-top:30px}
+footer{padding:36px var(--gut) calc(36px + env(safe-area-inset-bottom));font:500 .6rem/1.6 var(--ff-m);letter-spacing:.12em;text-transform:uppercase;color:var(--mute);border-top:1px solid var(--line);display:flex;flex-wrap:wrap;gap:10px 24px;justify-content:space-between}
+@media(min-width:820px){.contact-grid{grid-template-columns:1fr 1fr;gap:64px;align-items:start}}
+
+/* ===== spotlight ===== */
+.spot{position:fixed;inset:0;z-index:60;background:var(--bg);display:none;overflow:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+.spot.open{display:block;animation:fadein .35s ease}
+@keyframes fadein{from{opacity:0}}
+.spot-in{width:min(100% - 2*var(--gut),1120px);margin:0 auto;padding:calc(66px + env(safe-area-inset-top)) 0 calc(72px + env(safe-area-inset-bottom))}
+.spot-close{position:fixed;top:14px;top:calc(14px + env(safe-area-inset-top));right:var(--gut);z-index:2;font:500 .62rem var(--ff-m);letter-spacing:.14em;text-transform:uppercase;color:var(--ink);border:1px solid var(--line2);background:rgba(10,9,8,.7);padding:11px 14px;border-radius:999px;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:inline-flex;gap:10px;align-items:center}
+.spot-close:hover{border-color:var(--acc);color:var(--acc)}
+.spot-media{position:relative;aspect-ratio:16/9;background:var(--bg3);border-radius:6px;overflow:hidden;animation:rise .6s var(--ease)}
+@keyframes rise{from{transform:translateY(18px) scale(.985);opacity:0}}
+.spot-media img,.spot-media iframe{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border:0}
+.spot-media::after{content:'';position:absolute;inset:0;pointer-events:none;background:linear-gradient(100deg,transparent 32%,rgba(240,174,85,.16) 50%,transparent 68%);transform:translateX(-130%)}
+.spot.open .spot-media::after{animation:leak 1.2s .3s var(--ease) both}
+@keyframes leak{to{transform:translateX(130%)}}
+.spot.open .spot-meta,.spot.open .spot-title,.spot.open .spot-desc,.spot.open .credits,.spot.open .crew-toggle,.spot.open .spot-nav{animation:rise .7s var(--ease) both}
+.spot.open .spot-title{animation-delay:.07s}.spot.open .spot-desc,.spot.open .credits{animation-delay:.14s}.spot.open .crew-toggle{animation-delay:.2s}.spot.open .spot-nav{animation-delay:.26s}
+.spot-in.swap{animation:rise .55s var(--ease)}
+.play-btn{animation:breathe 3.4s ease-in-out infinite}
+@keyframes breathe{50%{box-shadow:0 12px 64px rgba(240,174,85,.6)}}
+.spot-media .play{position:absolute;inset:0;display:grid;place-items:center;cursor:pointer;background:linear-gradient(to top,rgba(10,9,8,.6),rgba(10,9,8,0) 50%)}
+.spot-media .nop{position:absolute;inset:0}
+.unavail{position:absolute;left:0;right:0;bottom:0;padding:18px 16px;display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;background:linear-gradient(to top,rgba(10,9,8,.9),rgba(10,9,8,0))}
+.unavail .mono{color:var(--ink)}
+.spot-body{display:grid;gap:24px;margin-top:26px}
+.spot-meta{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center}
+.spot-meta .feat-tag{color:var(--acc)}
+.spot-title{font-size:clamp(1.9rem,6.4vw,4.4rem);margin:.15em 0 0;max-width:16ch}
+.spot-desc{color:var(--ink2);max-width:58ch;font-size:1rem;overflow-wrap:anywhere}
+.credits{display:grid;gap:0;margin-top:4px;border-top:1px solid var(--line2)}
+.credits li{display:grid;grid-template-columns:minmax(110px,36%) 1fr;gap:12px;font:400 .74rem/1.5 var(--ff-m);border-bottom:1px solid var(--line);padding:8px 0}
+.credits li span:first-child{color:var(--mute);letter-spacing:.06em;text-transform:uppercase;font-size:.66rem;padding-top:2px}
+.credits li.gb span:last-child{color:var(--acc)}
+.credits li.more{display:none}
+.credits.open li.more{display:grid}
+.crew-toggle[hidden]{display:none}
+.crew-toggle{margin-top:14px;font:500 .64rem var(--ff-m);letter-spacing:.14em;text-transform:uppercase;color:var(--acc);display:inline-flex;gap:10px;align-items:center}
+.crew-toggle::before{content:'+';font-size:1rem;line-height:0}
+.credits.open+.crew-toggle::before{content:'–'}
+.spot-nav{display:flex;justify-content:space-between;gap:16px;margin-top:44px;border-top:1px solid var(--line);padding-top:18px}
+.spot-nav button{display:grid;gap:4px;text-align:left;max-width:46%}
+.spot-nav button:last-child{text-align:right}
+.spot-nav .nt{font:400 1.1rem/1.15 var(--ff-d);color:var(--ink);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.spot-nav button:hover .nt{color:var(--acc)}
+.flip{position:fixed;z-index:61;pointer-events:none;object-fit:cover;border-radius:6px;left:0;top:0}
+@media(min-width:820px){
+  .spot-body{grid-template-columns:1fr 1.1fr;gap:48px;margin-top:34px}
+}
+
+/* reduced motion: less motion, same layout */
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .script>*{animation:none;opacity:1;transform:none}
+  .wipe-frame img{transition:none}
+  .trusted-row{animation:none;width:auto;flex-wrap:wrap;gap:16px 32px}
+  .trusted-clip{mask-image:none;-webkit-mask-image:none}
+  .wipe-cap i{animation:none}
+  .list .card.rv{opacity:1;transform:none;transition:none}
+  .rv{opacity:1;transform:none;transition:none}
+  .slate-bar{transition:none}
+  .spot.open,.spot-media,.spot.open .spot-media::after,.spot.open .spot-meta,.spot.open .spot-title,.spot.open .spot-desc,.spot.open .credits,.spot.open .crew-toggle,.spot.open .spot-nav,.spot-in.swap,.play-btn{animation:none}
+  .card .ph img,.play-btn,.slate .slate-bar{transition:none}
+}
+html.reduce{scroll-behavior:auto}
+html.reduce .script>*{animation:none;opacity:1;transform:none}
+html.reduce .wipe-frame img{transition:none}
+html.reduce .trusted-row{animation:none;width:auto;flex-wrap:wrap;gap:16px 32px}
+html.reduce .trusted-clip{mask-image:none;-webkit-mask-image:none}
+html.reduce .wipe-cap i{animation:none}
+html.reduce .list .card.rv{opacity:1;transform:none;transition:none}
+html.reduce .rv{opacity:1;transform:none;transition:none}
+html.reduce .slate-bar{transition:none}
+html.reduce .spot.open,html.reduce .spot-media,html.reduce .spot.open .spot-media::after,html.reduce .spot.open .spot-meta,html.reduce .spot.open .spot-title,html.reduce .spot.open .spot-desc,html.reduce .spot.open .credits,html.reduce .spot.open .crew-toggle,html.reduce .spot.open .spot-nav,html.reduce .spot-in.swap,html.reduce .play-btn{animation:none}
+</style>
+</head>
+<body>
+<canvas id="grain" aria-hidden="true"></canvas>
+<div id="prog" aria-hidden="true"></div>
+
+<header class="mast">
+  <a class="brand" href="#hero">Gaby Botova<small>Producer · Production Manager</small></a>
+  <nav aria-label="Sections">
+    <a href="#commercials">Work</a>
+    <a href="#film">Film</a>
+    <a href="#events">Events</a>
+    <a href="#contact">Contact</a>
+  </nav>
+  <a class="cta" href="#contact">Get in touch</a>
+</header>
+
+<main>
+
+<!-- ============ 1 · HERO — the wipe ============ -->
+<section class="stage hero" id="hero" aria-label="Introduction">
+  <div class="wipe" id="wipe" tabindex="0" aria-label="Drag the light to reveal the frame. Use left and right arrow keys to move it." role="slider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="56">
+    <div class="wipe-page">
+      <div class="script" id="script" aria-hidden="true"></div>
+    </div>
+    <div class="wipe-frame" id="wipeFrame">
+      <img alt="" decoding="async" fetchpriority="high">
+      <img alt="" decoding="async">
+    </div>
+    <canvas class="wipe-dust" id="wipeDust" aria-hidden="true"></canvas>
+    <div class="wipe-beam" id="wipeBeam" aria-hidden="true"><div class="wipe-handle">◂ ▸</div></div>
+    <div class="wipe-cap" aria-live="polite"><i></i><span id="heroCap"></span></div>
+  </div>
+  <div class="hero-copy">
+    <div class="wrap">
+      <p class="eyebrow">Producer · Production Manager — Sofia, Bulgaria — since 2006</p>
+      <h1>You have a production to bring to life.</h1>
+      <p class="lede">A script, a deadline, a story that has to be told right. Between the page and the frame, someone makes it happen. Since 2006, that someone has been Gaby.</p>
+      <p class="hint">Drag the light to reveal the frame</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 2 · WHICH PRODUCTION — the turret ============ -->
+<section class="stage choose" id="choose" aria-label="Choose your production">
+  <div class="wrap choose-grid">
+    <div class="turret" id="turret" tabindex="0" role="listbox" aria-label="Choose a production type. Turn the turret with the arrow keys and press Enter to open the chapter." aria-activedescendant="lens0">
+      <canvas id="turretGlint" aria-hidden="true"></canvas>
+      <svg viewBox="0 0 400 400" aria-hidden="true">
+        <defs>
+          <radialGradient id="gPlate" cx="50%" cy="38%" r="68%"><stop offset="0" stop-color="#1e1a17"/><stop offset="1" stop-color="#0c0b0a"/></radialGradient>
+          <radialGradient id="gGlass" cx="36%" cy="30%" r="72%"><stop offset="0" stop-color="#ffffff" stop-opacity=".12"/><stop offset=".42" stop-color="#f0ae55" stop-opacity=".09"/><stop offset="1" stop-color="#000000" stop-opacity=".62"/></radialGradient>
+          <clipPath id="clGlass"><circle r="42"/></clipPath>
+          <path id="rim" d="M-36,0 a36,36 0 1,1 72,0 a36,36 0 1,1 -72,0"/>
+        </defs>
+        <circle cx="200" cy="200" r="190" fill="url(#gPlate)" stroke="rgba(239,233,225,.14)"/>
+        <circle cx="200" cy="200" r="181" fill="none" stroke="rgba(239,233,225,.22)" stroke-dasharray="1 5.68"/>
+        <circle cx="200" cy="200" r="160" fill="none" stroke="rgba(239,233,225,.06)"/>
+        <circle cx="200" cy="200" r="118" fill="none" stroke="rgba(239,233,225,.08)" stroke-dasharray="2 6"/>
+        <g id="lensLayer">
+          <g class="lens" data-i="0" id="lens0" role="option" aria-selected="true" aria-label="Commercials">
+            <circle r="52" fill="#0c0b0a" stroke="rgba(239,233,225,.2)"/>
+            <circle r="46" fill="none" stroke="rgba(240,174,85,.22)"/>
+            <image id="lensImg" clip-path="url(#clGlass)" x="-75" y="-42" width="150" height="84" preserveAspectRatio="xMidYMid slice" href="" style="opacity:.92"/>
+            <circle r="42" fill="url(#gGlass)"/>
+            <circle r="30" fill="none" stroke="rgba(240,174,85,.28)"/>
+            <text><textPath href="#rim" startOffset="50%" text-anchor="middle">Commercials · 48</textPath></text>
+          </g>
+          <g class="lens" data-i="1" id="lens1" role="option" aria-selected="false" aria-label="Film Productions">
+            <circle r="52" fill="#0c0b0a" stroke="rgba(239,233,225,.2)"/>
+            <circle r="46" fill="none" stroke="rgba(240,174,85,.22)"/>
+            <circle r="42" fill="url(#gGlass)"/>
+            <g class="iris" stroke="rgba(239,233,225,.32)" fill="none"></g>
+            <text class="ctr" text-anchor="middle" y="4">in production</text>
+            <text><textPath href="#rim" startOffset="50%" text-anchor="middle">Film Productions</textPath></text>
+          </g>
+          <g class="lens" data-i="2" id="lens2" role="option" aria-selected="false" aria-label="Events">
+            <circle r="52" fill="#0c0b0a" stroke="rgba(239,233,225,.2)"/>
+            <circle r="46" fill="none" stroke="rgba(240,174,85,.22)"/>
+            <circle r="42" fill="url(#gGlass)"/>
+            <g class="iris" stroke="rgba(239,233,225,.32)" fill="none"></g>
+            <text class="ctr" text-anchor="middle" y="4">coming soon</text>
+            <text><textPath href="#rim" startOffset="50%" text-anchor="middle">Events</textPath></text>
+          </g>
+        </g>
+        <circle cx="200" cy="200" r="17" fill="#0c0b0a" stroke="rgba(240,174,85,.55)"/>
+        <circle cx="200" cy="200" r="3" fill="#f0ae55"/>
+      </svg>
+    </div>
+    <div class="choose-txt">
+      <p class="eyebrow">Which production is yours?</p>
+      <h2 id="chooseTitle" aria-live="polite">Commercials</h2>
+      <p class="lede" id="chooseDesc">Forty-eight films for the world's most demanding brands — from Coca-Cola and Apple to Xbox, LEGO and Klarna.</p>
+      <div class="choose-ctl">
+        <button class="arrow" id="chPrev" aria-label="Previous production type">‹</button>
+        <a class="btn acc" id="chooseGo" href="#commercials">Enter Commercials <span aria-hidden="true">→</span></a>
+        <button class="arrow" id="chNext" aria-label="Next production type">›</button>
+      </div>
+      <div class="choose-idx" id="chooseIdx" aria-hidden="true"><button class="on"></button><button></button><button></button></div>
+      <p class="hint">Turn the turret · tap a lens</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 3 · CHAOS → ORDER — the guide ============ -->
+<section class="stage guide" id="guide" aria-label="The chaos of production, and the guide">
+  <div class="wrap guide-top">
+    <div>
+      <p class="eyebrow">Between the idea and the first frame</p>
+      <h2>There is chaos.</h2>
+    </div>
+    <ul class="doubts">
+      <li>Will my story be done right?</li>
+      <li>Foreign location. Tight budget. Forty strangers on day one.</li>
+      <li>Who holds it all together when the weather turns?</li>
+    </ul>
+  </div>
+  <div class="chaos" id="chaos" tabindex="0" role="img" aria-label="Forty production variables — permits, weather, budget, crew, visas, catering — floating in disorder. Press and hold to bring them into the order of a call sheet.">
+    <canvas id="chaosCanvas" aria-hidden="true"></canvas>
+    <div class="chaos-hint" id="chaosHint">Press and hold to bring order</div>
+  </div>
+  <div class="wrap">
+    <div class="answer">
+      <div>
+        <p class="eyebrow">The quiet answer</p>
+        <h3>Someone who has done it since 2006.</h3>
+        <p class="lede" style="margin-top:.8em">Gaby Botova produces and manages commercials for directors like TRAKTOR, Sam Pilling and Ian Pons Jewell, and for brands from Coca-Cola to Apple, Xbox to LEGO. Weather, permits, forty strangers — handled.</p>
+        <p class="hint">The proof — press play</p>
+      </div>
+      <div class="reel" id="reel"></div>
+    </div>
+    <div class="trusted">
+      <p class="mono">Trusted by</p>
+      <div class="trusted-clip">
+        <div class="trusted-row" id="trustedRow"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 4 · HOW IT'S DONE — the follow-spot ============ -->
+<section class="stage craft" id="craft" aria-label="How it's done — the crew">
+  <div class="wrap">
+    <p class="eyebrow">How it's done</p>
+    <h2>Forty people who never met, working like one.</h2>
+    <p class="lede" style="margin-top:.8em">A commercial is a small city built for two days. Every department has to arrive on time, in the right place, with the right things — and someone has to have planned all of it. Move the light.</p>
+    <div class="craft-grid">
+      <div class="craft-fig" id="craftFig" tabindex="0" role="img" aria-label="A dark set map of nine departments — production, camera, light and grip, art, wardrobe, assistant directors, special effects, transport and catering. A follow-spot reveals the crew names wherever it shines; tap to move it.">
+        <canvas id="craftCanvas" aria-hidden="true"></canvas>
+        <p class="hint" id="craftHint">Move the light · tap a department</p>
+      </div>
+      <aside class="roster" id="roster" aria-live="polite">
+        <p class="eyebrow" id="rosterEye">Department</p>
+        <h3 id="rosterName">Production</h3>
+        <p class="mono" id="rosterCnt"></p>
+        <ul id="rosterList"></ul>
+        <p class="foot">Crew credits from <em>Congstar — All Net Flat</em> and <em>Deliveroo Plus — Mastermind</em>, production service by Icon Films Sofia. Full credits for every film are in the reel below.</p>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 5 · THE WORK — showcase ============ -->
+<section class="stage work" id="commercials" aria-label="Commercials">
+  <div class="wrap work-head">
+    <div>
+      <p class="eyebrow">Chapter one · The work</p>
+      <h2>Forty-eight commercials.</h2>
+      <p class="lede" style="margin-top:.8em">Every film here is a production that made it to the screen. Featured work first; the full reel follows. Tap any frame to watch.</p>
+    </div>
+    <div class="counter" aria-live="polite"><b id="cntCur">01</b> / <span id="cntAll">48</span></div>
+  </div>
+  <div class="list" id="list"></div>
+  <div class="track-wrap" id="trackWrap" tabindex="0" aria-label="Horizontal reel of commercials. Drag, flick, or use the arrow keys.">
+    <div class="track" id="track"></div>
+  </div>
+  <div class="grid-all" id="gridAll"></div>
+  <div class="bar" id="bar" aria-hidden="true"><i></i></div>
+  <div class="work-foot">
+    <p class="mono">Drag · flick · <b>←</b> <b>→</b> · scrub the line</p>
+    <div class="seg" role="tablist" aria-label="View mode">
+      <button class="on" id="modeTrack" role="tab" aria-selected="true">Reel</button>
+      <button id="modeAll" role="tab" aria-selected="false">All 48</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ chapters ============ -->
+<section class="chapter" id="film" aria-label="Film Productions">
+  <div class="wrap">
+    <p class="eyebrow">Chapter two</p>
+    <h2>Film Productions</h2>
+    <p class="lede">In production — coming soon.</p>
+    <div class="slot"><span>01</span><i></i><b>Reserved for the first feature</b></div>
+  </div>
+</section>
+
+<section class="chapter" id="events" aria-label="Events">
+  <div class="wrap">
+    <p class="eyebrow">Chapter three</p>
+    <h2>Events</h2>
+    <p class="lede">In production — coming soon.</p>
+    <div class="slot"><span>01</span><i></i><b>Reserved for the first event</b></div>
+  </div>
+</section>
+
+<!-- ============ contact — the payoff ============ -->
+<section class="stage contact" id="contact" aria-label="Get in touch">
+  <div class="wrap">
+    <p class="eyebrow">That's a wrap — now, yours</p>
+    <h2>Get in touch</h2>
+    <div class="contact-grid">
+      <div>
+        <div class="contact-links">
+          <a id="mailLink" href="#"><span>Email</span></a>
+          <a id="telLink" href="#"><span>Phone</span></a>
+        </div>
+        <p class="based" id="based"></p>
+        <p class="bio" id="bio"></p>
+        <p class="sig" id="sig" aria-label="Signature"></p>
+      </div>
+      <div>
+        <div class="slate" id="slate" tabindex="0" role="button" aria-label="Clapperboard — tap to clap">
+          <div class="slate-bar"></div>
+          <div class="slate-flash"></div>
+          <dl>
+            <dt>Prod.</dt><dd>Your next production</dd>
+            <dt>Director</dt><dd>You</dd>
+            <dt>Producer / PM</dt><dd class="acc" id="slateName"></dd>
+            <dt>Location</dt><dd id="slateLoc"></dd>
+            <dt>Date</dt><dd id="slateDate"></dd>
+            <dt>Scene · Take</dt><dd>1 · 1</dd>
+          </dl>
+        </div>
+        <p class="hint">Tap the slate</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <span id="footBrand"></span>
+  <span>Sofia, Bulgaria</span>
+  <span>Producer · Production Manager</span>
+</footer>
+
+<!-- ============ spotlight ============ -->
+<div class="spot" id="spot" role="dialog" aria-modal="true" aria-label="Film detail" hidden>
+  <button class="spot-close" id="spotClose">Close <span aria-hidden="true">✕</span></button>
+  <div class="spot-in">
+    <div class="spot-media" id="spotMedia"></div>
+    <div class="spot-body">
+      <div>
+        <p class="spot-meta mono" id="spotMeta"></p>
+        <h2 class="spot-title" id="spotTitle"></h2>
+      </div>
+      <div>
+        <p class="spot-desc" id="spotDesc"></p>
+        <ul class="credits" id="spotCredits"></ul>
+        <button class="crew-toggle" id="crewToggle" hidden aria-expanded="false">full crew</button>
+      </div>
+    </div>
+    <nav class="spot-nav" aria-label="Previous and next film">
+      <button id="spotPrev"><span class="mono">‹ Previous</span><span class="nt"></span></button>
+      <button id="spotNext"><span class="mono">Next ›</span><span class="nt"></span></button>
+    </nav>
+  </div>
+</div>
+
+<script id="data" type="application/json">
+{"site":{"brand":"Gaby Botova","legalName":"Galabena Botova","alias":"Daomina","role":"Producer · Production Manager","based":"Sofia, Bulgaria","since":2006,"bio":"Galabena Botova has been working in film production since 2006. Over the years, she has collaborated with numerous directors, directors of photography, and producers from around the world.","email":"galabenabotova@gmail.com","phone":"+359 898 440 191","language":"en"},"sections":[{"key":"commercials","label":"Commercials","status":"populated"},{"key":"film","label":"Film Productions","status":"coming-soon"},{"key":"events","label":"Events","status":"coming-soon"}],"embedNotes":{"youtube":"https://www.youtube.com/embed/<embedId>","vimeo":"https://player.vimeo.com/video/<embedId>","posterOnly":"playable:false → private/unlisted Vimeo; show poster + graceful state; real embed (with ?h=privacyHash) to be captured from the live site during v1 refinement"},"featuredSuggested":[1,7,34,14,16,32,6,18,4,40],"works":[{"order":1,"section":"commercials","title":"'SWING' | PAPAYA | 2024 COMMERCIAL","body":"Championing the Power of Play, our epic ad shows two friends compete to swing the highest on the world's biggest swing. High above the New York streets, they remember the joy of play. Learn more @ www.papaya.com #papaya #papayaadvert #playon #powerofplay #papayaadvertisement #papayaadvertswing #papayacommercial","platform":"youtube","embedId":"rr5FspII01w","playable":true,"poster":"https://i.ytimg.com/vi/rr5FspII01w/maxresdefault.jpg"},{"order":2,"section":"commercials","title":"Fanta + Xbox Launch","body":"To celebrate Xbox's 25th anniversary, Xbox and Fanta are teaming up for a collaboration that not only features the games you love but also rewards you with brand new in-game content for those same titles. Starting now, fans will be able to purchase a special-edition collection of Fanta cans and bottles, featuring packaging inspired by Halo, Call of Duty, World of Warcraft, Forza Horizon 6, and Diablo IV.","platform":"youtube","embedId":"ZgHNasdtFU0","playable":true,"poster":"https://i.ytimg.com/vi/ZgHNasdtFU0/maxresdefault.jpg"},{"order":3,"section":"commercials","title":"Pass the Pringles","body":"Whatever you're up to, #PassThePringles","platform":"youtube","embedId":"0r9olCYgs-8","playable":true,"poster":"https://i.ytimg.com/vi/0r9olCYgs-8/maxresdefault.jpg"},{"order":4,"section":"commercials","title":"Apple - The New Macbook Pro","body":"DIRECTOR // Mackenzie Sheppard DOP // Phedon Papamichael PRODUCTION COMPANY // Prod Co","platform":"vimeo","embedId":"912606596","playable":true,"poster":"https://i.vimeocdn.com/video/1797959944-e1cc145164a6a42a1c6f07fde95628cc610722ff90752eb35e3954f14e80592e-d_1920x1080"},{"order":5,"section":"commercials","title":"5 vs 5 - Riyadh Season Boxing Tournament","body":"DIRECTOR // Leigh Powis DOP // Harry Wheeler AGENCY // Big Time Creative Shop PRODUCTION COMPANY / ProdCo","platform":"vimeo","embedId":"950649171","playable":true,"poster":"https://static.wixstatic.com/media/39782a_d2a052c54cf0476c84242bba4d89c95c~mv2.png/v1/fill/w_287,h_161,enc_auto/file.jpeg"},{"order":6,"section":"commercials","title":"Citroën We Care – Election 2034","body":"What if the future turns out to be even crazier than we ever imagined? Our latest film drops you into 2034, where the presidential race has taken a wild and totally unexpected turn… The future is uncertain. Luckily your Citroën's warranty isn't.","platform":"youtube","embedId":"jaiWnrKWNMA","playable":true,"poster":"https://i.ytimg.com/vi/jaiWnrKWNMA/sddefault.jpg"},{"order":7,"section":"commercials","title":"Coca-Cola - The World Needs More Santas","body":"DIRECTOR / TRAKTOR DOP / Anthony Dod Mantle AGENCY / WPP Open X PRODUCTION COMPANY / Stink Films","platform":"vimeo","embedId":"881140861","playable":true,"poster":"https://i.vimeocdn.com/video/1748538801-f23e524f0575f3530498b543955d2355137c232eb3b5fda0c8fe3509b3332eae-d_1920x1080"},{"order":8,"section":"commercials","title":"Clean Business: Presented by Native Skippable","body":"Case closed: Native makes an aluminum free deodorant that smells great and works really well. Learn more at https://www.nativecos.com","platform":"youtube","embedId":"YRhoHVOvOvg","playable":true,"poster":"https://i.ytimg.com/vi/YRhoHVOvOvg/maxresdefault.jpg"},{"order":9,"section":"commercials","title":"Eternally Yours, Clean & Effective: Presented by Native Skippable","body":"Learn more at https://www.nativecos.com","platform":"youtube","embedId":"gfTvZ8Nvkb4","playable":true,"poster":"https://i.ytimg.com/vi/gfTvZ8Nvkb4/maxresdefault.jpg"},{"order":10,"section":"commercials","title":"Leo's Inventions - Smart Business Buying | Amazon Business","body":"Embark on a transformative procurement journey with Smart Business Buying! Tired of being buried in paperwork? Our tools act as your guiding compass, leading you through the complexities of purchasing with ease. With Smart Business Buying, you'll not only navigate through procurement challenges but also uncover savings and streamline operations. Learn more: https://business.amazon.com/en/smartbusinessbuying","platform":"youtube","embedId":"NJxpdlPQ9aQ","playable":true,"poster":"https://i.ytimg.com/vi/NJxpdlPQ9aQ/maxresdefault.jpg"},{"order":11,"section":"commercials","title":"Run a Tighter Ship - Smart Business Buying | Amazon Business","body":"Embark on a transformative procurement journey with Smart Business Buying! Tired of being buried in paperwork? Our tools act as your guiding compass, leading you through the complexities of purchasing with ease. With Smart Business Buying, you'll not only navigate through procurement challenges but also uncover savings and streamline operations. Learn more: https://business.amazon.com/en/smartbusinessbuying","platform":"youtube","embedId":"E5T3sSPqXCk","playable":true,"poster":"https://i.ytimg.com/vi/E5T3sSPqXCk/maxresdefault.jpg"},{"order":12,"section":"commercials","title":"Augen auf! Gemeinsam #GegenHassImNetz","body":"Hass und Beleidigungen im Netz verschwinden nicht, wenn wir die Augen verschließen. Lasst uns hinschauen und handeln. Für Verbundenheit, Mitgefühl und ein Netz, in dem das Wir stärker ist als Hass. Gemeinsam #GegenHassImNetz Mehr Infos unter: https://telekom.com/gegenhassimnetz","platform":"youtube","embedId":"bIpffS75vPU","playable":true,"poster":"https://i.ytimg.com/vi/bIpffS75vPU/maxresdefault.jpg"},{"order":13,"section":"commercials","title":"Coca Cola - Christmas 2024","body":"","platform":"vimeo","embedId":"1055550854","playable":true,"poster":"https://i.vimeocdn.com/video/1981143729-c530782279b6b0afd2d51fc9769e47c0db569abc04e9eab1aa13d3aa311d0401-d_1920x1080"},{"order":14,"section":"commercials","title":"Klarna X Apple – Astronaut","body":"Agency: Save Our Souls Director: TRAKTOR Production: Giants & Toys","platform":"vimeo","embedId":"1038584558","playable":true,"poster":"https://i.vimeocdn.com/video/1960804810-1d1895850c334687012d6a3022365596e497706f6a0e42edf26c18317ce0116b-d_1920x1080"},{"order":15,"section":"commercials","title":"Klarna X Apple – Engineer","body":"Agency: Save Our Souls Director: TRAKTOR Production: Giants & Toys","platform":"vimeo","embedId":"1038585971","playable":true,"poster":"https://i.vimeocdn.com/video/1960806488-8c3f91175ed5640c79fff053127fa7e545d4e3de9911fd592754aa01e9fa6d0a-d_1920x1080"},{"order":16,"section":"commercials","title":"Carlsberg - Do the best things begin with curiosity? Probably","body":"DIRECTOR // Sam Pilling DOP // Justin Brown AGENCY // Fold7 PRODUCTION COMPANY // Magna Studios","platform":"vimeo","embedId":"929975615","playable":true,"poster":"https://i.vimeocdn.com/video/1826426899-a42112f6a5ac8f77aa31e0ea98674e9514e2b8c0812f50cf8da07396a260b662-d_1920x1080"},{"order":17,"section":"commercials","title":"PAPAYA SOLITAIRE | PUT CHAOS IN ORDER","body":"Put Chaos In Order with Papaya Solitaire—a timeless classic we all grew up on, now with an exciting twist of live competition and real rewards. Play Now- www.tinyurl.com/Papayasolitaire","platform":"youtube","embedId":"4hbc6LzThRo","playable":true,"poster":"https://i.ytimg.com/vi/4hbc6LzThRo/maxresdefault.jpg"},{"order":18,"section":"commercials","title":"Xbox - How to turn (almost) anything into an Xbox - Explained by an Ex-Boxer","body":"With an Xbox controller, almost anything can be an Xbox. Play hundreds of games with Game Pass by connecting your Xbox Controller to your smartphone, smart TV, PC, or console: https://www.xbox.com/devices.","platform":"youtube","embedId":"qVxFfe09-6o","playable":true,"poster":"https://i.ytimg.com/vi/qVxFfe09-6o/maxresdefault.jpg"},{"order":19,"section":"commercials","title":"Xbox Game Pass: Play When You Want","body":"Now, you can play the games you want on any device, anywhere. This is how we play now. Join Xbox Game Pass https://xbox.com/gamepass","platform":"youtube","embedId":"hczIkxpC7Tc","playable":true,"poster":"https://i.ytimg.com/vi/hczIkxpC7Tc/maxresdefault.jpg"},{"order":20,"section":"commercials","title":"Xbox Game Pass: New Games Added All The Time","body":"No need to hover by the return box. With Xbox Game Pass, new games are added all the time. Play what you want, when you want. This is how we play now. Join Xbox Game Pass https://xbox.com/gamepass","platform":"youtube","embedId":"Q5IJn83bV_8","playable":true,"poster":"https://i.ytimg.com/vi/Q5IJn83bV_8/maxresdefault.jpg"},{"order":21,"section":"commercials","title":"Xbox Game Pass: Hundreds of PC Games","body":"Turns out having hundreds of PC games at your fingertips is possible. This is how we play now. Join Xbox Game Pass https://xbox.com/gamepass","platform":"youtube","embedId":"4Vt2OrovyqE","playable":true,"poster":"https://i.ytimg.com/vi/4Vt2OrovyqE/maxresdefault.jpg"},{"order":22,"section":"commercials","title":"Xbox Game Pass: Day One Games","body":"Play Call of Duty®: Black Ops 7 day one on Xbox Game Pass. This is how we play now. Join Xbox Game Pass https://xbox.com/gamepass","platform":"youtube","embedId":"knhhrnZ2QNI","playable":true,"poster":"https://i.ytimg.com/vi/knhhrnZ2QNI/maxresdefault.jpg"},{"order":23,"section":"commercials","title":"Xbox Game Pass: Earn More Rewards","body":"Earn more rewards with Xbox Game Pass when playing or buying games. Play and earn up to $100 a year in the Store with Rewards. This is how we play now. Join Xbox Game Pass https://xbox.com/gamepass","platform":"youtube","embedId":"qS6Q4B6A5cw","playable":true,"poster":"https://i.ytimg.com/vi/qS6Q4B6A5cw/maxresdefault.jpg"},{"order":24,"section":"commercials","title":"Xbox Game Pass: Day One Games Without The Wait","body":"Enjoy game launches with friends from the comfort of your gaming chair. With Xbox Game Pass, new games come to you on day one. This is how we play now. Join Xbox Game Pass https://xbox.com/gamepass","platform":"youtube","embedId":"mBGFkwuYMuE","playable":true,"poster":"https://i.ytimg.com/vi/mBGFkwuYMuE/maxresdefault.jpg"},{"order":25,"section":"commercials","title":"Xbox Game Pass: Play Your Way","body":"More rewards. More devices. More games with Xbox Game Pass. This is how we play now. Join Xbox Game Pass https://xbox.com/gamepass","platform":"youtube","embedId":"0PzV7zA-KZo","playable":true,"poster":"https://i.ytimg.com/vi/0PzV7zA-KZo/maxresdefault.jpg"},{"order":26,"section":"commercials","title":"Xbox Game Pass: Unlock In-Game Benefits","body":"Get more out of your favorite games. All Xbox Game Pass subscribers can enjoy in-game content like character skins, consumables, boosts, and more—available across Free-to-Play titles and games in the Xbox Game Pass library. This is how we play now.","platform":"youtube","embedId":"vcB7YhwJ0hE","playable":true,"poster":"https://i.ytimg.com/vi/vcB7YhwJ0hE/maxresdefault.jpg"},{"order":27,"section":"commercials","title":"Xbox Game Pass: Any Device. Anywhere.","body":"Wasn't that a trip down memory lane? Now, you can play anywhere, on any device, with Xbox Game Pass. This is how we play now. Join Xbox Game Pass https://xbox.com/gamepass","platform":"youtube","embedId":"ibmHp_F05yM","playable":true,"poster":"https://i.ytimg.com/vi/ibmHp_F05yM/maxresdefault.jpg"},{"order":28,"section":"commercials","title":"Xbox Game Pass gives you more","body":"Xbox Game Pass is here to give you more. Choose from Ultimate, Premium, and Essential plans, all of which include games on PC and console, cloud gaming, online console multiplayer, in-game benefits, and much more. Xbox Game Pass Ultimate features over 400 console and PC games and more than 75 day one games per year. Xbox Game Pass Premium includes over 200 console and PC games. Xbox Game Pass Essential offers over 50 console and PC games.","platform":"youtube","embedId":"bRcXlQs98n4","playable":true,"poster":"https://i.ytimg.com/vi/bRcXlQs98n4/maxresdefault.jpg"},{"order":29,"section":"commercials","title":"What's new and what's changing with Xbox Game Pass","body":"Xbox Game Pass is getting an upgrade! We're introducing 3 updated plans for subscribers: Xbox Game Pass Essential, Premium, and Ultimate.","platform":"youtube","embedId":"Z_6I0MkhJfQ","playable":true,"poster":"https://i.ytimg.com/vi/Z_6I0MkhJfQ/maxresdefault.jpg"},{"order":30,"section":"commercials","title":"Xbox Game Pass: Play The Games You Want On Your PC.","body":"Oh the good ol' days. Now, with Xbox Game Pass, you can play the games you want on your PC with access to hundreds of incredible titles. This is how we play now.","platform":"youtube","embedId":"cpfimZFINoA","playable":true,"poster":"https://i.ytimg.com/vi/cpfimZFINoA/maxresdefault.jpg"},{"order":31,"section":"commercials","title":"Congstar / All Net Flat","body":"TITLE / All Net Flat CLIENT / Congstar AGENCY / Grabarz XCT DIRECTOR / Joffrey Jans DOP / Christian Huck EXECUTIVE PRODUCER / Dominik Meis PRODUCER / Daria Marie Küpker PRODUCTION COMPANY / Goodhouse Films VFX SUPERVISOR / Noah Kayma PRODUCTION DESIGNER / Alexei Karaghiaur SET DECORATOR / Lidia Burukova PROPS MASTER / Yordan Petrov CONSTRUCTION MANAGER / Ivo Ivanov ART DEPARTMENT COORDINATOR / Teodora Nikolova STYLIST / Vasilen Milkov KEY MAKE UP ARTIST / Krasimira Petrova HAIR STYLIST / Lyubomir Petrov 1st AD / Petya Evtimova 2nd AD / Teodora Petrova 3rd AD / Simona Gardeva SEADICAM OPERATOR / Adam Mendry 1st AC/A CAMERA / Vasil Paunov 2nd AC/A CAMERA / Maxim Penev 2nd AC/B CAMERA / Ivaylo Yovchev VIDEO CONTROL / Simeon Chengelski VIDEO CONTROL / Iliya Petrov DIT / Jivko Chakarov GAFFER / Pavel Mitov KEY GRIP / Tsvetan Kostov SFX / Nitro Media SFX SUPERVISOR / Yovko Dogandzhiyski STUNT COORDINATOR / Georgi Dimitrov - Bomba PICTURE VEHICLES COORDINATOR / Teodor Valchev - Terro SET MANAGER / Martin Velichkov TRANSPORT COORDINATOR / Kalin Nikolov PRODUCTION SERVICE COMPANY / Icon Films Sofia EXECUTIVE PRODUCER / Emil Rangelov SERVICE PRODUCER / Beba Yordanova CASTING PRODUCER / Gergana Kuzmova UPM / Galabena Botova PRODUCTION COORDINATOR / Petia Petrova ASSISTANT PRODUCTION COORDINATOR / Rositsa Terziiyska OFFICE RUNNER / Emil Chopev CATERING / Ragazzi D'ORO","platform":"vimeo","embedId":"991473772","playable":true,"poster":"https://i.vimeocdn.com/video/1907331597-fe9a45a080d6ace4e8814eb3a72e0fe369e17be38c166500778173cf0f7154e6-d_1920x1080"},{"order":32,"section":"commercials","title":"Deliveroo Plus / Mastermind","body":"TITLE / Mastermind CLIENT / Deliveroo AGENCY / Pablo London DIRECTOR / Will Wightman DOP / Fabian Wagner PRODUCER / Isobel Conroy PM / Alex Yiaxis PRODUCTION COMPANY / BlinkInk VFX SUPERVISOR / Jamie Stitson FOOD STYLIST / Elaine Ngan PRODUCTION DESIGNER / Alexei Karaghiaur SET DECORATOR / Lidia Burukova PROPS MASTER / Peter Rakovski CONSTRUCTION MANAGER / Ivo Ivanov ART DEPARTMENT COORDINATOR / Teodora Nikolova STYLIST / Sergei Yordanov KEY MAKE UP ARTIST / Krasimira Petrova HAIR STYLIST / Lyubomir Petrov FOOD STYLIST BG / Milen Kanev 1st AD / Antony Tanev 1st AD 2nd Unit / Damyan Tanev 2nd AD / Margarita Aneva B CAMERA OPERATOR / Ivo Ivanov 1st AC/A CAMERA / Vasil Paunov 2nd AC/A CAMERA / Maxim Penev 2nd AC/B CAMERA / Mladen Minev 2nd AC/B CAMERA / Radoi Nikolov VIDEO CONTROL / Iliya Petrov VIDEO CONTROL / Peter Shterev DIT / Jivko Chakarov GAFFER / Pavel Mitov KEY GRIP / Tsvetan Kostov SFX PROSTETHICS / FX Studio Bulgaria SFX PROSTETHICS / Lyudmil Ivanov SFX PROSTETHICS / Lyudmil Nikolov SFX / Fire Vision SFX SUPERVISOR / Nikolai Fartunkov HEAD PUPPETEER / Ventsislava Zaharieva-Asenova PUPPETEER / Kamen Asenov PUPPETEER / Marian Rangelov PUPPETEER / Nikolay Bakurdzhiev PUPPETEER / Dilyana Spasova SOUND / Emil Evtimov SET MANAGER / Martin Velichkov TRANSPORT COORDINATOR / Kalin Nikolov PRODUCTION SERVICE COMPANY / Icon Films Sofia EXECUTIVE PRODUCER / Emil Rangelov SERVICE PRODUCER / Beba Yordanova CASTING PRODUCER / Gergana Kuzmova UPM / Galabena Botova PRODUCTION COORDINATOR / Irina Cherkelova ASSISTANT PRODUCTION COORDINATOR / Evelina Nacheva OFFICE RUNNER / Marian Kostov CATERING / Ragazzi D'ORO","platform":"vimeo","embedId":"1028855738","playable":true,"poster":"https://i.vimeocdn.com/video/1949077586-4391d8e84b36df282c4e9a4d2fb12fc9b5e3c6bb314ea4fe9a42782b2539ae3b-d_1920x1080"},{"order":33,"section":"commercials","title":"Playstation - Live From PS5","body":"","platform":"vimeo","embedId":"798771956","playable":true,"poster":"https://i.vimeocdn.com/video/1611187620-372335fce55f1ce7d7a0009656e05895247a1499658f34d66f4f82102c7ada17-d_1920x1080"},{"order":34,"section":"commercials","title":"LEGO - Build a playful holiday","body":"DIRECTOR / TRAKTOR DOP / Sophie Winqvist AGENCY / LEGO® Agency PRODUCTION COMPANY / Stink Paris","platform":"vimeo","embedId":"766000653","playable":true,"poster":"https://i.vimeocdn.com/video/1539013114-9fd08a93afe095a75b45179b42574d74cdb3bfcf507be6a7df4933b2a51a8479-d_1920x1080"},{"order":35,"section":"commercials","title":"INVESTEC - Partner with Investec","body":"DIRECTOR // Tristan Holmes DOP // Franz Lustig AGENCY // Ogilvy PRODUCTION COMPANY // The Star Film Co.","platform":"vimeo","embedId":"317504171","playable":true,"poster":"https://i.vimeocdn.com/video/759735404-2cd6957df40b512fcb1a7c7fa298ac1cf693cd7203c01ab163fee39233403319-d_1920x1080"},{"order":36,"section":"commercials","title":"NAO - Bad Blood (Official Video)","body":"Official music video for NAO - Bad Blood. Directed by Ian Pons Jewell. Written by Ian Pons Jewell & Dobrina Manolova. www.ianponsjewell.com. Get NAO's debut album For All We Know - http://smarturl.it/NAOalbumiT","platform":"youtube","embedId":"R7vHqhRXZpY","playable":true,"poster":"https://i.ytimg.com/vi/R7vHqhRXZpY/maxresdefault.jpg"},{"order":37,"section":"commercials","title":"H&M - Take Care","body":"DIRECTOR // BabyBaby DOP // Andreas Bjørseth","platform":"vimeo","embedId":"827915937","playable":true,"poster":"https://i.vimeocdn.com/video/1673268686-a850749156079a6aad1e81628ad80285e07958958d3ee23312c7e28e251906fe-d_1920x1080"},{"order":38,"section":"commercials","title":"ARGOS - The Book of Dreams","body":"DIRECTOR // Traktor DOP // Joost van Gelder AGENCY // The&Partnership PRODUCTION COMPANY // Stink London","platform":"vimeo","embedId":"370317121","playable":true,"poster":"https://i.vimeocdn.com/video/827519231-a5e71d8ac8d6bedad38a9fb1eea8875627c1946346904ed20839d2e2ecbc7326-d_1920x1080"},{"order":39,"section":"commercials","title":"T-Mobile - Nederland","body":"DIRECTOR // Nina Aaldering DOP // Tibor Dingelstad AGENCY // TBWA\\NEBOKO PRODUCTION COMPANY // Cake Film & Photography","platform":"vimeo","embedId":"717213705","playable":true,"poster":"https://i.vimeocdn.com/video/1447759909-f6c90b52b3e0315acbabb1b5dbe61a225b247a5c235fc191170a19ab2482ba0f-d_1920x1080"},{"order":40,"section":"commercials","title":"REDFIN","body":"DIRECTOR // Traktor DOP // Matyas Erdely PRODUCTION COMPANY // Stink","platform":"vimeo","embedId":"776619922","playable":true,"poster":"https://i.vimeocdn.com/video/1558370046-bd7c6b273151ad978b8f02f12e60254d662502797809fd926e6b9c5371e7a847-d_1920x1080"},{"order":41,"section":"commercials","title":"PETA - Animal Testing Campaign","body":"DIRECTOR // Angel Apostolski DOP // Nenad Boroevich AGENCY // Young & Rubicam - New York PRODUCTION COMPANY // Ray Productions","platform":"vimeo","embedId":null,"playable":false,"poster":"https://i.vimeocdn.com/video/732056350-fa42ea3ff4ad29131818c7aa8245c10e6169976cced337a101d9d63b3983ee05-d_1920x1080"},{"order":42,"section":"commercials","title":"Lidl - Pikok","body":"AGENCY // Saatchi & Saatchi - Sofia PRODUCTION COMPANY // Push Pull Production","platform":"vimeo","embedId":null,"playable":false,"poster":"https://i.vimeocdn.com/video/563707478-2f1d04b97c0c5473d31bad8ea8fc7869a0d52273507add11c51b07e62659467a-d_1920x1080"},{"order":43,"section":"commercials","title":"Telenor - Manifesto","body":"DIRECTOR // Jan Gleie DOP // Fredereick Jacobi AGENCY // guts&brainsDDB PRODUCTION COMPANY // Push Pull Production","platform":"vimeo","embedId":null,"playable":false,"poster":"https://i.vimeocdn.com/video/495281612-615e8d16ba870bb54a2682a11cbea61a734237d73c98ffc7a51e004e8c839d77-d_1920x1080"},{"order":44,"section":"commercials","title":"Logitech - ASTRO A50","body":"DIRECTOR // JJ Adler DOP // Ula Pontikos PRODUCTION COMPANY // Ruckus Films","platform":"vimeo","embedId":null,"playable":false,"poster":"https://i.vimeocdn.com/video/1799115743-219a621bfea67dfb79f3994bbfca406e74756f57423c0085dd4c97d15751acdd-d_1920x1080"},{"order":45,"section":"commercials","title":"Telenor Network","body":"DIRECTOR // Nikola Lezaic & Petko Spasov DOP // Julian Atannasov AGENCY // guts&brainsDDB PRODUCTION COMPANY // Push Pull Production","platform":"vimeo","embedId":null,"playable":false,"poster":"https://i.vimeocdn.com/video/546456870-fa6a17ffa26945bae1c769e5817a1e03c7000e85cd8c9efd0e6b96edfb36f8e0-d_1920x1080"},{"order":46,"section":"commercials","title":"Krali Marko - Kafana TVC","body":"DIRECTOR // Marko Djilas DOP // Nenad Boroevich AGENCY // Futura 2/2 PRODUCTION COMPANY // Push Pull Production","platform":"vimeo","embedId":null,"playable":false,"poster":"https://i.vimeocdn.com/video/635150214-a8591fdf7fa0b080e18728ffa9b5e05d71eaf9a537c79dcabe601c50db95cb8d-d_1920x1080"},{"order":47,"section":"commercials","title":"BITVAVO - STORM","body":"DIRECTOR // Sharif Abdel Mawla DOP // Daan Bukman AGENCY // Dept PRODUCTION COMPANY // Bonkers","platform":"vimeo","embedId":null,"playable":false,"poster":"https://i.vimeocdn.com/video/1556603322-a9df8bd722b66e9fdc472cd0ae350386dfe6b4b59f745b986d0ab3795d7898a4-d_1920x1080"},{"order":48,"section":"commercials","title":"Wine Tourism","body":"DIRECTOR // Emil S. Zakhariev DOP // Nenad Boroevich AGENCY // guts&brainsDDB PRODUCTION COMPANY // Push Pull Production","platform":"vimeo","embedId":null,"playable":false,"poster":"https://i.vimeocdn.com/video/601329615-3ee6f611d37f42cbd60f9928202314754249ef86d4b7078183c0a909b1679e91-d_1920x1080"}]}
+</script>
+<script>
+(()=>{
+'use strict';
+/* ------------------------------------------------------------------ data */
+const DATA=JSON.parse(document.getElementById('data').textContent);
+const SITE=DATA.site, WORKS=DATA.works, FEAT=DATA.featuredSuggested;
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>Array.from(r.querySelectorAll(s));
+const Q=new URLSearchParams(location.search);
+const REDUCE=matchMedia('(prefers-reduced-motion: reduce)').matches||Q.get('reduced')==='1';
+if(REDUCE) document.documentElement.classList.add('reduce');
+const DPR=Math.min(2,window.devicePixelRatio||1);
+const lerp=(a,b,t)=>a+(b-a)*t, clamp=(v,a,b)=>v<a?a:v>b?b:v, smooth=t=>{t=clamp(t,0,1);return t*t*(3-2*t)};
+const isWide=()=>matchMedia('(min-width:820px) and (orientation:landscape)').matches;
+const FINE=matchMedia('(pointer:fine)').matches;
+const byOrder=new Map(WORKS.map(w=>[w.order,w]));
+const featSet=new Set(FEAT);
+const ORDERED=FEAT.map(o=>byOrder.get(o)).filter(Boolean).concat(WORKS.filter(w=>!featSet.has(w.order)));
+ORDERED.forEach((w,i)=>{w.pos=i+1;w.featured=featSet.has(w.order)});
+const N=ORDERED.length;
+const pad2=n=>String(n).padStart(2,'0');
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c]);
+const platformName=p=>p==='youtube'?'YouTube':'Vimeo';
+const embedURL=w=>w.platform==='youtube'
+  ?`https://www.youtube.com/embed/${w.embedId}?autoplay=1&rel=0&modestbranding=1&playsinline=1`
+  :`https://player.vimeo.com/video/${w.embedId}?autoplay=1&title=0&byline=0&portrait=0`;
+
+/* credits parser: "ROLE / Name ROLE // Name" → [{role,value}] · values are exact substrings, nothing lost */
+const ROLES=["ASSISTANT PRODUCTION COORDINATOR","PICTURE VEHICLES COORDINATOR","PRODUCTION SERVICE COMPANY","ART DEPARTMENT COORDINATOR","TRANSPORT COORDINATOR","CONSTRUCTION MANAGER","PRODUCTION COORDINATOR","PRODUCTION DESIGNER","PRODUCTION COMPANY","KEY MAKE UP ARTIST","B CAMERA OPERATOR","SEADICAM OPERATOR","STUNT COORDINATOR","EXECUTIVE PRODUCER","1st AD 2nd Unit","CASTING PRODUCER","SERVICE PRODUCER","SFX PROSTETHICS","2nd AC/B CAMERA","2nd AC/A CAMERA","1st AC/A CAMERA","VFX SUPERVISOR","SFX SUPERVISOR","HEAD PUPPETEER","FOOD STYLIST BG","SET DECORATOR","VIDEO CONTROL","OFFICE RUNNER","HAIR STYLIST","FOOD STYLIST","PROPS MASTER","SET MANAGER","PUPPETEER","DIRECTOR","PRODUCER","CATERING","STYLIST","AGENCY","GAFFER","KEY GRIP","CLIENT","1st AD","2nd AD","3rd AD","TITLE","SOUND","DOP","DIT","SFX","UPM","PM","Agency","Director","Production"];
+const ROLE_RE=new RegExp('(^|\\s)('+ROLES.map(r=>r.replace(/[.*+?^${}()|[\]\\\/]/g,'\\$&')).join('|')+')\\s*(?://|/|:)\\s*','g');
+function parseCredits(body){
+  if(!body) return null;
+  const rows=[]; let m,last=null,prevEnd=0,first=true; ROLE_RE.lastIndex=0;
+  while((m=ROLE_RE.exec(body))){
+    const start=m.index+m[1].length;
+    if(first){ if(body.slice(0,start).trim()) return null; first=false; }
+    else { last.value=body.slice(prevEnd,start).trim(); rows.push(last); }
+    last={role:m[2],value:''}; prevEnd=ROLE_RE.lastIndex;
+  }
+  if(!last) return null;
+  last.value=body.slice(prevEnd).trim(); rows.push(last);
+  return rows.some(r=>!r.value)?null:rows;
+}
+WORKS.forEach(w=>{ w.credits=parseCredits(w.body); });
+const isGB=v=>/galabena|gaby/i.test(v);
+
+/* poster fallback chain (YouTube maxres → sd → hq → typographic placeholder) */
+function posterGuard(img,ph){
+  img.addEventListener('error',()=>{
+    const src=img.getAttribute('src')||'';
+    const m=src.match(/^https:\/\/i\.ytimg\.com\/vi\/([^/]+)\/(\w+)\.jpg$/);
+    if(m){ const chain=['maxresdefault','sddefault','hqdefault']; const i=chain.indexOf(m[2]); if(i>-1&&i<chain.length-1){ img.src=`https://i.ytimg.com/vi/${m[1]}/${chain[i+1]}.jpg`; return; } }
+    img.remove(); if(ph) ph.classList.add('nop');
+  });
+}
+
+/* ---------------------------------------------------------------- engine */
+const figs=[]; let running=false,lastT=0,idle=0;
+let vh=innerHeight, vw=innerWidth;
+function frame(now){
+  if(document.hidden){ running=false; return; }
+  const dt=lastT?Math.min(50,now-lastT):16; lastT=now;
+  let active=false;
+  for(const f of figs){ if(!f.vis) continue; if(f.tick(dt,now)) active=true; }
+  idle=active?0:idle+1;
+  if(idle<60) requestAnimationFrame(frame); else running=false;
+}
+const wake=()=>{ if(!running){ running=true; lastT=0; idle=0; requestAnimationFrame(frame); } };
+/* one synchronous frame — first paint, reduced-motion poster, and hidden tabs (rAF never fires there) */
+function paintOnce(){ const now=performance.now(); for(const f of figs){ const el=f.el; if(el){ const r=el.getBoundingClientRect(); if(r.bottom<-vh*.2||r.top>vh*1.2) continue; } try{ f.tick(16,now); }catch(_){} } }
+document.addEventListener('visibilitychange',()=>{ if(!document.hidden) wake(); });
+addEventListener('scroll',wake,{passive:true});
+addEventListener('pointermove',wake,{passive:true});
+addEventListener('pointerdown',wake,{passive:true});
+addEventListener('keydown',wake);
+addEventListener('dragstart',e=>{ if(e.target&&e.target.tagName==='IMG') e.preventDefault(); });
+let rsT; addEventListener('resize',()=>{ vh=innerHeight; vw=innerWidth; clearTimeout(rsT); rsT=setTimeout(()=>{ figs.forEach(f=>f.resize&&f.resize()); place(); paintOnce(); wake(); },80); });
+const vio=new IntersectionObserver(es=>es.forEach(e=>{ const f=e.target.__fig; if(!f) return; f.vis=e.isIntersecting; if(f.vis){ f.resize&&f.resize(); try{ f.tick(16,performance.now()); }catch(_){} wake(); } }),{rootMargin:'12% 0px'});
+function addFig(el,f){ f.el=el; f.vis=false; el.__fig=f; figs.push(f); vio.observe(el); return f; }
+function fitCanvas(c){
+  const r=c.getBoundingClientRect(); const w=Math.max(1,Math.round(r.width)), h=Math.max(1,Math.round(r.height));
+  if(c.__w!==w||c.__h!==h){ c.__w=w; c.__h=h; c.width=Math.round(w*DPR); c.height=Math.round(h*DPR); }
+  const ctx=c.getContext('2d'); ctx.setTransform(DPR,0,0,DPR,0,0); return {ctx,w,h};
+}
+const progressOf=el=>{ const r=el.getBoundingClientRect(); return clamp((vh-r.top)/(vh+r.height),0,1); };
+const ACC=(a)=>`rgba(240,174,85,${a})`, INK=(a)=>`rgba(239,233,225,${a})`;
+const fontsReady=(document.fonts&&document.fonts.ready)||Promise.resolve();
+fontsReady.then(()=>{ figs.forEach(f=>f.resize&&f.resize()); paintOnce(); wake(); });
+
+/* ------------------------------------------------- global: grain + progress */
+{
+  const c=$('#grain'), prog=$('#prog'), mast=$('.mast');
+  const tile=document.createElement('canvas'); tile.width=tile.height=160;
+  const tx=tile.getContext('2d'); const id=tx.createImageData(160,160);
+  for(let i=0;i<id.data.length;i+=4){ const v=Math.random()*255|0; id.data[i]=id.data[i+1]=id.data[i+2]=v; id.data[i+3]=255; }
+  tx.putImageData(id,0,0);
+  let pat=null, acc=999, lastY=-1;
+  const f={vis:true,
+    resize(){ const {ctx}=fitCanvas(c); pat=ctx.createPattern(tile,'repeat'); f.draw(); },
+    draw(){ const ctx=c.getContext('2d'); ctx.setTransform(DPR,0,0,DPR,0,0); ctx.clearRect(0,0,c.__w,c.__h); ctx.save(); ctx.translate(-(Math.random()*160|0),-(Math.random()*160|0)); ctx.fillStyle=pat; ctx.fillRect(0,0,c.__w+160,c.__h+160); ctx.restore(); },
+    tick(dt){
+      const y=scrollY; if(y!==lastY){ lastY=y; const h=document.documentElement.scrollHeight-vh; prog.style.transform=`scaleX(${h>0?clamp(y/h,0,1):0})`; mast.classList.toggle('solid',y>40); }
+      if(REDUCE) return false; acc+=dt; if(acc>110){ acc=0; f.draw(); } return false;
+    }};
+  figs.push(f); f.resize();
+}
+
+/* ======================================================= 1 · HERO — wipe */
+{
+  const root=$('#wipe'), frameEl=$('#wipeFrame'), beam=$('#wipeBeam'), imgs=$$('img',frameEl), dust=$('#wipeDust'), script=$('#script'), cap=$('#heroCap');
+  const SCRIPTS={
+    1:['EXT. NEW YORK — HIGH ABOVE THE STREETS — DAY',"Two friends. The world's biggest swing. Who goes higher?"],
+    7:['EXT. THE WORLD — CHRISTMAS','The world needs more Santas.'],
+    34:['INT. A PLAYFUL HOLIDAY — DAY','Build it. Brick by brick.'],
+    14:['INT. ORBIT — WEIGHTLESS','An astronaut. An Apple. A Klarna.'],
+    16:['EXT. CURIOSITY — PROBABLY','Do the best things begin with curiosity?'],
+    32:['INT. THE MASTERMIND CHAIR — NIGHT','Puppets, prosthetics and a black chair.'],
+    6:['EXT. THE FUTURE, 2034 — ELECTION DAY','The presidential race takes a wild turn.'],
+    18:['INT. ALMOST ANYTHING — DAY','With a controller, almost anything is an Xbox.'],
+    4:['INT. STUDIO — DAY','The new MacBook Pro.'],
+    40:['EXT. A HOUSE FOR SALE — DAY','Home, found.']
+  };
+  const H={x:.56,tx:.56,drag:false,userT:0,idx:0,cur:0,swapT:0,parts:[]};
+  for(let i=0;i<64;i++) H.parts.push({y:Math.random(),o:(Math.random()*2-1),s:Math.random()*1.3+.5,v:Math.random()*.5+.15,ph:Math.random()*6.28,a:Math.random()*.6+.3});
+  function scriptFor(w){
+    const s=SCRIPTS[w.order]||['SCENE 1 — TAKE 1',w.title];
+    const cr=(w.credits||[]).filter(r=>/^(DIRECTOR|Director|DOP|AGENCY|Agency|PRODUCTION COMPANY|Production)$/.test(r.role)).slice(0,3);
+    const crHtml=cr.length?cr.map(r=>`${esc(r.role.toUpperCase().replace('PRODUCTION COMPANY','PROD. CO'))} — <b>${esc(r.value)}</b>`).join('<br>'):`COMMERCIAL — <b>${esc(platformName(w.platform))}</b>`;
+    return `<span class="slug">${esc(s[0])}</span><span class="act">${esc(s[1])}</span><span class="cr">${crHtml}</span><span class="stamp">Production manager — Gaby Botova · Sofia</span>`;
+  }
+  function setFrame(i){
+    H.idx=i; const w=byOrder.get(FEAT[i]); if(!w) return;
+    const next=imgs[H.cur^1], prev=imgs[H.cur];
+    const show=()=>{ next.classList.add('on'); prev.classList.remove('on'); H.cur^=1; };
+    next.onload=show; next.src=w.poster; if(next.complete&&next.naturalWidth) show();
+    script.innerHTML=scriptFor(w); cap.textContent=`Now showing — ${w.title}`;
+  }
+  const apply=()=>{ const p=(H.x*100).toFixed(2)+'%'; frameEl.style.clipPath=`inset(0 0 0 ${p})`; beam.style.left=p; root.setAttribute('aria-valuenow',Math.round(H.x*100)); };
+  const setFromEvent=e=>{ const r=root.getBoundingClientRect(); H.tx=clamp((e.clientX-r.left)/r.width,.04,.96); };
+  root.addEventListener('pointerdown',e=>{ if(e.button&&e.button!==0) return; H.drag=true; H.userT=performance.now(); try{root.setPointerCapture(e.pointerId)}catch(_){} setFromEvent(e); wake(); });
+  root.addEventListener('pointermove',e=>{ if(H.drag) setFromEvent(e); else if(e.pointerType==='mouse'){ const r=root.getBoundingClientRect(); H.hover=(e.clientX-r.left)/r.width; wake(); } });
+  root.addEventListener('pointerleave',()=>{ H.hover=null; });
+  const up=()=>{ H.drag=false; H.userT=performance.now(); };
+  root.addEventListener('pointerup',up); root.addEventListener('pointercancel',up); root.addEventListener('lostpointercapture',up);
+  root.addEventListener('keydown',e=>{ if(e.key==='ArrowLeft'||e.key==='ArrowRight'){ e.preventDefault(); H.tx=clamp(H.tx+(e.key==='ArrowLeft'?-.06:.06),.04,.96); H.userT=performance.now(); wake(); } });
+  const fig=addFig(root,{
+    resize(){ fitCanvas(dust); apply(); },
+    tick(dt,now){
+      if(!H.drag&&!REDUCE&&now-H.userT>5000){ const base=.5+Math.sin(now/4600)*.15; H.tx=H.hover==null?base:clamp(base+(H.hover-base)*.38,.08,.92); }
+      H.x=lerp(H.x,H.tx,REDUCE?1:(H.drag?.22:.08)); apply();
+      if(!REDUCE&&!H.drag){ H.swapT+=dt; if(H.swapT>7000){ H.swapT=0; setFrame((H.idx+1)%FEAT.length); } }
+      /* dust near the beam */
+      const {ctx,w,h}=fitCanvas(dust); ctx.clearRect(0,0,w,h);
+      if(REDUCE) return false;
+      const bx=H.x*w, t=now/1000;
+      for(const p of H.parts){
+        p.y-=p.v*dt/9000; if(p.y<0){ p.y=1; p.o=Math.random()*2-1; }
+        const px=bx+p.o*44+Math.sin(t*1.3+p.ph)*10, py=p.y*h, a=p.a*(1-Math.abs(p.o))*(.35+.65*Math.abs(Math.sin(t*2+p.ph)));
+        ctx.fillStyle=ACC(a*.9); ctx.beginPath(); ctx.arc(px,py,p.s,0,6.283); ctx.fill();
+      }
+      return true;
+    }
+  });
+  setFrame(0); apply();
+  fig.set=v=>{ H.x=H.tx=v; H.userT=performance.now()+1e9; apply(); };
+  window.__hero=fig;
+}
+
+/* ================================================== 2 · TURRET — choose */
+{
+  const root=$('#turret'), glint=$('#turretGlint'), lenses=$$('.lens',root), layer=$('#lensLayer');
+  const title=$('#chooseTitle'), desc=$('#chooseDesc'), go=$('#chooseGo'), idx=$$('#chooseIdx button');
+  const SECT=[
+    {label:'Commercials',href:'#commercials',desc:`Forty-eight films for the world's most demanding brands — from Coca-Cola and Apple to Xbox, LEGO and Klarna.`},
+    {label:'Film Productions',href:'#film',desc:'In production — coming soon. The first feature will take its place here.'},
+    {label:'Events',href:'#events',desc:'In production — coming soon. Live productions, brought to life with the same crew discipline.'}
+  ];
+  /* iris blades for film / events */
+  $$('.iris',root).forEach((g,k)=>{ const n=k?7:6, r=34; let d=''; for(let i=0;i<n;i++){ const a=i/n*6.283, b=a+(k?2.9:2.6); d+=`M${(r*Math.cos(a)).toFixed(1)},${(r*Math.sin(a)).toFixed(1)}L${(r*Math.cos(b)).toFixed(1)},${(r*Math.sin(b)).toFixed(1)}`; } const p=document.createElementNS('http://www.w3.org/2000/svg','path'); p.setAttribute('d',d); g.appendChild(p); });
+  const T={rot:0,target:0,drag:false,a0:0,r0:0,vel:0,lastA:0,lastT:0,active:-1,moved:0,sparks:[],lensImgT:0,lensImgI:0,snapT:0};
+  const lensImg=$('#lensImg');
+  const setLensImg=i=>{ const w=byOrder.get(FEAT[i]); if(w) lensImg.setAttribute('href',w.poster); };
+  setLensImg(0);
+  const center=()=>{ const r=root.getBoundingClientRect(); return {cx:r.left+r.width/2,cy:r.top+r.height/2,w:r.width}; };
+  const ang=e=>{ const c=center(); return Math.atan2(e.clientY-c.cy,e.clientX-c.cx)*180/Math.PI; };
+  const norm=d=>((d+540)%360)-180;
+  const activeOf=target=>{ const k=Math.round(target/120); return ((-k)%3+3)%3; };
+  function setActive(i,silent){
+    if(i===T.active) return; T.active=i; const s=SECT[i];
+    title.textContent=s.label; desc.textContent=s.desc; go.setAttribute('href',s.href); go.innerHTML=`Enter ${esc(s.label)} <span aria-hidden="true">→</span>`;
+    idx.forEach((b,k)=>b.classList.toggle('on',k===i)); lenses.forEach((g,k)=>g.setAttribute('aria-selected',k===i?'true':'false')); root.setAttribute('aria-activedescendant','lens'+i);
+    if(!silent) burst();
+  }
+  function snapTo(i){ const base=Math.round(T.rot/120); let best=null; for(let k=base-3;k<=base+3;k++){ if(((-k)%3+3)%3===i){ if(best===null||Math.abs(k*120-T.rot)<Math.abs(best*120-T.rot)) best=k; } } T.target=best*120; setActive(i); wake(); }
+  const step=d=>snapTo(((T.active+d)%3+3)%3);
+  function burst(){ if(REDUCE) return; for(let i=0;i<22;i++){ const a=Math.random()*6.283, v=Math.random()*1.6+.4; T.sparks.push({x:0,y:0,vx:Math.cos(a)*v,vy:Math.sin(a)*v,l:1,s:Math.random()*1.6+.6}); } }
+  root.addEventListener('pointerdown',e=>{ if(e.button&&e.button!==0) return; T.drag=true; T.hit=e.target.closest?e.target.closest('.lens'):null; root.classList.add('drag'); try{root.setPointerCapture(e.pointerId)}catch(_){} T.a0=ang(e); T.r0=T.rot; T.moved=0; T.vel=0; T.lastA=T.a0; T.lastT=performance.now(); wake(); });
+  root.addEventListener('pointermove',e=>{ if(!T.drag) return; const a=ang(e); const d=norm(a-T.a0); T.rot=T.r0+d; const now=performance.now(), dt=now-T.lastT; const dd=norm(a-T.lastA); T.moved+=Math.abs(dd); if(dt>0) T.vel=clamp(lerp(T.vel,dd/Math.max(dt,8)*16,.5),-9,9); T.lastA=a; T.lastT=now; });
+  root.addEventListener('pointerup',e=>{
+    if(!T.drag) return; T.drag=false; root.classList.remove('drag');
+    if(T.moved<4){ const g=T.hit; if(g){ const i=+g.dataset.i; if(i===T.active) go.click(); else snapTo(i); } else { T.target=Math.round(T.rot/120)*120; setActive(activeOf(T.target)); } }
+    else { const pred=T.rot+clamp(T.vel,-9,9)*8; T.target=Math.round(pred/120)*120; setActive(activeOf(T.target)); }
+    T.hit=null;
+    wake();
+  });
+  root.addEventListener('pointercancel',()=>{ T.drag=false; root.classList.remove('drag'); T.target=Math.round(T.rot/120)*120; setActive(activeOf(T.target)); });
+  root.addEventListener('keydown',e=>{ if(e.key==='ArrowLeft'||e.key==='ArrowUp'){ e.preventDefault(); step(-1); } else if(e.key==='ArrowRight'||e.key==='ArrowDown'){ e.preventDefault(); step(1); } else if(e.key==='Enter'||e.key===' '){ e.preventDefault(); go.click(); } });
+  $('#chPrev').addEventListener('click',()=>step(-1)); $('#chNext').addEventListener('click',()=>step(1));
+  idx.forEach((b,k)=>b.addEventListener('click',()=>snapTo(k)));
+  let orderKey='';
+  const fig=addFig(root,{
+    resize(){ fitCanvas(glint); },
+    tick(dt,now){
+      if(!T.drag) T.rot=lerp(T.rot,T.target,REDUCE?1:.1);
+      const moving=T.drag||Math.abs(T.rot-T.target)>.05;
+      const acts=[]; let ax=0,ay=0;
+      lenses.forEach((g,i)=>{ const th=(90+i*120+T.rot)*Math.PI/180; const x=200+118*Math.cos(th), y=200+118*Math.sin(th); const act=(Math.cos(th-Math.PI/2)+1)/2; const s=.72+.44*act*act; g.setAttribute('transform',`translate(${x.toFixed(2)} ${y.toFixed(2)}) scale(${s.toFixed(3)})`); g.style.opacity=(.5+.5*act).toFixed(3); acts.push([act,i]); if(i===T.active){ ax=x; ay=y; } });
+      const key=acts.slice().sort((a,b)=>a[0]-b[0]).map(a=>a[1]).join(''); if(key!==orderKey){ orderKey=key; key.split('').forEach(i=>layer.appendChild(lenses[+i])); }
+      /* lens image cycling (commercials lens) */
+      if(!REDUCE){ T.lensImgT+=dt; if(T.lensImgT>4200){ T.lensImgT=0; T.lensImgI=(T.lensImgI+1)%FEAT.length; setLensImg(T.lensImgI); } }
+      /* glints */
+      const {ctx,w,h}=fitCanvas(glint); ctx.clearRect(0,0,w,h);
+      if(REDUCE) return false;
+      const W=w/1.2, sc=W/400, ox=0.1*W, oy=0.1*W;
+      const px=ax*sc+ox, py=ay*sc+oy, t=now/1000, pulse=.55+.45*Math.sin(t*1.1);
+      const rad=62*sc*(.72+.44);
+      const g1=ctx.createRadialGradient(px,py,0,px,py,rad*1.6); g1.addColorStop(0,ACC(.16*pulse+(moving?.12:0))); g1.addColorStop(1,ACC(0)); ctx.fillStyle=g1; ctx.fillRect(px-rad*1.6,py-rad*1.6,rad*3.2,rad*3.2);
+      const g2=ctx.createLinearGradient(px-W*.55,0,px+W*.55,0); g2.addColorStop(0,ACC(0)); g2.addColorStop(.5,ACC(.34*pulse+(moving?.3:0))); g2.addColorStop(1,ACC(0)); ctx.fillStyle=g2; ctx.fillRect(px-W*.55,py-.5,W*1.1,1);
+      for(let i=0;i<3;i++){ const a=t*.35+i*2.1, r=rad*(.55+.25*i); const bx=px+Math.cos(a)*r, by=py+Math.sin(a)*r*.5; ctx.fillStyle=ACC(.10); ctx.beginPath(); ctx.arc(bx,by,rad*.16+i*2,0,6.283); ctx.fill(); }
+      if(T.sparks.length){ T.sparks=T.sparks.filter(s=>s.l>0); for(const s of T.sparks){ s.x+=s.vx*dt*.08; s.y+=s.vy*dt*.08; s.l-=dt/700; ctx.fillStyle=ACC(Math.max(0,s.l)); ctx.beginPath(); ctx.arc(px+s.x*sc,py+s.y*sc,s.s,0,6.283); ctx.fill(); } }
+      return true;
+    }
+  });
+  setActive(0,true); fig.tick(16,performance.now());
+  fig.select=i=>{ snapTo(i); T.rot=T.target; };
+  window.__turret=fig;
+}
+
+/* ============================================ 3 · CHAOS → ORDER — guide */
+{
+  const root=$('#chaos'), c=$('#chaosCanvas');
+  const ITEMS=['PERMITS','WEATHER','BUDGET','CASTING','CREW · 42','VISAS','LOCATION','CUSTOMS','INSURANCE','CALL TIME 05:30','UNIT BASE','CATERING','TRANSPORT','PICTURE CARS','SFX','STUNTS','ART DEPT','WARDROBE','HAIR & MAKE-UP','CAMERA','LIGHTING','GRIP','SOUND','VFX','SCHEDULE','OVERTIME','SUNSET 19:42','DAY 1 / 2','CLIENT','AGENCY','DIRECTOR','DOP','SCOUT','TECH RECCE','PPM','WRAP','DAILIES','SAFETY','POLICE','ROAD CLOSURE','GENERATOR','DRONE','RAIN COVER','HOTELS','PAYROLL','INVOICES'];
+  const C={order:0,hold:false,force:false,items:[],w:0,h:0,cols:3,hdr:0,t0:performance.now()};
+  ITEMS.forEach((s,i)=>C.items.push({s,cx:Math.random(),cy:Math.random(),rot:(Math.random()*2-1)*.6,sc:Math.random()*.7+.7,a:Math.random()*.4+.3,f1:Math.random()*.6+.2,f2:Math.random()*.6+.2,p1:Math.random()*6.28,p2:Math.random()*6.28,d:(i%7)/7*.4,jx:0,jy:0,kx:0,ky:0}));
+  function layout(){
+    const {w,h}=fitCanvas(c); C.w=w; C.h=h;
+    C.cols=w<560?2:w<1100?3:4; const rows=Math.ceil(C.items.length/C.cols);
+    const mx=Math.max(18,w*.06), bottom=64; const cw=(w-2*mx)/C.cols, rh=Math.max(18,Math.min(34,(h-72-bottom)/rows));
+    const top=Math.max(72,(h-rows*rh-bottom+72)/2);
+    C.rh=rh; C.top=top; C.mx=mx; C.fs=w<560?11:w<1100?12.5:13.5;
+    C.items.forEach((it,i)=>{ const col=i%C.cols, row=Math.floor(i/C.cols); it.ox=mx+col*cw; it.oy=top+row*rh+rh*.5; });
+  }
+  const on=()=>{ C.hold=true; wake(); }, off=()=>{ C.hold=false; wake(); };
+  root.addEventListener('pointerdown',e=>{ if(e.button&&e.button!==0) return; on(); try{root.setPointerCapture(e.pointerId)}catch(_){} });
+  ['pointerup','pointercancel','lostpointercapture'].forEach(ev=>root.addEventListener(ev,off));
+  root.addEventListener('keydown',e=>{ if(e.key===' '||e.key==='Enter'){ e.preventDefault(); if(!C.hold) on(); } });
+  root.addEventListener('keyup',e=>{ if(e.key===' '||e.key==='Enter') off(); });
+  const fig=addFig(root,{
+    resize(){ layout(); },
+    tick(dt,now){
+      const p=progressOf(root); const scrollOrder=smooth((p-.58)/.3);
+      const target=C.force?1:Math.max(C.hold?1:0,scrollOrder);
+      C.order=lerp(C.order,target,REDUCE?1:(target>C.order?.045:.02));
+      const o=C.order; root.classList.toggle('ordered',o>.85);
+      const {ctx,w,h}=fitCanvas(c); if(w!==C.w||h!==C.h) layout(); ctx.clearRect(0,0,w,h);
+      const t=(now-C.t0)/1000, fs=C.fs||12.5;
+      ctx.textBaseline='middle';
+      /* header of the call sheet */
+      const ho=smooth((o-.55)/.45);
+      if(ho>0){ ctx.globalAlpha=ho; ctx.fillStyle=ACC(1); ctx.font=`500 ${fs-1}px "DM Mono", monospace`; ctx.textAlign='left'; ctx.fillText('CALL SHEET · DAY 1 · UNIT CALL 05:30',C.mx,32); ctx.textAlign='right'; ctx.fillStyle=INK(.7); ctx.fillText('UPM — G. BOTOVA',w-C.mx,32); ctx.fillStyle=INK(.22); ctx.fillRect(C.mx,48,w-2*C.mx,1); ctx.globalAlpha=1; }
+      let live=false;
+      for(const it of C.items){
+        const k=smooth((o-it.d)/(1-it.d)); if(k<1) live=true;
+        const dx=Math.sin(t*it.f1+it.p1)*w*.06, dy=Math.cos(t*it.f2+it.p2)*h*.05;
+        const cx=it.cx*(w-160)+80+dx, cy=it.cy*(h-90)+45+dy;
+        const x=lerp(cx,it.ox,k), y=lerp(cy,it.oy,k), rot=lerp(it.rot+Math.sin(t*it.f1+it.p2)*.08,0,k), sc=lerp(it.sc,1,k);
+        const jit=(1-k)*(Math.random()<.04?1:0);
+        ctx.save(); ctx.translate(x+jit*(Math.random()*4-2),y); ctx.rotate(rot); ctx.scale(sc,sc);
+        ctx.font=`${k>.5?500:400} ${fs}px "DM Mono", monospace`; ctx.textAlign='left';
+        const a=lerp(it.a*(.6+.4*Math.abs(Math.sin(t*2+it.p1))),.82,k);
+        ctx.fillStyle=k>.5&&/CALL TIME|CREW|DAY 1/.test(it.s)?ACC(a):INK(a); ctx.fillText(it.s,0,0);
+        ctx.restore();
+        if(k>.6){ ctx.fillStyle=INK(.08*smooth((k-.6)/.4)); ctx.fillRect(it.ox,it.oy+C.rh*.5-1,(w-2*C.mx)/C.cols-14,1); }
+      }
+      /* calm hum in chaos */
+      if(o<.9&&!REDUCE){ for(let i=0;i<4;i++){ const a=t*.17+i*1.7, bx=w*.5+Math.cos(a)*w*.32, by=h*.5+Math.sin(a*1.3)*h*.3, br=90+i*30; const g=ctx.createRadialGradient(bx,by,0,bx,by,br); g.addColorStop(0,ACC(.11*(1-o))); g.addColorStop(1,ACC(0)); ctx.fillStyle=g; ctx.fillRect(bx-br,by-br,br*2,br*2); } }
+      return !REDUCE&&(o<.99||live||Math.abs(target-o)>.002);
+    }
+  });
+  fig.force=()=>{ C.force=true; C.order=1; };
+  window.__chaos=fig;
+}
+
+/* ================================================ 4 · FOLLOW-SPOT — craft */
+{
+  const root=$('#craftFig'), c=$('#craftCanvas'), rName=$('#rosterName'), rCnt=$('#rosterCnt'), rList=$('#rosterList');
+  const DEPTS=[
+    {k:'above',n:'Above the line'},{k:'prod',n:'Production'},{k:'ad',n:'Assistant Directors'},
+    {k:'cam',n:'Camera & Sound'},{k:'lg',n:'Light & Grip'},{k:'art',n:'Art Department'},
+    {k:'hmu',n:'Wardrobe · Hair · Make-up'},{k:'sfx',n:'SFX · Stunts · Puppets'},{k:'log',n:'Transport & Catering'}
+  ];
+  const deptOf=(role,afterService)=>{
+    if(/^(TITLE)$/.test(role)) return null;
+    if(afterService&&/^(EXECUTIVE PRODUCER)$/.test(role)) return 'prod';
+    if(/^(PRODUCTION SERVICE COMPANY|SERVICE PRODUCER|CASTING PRODUCER|UPM|PRODUCTION COORDINATOR|ASSISTANT PRODUCTION COORDINATOR|OFFICE RUNNER)$/.test(role)) return 'prod';
+    if(/^(CLIENT|AGENCY|DIRECTOR|DOP|EXECUTIVE PRODUCER|PRODUCER|PM|PRODUCTION COMPANY)$/.test(role)) return 'above';
+    if(/AD$|AD 2nd Unit$|SET MANAGER/.test(role)) return 'ad';
+    if(/CAMERA|VIDEO CONTROL|DIT|SOUND|OPERATOR/.test(role)) return 'cam';
+    if(/GAFFER|GRIP/.test(role)) return 'lg';
+    if(/PRODUCTION DESIGNER|SET DECORATOR|PROPS|CONSTRUCTION|ART DEPARTMENT|FOOD STYLIST/.test(role)) return 'art';
+    if(/STYLIST|MAKE UP|HAIR/.test(role)) return 'hmu';
+    if(/SFX|VFX|STUNT|PICTURE VEHICLES|PUPPETEER/.test(role)) return 'sfx';
+    if(/TRANSPORT|CATERING/.test(role)) return 'log';
+    return 'prod';
+  };
+  const rows=new Map(DEPTS.map(d=>[d.k,[]])); const seen=new Set();
+  [31,32].forEach(o=>{ const w=byOrder.get(o); if(!w||!w.credits) return; let afterService=false; w.credits.forEach(r=>{ if(r.role==='PRODUCTION SERVICE COMPANY') afterService=true; const k=deptOf(r.role,afterService); if(!k) return; const id=r.role+'|'+r.value; if(seen.has(id)) return; seen.add(id); rows.get(k).push(r); }); });
+  DEPTS.forEach(d=>{ d.rows=rows.get(d.k); });
+  const S={x:.5,y:.5,tx:.5,ty:.5,w:0,h:0,R:200,roam:true,roamI:1,roamT:0,userT:0,cur:'prod',pin:false,mob:false,lines:[],hdrs:[],motes:[]};
+  for(let i=0;i<42;i++) S.motes.push({r:Math.sqrt(Math.random()),a:Math.random()*6.283,vr:(Math.random()-.5)*.0004,va:(Math.random()-.5)*.0012,vy:Math.random()*.012+.004,s:Math.random()*1.2+.5,ph:Math.random()*6.283});
+  function layout(){
+    const {w,h}=fitCanvas(c); S.w=w; S.h=h; S.mob=w<640;
+    const cols=S.mob?2:3, rowsN=S.mob?5:3; const cw=w/cols, ch=(h-40)/rowsN;
+    const orderIdx=S.mob?[0,2,3,4,1,5,6,7,8]:[0,2,3,4,1,5,6,7,8];
+    const fs=S.mob?10.5:12, lh=fs*1.42, hfs=S.mob?15:19;
+    const maxLines=Math.max(2,Math.floor((ch-hfs-26)/lh));
+    S.lines=[]; S.hdrs=[]; S.fs=fs; S.lh=lh; S.hfs=hfs;
+    const ctx=c.getContext('2d'); ctx.font=`400 ${fs}px "DM Mono", monospace`; const maxW=cw-(S.mob?10:26);
+    const fit=str=>{ if(ctx.measureText(str).width<=maxW) return str; let lo=0,hi=str.length; while(lo<hi){ const mid=(lo+hi+1)>>1; if(ctx.measureText(str.slice(0,mid)+'…').width<=maxW) lo=mid; else hi=mid-1; } return str.slice(0,lo).trimEnd()+'…'; };
+    orderIdx.forEach((di,slot)=>{ const d=DEPTS[di]; let col=slot%cols, row=Math.floor(slot/cols); if(S.mob&&slot===8){ col=0.5; }
+      const x=(col+.5)*cw, y0=20+row*ch+14; const j=(di*37%11)/11-.5; const jx=S.mob?0:j*cw*.12; const hx=x+jx;
+      d.cx=hx; d.cy=y0+hfs*.5; S.hdrs.push({d,x:hx,y:y0+hfs*.5});
+      const n=d.rows.length, show=Math.min(n,maxLines - (n>maxLines?1:0)); d.by=y0+hfs*.5+(show+(n>show?1:0))*lh*.5;
+      for(let i=0;i<show;i++){ const r=d.rows[i]; S.lines.push({d,x:hx,y:y0+hfs+8+i*lh+lh*.5,s:fit(`${r.role} — ${r.value}`),gb:isGB(r.value)}); }
+      if(n>show) S.lines.push({d,x:hx,y:y0+hfs+8+show*lh+lh*.5,s:`+ ${n-show} more`,more:true});
+    });
+    S.R=S.mob?Math.min(w,h)*.36:Math.min(w,h)*.3;
+    const p=DEPTS.find(d=>d.k===S.cur); if(p){ S.tx=p.cx/w; S.ty=p.cy/h; if(S.pin){ S.x=S.tx; S.y=S.ty; } }
+  }
+  function roster(k){
+    const d=DEPTS.find(x=>x.k===k); if(!d||S.cur===k&&rList.children.length) return; S.cur=k;
+    rName.textContent=d.n; rCnt.textContent=`${d.rows.length} credit${d.rows.length===1?'':'s'}`;
+    rList.innerHTML=d.rows.map(r=>`<li${isGB(r.value)?' class="gb"':''}><span>${esc(r.role)}</span><b>${esc(r.value)}</b></li>`).join('');
+  }
+  const setT=(px,py)=>{ S.tx=clamp(px/S.w,0,1); S.ty=clamp(py/S.h,0,1); S.roam=false; S.userT=performance.now(); wake(); };
+  root.addEventListener('pointermove',e=>{ if(e.pointerType==='mouse'||e.pointerType==='pen'||S.down){ const r=root.getBoundingClientRect(); setT(e.clientX-r.left,e.clientY-r.top); } });
+  root.addEventListener('pointerdown',e=>{ S.down=true; const r=root.getBoundingClientRect(); setT(e.clientX-r.left,e.clientY-r.top); S.pin=false; });
+  ['pointerup','pointercancel'].forEach(ev=>root.addEventListener(ev,()=>{ S.down=false; }));
+  root.addEventListener('pointerleave',()=>{ S.down=false; S.userT=performance.now()-2500; });
+  root.addEventListener('keydown',e=>{ const i=DEPTS.findIndex(d=>d.k===S.cur); if(e.key==='ArrowRight'||e.key==='ArrowDown'){ e.preventDefault(); const d=DEPTS[(i+1)%DEPTS.length]; setT(d.cx,d.cy); } if(e.key==='ArrowLeft'||e.key==='ArrowUp'){ e.preventDefault(); const d=DEPTS[(i-1+DEPTS.length)%DEPTS.length]; setT(d.cx,d.cy); } });
+  const fig=addFig(root,{
+    resize(){ layout(); },
+    tick(dt,now){
+      const {ctx,w,h}=fitCanvas(c); if(w!==S.w||h!==S.h) layout(); ctx.clearRect(0,0,w,h);
+      /* roaming */
+      if(!S.pin&&!S.down&&now-S.userT>4500&&!REDUCE){ S.roam=true; S.roamT+=dt; if(S.roamT>2800){ S.roamT=0; S.roamI=(S.roamI+1)%DEPTS.length; } const d=DEPTS[S.roamI]; S.tx=d.cx/w; S.ty=d.cy/h; }
+      const k=REDUCE?1:(S.down?.2:.07); S.x=lerp(S.x,S.tx,k); S.y=lerp(S.y,S.ty,k);
+      const sx=S.x*w, sy=S.y*h, R=S.R;
+      /* nearest department → roster */
+      let best=null,bd=1e9; for(const hd of S.hdrs){ const dd=Math.hypot(hd.x-sx,(hd.d.by||hd.y)-sy); if(dd<bd){ bd=dd; best=hd.d; } }
+      if(best&&bd<R*1.2) roster(best.k);
+      /* light */
+      const g=ctx.createRadialGradient(sx,sy,0,sx,sy,R*1.25); g.addColorStop(0,ACC(.20)); g.addColorStop(.45,ACC(.07)); g.addColorStop(1,ACC(0)); ctx.fillStyle=g; ctx.fillRect(sx-R*1.3,sy-R*1.3,R*2.6,R*2.6);
+      /* connectors from production hub */
+      const hub=DEPTS[1]; ctx.lineWidth=1;
+      for(const d of DEPTS){ if(d===hub) continue; const lit=smooth(1-Math.hypot(d.cx-sx,d.cy-sy)/(R*1.2)); ctx.strokeStyle=ACC(.05+.22*lit); ctx.beginPath(); ctx.moveTo(hub.cx,hub.cy); ctx.lineTo(d.cx,d.cy); ctx.stroke(); }
+      /* headers */
+      ctx.textBaseline='middle'; ctx.textAlign='center';
+      for(const hd of S.hdrs){ const lit=smooth(1-Math.hypot(hd.x-sx,hd.y-sy)/R); ctx.font=`italic ${S.hfs}px "Instrument Serif", Georgia, serif`; const base=hd.d.k==='prod'?.42:.14; ctx.fillStyle=hd.d.k==='prod'?ACC(base+(1-base)*lit):INK(base+(1-base)*lit); ctx.fillText(hd.d.n,hd.x,hd.y); if(hd.d.k===S.cur){ ctx.fillStyle=ACC(.35+.65*lit); ctx.fillRect(hd.x-8,hd.y+S.hfs*.75,16,1); } }
+      /* lines */
+      ctx.font=`400 ${S.fs}px "DM Mono", monospace`;
+      for(const ln of S.lines){ const dd=Math.hypot(ln.x-sx,ln.y-sy); const lit=smooth(1-dd/R); if(lit<.02&&ln.more) continue; const a=.07+.85*lit; ctx.fillStyle=ln.gb?ACC(.3+.7*lit):ln.more?INK(a*.6):INK(a); ctx.fillText(ln.s,ln.x,ln.y-2*lit); }
+      /* dust in the beam */
+      if(!REDUCE){ for(const m of S.motes){ m.a+=m.va*dt; m.r+=m.vr*dt; if(m.r>1){ m.r=0.05; } if(m.r<0){ m.r=1; } const mx=sx+Math.cos(m.a)*m.r*R, my=sy+Math.sin(m.a)*m.r*R-((now/1000*m.vy*60+m.ph*30)%(R*2)-R)*.35; const dd=Math.hypot(mx-sx,my-sy)/R; if(dd>1) continue; const a=(1-dd)*(.25+.35*Math.abs(Math.sin(now/900+m.ph))); ctx.fillStyle=ACC(a); ctx.beginPath(); ctx.arc(mx,my,m.s,0,6.283); ctx.fill(); } }
+      /* the lamp */
+      ctx.fillStyle=ACC(.9); ctx.beginPath(); ctx.arc(sx,sy,2.2,0,6.283); ctx.fill(); ctx.strokeStyle=ACC(.35); ctx.beginPath(); ctx.arc(sx,sy,R*.98,0,6.283); ctx.stroke();
+      return !REDUCE;
+    }
+  });
+  roster('prod');
+  fig.pin=k=>{ S.pin=true; S.roam=false; S.userT=performance.now()+1e9; const d=DEPTS.find(x=>x.k===k)||DEPTS[1]; layout(); S.tx=S.x=d.cx/S.w; S.ty=S.y=d.cy/S.h; roster(d.k); };
+  window.__craft=fig;
+}
+
+/* ================================================= 5 · THE WORK — reel */
+const cards=[]; const list=$('#list'), track=$('#track'), trackWrap=$('#trackWrap'), gridAll=$('#gridAll'), workSec=$('#commercials'), bar=$('#bar'), barI=$('i',bar), cntCur=$('#cntCur');
+$('#cntAll').textContent=N;
+ORDERED.forEach(w=>{
+  const b=document.createElement('button'); b.className='card'+(w.featured?' feat':'')+' rv'; b.type='button'; b.dataset.order=w.order; b.setAttribute('aria-label',`Open ${w.title}`);
+  b.innerHTML=`<div class="ph" data-t="${esc(w.title)}"><img alt="" loading="lazy" decoding="async" src="${esc(w.poster)}">${w.playable?'':'<span class="lock">On request</span>'}</div><div class="cap"><span class="n">${pad2(w.pos)} · ${platformName(w.platform)}</span><span class="t">${esc(w.title)}</span></div>`;
+  posterGuard($('img',b),$('.ph',b));
+  b.addEventListener('click',()=>{ if(TR.suppress){ TR.suppress=false; return; } openSpot(w,b); });
+  w.el=b; cards.push(b);
+});
+const rio=new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); rio.unobserve(e.target); } }),{threshold:.12});
+let mode='';
+function place(){
+  const m=isWide()?(workSec.classList.contains('all')?'grid':'track'):'list';
+  if(m===mode) return; mode=m;
+  const host=m==='list'?list:m==='grid'?gridAll:track;
+  cards.forEach(b=>host.appendChild(b));
+  if(m==='list') cards.forEach(b=>{ if(!b.classList.contains('in')) rio.observe(b); }); else cards.forEach(b=>b.classList.add('in'));
+  if(m==='track') TR.layout(); else { track.style.transform=''; }
+}
+const TR={x:0,tx:0,v:0,drag:false,sx:0,sxt:0,lastX:0,lastT:0,min:0,max:0,moved:0,suppress:false,skew:0,offs:[],cur:-1,px:0,
+  layout(){ if(mode!=='track') return; TR.min=Math.min(0,trackWrap.clientWidth-track.scrollWidth); TR.max=0; TR.padL=parseFloat(getComputedStyle(track).paddingLeft)||0; TR.offs=cards.map(b=>b.offsetLeft); TR.tx=clamp(TR.tx,TR.min,TR.max); TR.x=TR.tx; TR.apply(true); },
+  apply(force){
+    track.style.transform=`translate3d(${TR.x.toFixed(2)}px,0,0) skewX(${TR.skew.toFixed(3)}deg)`;
+    const span=TR.max-TR.min||1, r=clamp((TR.max-TR.x)/span,0,1);
+    const bw=clamp(trackWrap.clientWidth/track.scrollWidth,.04,1); barI.style.width=(bw*100)+'%'; barI.style.transform=`translateX(${(r*(1-bw)/bw*100).toFixed(2)}%)`;
+    let best=0,bd=1e9; for(let i=0;i<TR.offs.length;i++){ const d=Math.abs(TR.offs[i]+TR.x-TR.padL); if(d<bd){ bd=d; best=i; } }
+    if(best!==TR.cur){ TR.cur=best; cntCur.textContent=pad2(best+1); cntCur.classList.remove('roll'); void cntCur.offsetWidth; cntCur.classList.add('roll'); }
+    if(force||Math.abs(TR.x-TR.px)>.05){ const cx=trackWrap.clientWidth/2; cards.forEach((b,i)=>{ const left=TR.offs[i]+TR.x, wdt=b.offsetWidth; if(left+wdt<-100||left>trackWrap.clientWidth+100) return; const img=b.firstChild.firstChild; if(img&&img.tagName==='IMG') img.style.transform=`translateX(${((left+wdt/2-cx)*-.05).toFixed(1)}px) scale(1.12)`; }); }
+    TR.px=TR.x;
+  }
+};
+trackWrap.addEventListener('pointerdown',e=>{ if(mode!=='track'||(e.button&&e.button!==0)) return; TR.drag=true; trackWrap.classList.add('drag'); TR.sx=e.clientX; TR.sxt=TR.tx; TR.v=0; TR.lastX=e.clientX; TR.lastT=performance.now(); TR.moved=0; wake(); });
+addEventListener('pointermove',e=>{ if(!TR.drag) return; const dx=e.clientX-TR.sx; TR.moved=Math.max(TR.moved,Math.abs(dx)); let nx=TR.sxt+dx; if(nx>TR.max) nx=TR.max+(nx-TR.max)*.25; if(nx<TR.min) nx=TR.min+(nx-TR.min)*.25; TR.tx=nx; const now=performance.now(), dt=now-TR.lastT; if(dt>0) TR.v=clamp(lerp(TR.v,(e.clientX-TR.lastX)/Math.max(dt,8)*16,.5),-90,90); TR.lastX=e.clientX; TR.lastT=now; if(TR.moved>6) e.preventDefault(); },{passive:false});
+addEventListener('pointerup',()=>{ if(!TR.drag) return; TR.drag=false; trackWrap.classList.remove('drag'); if(TR.moved>6){ TR.suppress=true; setTimeout(()=>TR.suppress=false,120); TR.tx=clamp(TR.tx+TR.v*16,TR.min,TR.max); } else TR.tx=clamp(TR.tx,TR.min,TR.max); wake(); });
+addEventListener('pointercancel',()=>{ if(TR.drag){ TR.drag=false; trackWrap.classList.remove('drag'); TR.tx=clamp(TR.tx,TR.min,TR.max); } });
+trackWrap.addEventListener('wheel',e=>{ if(mode!=='track') return; if(Math.abs(e.deltaX)>Math.abs(e.deltaY)){ e.preventDefault(); TR.tx=clamp(TR.tx-e.deltaX,TR.min,TR.max); wake(); } },{passive:false});
+trackWrap.addEventListener('keydown',e=>{ if(mode!=='track') return; if(e.key==='ArrowRight'||e.key==='ArrowLeft'){ e.preventDefault(); const i=clamp(TR.cur+(e.key==='ArrowRight'?1:-1),0,N-1); TR.tx=clamp(-(TR.offs[i]-TR.padL),TR.min,TR.max); wake(); } if(e.key==='Enter'&&cards[TR.cur]) cards[TR.cur].click(); });
+{ let bd=false; const scrub=e=>{ const r=bar.getBoundingClientRect(); const p=clamp((e.clientX-r.left)/r.width,0,1); TR.tx=TR.max-(TR.max-TR.min)*p; wake(); };
+  bar.addEventListener('pointerdown',e=>{ if(mode!=='track') return; bd=true; scrub(e); e.preventDefault(); }); addEventListener('pointermove',e=>{ if(bd) scrub(e); }); addEventListener('pointerup',()=>{ bd=false; }); }
+$('#modeTrack').addEventListener('click',()=>{ workSec.classList.remove('all'); $('#modeTrack').classList.add('on'); $('#modeAll').classList.remove('on'); $('#modeTrack').setAttribute('aria-selected','true'); $('#modeAll').setAttribute('aria-selected','false'); place(); });
+$('#modeAll').addEventListener('click',()=>{ workSec.classList.add('all'); $('#modeAll').classList.add('on'); $('#modeTrack').classList.remove('on'); $('#modeAll').setAttribute('aria-selected','true'); $('#modeTrack').setAttribute('aria-selected','false'); place(); });
+addFig(trackWrap,{
+  resize(){ TR.layout(); },
+  tick(){ if(mode!=='track') return false; const prev=TR.x; TR.x=lerp(TR.x,TR.tx,REDUCE?1:(TR.drag?.4:.085)); const dv=TR.x-prev; TR.skew=REDUCE?0:lerp(TR.skew,clamp(-dv*.06,-2.4,2.4),.18); TR.apply(); return Math.abs(TR.x-TR.tx)>.05||Math.abs(TR.skew)>.01; }
+});
+place();
+
+/* ------------------------------------------------------------ spotlight */
+const spot=$('#spot'), spotMedia=$('#spotMedia'), spotMeta=$('#spotMeta'), spotTitle=$('#spotTitle'), spotDesc=$('#spotDesc'), spotCredits=$('#spotCredits'), crewToggle=$('#crewToggle'), spotPrev=$('#spotPrev'), spotNext=$('#spotNext'), spotClose=$('#spotClose');
+const SP={open:false,w:null,from:null,pushed:false,lockY:0};
+function mediaFor(w,host){
+  host.innerHTML='';
+  const ph=document.createElement('div'); ph.className='nop-host'; host.appendChild(ph);
+  const img=document.createElement('img'); img.alt=''; img.decoding='async'; img.src=w.poster; host.appendChild(img); posterGuard(img,host); host.dataset.t=w.title;
+  if(w.playable){
+    const play=document.createElement('button'); play.className='play'; play.type='button'; play.setAttribute('aria-label',`Play ${w.title} with sound`);
+    play.innerHTML=`<span class="play-btn"><svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg></span><span class="play-lbl"><span>Play with sound</span><span>${platformName(w.platform)}</span></span>`;
+    play.addEventListener('click',()=>{ const f=document.createElement('iframe'); f.src=embedURL(w); f.title=w.title; f.allow='autoplay; fullscreen; picture-in-picture; encrypted-media'; f.setAttribute('referrerpolicy','strict-origin-when-cross-origin'); host.appendChild(f); play.remove(); });
+    host.appendChild(play);
+  } else {
+    const u=document.createElement('div'); u.className='unavail'; u.innerHTML=`<span class="mono">Private film — available on request</span><a class="btn" href="mailto:${esc(SITE.email)}?subject=${encodeURIComponent('Request: '+w.title)}">Request this film <span aria-hidden="true">→</span></a>`; host.appendChild(u);
+  }
+}
+function renderSpot(w){
+  SP.w=w; mediaFor(w,spotMedia);
+  spotMeta.innerHTML=`<span>${pad2(w.pos)} / ${N}</span><span>${platformName(w.platform)}</span>${w.featured?'<span class="feat-tag">Featured</span>':''}${w.playable?'':'<span>On request</span>'}`;
+  spotTitle.textContent=w.title;
+  spotCredits.classList.remove('open'); crewToggle.hidden=true; crewToggle.setAttribute('aria-expanded','false');
+  if(w.credits){
+    spotDesc.textContent=''; spotDesc.hidden=true;
+    const LIM=6, long=w.credits.length>LIM;
+    spotCredits.innerHTML=w.credits.map((r,i)=>`<li class="${i>=LIM&&long?'more':''}${isGB(r.value)?' gb':''}"><span>${esc(r.role)}</span><span>${esc(r.value)}</span></li>`).join('');
+    if(long){ crewToggle.hidden=false; crewToggle.textContent=`full crew · ${w.credits.length}`; }
+  } else {
+    spotCredits.innerHTML=''; spotDesc.hidden=!w.body; spotDesc.textContent=w.body||'';
+  }
+  const prev=ORDERED[(w.pos-2+N)%N], next=ORDERED[w.pos%N];
+  $('.nt',spotPrev).textContent=prev.title; $('.nt',spotNext).textContent=next.title;
+  const swap=w2=>{ renderSpot(w2); spot.scrollTop=0; history.replaceState({panel:w2.order},'',`?panel=${w2.order}`); const inn=$('.spot-in',spot); inn.classList.remove('swap'); void inn.offsetWidth; inn.classList.add('swap'); };
+  spotPrev.onclick=()=>swap(prev); spotNext.onclick=()=>swap(next);
+}
+crewToggle.addEventListener('click',()=>{ const o=spotCredits.classList.toggle('open'); crewToggle.setAttribute('aria-expanded',o?'true':'false'); crewToggle.textContent=(o?'less crew':'full crew')+` · ${SP.w.credits.length}`; });
+function lock(){ SP.lockY=scrollY; document.body.style.top=-SP.lockY+'px'; document.body.classList.add('locked'); }
+function unlock(){ document.body.classList.remove('locked'); document.body.style.top=''; document.documentElement.style.scrollBehavior='auto'; scrollTo(0,SP.lockY); requestAnimationFrame(()=>{ document.documentElement.style.scrollBehavior=''; }); }
+function flip(fromEl){
+  if(REDUCE||!fromEl) return; const src=fromEl.querySelector('img'); const dst=spotMedia.querySelector('img'); if(!src||!dst) return;
+  const a=src.getBoundingClientRect(), b=spotMedia.getBoundingClientRect(); if(!a.width||!b.width) return;
+  const f=document.createElement('img'); f.className='flip'; f.src=src.currentSrc||src.src; f.alt='';
+  Object.assign(f.style,{left:b.left+'px',top:b.top+'px',width:b.width+'px',height:b.height+'px',transformOrigin:'0 0',transform:`translate(${a.left-b.left}px,${a.top-b.top}px) scale(${a.width/b.width},${a.height/b.height})`});
+  document.body.appendChild(f); dst.style.opacity='0';
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{ f.style.transition='transform .55s cubic-bezier(.22,1,.36,1)'; f.style.transform='translate(0,0) scale(1,1)'; }));
+  setTimeout(()=>{ dst.style.opacity=''; f.remove(); },580);
+}
+function openSpot(w,fromEl,opts={}){
+  SP.from=fromEl||null; renderSpot(w); spot.hidden=false; spot.classList.add('open'); spot.scrollTop=0; SP.open=true; lock();
+  if(!opts.noHistory){ history.pushState({panel:w.order},'',`?panel=${w.order}`); SP.pushed=true; }
+  flip(fromEl); setTimeout(()=>spotClose.focus({preventScroll:true}),60);
+}
+function closeSpot(){
+  if(!SP.open) return; SP.open=false; spot.classList.remove('open'); spot.hidden=true; spotMedia.innerHTML=''; unlock();
+  const back=SP.pushed; SP.pushed=false; if(back) history.back(); else history.replaceState(null,'',location.pathname+location.hash);
+  if(SP.from) SP.from.focus({preventScroll:true});
+}
+spotClose.addEventListener('click',closeSpot);
+spot.addEventListener('click',e=>{ if(e.target===spot) closeSpot(); });
+addEventListener('keydown',e=>{ if(!SP.open) return; if(e.key==='Escape') closeSpot(); else if(e.key==='ArrowRight') spotNext.click(); else if(e.key==='ArrowLeft') spotPrev.click(); });
+addEventListener('popstate',e=>{ const s=e.state; if(s&&s.panel){ const w=byOrder.get(+s.panel); if(!w) return; if(SP.open){ renderSpot(w); spot.scrollTop=0; } else openSpot(w,null,{noHistory:true}); SP.pushed=true; } else if(SP.open){ SP.pushed=false; closeSpot(); } });
+
+/* ------------------------------------------------------- guide reel etc. */
+mediaFor(byOrder.get(7)||ORDERED[0],$('#reel'));
+{ const brands=['Coca-Cola','Apple','Xbox','LEGO','Klarna','Carlsberg','Deliveroo','Citroën','Fanta','Pringles','PlayStation','H&M','Investec','T-Mobile','Amazon Business','Argos']; const row=$('#trustedRow'); row.innerHTML=(REDUCE?brands:brands.concat(brands)).map(b=>`<span>${esc(b)}</span>`).join(''); }
+
+/* --------------------------------------------------------------- contact */
+{
+  const m=$('#mailLink'), t=$('#telLink'); m.href='mailto:'+SITE.email; m.insertAdjacentText('beforeend',SITE.email); t.href='tel:'+SITE.phone.replace(/\s+/g,''); t.insertAdjacentText('beforeend',SITE.phone);
+  $('#based').textContent='Based in '+SITE.based+'.'; $('#bio').textContent=SITE.bio; $('#sig').textContent=SITE.alias; $('#footBrand').textContent=`© ${new Date().getFullYear()} ${SITE.brand} · ${SITE.legalName}`;
+  $('#slateName').textContent=SITE.brand; $('#slateLoc').textContent=SITE.based; $('#slateDate').textContent=new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
+  const slate=$('#slate'); const clap=()=>{ slate.classList.remove('clap','flash'); void slate.offsetWidth; slate.classList.add('clap'); if(!REDUCE) slate.classList.add('flash'); };
+  const sio=new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting){ setTimeout(clap,250); sio.disconnect(); } }),{threshold:.5}); sio.observe(slate);
+  slate.addEventListener('click',clap); slate.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); clap(); } });
+  window.__clap=clap;
+}
+
+/* ------------------------------------------------------- scroll reveals */
+{
+  const sel='.hero-copy .wrap > *, .choose-txt > *, .guide-top > div > *, .guide-top > .doubts > li, .answer > div > *, .answer > .reel, .trusted, .craft > .wrap > .eyebrow, .craft > .wrap > h2, .craft > .wrap > .lede, .work-head > div > *, .work-head > .counter, .chapter .wrap > *, .contact > .wrap > .eyebrow, .contact > .wrap > h2, .contact-grid > div > *';
+  const els=$$(sel).filter(e=>!e.classList.contains('card'));
+  els.forEach((e,i)=>{ e.classList.add('rv'); });
+  let stagger=new Map();
+  const io=new IntersectionObserver(es=>{ es.forEach(en=>{ if(!en.isIntersecting) return; const e=en.target; const p=e.parentElement; const k=(stagger.get(p)||0); stagger.set(p,k+1); e.style.transitionDelay=REDUCE?'0s':`${Math.min(k,6)*.09}s`; e.classList.add('in'); io.unobserve(e); }); setTimeout(()=>stagger.clear(),400); },{threshold:.08,rootMargin:'0px 0px -4% 0px'});
+  els.forEach(e=>io.observe(e));
+}
+
+/* ------------------------------------------------------------ deep links */
+{
+  const st=Q.get('stage'), panel=Q.get('panel');
+  const map={1:'hero',2:'choose',3:'guide',4:'craft',5:'commercials',film:'film',events:'events',contact:'contact'};
+  const id=map[st]; const el=id&&document.getElementById(id);
+  if(el){
+    $$('.rv').forEach(e=>{ e.style.transition='none'; e.classList.add('in'); });
+    document.documentElement.style.scrollBehavior='auto';
+    const y=el.getBoundingClientRect().top+scrollY-(id==='hero'?0:60); scrollTo(0,y);
+    if(st==='1') window.__hero.set(.62);
+    if(st==='2') window.__turret.select(+(Q.get('lens')||0));
+    if(st==='3') window.__chaos.force();
+    if(st==='4') window.__craft.pin(Q.get('dept')||'prod');
+    if(st==='5'){ if(Q.get('mode')==='all') $('#modeAll').click(); else { TR.layout(); TR.tx=clamp(-(TR.offs[Math.min(N-1,+(Q.get('at')||2))]-TR.padL),TR.min,TR.max); TR.x=TR.tx; TR.apply(true); } }
+    if(st==='contact') window.__clap();
+    setTimeout(()=>{ document.documentElement.style.scrollBehavior=''; },80);
+  }
+  if(panel){ const w=byOrder.get(+panel); if(w){ openSpot(w,null,{noHistory:true}); history.replaceState({panel:w.order},'',location.search); SP.pushed=false; } }
+  paintOnce(); wake(); window.__paint=paintOnce;
+  addEventListener('load',()=>{ paintOnce(); wake(); });
+}
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+<html lang="bg" class="js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Меттамер · Герой-кукла · v14 пълен билд · 3D eidolon (MET-895)</title>
+<meta name="description" content="Меттамерът като Герой-кукла (MET-895 · Фаза 2 · v14): бюст-камея с 12 HD-слота · SVG-постер (мастило + акварел) + WebGL eidolon (three r160 локален) · скролът е господар · reduced/без WebGL → постерът.">
+<link rel="icon" href="data:,">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Inter:wght@300;400;500;600;700&display=swap&subset=cyrillic" rel="stylesheet">
+<!-- three vendor-нат ЛОКАЛНО (ADR 0099 · нула трета-страна CDN) -->
+<script type="importmap">{"imports":{"three":"../vendor/three.module.js"}}</script>
+<style>
+/* ═══ PROTOTYPE (MET-895 · v4) — throwaway · храни Fable 5.1 Max · без tdd/suite ═══ */
+:root{
+  --bg:#0d0a08; --bg2:#15100c;
+  --ink:#F0EBE0; --ink2:#d9d0bd; --mute:#a99e8a;
+  --gold:#E8C77E; --gold2:#c9a25a; --gold3:#8a6a2e;
+  --light:#fff5d6; --light2:#ffe9b8;
+  --em:#6FB59A; --fire:#D4895E;
+  --serif:'Cormorant Garamond',Georgia,'Times New Roman',serif;
+  --sans:Inter,-apple-system,'Segoe UI',Roboto,sans-serif;
+  --beat:1.6s;
+}
+*{margin:0;box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  background:radial-gradient(120% 80% at 50% -6%,#1a130b 0%,#0d0a08 58%),var(--bg);
+  color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased;
+  height:100dvh;overflow:hidden;position:fixed;inset:0;width:100%;
+}
+b,strong{color:#fff;font-weight:600}
+button{font-family:inherit;cursor:pointer;color:inherit}
+
+/* ── пълноекранна сцена ── */
+.app{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+
+/* ── ъглов HUD (като кръговия Метамер) ── */
+.hud{position:fixed;left:0;right:0;z-index:20;pointer-events:none;display:flex;align-items:flex-start;justify-content:space-between;padding:max(12px,env(safe-area-inset-top)) 14px 0}
+.hud.top{top:0}
+/* по-дискретни pill-ове → заглавието „Нова Жена" не се крие зад тях */
+.pill{display:inline-flex;align-items:center;gap:5px;border-radius:20px;padding:4px 10px;font-size:.72rem;letter-spacing:.02em;background:rgba(20,15,10,.5);border:1px solid rgba(232,199,126,.24);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.pill b{font-family:var(--serif);font-weight:700;font-size:.9rem}
+.pill.l{color:var(--light)}.pill.l b{color:var(--light);text-shadow:0 0 10px rgba(255,245,214,.55)}
+.pill.g{color:var(--gold)}.pill.g b{color:var(--gold);text-shadow:0 0 10px rgba(232,199,126,.55)}
+.hud .mid{position:absolute;left:50%;top:max(9px,env(safe-area-inset-top));transform:translateX(-50%);text-align:center;white-space:nowrap}
+.hud .mid .ttl{font-family:var(--serif);font-weight:600;font-size:1.08rem;color:#f7f1e3;line-height:1}
+.hud .mid .sf{font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;color:var(--fire);font-weight:600;margin-top:2px}
+.hud .mid .sf b{color:var(--gold);letter-spacing:.14em}
+
+/* ── платното ── */
+.stagewrap{position:relative;display:flex;align-items:center;justify-content:center;width:100%;flex:1;min-height:0}
+.mettamap{position:relative}
+.mm-stage{position:relative;height:min(97dvh,218vw);aspect-ratio:360/800;max-width:96vw;touch-action:pan-y}
+.mm-stage>svg,.mm-stage>canvas{position:absolute;inset:0;width:100%;height:100%}
+.mm-skel{z-index:1;display:block}
+.mm-skel text{font-family:var(--serif);text-anchor:middle;dominant-baseline:central;pointer-events:none}
+
+/* фигура (силует · аура · ромб · канали) — Тяло */
+.mm-body{fill:rgba(232,199,126,.04);stroke:rgba(232,199,126,.32);stroke-width:1.2;stroke-linejoin:round}
+.mm-aura{fill:none;stroke:rgba(255,245,214,.14);stroke-width:1}
+.mm-spiral{fill:none;stroke:rgba(232,199,126,.13);stroke-width:1;stroke-linecap:round}
+.mm-gdia{fill:rgba(255,245,214,.05);stroke:rgba(255,245,214,.55);stroke-width:1.3;stroke-linejoin:round}
+.mm-spine{fill:none;stroke:rgba(232,199,126,.18);stroke-width:1.2}
+/* обръч/октагон — Кръг */
+.mm-rim{fill:none;stroke:rgba(232,199,126,.16);stroke-width:1}
+.mm-oct{fill:none;stroke:rgba(232,199,126,.14);stroke-width:1}
+.mm-guide{fill:none;stroke:rgba(255,245,214,.10);stroke-width:1}
+/* ── Мандала v7 · вложена свещена геометрия: ромб(Метта)→квадрат(Мета)→триъгълници→кръг ── */
+.mm-rhomb{fill:rgba(255,245,214,.05);stroke:rgba(255,245,214,.6);stroke-width:1.5;stroke-linejoin:round}
+.mm-sq{fill:none;stroke:rgba(232,199,126,.52);stroke-width:1.7;stroke-linejoin:round}
+.mm-tri{fill:rgba(232,199,126,.055);stroke:rgba(232,199,126,.44);stroke-width:1.5;stroke-linejoin:round}
+.mm-arw{fill:none;stroke:rgba(232,199,126,.32);stroke-width:1.5;stroke-linecap:round}
+.mm-arw.hd{fill:rgba(232,199,126,.5);stroke:none}
+/* имена (Мандала) · четими от 60 см · тъмен halo (контраст ≥4.5:1) · котва през gL/gR (бие middle) */
+.mm-skel.v-mand .nm{font-size:14px;font-weight:700;letter-spacing:.02em;fill:#f4ecd6;paint-order:stroke;stroke:rgba(9,6,3,.85);stroke-width:2.7px;stroke-linejoin:round}
+.mm-skel.v-mand .mm-n[data-валута="светлина"] .nm{font-size:12px;fill:var(--light);stroke:rgba(9,6,3,.85)}
+.mm-skel.v-mand .mm-n.lit .nm,.mm-skel.v-mand .mm-n.visit .nm{fill:#fff}
+/* ── v8 · витрувианска фигура (класически вариант) + четими имена ── */
+.mm-skel .mm-figure{fill:none;stroke:rgba(232,199,126,.5);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.mm-skel .mm-figure .fill{fill:rgba(232,199,126,.06)}
+.mm-skel .mm-figure .jt{fill:rgba(232,199,126,.55);stroke:none}
+.mm-skel.v-vitr .nm,.mm-skel.v-vitrhd .nm{font-size:14px;font-weight:700;letter-spacing:.02em;fill:#f4ecd6;paint-order:stroke;stroke:rgba(9,6,3,.86);stroke-width:2.7px;stroke-linejoin:round}
+.mm-skel.v-vitr .mm-n[data-валута="светлина"] .nm{font-size:12px;fill:var(--light);stroke:rgba(9,6,3,.86)}
+.mm-skel.v-vitrhd .mm-n[data-валута="светлина"] .nm{fill:var(--light)}
+.mm-skel.v-vitr .mm-n.lit .nm,.mm-skel.v-vitr .mm-n.visit .nm,.mm-skel.v-vitrhd .mm-n.lit .nm,.mm-skel.v-vitrhd .mm-n.visit .nm{fill:#fff}
+
+/* ── ПРЕГРЪДКАТА (магията · Метта наметва клъстер от 3 Мета) ── */
+.mm-emb path,.mm-emb line{transition:opacity .45s,stroke-opacity .45s}
+.emb-wedge{opacity:.5}
+.emb-wedge .w{fill:var(--light);fill-opacity:.05;stroke:rgba(255,245,214,.16);stroke-width:1}
+.mm-emb .chan{fill:none;stroke:rgba(255,245,214,.22);stroke-width:1.3;stroke-linecap:round;opacity:.34}
+.mm-skel .emb-on.emb-wedge{opacity:1}
+.mm-skel .emb-on.emb-wedge .w{fill-opacity:.14;stroke:rgba(255,245,214,.5)}
+.mm-skel .emb-on .chan{opacity:1;stroke:rgba(255,245,214,.75);stroke-width:2}
+
+/* възли */
+.mm-skel .mm-n{transition:opacity .4s}
+.mm-skel .rbg{fill:none;stroke:rgba(255,255,255,.1);stroke-width:2}
+.mm-skel .ring{fill:none;stroke:var(--gold);stroke-width:2.4;stroke-linecap:round}
+.mm-skel .mm-n[data-валута="светлина"] .ring{stroke:var(--light)}
+.mm-skel .nm{font-weight:700;letter-spacing:.02em;fill:var(--ink2)}
+.mm-skel .mm-n[data-валута="злато"] .nm{font-size:15px}
+.mm-skel .mm-n[data-валута="светлина"] .nm{font-size:12.5px;fill:var(--light2)}
+/* Тяло v6 · гутер-имена ЕДРИ и с висок контраст (четимост от 60 см = гейтът) */
+.mm-skel.v-telo .nm.gut{font-size:16px;font-weight:700;letter-spacing:.03em;fill:#f3ead4;paint-order:stroke;stroke:rgba(10,7,4,.85);stroke-width:2.6px;stroke-linejoin:round}
+.mm-skel.v-telo .mm-n[data-валута="светлина"] .nm.gut{fill:var(--light);stroke:rgba(10,7,4,.85)}
+/* котва през КЛАС (бие .mm-skel text{text-anchor:middle}) → имената растат НАВЪН в гутера, не обратно към иконата */
+.mm-skel .nm.gL{text-anchor:end}
+.mm-skel .nm.gR{text-anchor:start}
+.mm-skel .nmled{stroke:rgba(232,199,126,.3);stroke-width:1;stroke-dasharray:1.2 3;stroke-linecap:round}
+.mm-skel .mm-n.lit .nmled,.mm-skel .mm-n.visit .nmled{stroke:rgba(255,245,214,.85)}
+.mm-skel .mm-n.lit .nm.gut{fill:#fff;stroke-width:2.8px}
+.mm-skel .tgm{fill:var(--gold);opacity:.9}
+.mm-skel .tg2 .tgm{opacity:.82}
+.mm-skel .mm-n.lit .tg2 .tgm{opacity:.95}
+.mm-skel .mm-n.dim{opacity:.4}
+.mm-skel .mm-n.lit .nm,.mm-skel .mm-n.visit .nm{fill:#fff}
+.mm-skel .mm-n.lit .ring{stroke-width:3.6;filter:drop-shadow(0 0 5px rgba(232,199,126,.9))}
+.mm-skel .mm-n.lit .mm-ico{filter:drop-shadow(0 0 6px rgba(255,240,190,.85))}
+.mm-skel .mm-n.lit .tgm{opacity:1;filter:drop-shadow(0 0 4px rgba(232,199,126,.9))}
+.mm-ico{fill:none;stroke:var(--gold);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.mm-n[data-валута="светлина"] .mm-ico{stroke:var(--light)}
+.mm-ico .fl{fill:var(--gold);stroke:none}
+.mm-n[data-валута="светлина"] .mm-ico .fl{fill:var(--light)}
+/* ин-ян сърце (цялото) · бие */
+.mm-skel .yy[data-сърце="цяло"]{transform-box:fill-box;transform-origin:50% 50%;animation:hbeat var(--beat) ease-in-out infinite}
+@keyframes hbeat{0%,100%{transform:scale(1)}18%{transform:scale(1.08)}36%{transform:scale(1)}}
+
+.mm-dust{z-index:2;pointer-events:none}
+.mm-hit{z-index:3}
+.mm-hit .mm-a{cursor:pointer;outline:none;-webkit-tap-highlight-color:transparent}
+.mm-hit .mm-a>*{fill:#E8C77E;fill-opacity:0;stroke:none;transition:fill-opacity .35s}
+.mm-hit .mm-a.visit>*{fill:#fff5d6;fill-opacity:.05}
+.mm-hit .mm-a.lit>*{fill-opacity:.1}
+.mm-hit .mm-a:focus-visible>*{stroke:var(--gold);stroke-width:2;fill-opacity:.06}
+
+/* ── карта на областта (Фокус на същия екран) ── */
+#mmcard{position:fixed;inset:0;z-index:120;background:rgba(8,5,3,.9);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:12px;overflow:auto;opacity:0;transition:opacity .35s}
+#mmcard[hidden]{display:none}
+#mmcard.show{opacity:1}
+.mmc{--gd:#b8862f;--cink:#3a2a12;position:relative;width:min(94vw,380px);max-height:calc(100dvh - 24px);overflow:auto;border-radius:18px;padding:14px 14px 16px;display:flex;flex-direction:column;gap:9px;font-family:var(--serif);color:var(--cink);background:radial-gradient(120% 90% at 50% 0%,#fff7e6 0%,#f3e6c4 45%,#e6d3a4 100%);box-shadow:0 0 0 2px var(--gd),0 0 0 5px rgba(255,240,190,.45),0 0 40px rgba(255,240,190,.3),0 24px 60px rgba(0,0,0,.6);transform:scale(.92);transition:transform .35s cubic-bezier(.2,.7,.2,1)}
+#mmcard.show .mmc{transform:scale(1)}
+.mmc.светлина{--gd:#caa64e}
+.mmc-x{position:absolute;right:10px;top:9px;z-index:9;width:30px;height:30px;border-radius:50%;border:1.5px solid var(--gd);background:#fffaf0;color:var(--cink);font-size:14px;line-height:1;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.25)}
+.mmc-tb{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding-right:34px}
+.mmc-lvl{font-weight:700;font-size:1rem;letter-spacing:.05em;text-transform:uppercase}
+.mmc-cur{font-size:.92rem;color:#7a5a1e;white-space:nowrap}
+.mmc-art{position:relative;border:2px solid var(--gd);border-radius:8px;overflow:hidden;box-shadow:inset 0 0 0 2px rgba(255,240,190,.6);aspect-ratio:4/5;max-height:46vh;background:#e9d9b3}
+.mmc-art .mmc-imgs,.mmc-art .mmc-imgs img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.mmc-art .wait{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-style:italic;color:#8a6a2e;font-size:1rem;background:radial-gradient(circle at 50% 40%,#fff3d4,#e6d3a4)}
+.mmc-art.ok .wait{display:none}
+.mmc-bd{position:absolute;top:6px;right:8px;min-width:24px;height:24px;padding:0 6px;border-radius:12px;background:rgba(42,31,18,.82);color:#ffe1a0;font-weight:700;font-size:.82rem;display:flex;align-items:center;justify-content:center;letter-spacing:.04em}
+.mmc-nm{font-size:1.5rem;font-weight:700;line-height:1.05;text-align:center}
+.mmc-ln{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;font-size:.82rem}
+.mmc-ln span{display:inline-flex;align-items:center;gap:5px;border:1px solid rgba(120,90,30,.4);border-radius:20px;padding:3px 9px;background:rgba(255,250,235,.5)}
+.mmc-ln span.no{opacity:.5}
+.mmc-ln img{width:18px;height:18px;border-radius:50%;object-fit:cover}
+.mmc-emb{font-size:.9rem;font-style:italic;text-align:center;color:#6a4a12;margin:0}
+.mmc-guard{font-size:.85rem;font-style:italic;text-align:center;color:#6a4a12;margin:0}
+.mmc-go{position:relative;margin:2px auto 0;display:inline-block;border:1.5px solid var(--gd);background:linear-gradient(120deg,#fffaf0,#efdcb0);color:var(--cink);border-radius:20px;padding:8px 16px;font-family:var(--serif);font-weight:700;font-size:.95rem;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.2);transition:all .3s}
+.mmc-go.on{background:linear-gradient(120deg,#2a1f16,#4a3520);color:#ffe1a0;border-color:#2a1f16}
+
+/* ── долен HUD: подсказка + вариант-лента (throwaway switcher) ── */
+.tap{position:fixed;left:50%;bottom:calc(58px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:20;pointer-events:none;display:flex;align-items:center;gap:7px;font-size:.74rem;color:var(--mute);letter-spacing:.14em;text-transform:uppercase;opacity:.9;transition:opacity .5s}
+.seen .tap{opacity:0}
+.tap i{width:9px;height:9px;border:1.5px solid var(--gold);border-radius:50%;display:inline-block;animation:tp 1.6s ease-out infinite}
+@keyframes tp{0%{box-shadow:0 0 0 0 rgba(232,199,126,.5)}100%{box-shadow:0 0 0 8px rgba(232,199,126,0)}}
+.vbar{position:fixed;right:calc(10px + env(safe-area-inset-right));bottom:calc(10px + env(safe-area-inset-bottom));z-index:30;display:flex;align-items:center;gap:2px;background:rgba(18,13,9,.82);border:1px solid rgba(232,199,126,.34);border-radius:24px;padding:3px;box-shadow:0 6px 22px rgba(0,0,0,.5);opacity:.82}
+.vbar button{border:none;background:transparent;border-radius:20px;padding:7px 10px;font-size:1.05rem;line-height:1;color:var(--gold)}
+.vbar .lbl{min-width:132px;text-align:center;font-family:var(--serif);font-size:.9rem;color:var(--ink);letter-spacing:.02em;padding:0 4px}
+.vbar .lbl b{color:var(--gold);font-weight:700}
+.vbar .lbl small{display:block;font-family:var(--sans);font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
+.vbar button:hover{background:rgba(232,199,126,.14)}
+
+/* ═══ v13.2 · ГЕРОЙ-КУКЛА (дума 25.09 · HMM3 paperdoll · бюст до кръста в ЕДИН кръг · HD-подредба с 12 центъра · текст-панел под кръста · скролът е господар) ═══ */
+html.kukla{overflow-x:hidden;overflow-y:auto}
+html.kukla body{position:static;inset:auto;height:auto;min-height:100dvh;overflow:visible}   /* overflow САМО на html: overflow-x:hidden на body прави body скрол-контейнер и sticky умира */
+html.kukla .app{position:sticky;inset:auto;top:0;height:100dvh;width:100%}
+html.kukla .spacer{height:calc(13 * 70vh)}
+html.kukla .tap{display:none}
+.mm-skel .mm-cameo{fill:none;stroke:rgba(255,245,214,.45);stroke-width:1.3}
+.mm-skel .mm-cameo2{fill:none;stroke:rgba(255,245,214,.10);stroke-width:1}
+.mm-skel .mm-cloak{fill:rgba(232,199,126,.085);stroke:rgba(232,199,126,.3);stroke-width:1}
+.mm-skel .mm-bust{fill:rgba(232,199,126,.06);stroke:rgba(232,199,126,.82);stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
+.mm-skel .mm-hair{fill:rgba(232,199,126,.16);stroke:rgba(232,199,126,.7);stroke-width:1.2}
+.mm-skel .mm-arm{fill:none;stroke:rgba(232,199,126,.8);stroke-width:1.9;stroke-linecap:round}
+.mm-skel .mm-belt{fill:none;stroke:rgba(232,199,126,.4);stroke-width:1.2;stroke-linecap:round}
+.mm-skel .mm-fib{fill:none;stroke:rgba(232,199,126,.28);stroke-width:1;stroke-linecap:round}
+.mm-skel .slot{fill:rgba(232,199,126,.04);stroke:rgba(232,199,126,.46);stroke-width:.9}
+.mm-skel .mm-n.lit .slot{stroke:rgba(255,245,214,.9);fill:rgba(232,199,126,.12)}
+.mm-skel .face{opacity:.94;transition:opacity .4s}
+.mm-skel .mm-n.dim .face{opacity:.35}
+.mm-skel .badge{fill:none;stroke:var(--gold);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.mm-skel .badge .fl{fill:var(--gold);stroke:none}
+.mm-skel .mm-n[data-валута="светлина"] .badge{stroke:var(--light)} .mm-skel .mm-n[data-валута="светлина"] .badge .fl{fill:var(--light)}
+.mm-skel .badge-bg{fill:#0d0a08;stroke:rgba(232,199,126,.4);stroke-width:.7}
+.mm-skel.v-kukla .nm{font-size:13.5px;font-weight:700;letter-spacing:.02em;fill:#f4ecd6;paint-order:stroke;stroke:rgba(9,6,3,.86);stroke-width:2.7px;stroke-linejoin:round}
+.mm-skel.v-kukla .mm-n[data-валута="светлина"] .nm{font-size:11.5px;fill:var(--light)}
+.mm-skel.v-kukla .mm-n.lit .nm,.mm-skel.v-kukla .mm-n.visit .nm{fill:#fff}
+/* текст-панелът под кръста · сменя се при скрол · тап = картата · текст ИЗВЪН праха (MED-V2) */
+.sfpanel{position:absolute;left:6%;right:6%;top:67.5%;bottom:2.5%;z-index:4;pointer-events:none;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;text-align:center;gap:5px;padding-top:8px}
+.sfpanel[hidden]{display:none}
+.sfpanel .sp-k{font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;color:var(--fire);font-weight:600}
+.sfpanel .sp-k b{color:var(--gold);letter-spacing:.1em}
+.sfpanel .sp-h{font-family:var(--serif);font-size:1.75rem;font-weight:700;color:#fff;line-height:1.05}
+.sfpanel .sp-h.светлина{color:var(--light);text-shadow:0 0 12px rgba(255,245,214,.4)}
+.sfpanel .sp-full{font-family:var(--serif);font-size:1.02rem;color:var(--ink2);font-style:italic}
+.sfpanel .sp-t{font-size:.84rem;color:var(--ink2);line-height:1.45;max-width:340px;margin:2px 0 0}
+.sfpanel .sp-t b{color:#fff}
+.sfpanel .sp-go{pointer-events:auto;margin-top:6px;border:1px solid rgba(232,199,126,.55);background:rgba(232,199,126,.1);color:var(--gold);border-radius:20px;padding:7px 16px;font-family:var(--serif);font-weight:700;font-size:.95rem}
+.sfpanel .sp-go[hidden]{display:none}
+.sfpanel .sp-dots{display:flex;gap:5px;margin-top:8px}
+.sfpanel .sp-dots i{width:6px;height:6px;border-radius:50%;background:rgba(232,199,126,.25);display:block}
+.sfpanel .sp-dots i.on{background:var(--gold);box-shadow:0 0 6px rgba(232,199,126,.8)}
+.sfpanel .sp-hint{font-size:.64rem;color:var(--mute);letter-spacing:.12em;text-transform:uppercase;margin-top:4px}
+
+
+/* ═══ v14 · ПЪЛЕН БИЛД (MET-895 Фаза 2 · 25.09) · слоеве в сцената: gl (z1 · eidolon · ПОД листа) < sheet (z2: wash·skel·прах2D·стрелка·hit) < panel (z4) ═══
+   Листът (мастилото · имената · лицата) стои ОСТЪР · eidolon-прахът е холограмата под стъклото · reduced/без WebGL/gl-lost → постерът + 2D прахът */
+.mm-gl{z-index:1;pointer-events:none;opacity:0;transition:opacity 1.4s ease}
+.mettamap.gl-on .mm-gl{opacity:1}
+.mettamap.gl-lost .mm-gl{display:none}
+.mm-sheet{position:absolute;inset:0;z-index:2;transform-origin:50% 47%}
+.mm-sheet>svg,.mm-sheet>canvas{position:absolute;inset:0;width:100%;height:100%}
+.mm-wash{z-index:0;pointer-events:none;display:block}
+.mm-needle-l{z-index:2;pointer-events:none;display:block}
+.mm-needle-l .yy[data-сърце="цяло"]{transform-box:fill-box;transform-origin:50% 50%;animation:hbeat var(--beat) ease-in-out infinite}
+/* акварел-измивки (наметало · торс · коса) + ръчно мастило (лек wobble) — статичен слой → филтрите се смятат ВЕДНЪЖ */
+.mm-wash .wash-cloak{fill:url(#mm-g-cloak);filter:url(#mm-wc)}
+.mm-wash .wash-bust{fill:url(#mm-g-bust);filter:url(#mm-wc)}
+.mm-wash .wash-hair{fill:url(#mm-g-hair);filter:url(#mm-wc)}
+.mm-wash .inkg{filter:url(#mm-ink)}
+.mm-wash .ink{fill:none;stroke:rgba(232,199,126,.86);stroke-width:2.1;stroke-linejoin:round;stroke-linecap:round}
+.mm-wash .ink.thin{stroke-width:1.3;stroke-opacity:.72}
+.mm-wash .ink.hair{stroke-width:1.25;stroke:rgba(212,137,94,.8)}
+.mm-wash .ink.under{stroke:rgba(58,42,18,.9);stroke-width:3.4;stroke-opacity:.55}
+.mm-wash .mm-fib{fill:none;stroke:rgba(232,199,126,.38);stroke-width:1.1;stroke-linecap:round}
+.mm-wash .mm-sq{stroke:rgba(232,199,126,.5)}
+.mm-wash .leo{fill:none;stroke:rgba(255,245,214,.17);stroke-width:1;stroke-dasharray:3 6;stroke-linecap:round}
+.mm-wash .leo2{fill:none;stroke:rgba(255,245,214,.34);stroke-width:1;stroke-linecap:round}
+.mm-wash .bezel{fill:none;stroke:rgba(232,199,126,.58);stroke-width:2.6}
+.mm-wash .bezel2{fill:none;stroke:rgba(138,106,46,.7);stroke-width:1}
+.mm-wash .tick{stroke:rgba(232,199,126,.55);stroke-width:1.1;stroke-linecap:round}
+/* печат (I-Ching триграма · 8-те Порти · дума 25.09 „триграма остава") · восъчен печат с тъмна подложка → чете се отдалече */
+.mm-skel .seal-bg{fill:#120d08;stroke:rgba(232,199,126,.55);stroke-width:.8}
+.mm-skel .mm-n.lit .seal-bg{stroke:rgba(255,245,214,.9)}
+/* картата · акварел-пергамент (лека хартиена зърнистост върху пергамент-градиента) */
+.mmc::before{content:"";position:absolute;inset:0;border-radius:18px;pointer-events:none;opacity:.38;mix-blend-mode:multiply;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='p'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' seed='4'/><feColorMatrix values='0 0 0 0 .55 0 0 0 0 .42 0 0 0 0 .2 0 0 0 .55 0'/></filter><rect width='100%25' height='100%25' filter='url(%23p)'/></svg>")}
+.mmc>*{position:relative}
+.mmc .mmc-x{position:absolute}
+@media (prefers-reduced-motion: reduce){
+  .mm-skel .yy[data-сърце="цяло"],.mm-needle-l .yy[data-сърце="цяло"],.tap i{animation:none}
+}
+</style>
+</head>
+<body>
+
+<div class="app" id="app">
+  <div class="hud top">
+    <span class="pill l">✧ <b id="sum-l">27</b>/40</span>
+    <div class="mid"><div class="ttl">Нова Жена</div><div class="sf">Сфера · <b id="sf-name">Призвание</b></div></div>
+    <span class="pill g">◆ <b id="sum-g">48</b>/80</span>
+  </div>
+
+  <div class="stagewrap">
+    <figure class="mettamap" id="mettamap" aria-label="Меттамерът — 4 Метта (светлина) прегръщат клъстери от Мета (злато); докоснете област за картата ѝ">
+      <div class="mm-stage" id="mm-stage">
+        <canvas class="mm-gl" id="mm-gl" aria-hidden="true"></canvas>
+        <div class="mm-sheet" id="mm-sheet">
+          <svg class="mm-wash" id="mm-wash" viewBox="0 0 380 800" aria-hidden="true" focusable="false"></svg>
+          <svg class="mm-skel" id="mm-skel" viewBox="0 0 360 800" aria-hidden="true" focusable="false"></svg>
+          <canvas class="mm-dust" id="mettadust" aria-hidden="true"></canvas>
+          <svg class="mm-needle-l" id="mm-needle" viewBox="0 0 380 800" aria-hidden="true" focusable="false"></svg>
+          <svg class="mm-hit" id="mm-hit" viewBox="0 0 360 800" aria-label="12-те области — докоснете област за картата ѝ"></svg>
+        </div>
+        <div class="sfpanel" id="sfpanel" hidden aria-live="polite">
+          <div class="sp-k" id="sp-k"><b>12 сфери</b></div>
+          <div class="sp-h" id="sp-h">Цялото</div>
+          <div class="sp-full" id="sp-full"></div>
+          <p class="sp-t" id="sp-t"></p>
+          <button type="button" class="sp-go" id="sp-go" hidden>Отвори картата ✦</button>
+          <div class="sp-dots" id="sp-dots" aria-hidden="true"></div>
+          <div class="sp-hint">скролирайте · сферите се сменят · докоснете слот</div>
+        </div>
+      </div>
+    </figure>
+  </div>
+
+  <div class="tap" id="tap" aria-hidden="true"><i></i><span>докоснете област · карта</span></div>
+
+  <div class="vbar" role="group" aria-label="Смени вариант на скелета">
+    <button type="button" id="v-prev" aria-label="Предишен вариант">‹</button>
+    <div class="lbl"><b id="v-name">Кръг</b><small id="v-sub">Метамер</small></div>
+    <button type="button" id="v-next" aria-label="Следващ вариант">›</button>
+  </div>
+</div>
+<div class="spacer" id="spacer" hidden aria-hidden="true"></div>
+
+<!-- карта на областта -->
+<div id="mmcard" hidden aria-hidden="true">
+  <div class="mmc" role="dialog" aria-modal="true" aria-labelledby="mmc-lvl">
+    <button class="mmc-x" type="button" aria-label="Затвори картата">✕</button>
+    <div class="mmc-tb"><span class="mmc-lvl" id="mmc-lvl">Ниво · област</span><span class="mmc-cur">✧</span></div>
+    <div class="mmc-art"><div class="mmc-imgs"></div><div class="wait">картината идва…</div><span class="mmc-bd tr" title="ниво от 10">I</span></div>
+    <div class="mmc-nm" id="mmc-nm">Личност</div>
+    <div class="mmc-ln"><span class="al">Съюзник <b></b></span><span class="paz"></span><span class="pro"></span></div>
+    <p class="mmc-emb" id="mmc-emb"></p>
+    <p class="mmc-guard" id="mmc-guard" hidden>Пазач при протагониста: <b>Вие избирате ли го заедно? Вие?</b></p>
+    <button class="mmc-go" type="button" id="mmc-go">Разширявам се тук ✦</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  'use strict';
+  var $=function(s,r){return (r||document).querySelector(s)}, $$=function(s,r){return [].slice.call((r||document).querySelectorAll(s))};
+  var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches||/[?&]reduced=1/.test(location.search);
+  var clamp=function(v,a,b){return Math.max(a,Math.min(b,v))};
+  var params=new URLSearchParams(location.search);
+  var V=params.get('v'); var _VS=['kukla','vitrhd','vitr','mand','krug','telo']; if(_VS.indexOf(V)<0) V='kukla'; if(V==='kukla') document.documentElement.classList.add('kukla'); /* v13.2 · ГЕРОЙ-КУКЛА водещ */ /* v9 · ДО КРЪСТА (яйце · 12 имена) водещ · класически/мандала/кръг/тяло = референции */
+
+  /* ── данни-договор · области (лица за картата · пътища ../ спрямо живата база) ── */
+  var БУД={доверка:['Доверка','Дв','Здраве'],любка:['Любка','Лб','Емоции и Любов'],еко:['Екопътечко','Ек','Ум'],куражку:['Куражку','Кж','Характер и Призвание'],обемко:['Обемко','Об','Изобилие'],хола:['Хола','Хл','Род и Среда'],фибо:['Фибоначко','Фб','Мъдрост'],творея:['Творея','Тв','Творчество и Визия']};
+  var ЕГО={име:'Его',роля:'Обсъждане'}, БЕГА={име:'Бега',роля:'Отлагане'}, УМА={име:'Ума Лисева',роля:'Обмисляне'}, УМЧО={име:'Умчо Вълчев',роля:'Осъждане'};
+  var И='../img/nz-sferi/card/';
+  var ОБЛАСТИ=[
+    {n:1, име:'Здраве', пълно:'Здраве и Тяло', валута:'светлина', ниво:6, буд:'доверка', лица:[{име:'Хипократ',img:И+'nz-sfera-01-хипократ.webp'}], пазач:null, прот:null},
+    {n:2, име:'Емоции', пълно:'Емоции', валута:'злато', ниво:7, буд:'любка', лица:[{име:'Бетовен',img:И+'nz-sfera-02-бетовен.webp'}], пазач:ЕГО, прот:null},
+    {n:3, име:'Ум', пълно:'Ум и Ментал', валута:'злато', ниво:5, буд:'еко', лица:[{име:'Мария Кюри',img:И+'nz-sfera-03-кюри.webp'}], пазач:БЕГА, прот:УМЧО},
+    {n:4, име:'Характер', пълно:'Психе, Характер и Навици', валута:'светлина', ниво:7, буд:'куражку', лица:[{име:'Жана Дарк',img:И+'nz-sfera-04-жана-дарк.webp'}], пазач:null, прот:null},
+    {n:5, име:'Любов', пълно:'Връзки и Любов', валута:'злато', ниво:6, буд:'любка', лица:[{име:'Орфей',img:И+'nz-sfera-05-орфей.webp'}], пазач:ЕГО, прот:null},
+    {n:6, име:'Род', пълно:'Род и Семейство', валута:'злато', ниво:8, буд:'хола', лица:[{име:'Деметра',img:И+'nz-sfera-06-деметра.webp'}], пазач:null, прот:null},
+    {n:7, име:'Среда', пълно:'Социална среда и Племе', валута:'злато', ниво:5, буд:'хола', лица:[{име:'Христо Ботев',img:И+'nz-sfera-07-ботев.webp'}], пазач:null, прот:null},
+    {n:8, име:'Изобилие', пълно:'Изобилие и Финанси', валута:'злато', ниво:4, буд:'обемко', лица:[{име:'Лоренцо де Медичи',img:И+'nz-sfera-08-лоренцо.webp'}], пазач:null, прот:null},
+    {n:9, име:'Призвание', пълно:'Призвание и Кариера', валута:'светлина', ниво:8, буд:'куражку', лица:[{име:'Леонардо да Винчи',img:И+'ЕТАЛОН-леонардо-призвание-светлина.webp'}], пазач:null, прот:null},
+    {n:10, име:'Творчество', пълно:'Творчество', валута:'злато', ниво:6, буд:'творея', лица:[{име:'Моцарт',img:И+'ЕТАЛОН-моцарт-творчество-злато.webp'}], пазач:null, прот:null},
+    {n:11, име:'Мъдрост', пълно:'Мъдрост и Обучение', валута:'злато', ниво:7, буд:'фибо', лица:[{име:'Питагор',img:И+'nz-sfera-11a-питагор.webp'},{име:'Фибоначи',img:И+'nz-sfera-11b-фибоначи.webp'}], пазач:УМА, прот:null},
+    {n:12, име:'Визия', пълно:'Визия и Връзка с Цялото', валута:'светлина', ниво:6, буд:'творея', лица:[{име:'Лао Дзъ',img:И+'nz-sfera-12-лао-дзъ.webp'}], пазач:null, прот:null}
+  ];
+  var ОБЛ=function(n){return ОБЛАСТИ[n-1];};
+  var ИГРА={сфера:9};
+
+  /* ── ПРЕГРЪДКАТА · всяка Метта наметва клъстер от 3 Мета (§3) ── */
+  var КЛЪСТЕР={1:[3,8,6], 9:[6,11,2], 4:[2,10,7], 12:[7,5,3]}; /* Здраве⊃Ум·Изобилие·Род · Призвание⊃Род·Мъдрост·Емоции · Характер⊃Емоции·Творчество·Среда · Визия⊃Среда·Любов·Ум */
+  var ВКЛЮЧЕН={}; Object.keys(КЛЪСТЕР).forEach(function(m){КЛЪСТЕР[m].forEach(function(g){(ВКЛЮЧЕН[g]=ВКЛЮЧЕН[g]||[]).push(+m);});});
+  var ИМЕ=function(n){return ОБЛ(n).име;};
+  var прегрТекст=function(n){ var o=ОБЛ(n);
+    if(КЛЪСТЕР[n]) return 'Прегръща: '+КЛЪСТЕР[n].map(ИМЕ).join(' · ');
+    if(ВКЛЮЧЕН[n]) return 'В прегръдката на: '+ВКЛЮЧЕН[n].map(ИМЕ).join(' · ');
+    return ''; };
+
+  /* ── 8-те най-основни триграми (багуа · 1=плътна черта · 0=прекъсната) ── */
+  var ТРИГ={3:'101',8:'110',6:'011',11:'100',2:'010',10:'111',7:'001',5:'000'};
+
+  /* ── природните икони (за Тяло · съдържание в координати спрямо центъра на възела) ── */
+  var ИКОНА={
+    3:'<path d="M-9,0 Q-5,-4 -1,0 Q-5,3.6 -9,0 Z"/><circle class="fl" cx="-5" cy="0" r="1.5"/><path d="M1,0 Q5,-4 9,0 Q5,3.6 1,0 Z"/><circle class="fl" cx="5" cy="0" r="1.5"/>',
+    11:'<path d="M-8,-8 L-5,-4 M8,-8 L5,-4"/><circle cx="-4" cy="-1" r="3.6"/><circle cx="4" cy="-1" r="3.6"/><circle class="fl" cx="-4" cy="-1" r="1.1"/><circle class="fl" cx="4" cy="-1" r="1.1"/><path d="M-2,2 L0,4 L2,2"/><path d="M-8,3 Q0,11 8,3"/>',
+    10:'<path d="M0,-8 C-6,-8 -9,-3 -8,2 C-9,7 -3,9.5 0,7 C3,9.5 9,7 8,2 C9,-3 6,-8 0,-8 Z"/><path d="M0,-7 L0,7"/><path d="M-4,-4 Q-1.5,-1.5 -4,1 M4,-4 Q1.5,-1.5 4,1"/>',
+    5:'<path class="fl" d="M-2.5,2.5 C-7.5,-1.5 -7.5,-6.5 -4,-6.5 C-2.8,-6.5 -2.5,-5.2 -2.5,-4.4 C-2.5,-5.2 -2.2,-6.5 -1,-6.5 C2.5,-6.5 2.5,-1.5 -2.5,2.5 Z"/><path class="fl" d="M3.5,5 C-1.5,1 -1.5,-4 2,-4 C3.2,-4 3.5,-2.7 3.5,-1.9 C3.5,-2.7 3.8,-4 5,-4 C8.5,-4 8.5,1 3.5,5 Z"/>',
+    2:'<path class="fl" d="M0,-9 C4,-3 5,0.5 2,3.5 C-1,6.5 -5,3 -3,-1 C-2,-3.5 -1,-6 0,-9 Z"/><path d="M-8,8 Q-4,5 0,8 Q4,11 8,8"/>',
+    7:'<path d="M-9,1 Q0,11 9,1"/><path d="M-7,-0.5 Q0,8 7,-0.5"/><circle class="fl" cx="-3.2" cy="0.5" r="1.7"/><circle class="fl" cx="0" cy="1.4" r="1.7"/><circle class="fl" cx="3.2" cy="0.5" r="1.7"/>',
+    6:'<path d="M0,10 L0,-1 M0,-1 L-6,-8 M0,-1 L6,-8 M0,3 L-5,-2 M0,3 L5,-2 M0,10 L-4,12 M0,10 L4,12"/><circle class="fl" cx="0" cy="-9.5" r="1.8"/><circle class="fl" cx="-6" cy="-8" r="1.6"/><circle class="fl" cx="6" cy="-8" r="1.6"/>',
+    8:'<path d="M0,10 L0,-7 M0,10 L-5.5,-3 M0,10 L5.5,-3 M0,-7 l-2,2 M0,-7 l2,2 M0,-3 l-2,2 M0,-3 l2,2 M-5.5,-3 l-2.2,1 M-5.5,0.5 l-2.2,1 M5.5,-3 l2.2,1 M5.5,0.5 l2.2,1 M-3.5,6 L3.5,6"/>',
+    1:'<path d="M0,-11 L0,11"/><path d="M0,-9 Q7,-6 0,-2 Q-7,2 0,6 Q6,8 2,11"/><circle class="fl" cx="2" cy="-9" r="1.2"/>',
+    4:'<path class="fl" d="M0,9 C-9,1 -9,-7 -3.4,-7 C-1.2,-7 0,-4.6 0,-3.4 C0,-4.6 1.2,-7 3.4,-7 C9,-7 9,1 0,9 Z"/>',
+    9:'<path d="M4,-9 L4,6"/><path d="M4,-9 Q9.5,-7 8,-1.5"/><ellipse class="fl" cx="1" cy="6" rx="3.6" ry="2.7" transform="rotate(-20 1 6)"/>',
+    12:'<path d="M0,-9 L8,5 L-8,5 Z"/><path d="M-4,1 Q0,-2 4,1 Q0,4 -4,1 Z"/><circle class="fl" cx="0" cy="1" r="1.3"/><path d="M0,-9 L0,-12 M8,5 L11,7 M-8,5 L-11,7"/>'
+  };
+
+  var TAU=Math.PI/180;
+  /* ═══ ГЕОМЕТРИЯ · v6: ЧОВЕК ПЪЛНИ екрана · viewBox ТЕСЕН-ВИСОК (0.45) мачва телефона → нула letterbox ═══ */
+  var VB={ kukla:{w:380,h:800,cx:190,cy:376,mw:'99vw',mh:'96dvh'},   /* v13.2 · КУКЛА · бюст в ЕДИН кръг (190,240 r186) · амулетът = сърцето (190,338) · панел под кръста */
+           vitr:{w:440,h:452,cx:220,cy:226,mw:'99vw',mh:'94dvh'},   /* v8 · класически Да Винчи · кръг-аура */
+           vitrhd:{w:380,h:800,cx:190,cy:398,mw:'99vw',mh:'96dvh'}, /* v10 · ШИРОК боди-граф · разперен пълни ширината · имена ПОД центровете */
+           mand:{w:448,h:418,cx:224,cy:214,mw:'99vw',mh:'93dvh'},
+           krug:{w:400,h:446,cx:200,cy:200,mw:'97vw',mh:'82dvh'},
+           telo:{w:360,h:800,cx:180,cy:360,mw:'96vw',mh:'97dvh'} };
+  var vb=VB[V], CX=vb.cx, CY=vb.cy;
+  var пол=function(cx,cy,r,a){var q=a*TAU;return [cx+r*Math.sin(q), cy-r*Math.cos(q)];};
+
+  /* Кръг — точните позиции на живия Метамер (Rg=150 злато-октагон · Rl=76 светлина-диагонали) */
+  var Rg=150, Rl=76;
+  var KRUG={ злато:{3:0,8:45,6:90,11:135,2:180,10:225,7:270,5:315}, светлина:{1:45,9:135,4:225,12:315} };
+  /* Тяло v6 — ЧОВЕК пълни екрана · HD-подредба разтеглена глава→корен с ВЪЗДУХ (§2).
+     Мъдрост=Crown · Ум=Ajna · Творчество=Throat · ромб(G · разреден)=4 Метта около сърцето ·
+     Изобилие=под ромба · Среда/Емоции=ханш (двойка) · Род=Sacral · Любов=Root.
+     Тесен торс (x 118–242) → широки гутери за имена. */
+  var TELO={
+    11:[180,96], 3:[180,158], 10:[180,224],
+    1:[180,302], 9:[222,360], 12:[138,360], 4:[180,418],
+    8:[180,486], 7:[146,556], 2:[214,556], 6:[180,626], 5:[180,700]
+  };
+  /* Мандала v7 — ВЛОЖЕНА свещена геометрия (реюз на krug/Монада ъгли · HD-триъгълници навън):
+     ин-ян → РОМБ(4 Метта · Rml диагонали · Монада · НЕ пипани) → КВАДРАТ(4 Мета-ъгли · Rmg диагонали 8·11·10·5)
+     → ТРИЪГЪЛНИЦИ(4 Мета-кардинали 3·2·6·7 · щръкнали навън) → КРЪГ (обединява · пълни широко).
+     ™1 анкери заковани: Изобилие(8)=NE над Емоции · Емоции(2)=E най-вдясно · Род(6)=S най-долу. */
+  var MAND={ злато:{3:0,8:45,2:90,11:135,6:180,10:225,7:270,5:315}, светлина:{1:45,9:135,4:225,12:315} };
+  var Rmg=140, Rml=74;
+  var Mкард={3:1,2:1,6:1,7:1};                 /* кардинали = триъгълници (иначе = квадрат-ъгъл) */
+  var Rdia=104, Rtb=112, Rtt=166, Rcirc=172;   /* ромб-връх(кардинал) · триъгълник база/връх · кръг */
+
+  /* ═══ v8 · ВИТРУВИАНСКИ ЧОВЕК вписан в аура-кръг + вложена геометрия в сърцето (MET-895 · дума 25.09) ═══
+     Геометрията САМА оформя тялото: КВАДРАТ-ъгли = рамене(Любов·Изобилие) + ханш(Творчество·Мъдрост) ·
+     КАРДИНАЛИ = глава(Ум горе) · торс(Среда·Емоции под midline) · корен(Род долу) ·
+     РОМБ(4 Метта · Визия·Здраве·Характер·Призвание) = сакралното сърце около ин-ян · КРЪГ/елипса = аура. */
+  var VITR={   /* класически · пълна фигура (разперени крайници) вписана в кръг+квадрат */
+    3:[220,66],                                       /* Ум · глава */
+    5:[150,158], 8:[290,158],                         /* Любов · Изобилие — рамене */
+    12:[188,202], 1:[252,202], 4:[188,252], 9:[252,252], /* Метта-ромб · сърце */
+    7:[122,250], 2:[318,250],                         /* Среда · Емоции — среден торс (встрани, под midline) */
+    10:[166,320], 11:[274,320],                       /* Творчество · Мъдрост — ханш */
+    6:[220,384]                                       /* Род · корен */
+  };
+  var VITRHD={ /* v10 · ШИРОК боди-граф · разперен пълни ширината · триъгълник(глава)→трапец(торс)→ромб(сърце)→триъгълник(таз) */
+    3:[190,68],                                       /* Ум · глава (връх · триъгълник-горе) */
+    5:[106,210], 8:[274,210],                         /* Любов · Изобилие — рамене (тесен ръб на трапеца) */
+    7:[44,360], 2:[336,360],                          /* Среда · Емоции — РАЗПЕРЕНИ ръце (широк ръб на трапеца) */
+    12:[134,344], 1:[246,344], 4:[134,452], 9:[246,452], /* Метта-ромб · сърце (Визия·Здраве горе / Характер·Призвание долу) */
+    10:[70,600], 11:[310,600],                        /* Творчество · Мъдрост — РАЗПЕРЕН ханш (триъгълник-долу) */
+    6:[190,692]                                       /* Род · таз (връх долу на триъгълника) */
+  };
+  function таблВитр(v){ return v==='vitr'?VITR:VITRHD; }
+  /* ═══ v13.2 · ГЕРОЙ-КУКЛА (дума Митрандир 25.09 · „катедрала → HMM3 герой · HD с 12 центъра · до кръста · в един кръг") ═══
+     HD-подредба: Head=Творчество(корона) · Ajna=Ум(чело) · Throat=Мъдрост · G=4 Метта (ромб около амулета ин-ян) ·
+     Ego=Изобилие (дясно рамо) · Любов (ляво рамо · „другата ръка") · Spleen/Solar=Среда/Емоции (дланите) · Root=Род (кръстът · катарамата).
+     12-те центъра = СЛОТОВЕ за артефакти (HMM3): рамка · лицето на водача · икона-значка · триграма-печат · пръстен = нивото. */
+  var KUKLA={ 10:[190,70], 3:[190,154], 11:[190,232], 5:[104,262], 8:[276,262], 12:[128,322], 1:[252,322], 4:[128,430], 9:[252,430], 7:[66,372], 2:[314,372], 6:[190,496] };   /* v13.3 · 62/38: фигурата до y496 (62%) · панелът под нея (38%) · v14: дланите 78/302→66/314 (дума v13.5 „раздалечи Емоции и Среда") */
+  var KUKLA_C={cx:190,cy:271,r:225};   /* кръгът прелива 35px извън ширината (клипва се) → фигурата = 62% от екрана */
+  var HD_РЕД=[10,3,11,5,8,12,1,7,2,4,9,6];   /* скрол-ред · HD отгоре надолу */
+  var ИМЕНА_K={}; Object.keys(KUKLA).forEach(function(n){ var lt=ОБЛ(+n).валута==='светлина'; ИМЕНА_K[n]=[KUKLA[n][0], KUKLA[n][1]+(lt?26:30)]; });
+  /* v9 · всичките 12 имена ПРИ центровете (еднакви) · [tx,ty,anchor: e=end/gL · s=start/gR · m=middle] */
+  var ИМЕНА_V9={ 3:[190,98,'m'], 5:[106,236,'m'], 8:[274,236,'m'], 7:[44,388,'m'], 2:[336,388,'m'], 12:[134,318,'m'], 1:[246,318,'m'], 4:[134,478,'m'], 9:[246,478,'m'], 10:[70,628,'m'], 11:[310,628,'m'], 6:[190,720,'m'] };
+  function ромбТочки(P){ var idx=[12,1,4,9], xs=idx.map(function(n){return P[n][0]}), ys=idx.map(function(n){return P[n][1]});
+    var cx=(Math.min.apply(0,xs)+Math.max.apply(0,xs))/2, cy=(Math.min.apply(0,ys)+Math.max.apply(0,ys))/2;
+    var hw=(Math.max.apply(0,xs)-Math.min.apply(0,xs))/2+12, hh=(Math.max.apply(0,ys)-Math.min.apply(0,ys))/2+12;
+    return cx+','+(cy-hh).toFixed(1)+' '+(cx+hw).toFixed(1)+','+cy+' '+cx+','+(cy+hh).toFixed(1)+' '+(cx-hw).toFixed(1)+','+cy; }
+
+  function възлиНа(v){
+    var out=[];
+    if(v==='mand'){
+      [['злато',Rmg],['светлина',Rml]].forEach(function(pr){
+        var карта=MAND[pr[0]], r=pr[1];
+        Object.keys(карта).forEach(function(n){ n=+n; var a=карта[n], xy=пол(CX,CY,r,a);
+          out.push({n:n, cx:xy[0], cy:xy[1], вал:pr[0]}); });
+      });
+    } else if(v==='krug'){
+      [['злато',Rg],['светлина',Rl]].forEach(function(pr){
+        var карта=KRUG[pr[0]], r=pr[1];
+        Object.keys(карта).forEach(function(n){ n=+n; var a=карта[n], xy=пол(CX,CY,r,a);
+          out.push({n:n, cx:xy[0], cy:xy[1], вал:pr[0]}); });
+      });
+    } else if(v==='vitr'||v==='vitrhd'){
+      var T=таблВитр(v);
+      Object.keys(T).forEach(function(n){ n=+n; var p=T[n]; out.push({n:n, cx:p[0], cy:p[1], вал:ОБЛ(n).валута}); });
+    } else if(v==='kukla'){
+      Object.keys(KUKLA).forEach(function(n){ n=+n; var p=KUKLA[n]; out.push({n:n, cx:p[0], cy:p[1], вал:ОБЛ(n).валута}); });
+    } else {
+      Object.keys(TELO).forEach(function(n){ n=+n; var p=TELO[n]; out.push({n:n, cx:p[0], cy:p[1], вал:ОБЛ(n).валута}); });
+    }
+    /* производни: ъгъл/радиус спрямо центъра → кръговото движение на праха работи и за двата */
+    out.forEach(function(o){ var dx=o.cx-CX, dy=o.cy-CY, r=Math.sqrt(dx*dx+dy*dy)||1;
+      o.a=(Math.atan2(dx,-dy)*180/Math.PI+360)%360; o.r=r;
+      o.r0=Math.max(20,r-20); o.r1=r+2; o.da=o.вал==='светлина'?26:16; o.ниво=ОБЛ(o.n).ниво; o.обл=ОБЛ(o.n); });
+    return out;
+  }
+
+  /* ── строим SVG-скелета (постерът) за активния вариант ── */
+  function триграма(cx,cy){ return ''; } // placeholder, replaced below
+  function рисуйТриграма(cx,cy,code,W){
+    var w=W||20, h=w<16?2:3, gap=w<16?2.8:4.2, seg=(w-w*0.3)/2, x0=cx-w/2, y0=cy-(3*h+2*gap)/2, s='';
+    var gp=w*0.3;
+    for(var i=0;i<3;i++){ var y=y0+i*(h+gap);
+      if(code[i]==='1'){ s+='<rect class="tgm" x="'+x0.toFixed(1)+'" y="'+y.toFixed(1)+'" width="'+w+'" height="'+h+'" rx="1"/>'; }
+      else{ s+='<rect class="tgm" x="'+x0.toFixed(1)+'" y="'+y.toFixed(1)+'" width="'+seg.toFixed(1)+'" height="'+h+'" rx="1"/>'
+             +'<rect class="tgm" x="'+(x0+seg+gp).toFixed(1)+'" y="'+y.toFixed(1)+'" width="'+seg.toFixed(1)+'" height="'+h+'" rx="1"/>'; }
+    }
+    return s;
+  }
+  /* v14 · ПЕЧАТ = ТРИГРАМА (дума 25.09 „триграма остава" · 8-те Порти · канонът на оригиналния Метамер) · кръгъл восъчен печат с тъмна подложка (симетричен на значката) */
+  function рисуйПечат(cx,cy,code,W){
+    var w=W||9, h=2, gap=2.2, seg=w*0.36, gp=w-2*seg, x0=cx-w/2, tot=3*h+2*gap, y0=cy-tot/2, s='';
+    s+='<circle class="seal-bg" cx="'+cx+'" cy="'+cy+'" r="8.2"/>';
+    for(var i=0;i<3;i++){ var y=y0+i*(h+gap);
+      if(code[i]==='1'){ s+='<rect class="tgm" x="'+x0.toFixed(1)+'" y="'+y.toFixed(1)+'" width="'+w+'" height="'+h+'" rx=".7"/>'; }
+      else{ s+='<rect class="tgm" x="'+x0.toFixed(1)+'" y="'+y.toFixed(1)+'" width="'+seg.toFixed(1)+'" height="'+h+'" rx=".7"/>'
+             +'<rect class="tgm" x="'+(x0+seg+gp).toFixed(1)+'" y="'+y.toFixed(1)+'" width="'+seg.toFixed(1)+'" height="'+h+'" rx=".7"/>'; }
+    }
+    return s;
+  }
+  function иняМал(cx,cy,r,вал){ var f=вал==='светлина'?'#fff5d6':'#E8C77E';
+    return '<g class="yy"><circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="#0d0a08" stroke="rgba(255,255,255,.4)" stroke-width=".8"/>'
+      +'<path d="M'+cx+','+(cy-r)+' A'+r+','+r+' 0 0 1 '+cx+','+(cy+r)+' A'+(r/2)+','+(r/2)+' 0 0 0 '+cx+','+cy+' A'+(r/2)+','+(r/2)+' 0 0 1 '+cx+','+(cy-r)+' Z" fill="'+f+'"/>'
+      +'<circle cx="'+cx+'" cy="'+(cy-r/2)+'" r="'+(r/6)+'" fill="#0d0a08"/><circle cx="'+cx+'" cy="'+(cy+r/2)+'" r="'+(r/6)+'" fill="'+f+'"/></g>'; }
+
+  function прегрКръг(){ /* 4 светлина-клина, всеки [a-52..a+52] → наметва 3-те злато-съседа; кардиналите преливат */
+    var s='<g class="mm-emb">';
+    Object.keys(KRUG.светлина).forEach(function(m){ m=+m; var a=KRUG.светлина[m], w=52, r0=30, r1=188;
+      var p1=пол(CX,CY,r0,a-w), p2=пол(CX,CY,r1,a-w), p3=пол(CX,CY,r1,a+w), p4=пол(CX,CY,r0,a+w);
+      var laf=0;
+      s+='<g class="emb-wedge" data-emb="'+m+'"><path class="w" d="M'+p1[0].toFixed(1)+','+p1[1].toFixed(1)
+        +' L'+p2[0].toFixed(1)+','+p2[1].toFixed(1)
+        +' A'+r1+','+r1+' 0 '+laf+' 1 '+p3[0].toFixed(1)+','+p3[1].toFixed(1)
+        +' L'+p4[0].toFixed(1)+','+p4[1].toFixed(1)
+        +' A'+r0+','+r0+' 0 '+laf+' 0 '+p1[0].toFixed(1)+','+p1[1].toFixed(1)+' Z"/></g>';
+    });
+    return s+'</g>';
+  }
+  function прегрТяло(){ /* HD-канали: от всяка Метта (в ромба) към 3-те ѝ Мета */
+    var s='<g class="mm-emb">', poz={};
+    Object.keys(TELO).forEach(function(n){poz[n]=TELO[n];});
+    Object.keys(КЛЪСТЕР).forEach(function(m){ m=+m; var a=poz[m]; if(!a) return;
+      s+='<g class="emb-chan" data-emb="'+m+'">';
+      КЛЪСТЕР[m].forEach(function(g){ var b=poz[g]; if(!b) return;
+        s+='<path class="chan" d="M'+a[0]+','+a[1]+' L'+b[0]+','+b[1]+'"/>'; });
+      s+='</g>';
+    });
+    return s+'</g>';
+  }
+
+  function позКарта(възли){ var m={}; възли.forEach(function(o){m[o.n]=[o.cx,o.cy];}); return m; }
+  function прегрканали(poz,рад){ /* канали Метта→3-те ѝ Мета (по номер · оцелява суапа Емоции↔Род) · рад(n) → каналът спира на ръба на слота (ревю v14 MED) */
+    var s='<g class="mm-emb">';
+    Object.keys(КЛЪСТЕР).forEach(function(m){ m=+m; var a=poz[m]; if(!a) return;
+      s+='<g class="emb-chan" data-emb="'+m+'">';
+      КЛЪСТЕР[m].forEach(function(g){ var b=poz[g]; if(!b) return; var a2=a, b2=b;
+        if(рад){ var dx=b[0]-a[0], dy=b[1]-a[1], L=Math.hypot(dx,dy)||1, ux=dx/L, uy=dy/L, ra=рад(m)+4, rb=рад(g)+4; a2=[a[0]+ux*ra,a[1]+uy*ra]; b2=[b[0]-ux*rb,b[1]-uy*rb]; }
+        s+='<path class="chan" d="M'+a2[0].toFixed(1)+','+a2[1].toFixed(1)+' L'+b2[0].toFixed(1)+','+b2[1].toFixed(1)+'"/>'; });
+      s+='</g>';
+    });
+    return s+'</g>';
+  }
+  function дъгаСтрелка(r,a0,a1,cw){ /* кръгова стрелка (Монада · движение в кръга) */
+    var p0=пол(CX,CY,r,a0), p1=пол(CX,CY,r,a1), laf=Math.abs(a1-a0)>180?1:0, sw=cw?1:0, dir=cw?1:-1;
+    var tip=пол(CX,CY,r,a1+dir*3), w1=пол(CX,CY,r+5,a1-dir*3), w2=пол(CX,CY,r-5,a1-dir*3);
+    return '<path class="mm-arw" d="M'+p0[0].toFixed(1)+','+p0[1].toFixed(1)+' A'+r+','+r+' 0 '+laf+' '+sw+' '+p1[0].toFixed(1)+','+p1[1].toFixed(1)+'"/>'
+      +'<polygon class="mm-arw hd" points="'+tip[0].toFixed(1)+','+tip[1].toFixed(1)+' '+w1[0].toFixed(1)+','+w1[1].toFixed(1)+' '+w2[0].toFixed(1)+','+w2[1].toFixed(1)+'"/>';
+  }
+
+  function фон(v){
+    if(v==='kukla'){
+      var K=KUKLA, C=KUKLA_C;
+      /* v14 · СКЕЛЕТЪТ носи само динамичното (камея-пръстени · ромб · Монада-дъги · после възлите/каналите) · фигурата/акварелът/спиралата/Витрувий = wash-слоят (статичен · филтрите се смятат веднъж) */
+      var s3='<defs><clipPath id="mm-medclip" clipPathUnits="objectBoundingBox"><circle cx=".5" cy=".5" r=".5"/></clipPath></defs>'
+        +'<circle class="mm-cameo2" cx="'+C.cx+'" cy="'+C.cy+'" r="'+(C.r-6)+'"/>'
+        +'<circle class="mm-cameo" cx="'+C.cx+'" cy="'+C.cy+'" r="'+C.r+'"/>'
+        /* сакралното сърце · ромб около 4-те Метта · Монада-дъги (r50) около амулета · вътре в ромба */
+        +'<polygon class="mm-rhomb" points="'+ромбТочки(K)+'"/>'
+        +дъгаСтрелка(50,-38,38,1)+дъгаСтрелка(50,142,218,1);
+      return s3;
+    }
+    if(v==='vitr'){
+      var T=VITR, pt=function(n){return T[n][0]+','+T[n][1];};
+      var s='<circle class="mm-rim" cx="'+CX+'" cy="'+CY+'" r="210"/>'
+        +'<circle class="mm-guide" cx="'+CX+'" cy="'+CY+'" r="150" opacity=".4"/>'
+        /* Да-Винчиев квадрат (стъпалата/дланите го докосват) */
+        +'<rect class="mm-sq" x="68" y="86" width="304" height="304" rx="2"/>'
+        /* витрувианска фигура · глава + торс + 2 позиции ръце + 2 позиции нозе (дланите→квадрат · нозете→кръг) */
+        +'<g class="mm-figure">'
+          +'<circle class="fill" cx="220" cy="58" r="27"/>'
+          +'<path class="fill" d="M220,86 C213,150 213,304 220,358 C227,304 227,150 220,86 Z"/>'
+          +'<path d="M208,150 L70,150 M232,150 L370,150"/>'
+          +'<path d="M211,142 L116,66 M229,142 L324,66"/>'
+          +'<path d="M215,352 L206,388 M225,352 L234,388"/>'
+          +'<path d="M212,356 L126,410 M228,356 L314,410"/>'
+          +'<circle class="jt" cx="70" cy="150" r="2.4"/><circle class="jt" cx="370" cy="150" r="2.4"/>'
+          +'<circle class="jt" cx="116" cy="66" r="2.4"/><circle class="jt" cx="324" cy="66" r="2.4"/>'
+          +'<circle class="jt" cx="126" cy="410" r="2.4"/><circle class="jt" cx="314" cy="410" r="2.4"/>'
+        +'</g>'
+        /* сакралното сърце · ромб около 4-те Метта */
+        +'<polygon class="mm-rhomb" points="'+ромбТочки(T)+'"/>'
+        +дъгаСтрелка(196,-50,50,1)+дъгаСтрелка(196,130,230,1);
+      return s;
+    }
+    if(v==='vitrhd'){
+      var T2=VITRHD, q=function(n){return T2[n][0]+','+T2[n][1];};
+      /* v10 · ШИРОК боди-граф · разперена фигура пълни ширината · глава-триъгълник → торс-трапец → сърце-ромб → таз-триъгълник */
+      var s2='<path class="mm-rim" d="M190,44 C150,44 138,70 154,96 C120,132 84,210 60,300 C40,372 30,404 52,420 C74,436 108,428 132,452 C112,516 94,566 96,616 C120,672 150,712 190,724 C230,712 260,672 284,616 C286,566 268,516 248,452 C272,428 306,436 328,420 C350,404 340,372 320,300 C296,210 260,132 226,96 C242,70 230,44 190,44 Z"/>'
+        +'<path class="mm-guide" d="M190,120 C160,120 150,140 162,160 C132,196 108,254 92,318 C80,368 74,398 96,410 C120,420 146,414 164,436 C150,486 138,540 140,584 C160,632 168,656 190,668 C212,656 220,632 240,584 C242,540 230,486 216,436 C234,414 260,420 284,410 C306,398 300,368 288,318 C272,254 248,196 218,160 C230,140 220,120 190,120 Z" opacity=".38"/>'
+        /* глава + широк силует (глава→рамене→РАЗПЕРЕНИ ръце→ханш→таз) */
+        +'<circle class="mm-body" cx="190" cy="68" r="30"/>'
+        +'<path class="mm-body" d="M160,92 C136,128 118,168 106,210 C82,270 56,320 44,362 C50,436 58,516 70,600 C104,650 146,682 190,694 C234,682 276,650 310,600 C322,516 330,436 336,362 C324,320 298,270 274,210 C262,168 244,128 220,92 C200,102 180,102 160,92 Z"/>'
+        +'<path class="mm-spine" d="M190,100 L190,660"/>'
+        /* ГЛАВА-ТРИЪГЪЛНИК (Ум·Любов·Изобилие) */
+        +'<polygon class="mm-tri" points="'+q(3)+' '+q(5)+' '+q(8)+'"/>'
+        /* ТОРС-ТРАПЕЦ (Любов·Изобилие тесен ръб · Изобилие→Емоции · Среда·Емоции широк ръб) */
+        +'<polygon class="mm-sq" points="'+q(5)+' '+q(8)+' '+q(2)+' '+q(7)+'"/>'
+        /* сакралното сърце · ромб около 4-те Метта */
+        +'<polygon class="mm-rhomb" points="'+ромбТочки(T2)+'"/>'
+        /* ТАЗ-ТРИЪГЪЛНИК (Творчество·Мъдрост·Род) */
+        +'<polygon class="mm-tri" points="'+q(10)+' '+q(11)+' '+q(6)+'"/>'
+        /* кръгови стрелки-Монада около сърцето */
+        +дъгаСтрелка(92,-52,52,1)+дъгаСтрелка(92,128,232,1);
+      return s2;
+    }
+    if(v==='mand'){
+      var P=function(r,a){return пол(CX,CY,r,a);};
+      var sqp=[45,135,225,315].map(function(a){var q=P(Rmg,a);return q[0].toFixed(1)+','+q[1].toFixed(1);}).join(' ');
+      var dip=[0,90,180,270].map(function(a){var q=P(Rdia,a);return q[0].toFixed(1)+','+q[1].toFixed(1);}).join(' ');
+      var s='<circle class="mm-rim" cx="'+CX+'" cy="'+CY+'" r="'+Rcirc+'"/>'
+        +'<circle class="mm-guide" cx="'+CX+'" cy="'+CY+'" r="'+(Rcirc-4).toFixed(1)+'" opacity=".45"/>';
+      [0,90,180,270].forEach(function(a){ var t=P(Rtt,a), b1=P(Rtb,a-15), b2=P(Rtb,a+15);
+        s+='<polygon class="mm-tri" points="'+t[0].toFixed(1)+','+t[1].toFixed(1)+' '+b1[0].toFixed(1)+','+b1[1].toFixed(1)+' '+b2[0].toFixed(1)+','+b2[1].toFixed(1)+'"/>'; });
+      s+='<polygon class="mm-sq" points="'+sqp+'"/>';
+      s+='<polygon class="mm-rhomb" points="'+dip+'"/>';
+      s+=дъгаСтрелка(Rcirc-14,-55,55,1)+дъгаСтрелка(Rcirc-14,125,235,1);
+      return s;
+    }
+    if(v==='krug'){
+      var pts=[0,45,90,135,180,225,270,315].map(function(a){var xy=пол(CX,CY,Rg,a);return xy[0].toFixed(1)+','+xy[1].toFixed(1);}).join(' ');
+      return '<circle class="mm-rim" cx="200" cy="200" r="192"/><circle class="mm-rim" cx="200" cy="200" r="150" opacity=".5"/>'
+        +'<polygon class="mm-oct" points="'+pts+'"/><circle class="mm-guide" cx="200" cy="200" r="76"/>';
+    }
+    /* Тяло v6 · ЧОВЕК ПЪЛНИ екрана: аура-дълбочина + строен силует глава→нозе (тесен торс) + гръбнак + разреден G-ромб */
+    return '<ellipse class="mm-aura" cx="180" cy="230" rx="122" ry="168"/><ellipse class="mm-aura" cx="180" cy="520" rx="150" ry="230"/>'
+      +'<path class="mm-spiral" d="M180,360 C180,346 196,342 205,354 C217,369 207,393 185,396 C158,399 142,366 160,342 C182,312 224,323 240,357"/>'
+      +'<path class="mm-body" d="M180,42 a38,38 0 1,0 0.1,0 Z'
+        +' M166,122 C164,142 158,158 150,172 C134,188 122,208 118,236'
+        +' C124,322 130,394 134,454 C128,562 124,662 128,792 L232,792'
+        +' C236,662 232,562 226,454 C230,394 236,322 242,236'
+        +' C238,208 226,188 210,172 C202,158 196,142 194,122 Z"/>'
+      +'<path class="mm-spine" d="M180,124 L180,690"/>'
+      +'<path class="mm-gdia" d="M180,294 L228,360 L180,426 L132,360 Z"/>';
+  }
+
+  /* ═══ v14 · WASH-СЛОЙ (статичен SVG под скелета · Фаза 2 естетика): Витрувий (вписан квадрат · Леонардо-линии · φ-деления) ·
+     Фибоначи (златната спирала = хартийна линия) · КАМЕЯ = ръчно мастило (feTurbulence-wobble) + акварел-измивки (наметало · торс · коса · охра-амбър) ·
+     безел с тикове (алетиометърът на оригиналния Метамер) · ореол = Леонардо-осветеност от сърцето. Само за kukla · reduced/без WebGL → пак стои (постер). ═══ */
+  var ФИГ={cloak:'M100,246 C56,320 32,420 34,510 L346,510 C348,420 324,320 280,246 C252,232 222,228 190,228 C158,228 128,232 100,246 Z',
+           bust:'M176,230 C160,233 128,236 108,244 C96,250 92,264 96,284 C100,320 100,352 106,384 C112,430 118,470 124,510 L256,510 C262,470 268,430 274,384 C280,352 280,320 284,284 C288,264 284,250 272,244 C252,236 220,233 204,230 Z',
+           arms:'M100,256 C84,286 70,330 56,372 M114,290 C102,318 92,348 80,372 M280,256 C296,286 310,330 324,372 M266,290 C278,318 288,348 300,372',
+           neck:'M176,212 C178,220 178,226 176,230 L204,230 C202,226 202,220 204,212 Z',
+           hair:'M155,160 C153,124 172,114 190,114 C208,114 227,124 225,160 C217,138 202,130 190,130 C178,130 163,138 155,160 Z'};
+  function wash(v){
+    if(v!=='kukla') return '';
+    var C=KUKLA_C, PHI=1.6180339887, sp='', th;
+    for(th=0; th<=560; th+=4){ var rr=233*Math.pow(PHI,(th-540)/90), q=(th+10)*TAU, sx=CX+rr*Math.sin(q), sy=CY-rr*Math.cos(q); if(th>300 && Math.hypot(sx-C.cx,sy-C.cy)>C.r-2) break; sp+=(th?' L':'M')+sx.toFixed(1)+','+sy.toFixed(1); }
+    var sq=2*C.r/Math.SQRT2, sx0=C.cx-C.r/Math.SQRT2, sy0=C.cy-C.r/Math.SQRT2, d=2*C.r, f1=C.cy-C.r+d/PHI, f2=C.cy+C.r-d/PHI;
+    var s='<defs>'
+      +'<clipPath id="mm-wash-clip"><circle cx="'+C.cx+'" cy="'+C.cy+'" r="'+(C.r-1)+'"/></clipPath><clipPath id="mm-fib-clip"><circle cx="'+C.cx+'" cy="'+C.cy+'" r="'+(C.r+18)+'"/></clipPath>'
+      +'<filter id="mm-wc" x="-12%" y="-12%" width="124%" height="124%" color-interpolation-filters="sRGB"><feTurbulence type="fractalNoise" baseFrequency=".013 .019" numOctaves="3" seed="7" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="18" xChannelSelector="R" yChannelSelector="G" result="d"/><feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="1" seed="2" result="g"/><feColorMatrix in="g" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1.1 .45" result="ga"/><feComposite in="d" in2="ga" operator="in" result="p"/><feGaussianBlur in="p" stdDeviation=".6"/></filter>'
+      +'<filter id="mm-ink" x="-6%" y="-6%" width="112%" height="112%"><feTurbulence type="fractalNoise" baseFrequency=".06" numOctaves="2" seed="3" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>'
+      +'<radialGradient id="mm-g-cloak" cx="50%" cy="22%" r="78%"><stop offset="0" stop-color="#E8C77E" stop-opacity=".32"/><stop offset=".55" stop-color="#D4895E" stop-opacity=".15"/><stop offset="1" stop-color="#8a6a2e" stop-opacity=".05"/></radialGradient>'
+      +'<linearGradient id="mm-g-bust" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff5d6" stop-opacity=".14"/><stop offset=".5" stop-color="#E8C77E" stop-opacity=".18"/><stop offset="1" stop-color="#8a6a2e" stop-opacity=".24"/></linearGradient>'
+      +'<radialGradient id="mm-g-hair" cx="50%" cy="35%" r="65%"><stop offset="0" stop-color="#D4895E" stop-opacity=".58"/><stop offset="1" stop-color="#8a6a2e" stop-opacity=".3"/></radialGradient>'
+      +'<radialGradient id="mm-g-halo" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#fff5d6" stop-opacity=".15"/><stop offset=".55" stop-color="#E8C77E" stop-opacity=".05"/><stop offset="1" stop-color="#E8C77E" stop-opacity="0"/></radialGradient>'
+      +'</defs>'
+      /* ореол · Леонардо-осветеност (светлината от сърцето · зад камеята) */
+      +'<circle fill="url(#mm-g-halo)" cx="'+CX+'" cy="'+CY+'" r="'+(C.r+40)+'"/>'
+      /* Витрувий · вписаният квадрат (ъглите на кръга) · Леонардо-линии (диаметрите) · φ-деления по оста */
+      +'<rect class="mm-sq" x="'+sx0.toFixed(1)+'" y="'+sy0.toFixed(1)+'" width="'+sq.toFixed(1)+'" height="'+sq.toFixed(1)+'" opacity=".34"/>'
+      +'<path class="leo" d="M'+(C.cx-C.r)+','+C.cy+' H'+(C.cx+C.r)+' M'+C.cx+','+(C.cy-C.r)+' V'+(C.cy+C.r)+'"/>'
+      +'<path class="leo2" d="M'+(C.cx-9)+','+f1.toFixed(1)+' h18 M'+(C.cx-9)+','+f2.toFixed(1)+' h18"/>'
+      /* КАМЕЯ · акварел-измивки + мастило (клипнати в кръга) */
+      +'<g clip-path="url(#mm-wash-clip)">'
+        +'<path class="wash-cloak" d="'+ФИГ.cloak+'"/>'
+        +'<path class="wash-bust" d="'+ФИГ.bust+'"/>'
+        +'<ellipse class="wash-bust" cx="190" cy="166" rx="35" ry="46"/>'
+        +'<path class="wash-hair" d="'+ФИГ.hair+'"/>'
+        +'<g class="inkg">'
+          +'<path class="ink under" d="'+ФИГ.bust+'"/><ellipse class="ink under" cx="190" cy="166" rx="35" ry="46"/>'
+          +'<path class="ink" d="'+ФИГ.bust+'"/>'
+          +'<path class="ink thin" d="'+ФИГ.arms+'"/>'
+          +'<path class="ink" d="'+ФИГ.neck+'"/>'
+          +'<ellipse class="ink" cx="190" cy="166" rx="35" ry="46"/>'
+          +'<path class="ink hair" d="'+ФИГ.hair+'"/>'
+          +'<path class="ink thin" d="M190,232 L190,490"/>'
+          +'<path class="ink thin" d="M126,496 L254,496"/>'
+        +'</g>'
+      +'</g>'
+      /* Фибоначи · златната спирала = хартийна линия (прахът вдишва по нея в eidolon-а) */
+      +'<g clip-path="url(#mm-fib-clip)"><path class="mm-fib" d="'+sp+'"/></g>'
+      /* безелът на алетиометъра · тикове на 10° (дълги на 30°) */
+      +'<circle class="bezel2" cx="'+C.cx+'" cy="'+C.cy+'" r="'+(C.r+3)+'"/><circle class="bezel" cx="'+C.cx+'" cy="'+C.cy+'" r="'+C.r+'"/>';
+    var tk='';
+    for(var a=0;a<360;a+=10){ var L=a%30===0?9:5, p0=пол(C.cx,C.cy,C.r+4,a), p1=пол(C.cx,C.cy,C.r+4+L,a); tk+='M'+p0[0].toFixed(1)+','+p0[1].toFixed(1)+' L'+p1[0].toFixed(1)+','+p1[1].toFixed(1)+' '; }
+    s+='<path class="tick" d="'+tk+'"/>';
+    return s;
+  }
+
+  function строй(v){
+    var възли=възлиНа(v);
+    var s=фон(v);
+    if(v==='kukla'){ /* v14 · фикс: kukla по собствените позиции (базата рисуваше TELO-координати) · спират на ръба на слота · МАСКА: линията минава ЗАД имената (ревю v14 MED · четимост) */
+      var mk='<defs><mask id="mm-chan-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="'+vb.w+'" height="'+vb.h+'"><rect x="0" y="0" width="'+vb.w+'" height="'+vb.h+'" fill="#fff"/>';
+      Object.keys(ИМЕНА_K).forEach(function(n){ var lt=ОБЛ(+n).валута==='светлина', p=ИМЕНА_K[n], w=ОБЛ(+n).име.length*(lt?6.4:7.6)+6; mk+='<rect x="'+(p[0]-w/2).toFixed(1)+'" y="'+(p[1]-8).toFixed(1)+'" width="'+w.toFixed(1)+'" height="16" rx="3" fill="#000"/>'; });
+      s+=mk+'</mask></defs><g mask="url(#mm-chan-mask)">'+прегрканали(позКарта(възли),function(n){ return ОБЛ(n).валута==='злато'?16:11; })+'</g>';
+    } else s+= v==='krug'?прегрКръг(): (v==='mand'||v==='vitr'||v==='vitrhd')?прегрканали(позКарта(възли)) :прегрТяло();
+    /* възлите */
+    /* Тяло v6 · ГЕЙТ ЧЕТИМОСТ: всяко име в СТРАНИЧНИЯ ГУТЕР (ляво/дясно на тесния торс) + тънък водач · нула име върху икона */
+    var СТРАНА={11:'R',3:'L',10:'R',1:'R',9:'R',12:'L',4:'L',8:'R',7:'L',2:'R',6:'L',5:'R'};
+    var ГУТ={L:112,R:244};
+    възли.forEach(function(o){
+      var cx=o.cx, cy=o.cy, злато=o.вал==='злато', тяло=v==='telo';
+      var R=тяло?(злато?19:14): v==='mand'?(злато?17:12) :(злато?16:11);
+      var g='<g class="mm-n" data-n="'+o.n+'" data-валута="'+o.вал+'">';
+      g+='<circle class="rbg" cx="'+cx+'" cy="'+cy+'" r="'+R+'"/>';
+      var frac=o.ниво/10, C2=2*Math.PI*R;
+      g+='<circle class="ring" cx="'+cx+'" cy="'+cy+'" r="'+R+'" stroke-dasharray="'+(C2*frac).toFixed(1)+' '+C2.toFixed(1)+'" transform="rotate(-90 '+cx+' '+cy+')"/>';
+      /* глиф: Кръг злато → триграма · Тяло → ЕДРА природна икона води (нула триграма · четимостта е над I-Ching-пласта) */
+      if(v==='kukla'){
+        /* v13.2 · СЛОТ (HMM3): рамка (Мета) · ЛИЦЕТО на водача (thumb · кръгло клипнато · ПОД пръстена на нивото) · икона-значка (ъгъл) · триграма-печат (Мета · ъгъл) */
+        if(злато) g+='<rect class="slot" x="'+(cx-R-4)+'" y="'+(cy-R-4)+'" width="'+(2*R+8)+'" height="'+(2*R+8)+'" rx="3"/>';
+        var nn=(o.n<10?'0':'')+o.n, fsrc='../img/nz-sferi/thumb/sf-'+nn+'.webp', fr=R-2.2;
+        g+='<image class="face" x="'+(cx-fr).toFixed(1)+'" y="'+(cy-fr).toFixed(1)+'" width="'+(2*fr).toFixed(1)+'" height="'+(2*fr).toFixed(1)+'" clip-path="url(#mm-medclip)" preserveAspectRatio="xMidYMid slice" href="'+fsrc+'" xlink:href="'+fsrc+'"/>';
+        /* ъглите на значката/печата · според съседите (гейт 0 име↔икона): Метта → отстрани навън (ляво 12·4 / дясно 1·9) ·
+           Род (катарамата) → долу · дланите: Среда значка горе-ляво + печат ляво · Емоции значка горе-дясно + печат дясно · останалите горе-ляво/горе-дясно */
+        var КЪТ={12:[-1,0],4:[-1,0],1:[1,0],9:[1,0],6:[-1,0],7:[-1,-1],2:[1,-1]}, kk=КЪТ[o.n]||[-1,-1], ПЕЧ={6:[1,0],7:[-1,0],2:[1,0]}, pp=ПЕЧ[o.n]||[1,-1];
+        var bs=злато?0.5:0.4, bx=cx+kk[0]*(R+(kk[1]?3:5)), by=cy+kk[1]*(R+3);
+        g+='<circle class="badge-bg" cx="'+bx+'" cy="'+by+'" r="'+(злато?7.5:6)+'"/><g class="badge" transform="translate('+bx+' '+by+') scale('+bs+')">'+(ИКОНА[o.n]||'')+'</g>';
+        if(злато) g+='<g class="tg2">'+рисуйПечат(cx+pp[0]*(R+(pp[1]?3:9)),cy+pp[1]*(R+3),ТРИГ[o.n],9)+'</g>';   /* v14 · печат = триграма (кръгъл восъчен печат · симетричен на значката · дума 25.09) */
+      } else if(v==='krug'){
+        if(злато) g+=рисуйТриграма(cx,cy,ТРИГ[o.n],20);
+        else g+=иняМал(cx,cy,6,'светлина');
+      } else {
+        var sc=v==='mand'?(злато?1.28:1.02): v==='telo'?(злато?1.45:1.2) :(злато?1.3:1.05);
+        g+='<g class="mm-ico" transform="translate('+cx+' '+cy+') scale('+sc+')">'+(ИКОНА[o.n]||'')+'</g>';
+      }
+      /* име */
+      var tx, ty=cy, anchor='middle';
+      if(v==='krug'){
+        if(злато){ var a=KRUG.злато[o.n];
+          if(a===90){ anchor='end'; tx=cx-(R+8); ty=cy; }
+          else if(a===270){ anchor='start'; tx=cx+(R+8); ty=cy; }
+          else { var np=пол(CX,CY,Rg+30,a); tx=np[0]; ty=np[1]; }
+        }
+        else { var lp=пол(CX,CY,Rl+21,KRUG.светлина[o.n]); tx=lp[0]; ty=lp[1]; }
+        g+='<text class="nm" x="'+tx.toFixed(1)+'" y="'+ty.toFixed(1)+'" text-anchor="'+anchor+'">'+ОБЛ(o.n).име.toUpperCase()+'</text>';
+      } else if(v==='mand'){
+        /* ГЕЙТ ЧЕТИМОСТ: имена в СВОБОДНИТЕ полета · ъгли=двойка(Мета+Метта на диагонала) · кардинали (Ум горе·Род долу·Емоции/Среда навътре) · нула име върху икона */
+        var a=MAND[o.вал][o.n], лид=function(x1,y1,x2,y2){return '<line class="nmled" x1="'+x1.toFixed(1)+'" y1="'+y1.toFixed(1)+'" x2="'+x2.toFixed(1)+'" y2="'+y2.toFixed(1)+'"/>';};
+        var cls='';
+        if(злато){
+          if(Mкард[o.n]){ /* триъгълник-кардинал */
+            if(a===90){ cls='gL'; tx=cx-(R+9); ty=cy; }
+            else if(a===270){ cls='gR'; tx=cx+(R+9); ty=cy; }
+            else if(a===0){ tx=CX; ty=CY-(Rcirc+18); g+=лид(CX,cy-R,CX,ty+9); }
+            else { tx=CX; ty=CY+(Rcirc+22); g+=лид(CX,cy+R,CX,ty-13); }
+          } else { /* квадрат-ъгъл → навън в ъгъла */
+            var np=пол(CX,CY,186,a), eW=ОБЛ(o.n).име.length*10.6; ty=np[1]; cls=(a<180)?'gR':'gL';
+            tx=(a<180)?Math.min(np[0],vb.w-eW-5):Math.max(np[0],eW+5);
+            var ip=пол(CX,CY,Rmg+R,a); g+=лид(ip[0],ip[1],(a<180?tx-6:tx+6),ty);
+          }
+        } else { /* Метта · вложена под/над своята Мета в същия ъгъл */
+          var np2=пол(CX,CY,186,a), eW2=ОБЛ(o.n).име.length*9.0; ty=np2[1]+(np2[1]<CY?18:-18); cls=(a<180)?'gR':'gL';
+          tx=(a<180)?Math.min(np2[0],vb.w-eW2-5):Math.max(np2[0],eW2+5);
+          var ip2=пол(CX,CY,Rml+R,a); g+=лид(ip2[0],ip2[1],(a<180?tx-6:tx+6),ty);
+        }
+        g+='<text class="nm'+(cls?' '+cls:'')+'" x="'+tx.toFixed(1)+'" y="'+ty.toFixed(1)+'"'+(cls?'':' text-anchor="middle"')+'>'+ОБЛ(o.n).име.toUpperCase()+'</text>';
+      } else if(v==='kukla'){
+        /* v13.2 · 12-те имена ПОД слотовете (гейт четимост · таблица ИМЕНА_K) */
+        var PK=ИМЕНА_K[o.n]; tx=PK[0]; ty=PK[1];
+        g+='<text class="nm" x="'+tx.toFixed(1)+'" y="'+ty.toFixed(1)+'" text-anchor="middle">'+ОБЛ(o.n).име.toUpperCase()+'</text>';
+      } else if(v==='vitrhd'){
+        /* v9 · ВСИЧКИТЕ 12 имена ПРИ центровете · еднакви (таблица) · тънък водач икона→име */
+        var P9=ИМЕНА_V9[o.n]||[cx,cy-R-12,'m'], acls=P9[2]==='e'?'gL':(P9[2]==='s'?'gR':'');
+        tx=P9[0]; ty=P9[1];
+        var ddx=tx-cx, ddy=ty-cy, dd=Math.sqrt(ddx*ddx+ddy*ddy)||1;
+        if(dd>R+16) g+='<line class="nmled" x1="'+(cx+ddx/dd*(R+2)).toFixed(1)+'" y1="'+(cy+ddy/dd*(R+2)).toFixed(1)+'" x2="'+(tx-ddx/dd*8).toFixed(1)+'" y2="'+(ty-4-ddy/dd*3).toFixed(1)+'"/>';
+        g+='<text class="nm'+(acls?' '+acls:'')+'" x="'+tx.toFixed(1)+'" y="'+ty.toFixed(1)+'"'+(acls?'':' text-anchor="middle"')+'>'+ОБЛ(o.n).име.toUpperCase()+'</text>';
+      } else if(v==='vitr'){
+        /* v8 · 8-те Мета · име ПРИ иконата (радиално навън) · Метта = икона-само (реф. вариант) */
+        if(злато){
+          var dx=cx-CX, dy=cy-CY, eW=ОБЛ(o.n).име.length*9.4, gap=R+8, cls2='';
+          var лидв=function(x1,y1,x2,y2){ return '<line class="nmled" x1="'+x1.toFixed(1)+'" y1="'+y1.toFixed(1)+'" x2="'+x2.toFixed(1)+'" y2="'+y2.toFixed(1)+'"/>'; };
+          if(dx<-26){ cls2='gL'; tx=Math.max(cx-gap, eW+4); ty=cy; g+=лидв(cx-R-2,cy,tx+6,cy); }
+          else if(dx>26){ cls2='gR'; tx=Math.min(cx+gap, vb.w-eW-4); ty=cy; g+=лидв(cx+R+2,cy,tx-6,cy); }
+          else if(dy<0){ tx=clamp(cx,eW/2+4,vb.w-eW/2-4); ty=cy-(R+12); anchor='middle'; g+=лидв(cx,cy-R-2,cx,ty+9); }
+          else { tx=clamp(cx,eW/2+4,vb.w-eW/2-4); ty=cy+(R+15); anchor='middle'; g+=лидв(cx,cy+R+2,cx,ty-11); }
+          g+='<text class="nm'+(cls2?' '+cls2:'')+'" x="'+tx.toFixed(1)+'" y="'+ty.toFixed(1)+'"'+(cls2?'':' text-anchor="middle"')+'>'+ОБЛ(o.n).име.toUpperCase()+'</text>';
+        }
+      } else {
+        var стр=СТРАНА[o.n]||'R', pad=22;
+        tx=стр==='L'?Math.min(ГУТ.L,cx-pad):Math.max(ГУТ.R,cx+pad);
+        var lx0=стр==='L'?(cx-R-3):(cx+R+3), lx1=стр==='L'?(tx+7):(tx-7);
+        if(Math.abs(lx1-lx0)>12) g+='<line class="nmled" x1="'+lx0.toFixed(1)+'" y1="'+cy+'" x2="'+lx1.toFixed(1)+'" y2="'+cy+'"/>';
+        g+='<text class="nm gut '+(стр==='L'?'gL':'gR')+'" x="'+tx.toFixed(1)+'" y="'+ty.toFixed(1)+'">'+ОБЛ(o.n).име.toUpperCase()+'</text>';
+      }
+      g+='</g>';
+      s+=g;
+    });
+    /* централно ин-ян (цялото · сърцето на човека) + Времетрон-стрелка → v14: в ОТДЕЛЕН слой (#mm-needle) · repaint само на него, скелетът стои */
+    var rc = v==='krug'?40:v==='mand'?22:20;
+    /* стрелката стои В ромба (не пресича имената) */
+    var sL=v==='krug'?70:v==='mand'?42:32, sN=v==='krug'?48:v==='mand'?28:22, tL=v==='krug'?16:v==='mand'?11:14;
+    var nd='<defs><linearGradient id="mm-spear" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff5d6"/><stop offset=".45" stop-color="#E8C77E"/><stop offset="1" stop-color="#8a6a2e"/></linearGradient></defs>';
+    nd+='<g class="yy" data-сърце="цяло"><circle cx="'+CX+'" cy="'+CY+'" r="'+rc+'" fill="#E8C77E" stroke="rgba(255,245,214,.9)" stroke-width="'+(v==='krug'?2.4:1.8)+'"/>'
+      +'<path d="M'+CX+','+(CY-rc)+' A'+rc+','+rc+' 0 0 1 '+CX+','+(CY+rc)+' A'+(rc/2)+','+(rc/2)+' 0 0 0 '+CX+','+CY+' A'+(rc/2)+','+(rc/2)+' 0 0 1 '+CX+','+(CY-rc)+' Z" fill="#fff5d6"/>'
+      +'<circle cx="'+CX+'" cy="'+(CY-rc/2)+'" r="'+(rc/6)+'" fill="#E8C77E"/><circle cx="'+CX+'" cy="'+(CY+rc/2)+'" r="'+(rc/6)+'" fill="#fff5d6"/></g>';
+    nd+='<g class="mm-needle" transform="rotate(0 '+CX+' '+CY+')">'
+      +'<polygon class="spear" points="'+CX+','+(CY-rc-sL)+' '+(CX-4.5)+','+(CY-rc-sN)+' '+(CX-2.5)+','+CY+' '+(CX+2.5)+','+CY+' '+(CX+4.5)+','+(CY-rc-sN)+'" fill="url(#mm-spear)" stroke="rgba(255,245,214,.7)" stroke-width=".8" stroke-linejoin="round"/>'
+      +'<path class="tail" d="M'+CX+','+CY+' L'+CX+','+(CY+rc+tL)+'" stroke="var(--gold)" stroke-width="2.4" stroke-linecap="round" fill="none"/>'
+      +'<circle class="cw" cx="'+CX+'" cy="'+(CY+rc+tL+6)+'" r="5.5" fill="var(--gold)" stroke="rgba(255,245,214,.7)" stroke-width=".8"/>'
+      +'<circle class="pivot" cx="'+CX+'" cy="'+CY+'" r="5.5" fill="#1a130b" stroke="var(--light)" stroke-width="1.4"/></g>';
+    return {svg:s, needle:nd, wash:wash(v), възли:възли};
+  }
+
+  function хитове(възли){
+    return възли.map(function(o){ var R=(o.вал==='злато'?24:18);
+      return '<g class="mm-a" role="button" tabindex="0" data-n="'+o.n+'" aria-label="'+ОБЛ(o.n).име+' · ниво '+o.ниво+' от 10 · '+o.вал+' · отваря картата"><circle cx="'+o.cx+'" cy="'+o.cy+'" r="'+R+'"/></g>';
+    }).join('');
+  }
+
+  /* ── монтаж ── */
+  var skel=$('#mm-skel'), hitL=$('#mm-hit'), stage=$('#mm-stage'), cv=$('#mettadust'), host=$('#mettamap'), app=$('#app'), washL=$('#mm-wash'), needleL=$('#mm-needle');
+  /* viewBox + размер на сцената според варианта (telo · цял екран) */
+  skel.setAttribute('viewBox','0 0 '+vb.w+' '+vb.h); hitL.setAttribute('viewBox','0 0 '+vb.w+' '+vb.h); washL.setAttribute('viewBox','0 0 '+vb.w+' '+vb.h); needleL.setAttribute('viewBox','0 0 '+vb.w+' '+vb.h);
+  skel.classList.add('v-'+V);
+  /* височина = min(dvh-таван, ширина-производна vw) → SVG пълни точно (без letterbox → dust=skeleton подравнени) */
+  var _hcap=(parseFloat(vb.mw)*vb.h/vb.w).toFixed(2);
+  stage.style.aspectRatio=vb.w+' / '+vb.h; stage.style.maxWidth=vb.mw; stage.style.height='min('+vb.mh+','+_hcap+'vw)';
+  var построено=строй(V);
+  skel.innerHTML=построено.svg; washL.innerHTML=построено.wash; needleL.innerHTML=построено.needle;   /* v14 · три слоя: wash (статичен) · skel · стрелка (жива) */
+  hitL.innerHTML=хитове(построено.възли);
+  var възли=построено.възли.map(function(o){ o.g=skel.querySelector('.mm-n[data-n="'+o.n+'"]'); o.hit=hitL.querySelector('.mm-a[data-n="'+o.n+'"]'); return o; });
+  var пряк=function(n){for(var i=0;i<възли.length;i++)if(възли[i].n===n)return i;return -1;};
+  var embEls=$$('.emb-wedge,.emb-chan',skel);
+
+  /* суми в HUD */
+  var сумаL=ОБЛАСТИ.filter(function(o){return o.валута==='светлина'}).reduce(function(s,o){return s+o.ниво},0);
+  var сумаG=ОБЛАСТИ.filter(function(o){return o.валута==='злато'}).reduce(function(s,o){return s+o.ниво},0);
+  $('#sum-l').textContent=сумаL; $('#sum-g').textContent=сумаG;
+  var setSF=function(n){ $('#sf-name').textContent=ОБЛ(n).име; };
+  setSF(ИГРА.сфера);
+
+  /* вариант-лента */
+  var VN={kukla:['Герой-кукла','бюст · HD 12 · един кръг'],vitrhd:['Човекът · до кръста','широк · 12 сфери'],vitr:['Витрувий класически','човек в кръга'],mand:['Мандала','вложена геометрия'],krug:['Кръг','Метамер'],telo:['Тяло','HD боди-граф']}, поред=['kukla','vitrhd','vitr','mand','krug','telo'];
+  $('#v-name').textContent=VN[V][0]; $('#v-sub').textContent=VN[V][1];
+  function смени(dir){ var i=поред.indexOf(V), j=(i+dir+поред.length)%поред.length; params.set('v',поред[j]); location.search=params.toString(); }
+  $('#v-next').addEventListener('click',function(){смени(1)});
+  $('#v-prev').addEventListener('click',function(){смени(-1)});
+  addEventListener('keydown',function(e){ if(отворена) return; var t=e.target; if(t&&/^(INPUT|TEXTAREA)$/.test(t.tagName)) return;
+    if(e.key==='ArrowRight'){смени(1)} else if(e.key==='ArrowLeft'){смени(-1)} });
+
+  /* ── фокус (тап/hover) · гост (обхождане в покой) · прегръдка светва ── */
+  var карта=$('#mmcard'), к=карта.querySelector('.mmc');
+  var фокус=-1, гост=-1, отворена=false, отпускане=0, последен=null, следващГост=4;
+  var ДОМ=Math.max(0,пряк(ИГРА.сфера));
+
+  function светниПрегр(n){ embEls.forEach(function(el){el.classList.remove('emb-on');});
+    if(n<0) return; var mset=[];
+    if(КЛЪСТЕР[n]) mset=[n]; else if(ВКЛЮЧЕН[n]) mset=ВКЛЮЧЕН[n];
+    mset.forEach(function(m){ var el=skel.querySelector('[data-emb="'+m+'"]'); if(el) el.classList.add('emb-on'); });
+  }
+  function клас(){ възли.forEach(function(v,i){ var lit=i===фокус, vis=фокус<0&&i===гост, dim=фокус>=0&&i!==фокус;
+      v.g.classList.toggle('lit',lit); v.g.classList.toggle('visit',vis); v.g.classList.toggle('dim',dim);
+      if(v.hit){ v.hit.classList.toggle('lit',lit); v.hit.classList.toggle('visit',vis); } });
+    светниПрегр(фокус>=0?възли[фокус].n:(гост>=0?възли[гост].n:-1));
+  }
+  var ъгълЦел=възли[ДОМ]?възли[ДОМ].a:0, ъгъл=ъгълЦел;
+  function фокусирай(k){ фокус=k; if(k>=0){ ъгълЦел=възли[k].a; гост=-1; изблик(k); } else { ъгълЦел=възли[ДОМ]?възли[ДОМ].a:0; } клас(); }
+  function гостувай(k){ гост=k; ъгълЦел=(k>=0?възли[k].a:(възли[ДОМ]?възли[ДОМ].a:0)); клас(); }
+
+  var кеш={}; function предзареди(k){ възли[k].обл.лица.forEach(function(l){ if(!кеш[l.img]){ var im=new Image(); im.decoding='async'; im.src=l.img; кеш[l.img]=im; } }); }
+  $$('.mm-a',hitL).forEach(function(b){ var k=пряк(+b.dataset.n); if(k<0) return;
+    b.addEventListener('pointerenter',function(e){ if(e.pointerType==='mouse'&&!отворена){ clearTimeout(отпускане); фокусирай(k); предзареди(k); } });
+    b.addEventListener('pointerleave',function(e){ if(e.pointerType==='mouse'&&!отворена) отпускане=setTimeout(function(){фокусирай(-1)},500); });
+    b.addEventListener('pointerdown',function(){ app.classList.add('seen'); предзареди(k); if(window.__кукла) window.__кукла.заключи(6000); },{passive:true});
+    b.addEventListener('click',function(){ app.classList.add('seen'); clearTimeout(отпускане); фокусирай(k); setTimeout(function(){отвори(k)},reduce?0:420); });
+    b.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); b.dispatchEvent(new Event('click')); } });
+  });
+
+  /* ── картата ── */
+  var РИМ=['·','I','II','III','IV','V','VI','VII','VIII','IX','X'];
+  function чип(el,етикет,f,cls){ if(!el) return; el.className=cls+(f?'':' no'); el.innerHTML=(f?'<img alt="" decoding="async" src="">':'')+етикет+' <b>'+(f?f.име:'—')+'</b>'; if(f) el.title=f.роля; }
+  function отвори(k){ if(k<0) return; var v=възли[k], o=v.обл, Б=БУД[o.буд], св=o.валута==='светлина';
+    последен=v.hit; к.className='mmc '+o.валута;
+    $('#mmc-lvl').textContent='Ниво '+o.ниво+' · '+o.име; к.querySelector('.mmc-cur').textContent=св?'✧ светлина':'◆ злато';
+    var art=к.querySelector('.mmc-art'), imgs=к.querySelector('.mmc-imgs'); art.classList.remove('ok'); imgs.innerHTML='';
+    o.лица.forEach(function(l){ var im=document.createElement('img'); im.alt=l.име; im.decoding='async'; var ок=function(){im.classList.add('ok'); art.classList.add('ok')}; im.addEventListener('load',ок); im.addEventListener('error',ок); im.src=l.img; if(im.complete&&im.naturalWidth) ок(); imgs.appendChild(im); });
+    к.querySelector('.mmc-bd.tr').textContent=РИМ[o.ниво]||'·';
+    $('#mmc-nm').textContent=o.лица.map(function(l){return l.име}).join(' + ');
+    к.querySelector('.mmc-ln .al b').textContent=Б[0]; к.querySelector('.mmc-ln .al').title=Б[2];
+    чип(к.querySelector('.mmc-ln .paz'),'Пазач',o.пазач,'paz'); чип(к.querySelector('.mmc-ln .pro'),'Протагонист',o.прот,'pro');
+    $('#mmc-emb').textContent=прегрТекст(o.n);
+    var gq=$('#mmc-guard'); if(gq) gq.hidden=!o.прот;
+    var go=$('#mmc-go'); if(go){ var е=ИГРА.сфера===o.n; go.textContent=е?'Избрана сфера ✦ · разширявате се тук':'Разширявам се тук ✦'; go.classList.toggle('on',е); go.dataset.n=o.n; }
+    карта.hidden=false; карта.setAttribute('aria-hidden','false'); void карта.offsetWidth; карта.classList.add('show'); отворена=true;
+    setTimeout(function(){ var x=к.querySelector('.mmc-x'); if(x) x.focus({preventScroll:true}); },60);
+  }
+  function затвори(){ if(!отворена) return; отворена=false; карта.classList.remove('show'); setTimeout(function(){карта.hidden=true; карта.setAttribute('aria-hidden','true')},reduce?0:360); setTimeout(function(){ if(!отворена){ if(window.__кукла) window.__кукла.пак(); else фокусирай(-1); } },900);   /* v13.2 · кукла: след картата фокусът се връща на скрол-кадъра (скролът е господар) */ if(последен&&последен.focus) последен.focus({preventScroll:true}); }
+  карта.addEventListener('click',function(e){ if(e.target===карта||e.target.closest('.mmc-x')) затвори() });
+  addEventListener('keydown',function(e){ if(e.key==='Escape'&&отворена) затвори() });
+  function избериСфера(n){ var k=пряк(n); if(k<0) return; ИГРА.сфера=n; ДОМ=k; setSF(n); фокусирай(k); }
+  var goBtn=$('#mmc-go'); if(goBtn) goBtn.addEventListener('click',function(){ var n=+goBtn.dataset.n||0; if(n){ избериСфера(n); setTimeout(затвори,600); } });
+  клас();
+
+  /* ═══ v13.2 · СКРОЛЪТ Е ГОСПОДАР (MED-V1): скрол-позицията избира кадъра (0 = Цялото · 1..12 = сферите в HD-ред отгоре надолу) ·
+     тапът ДЪРЖИ (заключи 6 сек. · до смяна на скрола) · тап извън → Цялото · текст-панелът под кръста показва сферата (данни-договорът · нула измислен текст) ·
+     reduced → същото без анимация (MED-V1 не е анимация). ═══ */
+  var панел=$('#sfpanel'), spacer=$('#spacer');
+  if(V==='kukla' && панел){
+    панел.hidden=false; if(spacer) spacer.hidden=false;
+    var КАДРИ=[-1].concat(HD_РЕД), dotsEl=$('#sp-dots');
+    HD_РЕД.forEach(function(){ dotsEl.appendChild(document.createElement('i')); });
+    var dots=$$('i',dotsEl);
+    var панелСфера=function(k){ var e=k>=0?възли[k].обл:null;
+      $('#sp-k').innerHTML=e?('Сфера <b>'+e.n+'</b> · '+(e.валута==='светлина'?'✧ светлина':'◆ злато')+' · <b>ниво '+e.ниво+'/10</b>'):('<b>12 сфери</b> · ✧ '+сумаL+'/40 · ◆ '+сумаG+'/80');
+      var h=$('#sp-h'); h.textContent=e?e.име:'Цялото'; h.className='sp-h'+(e&&e.валута==='светлина'?' светлина':'');
+      $('#sp-full').textContent=e?e.пълно:'Героинята · светлина вътре · злато около';
+      $('#sp-t').innerHTML=e?('Водач: <b>'+e.лица.map(function(l){return l.име}).join(' + ')+'</b> · съюзник: <b>'+БУД[e.буд][0]+'</b>'+(прегрТекст(e.n)?'<br>'+прегрТекст(e.n):''))
+                            :'Скролирайте — стрелката обхожда 12-те сфери отгоре надолу. Докоснете слот, за да отворите картата му.';
+      var go=$('#sp-go'); go.hidden=!e; go.dataset.k=k;
+      var ред=e?HD_РЕД.indexOf(e.n):-1; dots.forEach(function(d,i){ d.classList.toggle('on',i===ред); });
+    };
+    $('#sp-go').addEventListener('click',function(){ var k=+this.dataset.k; if(k>=0){ app.classList.add('seen'); отвори(k); } });
+    var _фок=фокусирай; фокусирай=function(k){ _фок(k); панелСфера(k); if(reduce&&window.__метачовек&&window.__метачовек.кадър) window.__метачовек.кадър(); };   /* reduced: един кадър → стрелката следва скрола */
+    var стъпка=function(){ return Math.max(1,(window.innerHeight||800)*0.7); };
+    var скролИдx=-1, заключенДо=0, последенСкрол=-1;
+    var отСкрол=function(){ var y=window.scrollY||0, i=clamp(Math.floor((y+стъпка()*0.35)/стъпка()),0,КАДРИ.length-1);
+      if(последенСкрол>=0 && Math.abs(y-последенСкрол)<6 && i===скролИдx) return; последенСкрол=y;
+      if(i===скролИдx && performance.now()<заключенДо) return;
+      if(i===скролИдx) return; скролИдx=i; заключенДо=0;
+      if(отворена) return; var n=КАДРИ[i]; if(n<0) фокусирай(-1); else { var k=пряк(n); if(k>=0) фокусирай(k); } };
+    window.addEventListener('scroll',отСкрол,{passive:true});
+    stage.addEventListener('click',function(e){ if(e.target.closest('.mm-a')||e.target.closest('.sp-go')) return; if(отворена) return; заключенДо=performance.now()+6000; фокусирай(-1); });   /* тап извън → Цялото */
+    window.__кукла={ панел:панелСфера, ред:HD_РЕД, кадри:КАДРИ, индекс:function(){return скролИдx}, пак:function(){ скролИдx=-1; последенСкрол=-1; заключенДо=0; отСкрол(); }, заключи:function(ms){ заключенДо=performance.now()+(ms||6000); }, стъпка:стъпка };
+    отСкрол();
+  }
+
+  /* ── прахът · 2D-canvas · ЕДИН rAF-диригент · кръгово движение ── */
+  var ctx=cv.getContext('2d');
+  var ИСКРИ=[];
+  function изблик(k){ if(!ctx||reduce) return; var v=възли[k]; var b=Math.atan2(v.cy-CY,v.cx-CX); for(var i=0;i<24;i++){ var ang=b+(Math.random()-0.5)*0.9, sp=70+Math.random()*120; ИСКРИ.push({x:CX,y:CY,vx:Math.cos(ang)*sp,vy:Math.sin(ang)*sp,life:0,max:0.6+Math.random()*0.5,m:v.обл.валута==='светлина'?1:0,sz:1+Math.random()*1.4}); } if(ИСКРИ.length>160) ИСКРИ.splice(0,ИСКРИ.length-160); }
+
+  /* API за верификация + no-canvas fallback (постерът стои) */
+  window.__метачовек={вариант:V, области:ОБЛАСТИ, възли:function(){return възли.map(function(v){return v.n})}, фокус:function(){return фокус}, отвори:function(n){отвори(пряк(n))}, затвори:затвори, отворена:function(){return отворена}, сфера:function(){return ИГРА.сфера}, избери:избериСфера, прегрОсветени:function(){return $$('.emb-on',skel).length}};
+  if(!ctx){ return; }
+
+  var DPR=Math.min(2,window.devicePixelRatio||1), W=0,H=0,SC=1;
+  var ЗЛ=[232,199,126], СВ=[255,245,214];
+  var цвят=function(m,a){ return 'rgba('+((ЗЛ[0]+(СВ[0]-ЗЛ[0])*m)|0)+','+((ЗЛ[1]+(СВ[1]-ЗЛ[1])*m)|0)+','+((ЗЛ[2]+(СВ[2]-ЗЛ[2])*m)|0)+','+a.toFixed(2)+')'; };
+  function сияние(x,y,r,m,a){ var g=ctx.createRadialGradient(x,y,0,x,y,r); g.addColorStop(0,цвят(m,a)); g.addColorStop(1,цвят(m,0)); ctx.fillStyle=g; ctx.fillRect(x-r,y-r,r*2,r*2); }
+  var ПРАХ=[];
+  възли.forEach(function(v,k){ var n=reduce?(3+(v.обл.ниво>>1)):(5+v.обл.ниво*2); for(var i=0;i<n;i++) ПРАХ.push({k:k, a:(Math.random()-0.5)*2*v.da, r:v.r0+Math.random()*(v.r1-v.r0), w:(0.5+Math.random()*1.1)*(Math.random()<0.5?-1:1), sz:0.9+Math.random()*1.4, ph:Math.random()*6.283, pull:0.2+Math.random()*0.35}); });
+  var нарисуван=false;
+  function наЕкран(){ var r=host.getBoundingClientRect(); return r.bottom>-120&&r.top<(window.innerHeight||800)+120; }
+  function resize(){ var w=stage.clientWidth||stage.getBoundingClientRect().width; if(!w) return; W=w; H=stage.clientHeight||w*vb.h/vb.w; SC=W/vb.w; cv.width=Math.round(W*DPR); cv.height=Math.round(H*DPR); ctx.setTransform(DPR,0,0,DPR,0,0); if(GL&&GL.resize) GL.resize(W,H); if(reduce&&нарисуван) requestAnimationFrame(кадър); }
+  var стрелка=needleL.querySelector('.mm-needle');
+
+  /* ═══ v14 · EIDOLON-МОСТ (ADR 0099 · WebGL ред): модулът (three r160 · ЛОКАЛЕН) се регистрира тук · ЕДИН rAF = ТОЗИ диригент (модулът само дава tick/resize/info) ·
+     gl-lost / грешка → __мглСпри(true) → постерът + 2D прахът поемат · reduced → модулът мълчи. ═══ */
+  var GL=null;
+  window.__мглРег=function(api){ GL=api; host.classList.add('gl-on'); host.classList.remove('gl-lost'); if(W&&api.resize) api.resize(W,H); };
+  window.__мглСпри=function(загуба){ GL=null; host.classList.remove('gl-on'); if(загуба) host.classList.add('gl-lost'); };
+  /* D · ТРИИЗМЕРНОСТ (дума 25.09 „наклонът default"): листът (мастило·имена·лица) се накланя ±3-4° idle + паралакс от мишката ±5-7° с CSS perspective = камерата (точна регистрация z=0) ·
+     eidolon-облакът се върти със същите ъгли (дълбочина) · ?tilt=depth → само дълбочината на праха (листът остър) · ?tilt=0 / reduced → нула наклон */
+  var БЕЗ_НАКЛОН=params.get('tilt')==='0'||reduce, НАКЛОН_ЛИСТ=!БЕЗ_НАКЛОН&&params.get('tilt')!=='depth', накл={x:0,y:0,px:0,py:0,tx:0,ty:0}, sheet=$('#mm-sheet');
+  if(НАКЛОН_ЛИСТ&&sheet) sheet.style.willChange='transform';
+  stage.addEventListener('pointermove',function(e){ if(e.pointerType!=='mouse'||БЕЗ_НАКЛОН) return; var r=stage.getBoundingClientRect(); накл.tx=-((e.clientY-r.top)/r.height-0.5)*10; накл.ty=((e.clientX-r.left)/r.width-0.5)*14; },{passive:true});
+  stage.addEventListener('pointerleave',function(){ накл.tx=0; накл.ty=0; });
+  /* нов FPS-метър (за WebGL-гейта · брои кадрите на диригента · НЕ __мфиг) */
+  var _fps={on:false,n:0};
+  window.__метачовек.fps=function(ms){ return new Promise(function(res){ _fps.on=true; _fps.n=0; var t0=performance.now(); setTimeout(function(){ var dt=(performance.now()-t0)/1000; _fps.on=false; res(Math.round(_fps.n/Math.max(0.001,dt))); }, ms||2000); }); };
+  window.__метачовек.gl=function(){ return GL?GL.info():null; };
+  window.__метачовек.кадър=function(){ if(rafId===null) rafId=requestAnimationFrame(кадър); };   /* един кадър по заявка (reduced) */
+  var ЕМБ_РЕД=[1,4,9,12];
+  function ембСъстояние(){ var m=[0,0,0,0]; embEls.forEach(function(el){ if(el.classList.contains('emb-on')){ var i=ЕМБ_РЕД.indexOf(+el.dataset.emb); if(i>=0) m[i]=1; } }); return m; }
+  var t0=performance.now(), последно=t0, спи=false, rafId=null;   /* ревю v14 [HIGH]: един rafId · cancel при скриване → никога втори цикъл */
+  function кадър(now){
+    rafId=null; if(!W) resize();
+    var dt=Math.min(0.05,(now-последно)/1000); последно=now; if(_fps.on) _fps.n++;
+    if(W && наЕкран()){
+      нарисуван=true; var t=(now-t0)/1000;
+      if(!reduce&&фокус<0&&!отворена&&t>следващГост){ if(гост<0){ var k=Math.floor(Math.random()*възли.length); if(k===ДОМ&&възли.length>1) k=(k+1)%възли.length; гостувай(k); следващГост=t+3.4; } else { гостувай(-1); следващГост=t+4+Math.random()*5; } }
+      if(reduce){ ъгъл=ъгълЦел; } else { var d=((ъгълЦел-ъгъл+540)%360)-180; ъгъл+=d*Math.min(1,dt*5.5); if(ъгъл<0)ъгъл+=360; if(ъгъл>=360)ъгъл-=360; }   /* reduced: без easing · стрелката скача на целта (ревю v14 LOW) */
+      var трепет=reduce?0:Math.sin(t*5.5)*0.4+Math.sin(t*1.9)*0.3;
+      if(стрелка) стрелка.setAttribute('transform','rotate('+(ъгъл+трепет).toFixed(2)+' '+CX+' '+CY+')');
+      if(!БЕЗ_НАКЛОН){ накл.px+=(накл.tx-накл.px)*Math.min(1,dt*3); накл.py+=(накл.ty-накл.py)*Math.min(1,dt*3); накл.x=накл.px+3*Math.sin(t*0.571); накл.y=накл.py+4*Math.sin(t*0.37+1.3);
+        if(НАКЛОН_ЛИСТ&&sheet) sheet.style.transform='perspective('+(H*1.0723).toFixed(0)+'px) rotateX('+накл.x.toFixed(2)+'deg) rotateY('+накл.y.toFixed(2)+'deg)'; }
+      var ф=фокус>=0?възли[фокус]:(гост>=0?възли[гост]:null), fx=ф?ф.cx:0, fy=ф?ф.cy:0, тегло=фокус>=0?0.85:0.35;
+      ctx.clearRect(0,0,W,H); ctx.globalCompositeOperation='lighter';
+      var пулс=0.6+0.4*Math.sin(t*1.4);
+      сияние(CX*SC,CY*SC,40*SC,0.5,0.18+0.12*пулс);
+      if(ф) сияние(fx*SC,fy*SC,32*SC,ф.обл.валута==='светлина'?1:0,(фокус>=0?0.30:0.12));
+      if(!GL){ /* 2D прахът · кръгово движение · само когато eidolon-ът НЕ рисува (без WebGL · gl-lost · reduced · референтните варианти) */
+        for(var pi=0;pi<ПРАХ.length;pi++){ var p=ПРАХ[pi]; var v=възли[p.k], o=v.обл, lv=o.ниво/10;
+          var ang=v.a+p.a+(reduce?0:t*p.w), rad=p.r*(1+0.03*Math.sin(t*0.8+p.ph));
+          var xy=пол(CX,CY,rad,ang), x=xy[0], y=xy[1];
+          var свое=фокус===p.k, госта=гост===p.k&&фокус<0;
+          if(ф&&!свое&&!госта&&тегло>0.01){ var kk=тегло*p.pull, a2=ang*0.05+p.ph, ro=14+22*p.pull; x+=(fx+Math.cos(a2)*ro-x)*kk; y+=(fy+Math.sin(a2)*ro-y)*kk; }
+          var a=(0.24+0.56*lv)*(0.6+0.4*Math.sin(t*1.8*Math.abs(p.w)+p.ph))*(свое?1.4:(госта?1.2:1)), sz=p.sz*(свое?1.4:1);
+          ctx.fillStyle=цвят(o.валута==='светлина'?1:0,clamp(a,0,1)); ctx.fillRect(x*SC,y*SC,sz,sz);
+        }
+      }
+      for(var i2=ИСКРИ.length-1;i2>=0;i2--){ var q=ИСКРИ[i2]; q.life+=dt; if(q.life>=q.max){ ИСКРИ.splice(i2,1); continue; } q.x+=q.vx*dt; q.y+=q.vy*dt; q.vx*=0.985; q.vy*=0.985; var aa=1-q.life/q.max; ctx.fillStyle=цвят(q.m,0.25+0.7*aa); ctx.fillRect(q.x*SC,q.y*SC,q.sz*(0.6+aa),q.sz*(0.6+aa)); }
+      ctx.globalCompositeOperation='source-over';
+      if(GL){ try{ GL.tick(now,dt,{t:t, фокус:фокус>=0?възли[фокус].n:-1, гост:(гост>=0&&фокус<0)?възли[гост].n:-1, ъгъл:(ъгъл+трепет)*TAU, emb:ембСъстояние(), пулс:пулс, накл:накл, отворена:отворена}); }
+              catch(err){ window.__мглСпри(true); if(window.console) console.warn('eidolon спрян → постер', err); } }
+      if(reduce) return;
+    }
+    if(!спи&&rafId===null) rafId=requestAnimationFrame(кадър);
+  }
+  document.addEventListener('visibilitychange',function(){ if(reduce) return; if(document.hidden){ спи=true; if(rafId!==null){ cancelAnimationFrame(rafId); rafId=null; } } else if(спи){ спи=false; последно=performance.now(); if(rafId===null) rafId=requestAnimationFrame(кадър); } });   /* заспива при скрит таб (нула CPU/GPU извън кадър) · буди се с ЕДИН цикъл */
+  addEventListener('resize',resize); resize(); setTimeout(resize,300); if(document.fonts&&document.fonts.ready) document.fonts.ready.then(resize);
+  rafId=requestAnimationFrame(кадър);
+})();
+</script>
+<!-- ═══ v14 · EIDOLON (ADR 0099 · WebGL ред · three r160 vendor-нат ЛОКАЛНО ../vendor/three.module.js · нула CDN) ═══
+     SVG-ът (wash + skel) остава ПОСТЕРЪТ · reduced/без WebGL/не-kukla → модулът мълчи (2D прахът + постерът) · webglcontextlost → __мглСпри(true) → постер + 2D прах.
+     ЕДИН rAF = диригентът на драйвера („кадър") · модулът само дава tick()/resize()/info() през window.__мглРег.
+     Перф-бюджет ОСИНОВЕН (app.js порт): 18k/30k мобил · 34k/58k десктоп · DPR 2/1.75 · заспива със скрития таб.
+     Слоеве: E1 тяло-призрак (куклата като тела на въртене · лате-профил) · E2 12 орби ∝ ниво · E3 Монада-жироскоп (2 наклонени пръстена) ·
+     E4 поток по камеята + ∞ през амулета (осморката на оригинала) · E5 Фибоначи-вдишване по спиралата към сърцето · E6 фокус-потоци по HD-каналите (прегръдката) · E7 облак-копие на стрелката · амбиент. -->
+<script type="module">
+import * as THREE from 'three';
+(function(){
+'use strict';
+const TAU=Math.PI*2, DEG=Math.PI/180;
+const REDUCED=matchMedia('(prefers-reduced-motion: reduce)').matches||/[?&](reduced|nogl)=1/.test(location.search);
+const IS_MOBILE=matchMedia('(max-width: 899px)').matches;
+const LOW_POWER=(navigator.hardwareConcurrency||8)<=4||(navigator.deviceMemory||8)<=2;
+const COUNT=IS_MOBILE?(LOW_POWER?18000:30000):(LOW_POWER?34000:58000);
+const DPR=Math.min(window.devicePixelRatio||1, IS_MOBILE?2:1.75);
+const canvas=document.getElementById('mm-gl'), stage=document.getElementById('mm-stage'), skel=document.getElementById('mm-skel'), needleL=document.getElementById('mm-needle');
+const M=window.__метачовек;
+if(REDUCED||!canvas||!stage||!skel||!needleL||!M||M.вариант!=='kukla'||typeof window.__мглРег!=='function') return;
+
+/* ── геометрията ОТ DOM (single source of truth · нула дублиране на таблиците на драйвера) ── */
+const vbH=800, cam=skel.querySelector('.mm-cameo'); if(!cam) return;
+const CC={x:+cam.getAttribute('cx'), y:+cam.getAttribute('cy'), r:+cam.getAttribute('r')};
+const yyc=needleL.querySelector('.yy circle'); const AX=+yyc.getAttribute('cx'), AY=+yyc.getAttribute('cy');   /* пивот = амулетът (ин-ян) */
+const W=(x,y)=>[(x-AX)/100,(AY-y)/100];                                                                 /* SVG px → свят (1 = 100px · y нагоре) */
+const LVL={}; (M.области||[]).forEach(o=>{LVL[o.n]=o;});
+const nodes=[]; skel.querySelectorAll('.mm-n[data-n]').forEach(g=>{ const r=g.querySelector('.ring'); if(!r) return; const n=+g.dataset.n, o=LVL[n]||{ниво:5,валута:'злато'};
+  nodes.push({n, x:+r.getAttribute('cx'), y:+r.getAttribute('cy'), R:+r.getAttribute('r'), lvl:(o.ниво||5)/10, light:o.валута==='светлина'}); });
+const chans=[]; skel.querySelectorAll('.emb-chan[data-emb]').forEach(g=>{ const m=+g.dataset.emb; g.querySelectorAll('path.chan').forEach(p=>{ const mm=/M([\d.\-]+),([\d.\-]+)\s*L([\d.\-]+),([\d.\-]+)/.exec(p.getAttribute('d')||''); if(mm) chans.push({m, ax:+mm[1], ay:+mm[2], bx:+mm[3], by:+mm[4]}); }); });
+if(!nodes.length) return;
+const ЕМБ_РЕД=[1,4,9,12];
+
+/* ── валута-цвят (холограмен поток): светлина при сърцето → злато навън · амбър/дълбоко злато за коса и наметало ── */
+const GOLD=[232/255,199/255,126/255], LIGHT=[1,245/255,214/255], AMBER=[212/255,137/255,94/255], DEEP=[138/255,106/255,46/255];
+const mix3=(a,b,t)=>[a[0]+(b[0]-a[0])*t, a[1]+(b[1]-a[1])*t, a[2]+(b[2]-a[2])*t];
+const sm=(e0,e1,x)=>{ const t=Math.max(0,Math.min(1,(x-e0)/(e1-e0))); return t*t*(3-2*t); };
+const colorAt=(wx,wy)=>mix3(LIGHT,GOLD,sm(0.15,2.0,Math.hypot(wx,wy)));
+function mulberry32(a){ return function(){ a|=0;a=(a+0x6D2B79F5)|0; let t=Math.imul(a^(a>>>15),1|a); t=(t+Math.imul(t^(t>>>7),61|t))^t; return ((t^(t>>>14))>>>0)/4294967296; }; }
+const rand=mulberry32(0x4d455454);
+const gauss=()=>{ let u=0,v=0; while(u===0)u=rand(); while(v===0)v=rand(); return Math.sqrt(-2*Math.log(u))*Math.cos(TAU*v); };
+
+/* ── буферите (BufferGeometry · app.js рецепта) · aDust = разпръснат старт (E1/амбиент) · център (E2) · край B (E6) ── */
+const home=new Float32Array(COUNT*3), dust=new Float32Array(COUNT*3), seed=new Float32Array(COUNT), cls=new Float32Array(COUNT), dat=new Float32Array(COUNT), aux=new Float32Array(COUNT*2), col=new Float32Array(COUNT*3);
+let i=0;
+function put(p,d,c,dv,a0,a1,rgb){ if(i>=COUNT) return; home[i*3]=p[0]; home[i*3+1]=p[1]; home[i*3+2]=p[2]; dust[i*3]=d[0]; dust[i*3+1]=d[1]; dust[i*3+2]=d[2]; seed[i]=rand(); cls[i]=c; dat[i]=dv; aux[i*2]=a0; aux[i*2+1]=a1; col[i*3]=rgb[0]; col[i*3+1]=rgb[1]; col[i*3+2]=rgb[2]; i++; }
+const CW=W(CC.x,CC.y);
+const scat=()=>{ const a=rand()*TAU, r=Math.sqrt(rand())*2.9; return [CW[0]+Math.cos(a)*r, CW[1]+Math.sin(a)*r*1.05, (rand()*2-1)*1.6]; };
+/* точки по 2D лате-профил [[r,y],…] равномерно по дължина × среден радиус (app.js sampleProfileArc) */
+function sampleProfileArc(profile,n){ const segs=[]; let total=0; for(let k=0;k<profile.length-1;k++){ const [r0,y0]=profile[k],[r1,y1]=profile[k+1]; const len=Math.hypot(r1-r0,y1-y0)*Math.max(0.05,(r0+r1)/2); segs.push({r0,y0,r1,y1,len,acc:total}); total+=len; }
+  const out=[]; for(let k=0;k<n;k++){ const d=rand()*total; let s=segs[0]; for(let q=0;q<segs.length;q++){ if(segs[q].acc<=d) s=segs[q]; else break; } const f=s.len>0?(d-s.acc)/s.len:0; out.push({r:s.r0+(s.r1-s.r0)*f, y:s.y0+(s.y1-s.y0)*f}); } return out; }
+function lathe(profile,n,zs,shell,tint,cx){ const S=sampleProfileArc(profile,n); for(const s of S){ const th=rand()*TAU, onS=rand()<shell, k=onS?1:Math.sqrt(rand()); const r=s.r*k; const x=(cx||190)+r*Math.cos(th), z=r*Math.sin(th)*zs/100; const w=W(x,s.y); put([w[0],w[1],z],scat(),1,onS?1:0.35,0,0,tint(w[0],w[1])); } }
+
+/* E1 · ТЯЛО-ПРИЗРАК (40%) · куклата като тела на въртене: глава=елипсоид · коса=шапка (амбър) · шия · торс (елиптично сечение) · ръце=цилиндри · наметало=извит лист зад тялото */
+const nBody=Math.floor(COUNT*0.40), nHead=Math.floor(nBody*0.20), nHair=Math.floor(nBody*0.07), nNeck=Math.floor(nBody*0.03), nTorso=Math.floor(nBody*0.40), nArms=Math.floor(nBody*0.12), nCloak=nBody-nHead-nHair-nNeck-nTorso-nArms;
+for(let k=0;k<nHead;k++){ const u=rand()*TAU, cv=2*rand()-1, sv=Math.sqrt(1-cv*cv), onS=rand()<0.8, kk=onS?1:Math.cbrt(rand()); const x=190+35*kk*sv*Math.cos(u), y=166+46*kk*cv, z=31*kk*sv*Math.sin(u)/100; const w=W(x,y); put([w[0],w[1],z],scat(),1,onS?1:0.35,0,0,colorAt(w[0],w[1])); }
+for(let k=0;k<nHair;k++){ const u=rand()*TAU, cv=-1+rand()*0.62, sv=Math.sqrt(1-cv*cv), off=1.02+rand()*0.14; const x=190+35*off*sv*Math.cos(u), y=166+46*off*cv, z=31*off*sv*Math.sin(u)/100; const w=W(x,y); put([w[0],w[1],z],scat(),1,0.8,0,0,mix3(AMBER,GOLD,rand()*0.5)); }
+lathe([[13,212],[14,232]], nNeck, 1.0, 0.8, colorAt);
+lathe([[84,236],[91,252],[94,275],[93,305],[90,335],[86,365],[82,395],[78,425],[74,455],[70,482],[66,502]], nTorso, 0.55, 0.75, colorAt);
+for(let k=0;k<nArms;k++){ const side=k%2?1:-1, t=rand(), th=rand()*TAU, r=10*(rand()<0.8?1:Math.sqrt(rand())); const cx0=190+side*83, cy0=273, cx1=190+side*122, cy1=372; const bend=Math.sin(t*Math.PI)*6*side; const x=cx0+(cx1-cx0)*t+bend+r*Math.cos(th), y=cy0+(cy1-cy0)*t, z=r*Math.sin(th)/100; const w=W(x,y); put([w[0],w[1],z],scat(),1,0.9,0,0,colorAt(w[0],w[1])); }
+const cloakW=y=>y<320?90+(y-246)/74*35:(y<420?125+(y-320)/100*27:152+(y-420)/90*4);
+for(let k=0;k<nCloak;k++){ const y=246+rand()*262, w=cloakW(y), s=rand()<0.5?-1:1, xf=s*(0.5+0.5*Math.sqrt(rand())), x=190+xf*w; const z=-(0.30+0.30*xf*xf)-rand()*0.08; const ww=W(x,y); put([ww[0],ww[1],z],scat(),1,0.3,0,0,mix3(DEEP,AMBER,rand()*0.6)); }
+
+/* E2 · 12 ОРБИ-СЛОТОВЕ (18%) ∝ ниво · злато/светлина · aDust = центърът · aAux = (n · посока на орбитата) */
+const nOrb=Math.floor(COUNT*0.18); let ws=0; nodes.forEach(n=>{ n._w=0.4+n.lvl; ws+=n._w; });
+nodes.forEach(n=>{ const k=Math.round(nOrb*n._w/ws), c=W(n.x,n.y), R=(n.R+3)/100, rgb=n.light?LIGHT:GOLD;
+  for(let j=0;j<k;j++){ const u=rand()*TAU, cv=2*rand()-1, sv=Math.sqrt(1-cv*cv), rad=R*(1+0.28*gauss()); put([c[0]+rad*sv*Math.cos(u), c[1]+rad*cv, rad*sv*Math.sin(u)*0.8],[c[0],c[1],0],2,n.lvl,n.n,rand()<0.5?1:-1,rgb); } });
+/* E3 · МОНАДА-ЖИРОСКОП (7%) · 2 наклонени пръстена около амулета (r.50 злато ↻ · r.34 светлина ↺) · смятани в шейдъра */
+const nGyro=Math.floor(COUNT*0.07); for(let k=0;k<nGyro;k++){ const ring=k<nGyro*0.55?0:1; put([0,0,0],[0,0,0],3,rand()*TAU,ring,gauss()*0.5,ring?LIGHT:GOLD); }
+/* E4 · ПОТОК (13%) · по камеята (пръстен-течение) + ∞ през амулета (осморката на оригиналния Метамер · вертикална · като горе, така долу) */
+const nFlow=Math.floor(COUNT*0.13); for(let k=0;k<nFlow;k++){ const lem=k>=nFlow*0.55?1:0; put([0,0,0],[0,0,0],4,rand()*TAU,lem,gauss(),lem?mix3(LIGHT,GOLD,0.4):GOLD); }
+/* E5 · ФИБОНАЧИ-ВДИШВАНЕ (9%) · прахът тече по златната спирала навътре към окото = сърцето (същата формула като хартийната линия) */
+const nSp=Math.floor(COUNT*0.09); for(let k=0;k<nSp;k++){ put([0,0,0],[0,0,0],5,rand()*530,gauss()*0.5,gauss()*0.5,mix3(GOLD,LIGHT,0.3)); }
+/* E6 · ФОКУС-ПОТОЦИ по HD-каналите (6%) · Метта → 3-те ѝ Мета · светят/текат когато прегръдката е on (uEmb) */
+const nChan=Math.floor(COUNT*0.06); if(chans.length){ const per=Math.floor(nChan/chans.length);
+  chans.forEach(ch=>{ const mi=ЕМБ_РЕД.indexOf(ch.m); const A=W(ch.ax,ch.ay), B=W(ch.bx,ch.by);   /* SVG-каналът вече спира на ръба на слота */
+    const A2=[A[0],A[1],0], B2=[B[0],B[1],0]; for(let j=0;j<per;j++) put(A2,B2,6,rand(),mi<0?0:mi,gauss(),mix3(LIGHT,GOLD,0.5)); }); }
+/* E7 · ОБЛАК-КОПИЕ НА СТРЕЛКАТА (2%) · върти се с uNeedle около амулета */
+const nNd=Math.floor(COUNT*0.02); for(let k=0;k<nNd;k++){ put([0,0,0],[0,0,0],7,rand(),gauss()*0.6,0,mix3(LIGHT,GOLD,0.35)); }
+/* АМБИЕНТ (остатъкът) · реещ се прах в камеята и над панела (панелът = тих · MED-V2: нула прах под текста) */
+const yLo=W(0,520)[1], yHi=W(0,0)[1]; while(i<COUNT){ const x=(rand()*2-1)*1.9, y=yLo+rand()*(yHi-yLo), z=(rand()*2-1)*1.2; put([x,y,z],[x,y,z],-1,0.12,0,0,GOLD); }
+
+/* ── shuffle: setDrawRange(0,k) = равномерна извадка от ВСИЧКИ слоеве → тирът пада без rebuild ── */
+(function(){ const N=i, idx=new Uint32Array(N); for(let k=0;k<N;k++) idx[k]=k; for(let k=N-1;k>0;k--){ const j=Math.floor(rand()*(k+1)), t=idx[k]; idx[k]=idx[j]; idx[j]=t; }
+  const perm=(arr,n)=>{ const out=new Float32Array(arr.length); for(let k=0;k<N;k++){ const s=idx[k]; for(let q=0;q<n;q++) out[k*n+q]=arr[s*n+q]; } return out; };
+  home.set(perm(home,3)); dust.set(perm(dust,3)); seed.set(perm(seed,1)); cls.set(perm(cls,1)); dat.set(perm(dat,1)); aux.set(perm(aux,2)); col.set(perm(col,3)); })();
+const LOW=IS_MOBILE?18000:34000; let drawn=COUNT;
+
+/* ── renderer / scene ── */
+let renderer=null; try{ renderer=new THREE.WebGLRenderer({canvas, antialias:false, alpha:true, powerPreference:'high-performance'}); }catch(e){ renderer=null; }
+if(!renderer) return;                                                    /* нула WebGL → 2D прахът + постерът */
+renderer.debug.onShaderError=function(){ window.__мглСпри(true); };      /* ревю v14 [MED]: three не хвърля при шейдър-грешка → изрично → постер + 2D прах (нула console-спам) */
+const PLANE_H=vbH/100, CAM_FOV=50, CAM_Z=(PLANE_H/2)/Math.tan(CAM_FOV*DEG/2), CY_W=(AY-vbH/2)/100;
+let scene,camera,tiltGroup,points,material,uniforms;
+const VERT=`
+uniform float uTime,uAssembly,uFocus,uFocusId,uGuestId,uNeedle,uBeat,uSizeBase,uPx;
+uniform vec4 uEmb;
+attribute vec3 aDust; attribute float aSeed,aClass,aData; attribute vec2 aAux; attribute vec3 aColor;
+varying vec3 vColor; varying float vAlpha;
+const float PHI=1.6180339887; const float CAMY=${CW[1].toFixed(4)}; const float CAMR=${(CC.r/100).toFixed(4)};
+vec2 rot2(vec2 v,float a){ float c=cos(a),s=sin(a); return vec2(c*v.x-s*v.y, s*v.x+c*v.y); }
+void main(){
+  float tt=uTime, c=aClass, ase=clamp(uAssembly,0.0,1.0);
+  vec3 hp=position, p=hp, col=aColor; float alpha=0.2, sz=1.0;
+  float breath=1.0+0.016*sin(uBeat);
+  if(c<-0.5){
+    vec3 dp=aDust; dp.x+=0.10*sin(tt*0.11+aDust.y*0.7+aSeed*6.28)+0.05*sin(tt*0.23+aDust.z*1.3+aSeed*12.6); dp.y+=0.09*sin(tt*0.13+aDust.z*0.8+aSeed*4.71)+0.04*sin(tt*0.19+aDust.x*1.1+aSeed*8.1); dp.z+=0.08*sin(tt*0.09+aDust.x*0.6+aSeed*9.42);
+    p=dp; alpha=(0.04+0.22*smoothstep(0.7,1.0,aSeed))*(0.7+0.3*sin(tt*0.9+aSeed*6.28)); sz=0.8;
+  } else if(c<1.5){
+    vec3 dp=aDust+0.06*vec3(sin(tt*0.5+aSeed*6.28),cos(tt*0.42+aSeed*5.11),sin(tt*0.37+aSeed*3.7));
+    vec3 h=hp*breath+0.012*vec3(sin(tt*0.9+aSeed*12.0),cos(tt*0.8+aSeed*7.0),sin(tt*1.1+aSeed*9.0));
+    p=mix(dp,h,ase); alpha=mix(0.05,0.11+0.17*aData,ase)*(0.8+0.2*sin(tt*1.3+aSeed*6.28)); sz=0.9;
+  } else if(c<2.5){
+    float isF=1.0-step(0.5,abs(aAux.x-uFocusId)); float isG=1.0-step(0.5,abs(aAux.x-uGuestId));
+    float grow=(1.0+0.5*isF*uFocus+0.2*isG)*breath;
+    vec3 d=hp-aDust; vec2 o=rot2(d.xy, tt*(0.12+0.22*aSeed)*aAux.y); vec3 h=aDust+vec3(o,d.z)*grow;
+    p=mix(aDust,h,ase);
+    float dim=mix(1.0, mix(0.3,1.7,isF), uFocus);
+    alpha=(0.09+0.22*aData)*dim*(0.7+0.3*sin(tt*1.6+aSeed*6.28)); sz=0.9+0.5*aData+0.5*isF*uFocus; col*=1.0+0.35*isF*uFocus;
+  } else if(c<3.5){
+    float ring=aAux.x, R=mix(0.50,0.34,ring)*(1.0+0.06*aAux.y), th=aData+tt*mix(0.75,-1.05,ring);
+    vec3 q=vec3(R*cos(th),0.0,R*sin(th)); float tilt=mix(1.05,-0.95,ring)+0.25*sin(tt*0.27+ring*3.0);
+    float ct=cos(tilt),st=sin(tilt); q=vec3(q.x, q.y*ct-q.z*st, q.y*st+q.z*ct); q.xy=rot2(q.xy, tt*0.12*(1.0-2.0*ring));
+    p=q; alpha=(0.3+0.3*aSeed)*ase; sz=1.0+0.2*ring;
+  } else if(c<4.5){
+    if(aAux.x<0.5){ float th=aData+tt*0.09; float R=CAMR*(1.0+0.02*aAux.y); p=vec3(vec2(0.0,CAMY)+R*vec2(cos(th),sin(th)), aAux.y*0.12); alpha=0.10+0.16*aSeed; }
+    else { float s=aData+tt*0.35, A=1.22, cs=cos(s), sn=sin(s), den=1.0+sn*sn; vec2 l=vec2(A*sn*cs/den, A*cs/den); p=vec3(l+aAux.y*0.03*vec2(cs,-sn), aAux.y*0.10+0.05*sin(s*2.0)); alpha=0.12+0.18*aSeed; }
+    alpha*=ase; sz=0.9;
+  } else if(c<5.5){
+    float th=mod(aData-tt*38.0,560.0); float rr=2.33*pow(PHI,(th-540.0)/90.0); float q=radians(th+10.0);
+    vec2 sp=vec2(rr*sin(q), rr*cos(q))+aAux*0.03; float outside=step(CAMR-0.02, length(sp-vec2(0.0,CAMY)));
+    p=vec3(sp, 0.06*sin(th*0.05+aSeed*6.28)); float inhale=smoothstep(0.0,50.0,th)*(1.0-outside);
+    alpha=(0.16+0.22*aSeed)*inhale*ase*(0.75+0.25*sin(uBeat)); sz=0.9+0.4*(1.0-th/560.0);
+  } else if(c<6.5){
+    float mi=aAux.x; float on=mi<0.5?uEmb.x:(mi<1.5?uEmb.y:(mi<2.5?uEmb.z:uEmb.w));
+    float t=fract(aData+tt*0.22*(0.6+0.4*aSeed)); vec3 h=mix(hp,aDust,t); vec2 dir=normalize(aDust.xy-hp.xy+vec2(1e-4));
+    h.xy+=vec2(-dir.y,dir.x)*aAux.y*0.03*(1.0+1.5*(1.0-on)); h.z+=0.04*sin(tt+aSeed*6.28);
+    p=h; alpha=mix(0.05,0.34,on)*ase*(0.6+0.4*sin(t*6.28)); sz=mix(0.8,1.3,on); col=mix(col,vec3(1.0,0.96,0.84),on*0.5);
+  } else {
+    float y=mix(-0.26,0.82,aData), w=0.04*(1.0-aData)+0.006; vec2 q=rot2(vec2(aAux.x*w,y), -uNeedle);
+    p=vec3(q, 0.08+0.05*sin(tt*3.0+aSeed*6.28)); alpha=(0.22+0.4*aSeed)*ase; sz=0.9+0.6*aData;
+  }
+  vec4 mv=modelViewMatrix*vec4(p,1.0);
+  float ps=uSizeBase*mix(0.6,1.4,aSeed)*sz*(uPx*14.0/max(1.0,-mv.z));
+  gl_PointSize=clamp(ps,0.7,6.5); gl_Position=projectionMatrix*mv;
+  vColor=col; vAlpha=alpha;
+}`;
+const FRAG=`
+varying vec3 vColor; varying float vAlpha;
+void main(){ vec2 uv=gl_PointCoord-0.5; float m=1.0-smoothstep(0.08,0.5,length(uv)); if(m<0.01) discard; gl_FragColor=vec4(vColor, vAlpha*m); }`;
+function initGL(){
+  renderer.setPixelRatio(DPR); renderer.setClearColor(0x000000,0);
+  const w=Math.max(1,stage.clientWidth), h=Math.max(1,stage.clientHeight); renderer.setSize(w,h,false);
+  scene=new THREE.Scene(); camera=new THREE.PerspectiveCamera(CAM_FOV,w/h,0.1,60); camera.position.set(0,CY_W,CAM_Z); camera.lookAt(0,CY_W,0);
+  const geo=new THREE.BufferGeometry();
+  geo.setAttribute('position',new THREE.BufferAttribute(home,3)); geo.setAttribute('aDust',new THREE.BufferAttribute(dust,3)); geo.setAttribute('aSeed',new THREE.BufferAttribute(seed,1));
+  geo.setAttribute('aClass',new THREE.BufferAttribute(cls,1)); geo.setAttribute('aData',new THREE.BufferAttribute(dat,1)); geo.setAttribute('aAux',new THREE.BufferAttribute(aux,2)); geo.setAttribute('aColor',new THREE.BufferAttribute(col,3));
+  uniforms={uTime:{value:0},uAssembly:{value:0},uFocus:{value:0},uFocusId:{value:-1},uGuestId:{value:-1},uNeedle:{value:0},uBeat:{value:0},uEmb:{value:new THREE.Vector4(0,0,0,0)},uSizeBase:{value:IS_MOBILE?0.95:1.0},uPx:{value:DPR}};
+  material=new THREE.ShaderMaterial({vertexShader:VERT,fragmentShader:FRAG,uniforms,transparent:true,depthWrite:false,depthTest:false,blending:THREE.AdditiveBlending});
+  points=new THREE.Points(geo,material); points.frustumCulled=false;
+  tiltGroup=new THREE.Group(); tiltGroup.rotation.order='XYZ'; tiltGroup.add(points); scene.add(tiltGroup);
+}
+const st={time:0,ass:0,t0:0,focus:0,fw:0,fn:0,tier:0,bad:0,pn:0};
+function tick(now,dt,s){
+  st.time+=dt; if(!st.t0) st.t0=now; const ap=Math.min(1,(now-st.t0)/1700); st.ass=1-Math.pow(1-ap,3);   /* интро-сглобяване (подписът на eidolon-а) */
+  st.focus+=((s.фокус>=0?1:0)-st.focus)*Math.min(1,dt*5);
+  uniforms.uTime.value=st.time; uniforms.uAssembly.value=st.ass; uniforms.uFocus.value=st.focus; uniforms.uFocusId.value=s.фокус; uniforms.uGuestId.value=s.гост;
+  uniforms.uNeedle.value=s.ъгъл; uniforms.uBeat.value=(s.t%1.6)/1.6*TAU; uniforms.uEmb.value.set(s.emb[0],s.emb[1],s.emb[2],s.emb[3]);
+  tiltGroup.rotation.set(-s.накл.x*DEG, s.накл.y*DEG, 0);                                                /* D · дълбочината: CSS rotateX(θ) ≡ three rotation.x(−θ) · rotateY(θ) ≡ rotation.y(θ) */
+  renderer.render(scene,camera);
+  /* FPS-политика (ADR 0099): под 45 → сваля тир (LOW_POWER брой) → пак под → 60% → пак под → 2D прахът + постерът · мери се след сглобяването (t>3s) на 2-сек прозорци */
+  let wdt=st.pn?(now-st.pn)/1000:0; st.pn=now; if(wdt>1){ st.fw=0; st.fn=0; wdt=0; }   /* стенен часовник (dt е капнат) · пауза >1s (скрит таб) нулира прозореца */
+  if(st.ass>=1&&(now-st.t0)>3000&&!s.отворена){ st.fw+=wdt; st.fn++; if(st.fw>=2){ const f=st.fn/st.fw; st.fw=0; st.fn=0; st.bad=f<45?st.bad+1:0;   /* хистерезис: 2 поредни лоши прозореца · не се мери при отворена карта (blur) · ревю v14 LOW */
+    if(st.bad>=2){ st.bad=0; if(drawn>LOW){ drawn=LOW; st.tier=1; } else if(drawn>LOW*0.6){ drawn=Math.floor(LOW*0.6); st.tier=2; } else { st.tier=3; window.__мглСпри(false); return; }
+      points.geometry.setDrawRange(0,drawn); if(window.console) console.info('eidolon тир ↓', st.tier, drawn, Math.round(f)+'fps'); } } }
+}
+const api={ tick, resize(w,h){ if(!renderer) return; renderer.setSize(w,h,false); camera.aspect=w/h; camera.updateProjectionMatrix(); },
+  info(){ return {count:COUNT, drawn, tier:st.tier, mobile:IS_MOBILE, lowPower:LOW_POWER, dpr:DPR, assembled:+st.ass.toFixed(2), three:THREE.REVISION}; },
+  тир(k){ drawn=Math.max(1000,Math.min(COUNT,k|0)); points.geometry.setDrawRange(0,drawn); return drawn; },
+  /* verify: рендира + чете пиксели от камеята (същия task → буферът е цял без preserveDrawingBuffer) */
+  проба(){ renderer.render(scene,camera); const gl=renderer.getContext(); const w=gl.drawingBufferWidth, h=gl.drawingBufferHeight, bw=Math.floor(w*0.5), bh=Math.floor(h*0.4); const buf=new Uint8Array(bw*bh*4); gl.readPixels(Math.floor(w*0.25),Math.floor(h*0.35),bw,bh,gl.RGBA,gl.UNSIGNED_BYTE,buf); let lit=0; for(let k=0;k<buf.length;k+=4){ if(buf[k]+buf[k+1]+buf[k+2]>40) lit++; } return {lit, of:bw*bh, w, h}; },
+  загуби(){ const ext=renderer.getContext().getExtension('WEBGL_lose_context'); if(ext) ext.loseContext(); return !!ext; } };
+/* context loss → постерът + 2D прахът поемат (не черен екран) · restore → dispose + re-init + пак регистрация */
+canvas.addEventListener('webglcontextlost',e=>{ e.preventDefault(); window.__мглСпри(true); },false);
+canvas.addEventListener('webglcontextrestored',()=>{ try{ initGL(); if(points) points.geometry.setDrawRange(0,drawn); st.t0=0; window.__мглРег(api); }catch(_){ } },false);   /* без dispose (обектите са на изгубения контекст · ревю v14 LOW) · тирът се пази */
+try{ initGL(); }catch(e){ if(window.console) console.warn('eidolon init', e); return; }
+window.__мгл=api; window.__мглРег(api);
+})();
+</script>
+</body>
+</html>

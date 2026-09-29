@@ -15,7 +15,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Italiana&family=Cormorant:ital,wght@0,300;0,500;0,600;1,300;1,500&family=Cormorant+SC:wght@500;600&display=swap" rel="stylesheet">
 <style>
-:root{--notte:#050a16;--verde:#3fe3a1;--rosso:#ff5d6e;--avorio:#f1f2f1}
+:root{--notte:#102a42;--verde:#4ce3ab;--rosso:#ff6a5c;--avorio:#f5efe4}
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
 html.deep{scroll-behavior:auto}
@@ -76,6 +76,59 @@ main{position:relative;z-index:1;pointer-events:none}
 .tank h1{font-size:clamp(1.55rem,1.1rem + 2.6vw,3.3rem);font-weight:500;max-width:26ch;margin:.4rem auto 1.2rem;text-shadow:0 0 50px color-mix(in srgb,var(--verde) 25%,transparent)}
 .tank p{max-width:56ch;color:color-mix(in srgb,var(--avorio) 84%,transparent);margin:0 auto .75rem}
 .tank .cta{margin-top:.9rem}
+/* ---- hero-играта · BENVENUTI (MET-1009) · капките-семена носят поканата · скролът е господар · текстът е HTML извън движещото се поле · постер = всичко видимо ---- */
+.tank.gioco{min-height:348svh}
+@media (min-width:820px){.tank.gioco{min-height:300svh}}
+.tank.gioco .scendi{top:50svh}
+.tank.gioco .tank-titles{position:sticky;bottom:0;z-index:2;padding:0 clamp(1rem,4.5vw,3rem) clamp(1.3rem,3vh,2rem)}
+.tank.gioco .tank-titles::before{inset:118px 0 0 0;background:linear-gradient(to bottom,transparent 0,color-mix(in srgb,var(--notte) 86%,transparent) 54px,color-mix(in srgb,var(--notte) 91%,transparent) 100%)}
+.tank.gioco .parola{margin:.3rem 0 .4rem}
+.tank.gioco h1{margin:.3rem auto .7rem}
+.tank.gioco p{margin:0 auto .55rem;font-size:clamp(1.12rem,1.05rem + .4vw,1.3rem)}
+.semi{display:flex;justify-content:center;gap:clamp(.15rem,1.5vw,.9rem);width:100%;max-width:26rem;margin:0 0 .45rem}
+.seme{display:grid;justify-items:center;align-content:start;gap:.12rem;width:25%;max-width:6.4rem;min-height:44px;padding:.25rem 0 .3rem;color:var(--avorio);text-align:center;border-radius:.6rem;transition:opacity .6s}
+.seme .slot{display:block;width:60px;height:60px;border-radius:50%;border:1px solid color-mix(in srgb,var(--avorio) 22%,transparent);transition:border-color .6s,box-shadow .6s}
+.seme .icona{display:none;width:60px;height:60px;overflow:visible}
+.seme .icona use{fill:url(#frase-g);stroke:color-mix(in srgb,var(--avorio) 66%,transparent);stroke-width:.8;filter:drop-shadow(0 0 9px color-mix(in srgb,var(--verde) 55%,transparent))}
+.seme .it{font-size:1.12rem;line-height:1.15;padding:.05rem .45rem;border-radius:1rem;background:color-mix(in srgb,var(--notte) 78%,transparent)}
+.seme .gloss{font-family:'Cormorant SC','Cormorant',serif;letter-spacing:.12em;font-size:.6rem;color:color-mix(in srgb,var(--avorio) 76%,transparent);padding:0 .4rem;border-radius:1rem;background:color-mix(in srgb,var(--notte) 70%,transparent)}
+.seme.dopo{opacity:.5}
+.seme.dopo .it,.seme.dopo .gloss{visibility:hidden}
+.seme.ora .slot{border-color:var(--verde);animation:slotPulse 2.4s ease-in-out infinite}
+.seme.presa .slot{border-color:color-mix(in srgb,var(--avorio) 50%,transparent)}
+.seme:hover .slot,.seme:focus-visible .slot{border-color:var(--rosso)}
+.seme:focus-visible{outline:1.5px solid var(--verde);outline-offset:2px}
+@keyframes slotPulse{0%,100%{box-shadow:0 0 12px color-mix(in srgb,var(--verde) 28%,transparent),inset 0 0 10px color-mix(in srgb,var(--verde) 12%,transparent)}50%{box-shadow:0 0 30px color-mix(in srgb,var(--verde) 55%,transparent),inset 0 0 16px color-mix(in srgb,var(--verde) 22%,transparent)}}
+.passo{margin:.1rem auto .3rem;font-size:.64rem;letter-spacing:.16em;line-height:1.5;color:color-mix(in srgb,var(--avorio) 70%,transparent)}
+.passo b{font-weight:500;color:var(--avorio)}
+.benv-fase{color:color-mix(in srgb,var(--verde) 80%,var(--avorio))}
+.fine{display:grid;justify-items:center;gap:.1rem}
+.gioco .b{display:none;animation:beatIn .7s cubic-bezier(.22,.9,.28,1) both}
+.gioco [data-beat="0"] [data-b="0"],.gioco [data-beat="4"] [data-b="0"],.gioco [data-beat="1"] [data-b="1"],.gioco [data-beat="2"] [data-b="2"],.gioco [data-beat="3"] [data-b="2"]{display:block}
+.gioco [data-beat="4"] .fine{display:grid}
+.gioco [data-beat="2"] .s[data-b="3"],.gioco [data-beat="3"] .s[data-b="2"]{display:none}
+.gioco [data-beat="1"] .parola,.gioco [data-beat="2"] .parola,.gioco [data-beat="3"] .parola,.gioco [data-beat="4"] .tap{display:none}
+@keyframes beatIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.tank.gioco .tap{margin-top:.55rem}
+.tank.gioco .credit{margin:.5rem auto 0;max-width:none;text-align:center;font-size:.6rem}
+.mondo{display:none;width:100%;max-width:22rem;margin:.2rem auto .8rem}
+.mondo .quadro{aspect-ratio:3/2}
+.tank.postero{min-height:100svh}
+.tank.postero .tank-titles{position:static}
+/* постер: reduced (?reduced=1 · prefers-reduced-motion) · без JS · без GL (html.nogl) → цялата покана видима, иконите-капки стоят в слотовете */
+.tank.postero .b,html.nogl .tank .b{display:block;animation:none}
+.tank.postero .fine,html.nogl .tank .fine{display:grid}
+.tank.postero .s,html.nogl .tank .s{display:inline}
+.tank.postero .parola,html.nogl .tank .parola{display:flex}
+.tank.postero .tap,html.nogl .tank .tap{display:none}
+.tank.postero .seme,html.nogl .tank .seme{opacity:1}
+.tank.postero .seme .it,.tank.postero .seme .gloss,html.nogl .tank .seme .it,html.nogl .tank .seme .gloss{visibility:visible}
+.tank.postero .seme .slot,html.nogl .tank .seme .slot,.tank:not(.gioco) .seme .slot{display:none}
+.tank.postero .seme .icona,html.nogl .tank .seme .icona,.tank:not(.gioco) .seme .icona{display:block}
+.tank.postero .tank-titles::before,html.nogl .tank .tank-titles::before{inset:0;background:color-mix(in srgb,var(--notte) 88%,transparent)}
+.tank.postero .mondo,html.nogl .tank .mondo{display:block}
+html.nogl #field{display:none}
+@media (prefers-reduced-motion:reduce){.seme.ora .slot{animation:none}.gioco .b{animation:none}}
 .respira{margin-top:1.1rem;color:color-mix(in srgb,var(--avorio) 60%,transparent);border-bottom:1px solid color-mix(in srgb,var(--avorio) 25%,transparent);padding:.3rem 0;min-height:44px;font-family:'Cormorant SC','Cormorant',serif;letter-spacing:.22em;font-size:.76rem;transition:color .4s}
 .respira:hover{color:var(--verde)}
 .scendi{position:absolute;right:clamp(.9rem,2.5vw,2.2rem);top:50%;transform:translateY(-50%);writing-mode:vertical-rl;font-family:'Cormorant SC','Cormorant',serif;letter-spacing:.4em;font-size:.68rem;color:color-mix(in srgb,var(--avorio) 48%,transparent);display:flex;align-items:center;gap:.8rem}
@@ -260,6 +313,55 @@ body:not(.con-nome) .virgola,body:not(.con-nome) .nome-txt{display:none}
 .fine-pagina{position:relative;z-index:1;text-align:center;padding:2rem 1rem 3rem;color:color-mix(in srgb,var(--avorio) 56%,transparent);font-size:.9rem;pointer-events:auto}
 .fine-pagina .it{font-size:1.1rem;letter-spacing:.1em}
 .fine-pagina .sc{margin-left:.5rem}
+
+/* 4b · la frase intera · Цяло-Част-Цяло (MET-996 · нов контрол · канон metalandia-нов-контрол) */
+.frase{margin:1.7rem 0 2rem}
+.frase-scena{position:relative;width:100%;max-width:34rem;margin-inline:auto;aspect-ratio:390/300;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:pan-y;isolation:isolate}
+.frase-svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;display:block;z-index:1}
+.frase-scena canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2}
+.frase .filo{fill:none;stroke:rgba(232,199,126,.5);stroke-width:1;stroke-dasharray:2 5;transition:opacity .9s}
+.frase[data-fase="1"] .filo{opacity:.1}
+.frase .goccia{cursor:pointer;outline:none}
+.frase .goccia use{fill:url(#frase-g);stroke:color-mix(in srgb,var(--avorio) 66%,transparent);stroke-width:.8;filter:drop-shadow(0 0 9px color-mix(in srgb,var(--verde) 55%,transparent));transition:stroke .3s}
+.frase .goccia:hover use,.frase .goccia:focus-visible use{stroke:var(--verde);stroke-width:1.4}
+.frase .mini circle{fill:#fff5d6;opacity:.8}
+.frase .w{font-family:'Italiana','Cormorant',serif;font-size:21px;fill:var(--avorio);text-anchor:middle;letter-spacing:.5px}
+.frase .g{font-family:'Cormorant SC','Cormorant',serif;font-size:11px;letter-spacing:1.6px;fill:color-mix(in srgb,var(--avorio) 84%,transparent);text-anchor:middle;opacity:0;transition:opacity .8s}
+.frase[data-fase="1"] .g{opacity:1}
+.frase .senso{font-family:'Cormorant',serif;font-style:italic;font-size:19px;fill:var(--avorio);text-anchor:middle;cursor:pointer;outline:none;transition:opacity .9s,filter .9s}
+.frase .senso:focus-visible,.frase .senso:hover{fill:var(--verde)}
+.frase[data-fase="1"] .senso{opacity:.14}
+.frase[data-fase="2"] .senso{filter:drop-shadow(0 0 12px color-mix(in srgb,var(--verde) 75%,transparent))}
+.frase .fase{font-family:'Cormorant SC','Cormorant',serif;font-size:11px;letter-spacing:2.4px;fill:color-mix(in srgb,var(--avorio) 62%,transparent);text-anchor:middle}
+.frase-testo{max-width:34rem;margin:.6rem auto 0;display:grid;gap:.3rem;justify-items:start}
+.frase-eti{color:color-mix(in srgb,var(--verde) 80%,var(--avorio));font-size:.66rem}
+.frase-sp{margin:0 0 .6rem;color:color-mix(in srgb,var(--avorio) 86%,transparent);max-width:56ch}
+.frase-sp .it{font-size:1.4rem}
+.tap{display:inline-flex;align-items:center;gap:.6rem;min-height:44px;padding:.3rem .9rem .3rem .6rem;border:1px solid color-mix(in srgb,var(--avorio) 26%,transparent);border-radius:2rem;background:color-mix(in srgb,var(--notte) 62%,transparent);color:color-mix(in srgb,var(--avorio) 84%,transparent);font-family:'Cormorant SC','Cormorant',serif;font-size:.76rem;letter-spacing:.18em;cursor:pointer;transition:border-color .4s,box-shadow .4s}
+.tap:hover,.tap:focus-visible{border-color:var(--verde);box-shadow:0 0 16px color-mix(in srgb,var(--verde) 26%,transparent)}
+.tap i{width:9px;height:9px;border-radius:50%;background:var(--verde);flex:none;box-shadow:0 0 0 0 color-mix(in srgb,var(--verde) 60%,transparent);animation:tapPulse 1.8s ease-out infinite}
+.tap.seen i{animation:none;opacity:.45}
+@keyframes tapPulse{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--verde) 60%,transparent)}100%{box-shadow:0 0 0 11px transparent}}
+@media (prefers-reduced-motion:reduce){.tap i{animation:none}}
+/* карта (клик → карта · role=dialog · Esc/✕) */
+.mmcard{position:fixed;inset:0;z-index:40;display:grid;place-items:center;padding:1rem;background:color-mix(in srgb,var(--notte) 76%,transparent);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.mmcard[hidden]{display:none}
+.mmc{position:relative;width:min(100%,24rem);max-height:92svh;overflow:auto;padding:1.1rem 1.1rem 1.4rem;border:1px solid color-mix(in srgb,var(--avorio) 42%,transparent);background:color-mix(in srgb,var(--notte) 94%,#000);box-shadow:0 0 70px color-mix(in srgb,var(--verde) 22%,transparent);display:grid;gap:.55rem;justify-items:center;text-align:center}
+.mmc-tb{display:flex;justify-content:space-between;width:100%;padding-right:2.4rem;font-family:'Cormorant SC','Cormorant',serif;font-size:.68rem;letter-spacing:.22em;color:color-mix(in srgb,var(--avorio) 70%,transparent)}
+.mmc-art{width:92px;height:104px;margin-top:.2rem}
+.mmc-art svg{width:100%;height:100%;overflow:visible}
+.mmc-art use{fill:url(#frase-g);stroke:color-mix(in srgb,var(--avorio) 70%,transparent);stroke-width:.7;filter:drop-shadow(0 0 12px color-mix(in srgb,var(--verde) 60%,transparent))}
+.mmc-art circle{fill:#fff5d6;opacity:.85}
+.mmc-nm{font-size:2.5rem;line-height:1;color:var(--avorio);text-shadow:0 0 24px color-mix(in srgb,var(--verde) 45%,transparent)}
+.mmc-bg{font-size:1.4rem;font-weight:500;line-height:1.2}
+.mmc-sola{font-family:'Cormorant SC','Cormorant',serif;font-size:.8rem;letter-spacing:.14em;color:color-mix(in srgb,var(--avorio) 72%,transparent)}
+.mmc-intera{display:grid;gap:.15rem;padding:.7rem 0 .2rem;margin-top:.3rem;border-top:1px solid color-mix(in srgb,var(--avorio) 18%,transparent);width:100%}
+.mmc-intera .it{font-size:1.5rem;line-height:1.1}
+.mmc-intera .bg{font-style:italic;color:color-mix(in srgb,var(--avorio) 86%,transparent)}
+.mmc-nota{font-style:italic;color:color-mix(in srgb,var(--avorio) 84%,transparent);display:grid;gap:.25rem;margin-top:.2rem}
+.mmc-nota .sc{font-style:normal;color:color-mix(in srgb,var(--verde) 80%,var(--avorio));font-size:.66rem}
+.mmc-x{position:absolute;top:.35rem;right:.35rem;width:44px;height:44px;border:0;background:transparent;color:var(--avorio);font-size:1.15rem;cursor:pointer;border-radius:50%}
+.mmc-x:hover,.mmc-x:focus-visible{background:color-mix(in srgb,var(--avorio) 12%,transparent)}
 </style>
 </head>
 <body>
@@ -278,16 +380,28 @@ body:not(.con-nome) .virgola,body:not(.con-nome) .nome-txt{display:none}
 
 <main>
 
-<!-- 1 · benvenuta -->
+<!-- 1 · benvenuta · hero-играта (MET-1009): капките-семена (СЪЩОТО поле · първите 4 капки) носят поканата · скролът разкрива бийт по бийт (Цяло → Части → Цяло) · текстът 1:1 от content.json · постер = всичко видимо -->
 <section data-stage="1" id="benvenuta" class="stage tank" aria-label="Начало">
   <span class="scendi" aria-hidden="true">passeggiata</span>
-  <div class="tank-titles">
-    <p class="parola"><span class="it">benvenuta</span><span class="gloss">добре дошла</span></p>
-    <h1>Италиански чрез сугестопедия – не само език, който учите, а свят, в който влизате.</h1>
-    <p>Вместо да зубрите правила и списъци с думи, влизате в езика чрез музика, разговор, игра и нова самоличност, която сама започва да говори.</p>
-    <p>Часовете минават без напрежение и без изпитване. Резултатът е голям речников запас за кратко време и, което е по-важно, смелост да проговорите.</p>
-    <a class="cta" href="#andiamo">Виж курсовете</a>
-    <button class="respira" id="respira" type="button">изпусни дъх · <span class="it">respira</span></button>
+  <div class="tank-titles" id="benv-panel" data-beat="0">
+    <figure class="mondo" aria-hidden="true"><div class="quadro"><img src="assets/turner-venezia-dogana.webp" alt="" width="1280" height="948" loading="lazy" decoding="async"></div></figure>
+    <div class="semi" id="semi" role="group" aria-label="Четири думи-семена — капките носят поканата">
+      <button class="seme" data-k="0" type="button" aria-label="Ciao — здравей · цялото"><span class="slot" aria-hidden="true"></span><svg class="icona" viewBox="-30 -30 60 62" aria-hidden="true"><use href="#frase-goccia" class="ic"/></svg><span class="it">Ciao</span><span class="gloss">здравей</span></button>
+      <button class="seme" data-k="1" type="button" aria-label="Parla — говори · част 1"><span class="slot" aria-hidden="true"></span><svg class="icona" viewBox="-30 -30 60 62" aria-hidden="true"><use href="#frase-goccia" class="ic"/></svg><span class="it">Parla</span><span class="gloss">говори</span></button>
+      <button class="seme" data-k="2" type="button" aria-label="Piano piano — полека-лека · част 2"><span class="slot" aria-hidden="true"></span><svg class="icona" viewBox="-30 -30 60 62" aria-hidden="true"><use href="#frase-goccia" class="ic"/></svg><span class="it">Piano piano</span><span class="gloss">полека-лека</span></button>
+      <button class="seme" data-k="3" type="button" aria-label="Coraggio — смелост · част 3"><span class="slot" aria-hidden="true"></span><svg class="icona" viewBox="-30 -30 60 62" aria-hidden="true"><use href="#frase-goccia" class="ic"/></svg><span class="it">Coraggio</span><span class="gloss">смелост</span></button>
+    </div>
+    <p class="passo sc" id="benv-passo" aria-live="polite"><b id="benv-n">1 / 4</b> · <span class="benv-fase" id="benv-fase">цялото · като мелодия</span></p>
+    <p class="parola"><span class="it">Benvenuti!</span><span class="gloss">добре дошли</span></p>
+    <h1 class="b" data-b="0">Италиански чрез сугестопедия – не само език, който учите, а свят, в който влизате.</h1>
+    <p class="b" data-b="1">Вместо да зубрите правила и списъци с думи, влизате в езика чрез музика, разговор, игра и нова самоличност, която сама започва да говори.</p>
+    <p class="b" data-b="2"><span class="s" data-b="2">Часовете минават без напрежение и без изпитване.</span> <span class="s" data-b="3">Резултатът е голям речников запас за кратко време и, което е по-важно, смелост да проговорите.</span></p>
+    <div class="b fine" data-b="4">
+      <a class="cta" href="#andiamo">Виж курсовете</a>
+      <button class="respira" id="respira" type="button">изпусни дъх · <span class="it">Respira</span></button>
+    </div>
+    <button class="tap" data-tap id="benv-avanti" type="button"><i></i><span>докоснете · следващата капка</span></button>
+    <span class="credit">J. M. W. Turner · Venice: The Dogana and San Giorgio Maggiore · 1834 · National Gallery of Art, Washington</span>
   </div>
 </section>
 
@@ -298,7 +412,7 @@ body:not(.con-nome) .virgola,body:not(.con-nome) .nome-txt{display:none}
     <div class="citta" data-k="1"><i class="punto"></i><i class="filo"></i><button class="city" type="button" data-goto="#parte-2"><span class="it">Siena</span><span class="via">Част 2</span></button></div>
     <div class="citta" data-k="2"><i class="punto"></i><i class="filo"></i><button class="city" type="button" data-goto="#conversazione"><span class="it">Venezia</span><span class="via">Разговорен</span></button></div>
     <div class="mappa-testo">
-      <p class="parola"><span class="it">andiamo</span><span class="gloss">да тръгваме</span></p>
+      <p class="parola"><span class="it">Andiamo!</span><span class="gloss">да тръгваме</span></p>
       <p>три пътя · докосни град</p>
     </div>
   </div>
@@ -308,7 +422,7 @@ body:not(.con-nome) .virgola,body:not(.con-nome) .nome-txt{display:none}
 <section data-stage="3" id="coraggio" class="stage" aria-label="Смелост">
   <div class="col">
     <div class="scrim">
-      <p class="parola"><span class="it">coraggio</span><span class="gloss">смелост</span></p>
+      <p class="parola"><span class="it">Coraggio!</span><span class="gloss">смелост</span></p>
       <p class="dim" style="font-style:italic">три сенки · отвори ги</p>
       <div class="ombre" role="group" aria-label="Три сенки">
         <button class="ombra" type="button" aria-expanded="false" data-tint=".5"><span class="buio">страх да не сгреша</span><span class="cenno sc">отвори</span><span class="luce">Сугестопедията маха точно този страх — и тогава езикът тръгва.</span></button>
@@ -328,6 +442,13 @@ body:not(.con-nome) .virgola,body:not(.con-nome) .nome-txt{display:none}
           <p>През 2006 г. учих италиански език и култура в Университета за чужденци в гр. Сиена.</p>
           <p>През 2020 г. в гр. Сливен се проведе обучението ми за сугестопедагог. Мой обучител беше Ванина Бодурова. До 2024 г. бях част от екипа на Център по класическа сугестопедия „Вихровения“, а от есента на 2024 г. водя курсове и уроци самостоятелно.</p>
           <p>Защо сугестопедия? Защото години преподаване видях едно и също нещо твърде често: хора, които знаят повече, отколкото си мислят, но мълчат от страх да не сгрешат. Сугестопедията маха точно този страх — и тогава езикът тръгва.</p>
+          <figure class="arte larga foto-mia">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem">
+              <div class="quadro" style="aspect-ratio:4/5"><img src="assets/ponte-vecchio-firenze.webp" alt="Ponte Vecchio, Флоренция" loading="lazy" width="1100" height="684"></div>
+              <div class="quadro" style="aspect-ratio:4/5"><img src="assets/limoni-costiera.webp" alt="Лимони край италианското крайбрежие" loading="lazy" width="867" height="1300"></div>
+            </div>
+            <figcaption class="credit">Из Италия — местата, които обичам</figcaption>
+          </figure>
         </div>
         <div>
           <figure class="ritratto">
@@ -354,9 +475,41 @@ body:not(.con-nome) .virgola,body:not(.con-nome) .nome-txt{display:none}
 <section data-stage="4" id="piano-piano" class="stage" aria-label="Методът">
   <div class="col">
     <div class="scrim">
-      <p class="parola"><span class="it">piano piano</span><span class="gloss">полека-лека</span></p>
+      <p class="parola"><span class="it">Piano piano</span><span class="gloss">полека-лека</span></p>
       <h2>Какво е сугестопедия</h2>
       <p>На практика един сугестопедичен урок минава през няколко етапа: въвеждане на новия материал, концертен сеанс (активен и пасивен), разработка и представяне. Текстовете се поднасят като истории, не като списъци с думи за наизустяване. Учи се без домашни и без изпитване.</p>
+      <figure class="frase rv" id="frase" data-reveal data-fase="0" aria-labelledby="frase-t">
+        <div class="frase-scena" id="frase-scena">
+          <svg class="frase-svg" id="frase-svg" viewBox="0 0 390 300" aria-labelledby="frase-t" focusable="false">
+            <title id="frase-t">La frase intera — Piano piano si va lontano: пет капки на една нишка. Първо цялата фраза, после думите — всяка сама, после пак цялата — вече разбрана.</title>
+            <defs>
+              <radialGradient id="frase-g" cx="50%" cy="64%" r="58%">
+                <stop offset="0" stop-color="#fff5d6" stop-opacity=".96"/>
+                <stop offset=".55" stop-color="#4ce3ab" stop-opacity=".34"/>
+                <stop offset="1" stop-color="#4ce3ab" stop-opacity=".04"/>
+              </radialGradient>
+              <path id="frase-goccia" d="M0,-24 C7,-12 15,-4 15,7 A15,15 0 1,1 -15,7 C-15,-4 -7,-12 0,-24 Z"/>
+            </defs>
+            <path class="filo" id="frase-filo" d="M30,90 Q195,114 360,90"/>
+            <g id="frase-gocce">
+              <g class="goccia" data-k="0" role="button" tabindex="0" aria-label="piano — полека · сама: тихо, етаж, план, пиано" transform="translate(62 94.2)"><use href="#frase-goccia"/><g class="mini" aria-hidden="true"><circle cx="-8" cy="8" r="1.5"/><circle cx="-4" cy="9.6" r="1.5"/><circle cx="0" cy="10.2" r="1.5"/><circle cx="4" cy="9.6" r="1.5"/><circle cx="8" cy="8" r="1.5"/></g><text class="w" y="48">piano</text><text class="g" y="66">полека</text></g>
+              <g class="goccia" data-k="1" role="button" tabindex="0" aria-label="piano — полека · повторено: още по-полека" transform="translate(140 100.7)"><use href="#frase-goccia"/><g class="mini" aria-hidden="true"><circle cx="-8" cy="8" r="1.5"/><circle cx="-4" cy="9.6" r="1.5"/><circle cx="0" cy="10.2" r="1.5"/><circle cx="4" cy="9.6" r="1.5"/><circle cx="8" cy="8" r="1.5"/></g><text class="w" y="48">piano</text><text class="g" y="66">полека</text></g>
+              <g class="goccia" data-k="2" role="button" tabindex="0" aria-label="si — се · сама: и „да“" transform="translate(200 102)"><use href="#frase-goccia"/><g class="mini" aria-hidden="true"><circle cx="-8" cy="8" r="1.5"/><circle cx="-4" cy="9.6" r="1.5"/><circle cx="0" cy="10.2" r="1.5"/><circle cx="4" cy="9.6" r="1.5"/><circle cx="8" cy="8" r="1.5"/></g><text class="w" y="48">si</text><text class="g" y="66">се</text></g>
+              <g class="goccia" data-k="3" role="button" tabindex="0" aria-label="va — отива · в цялото: стига" transform="translate(245 100.9)"><use href="#frase-goccia"/><g class="mini" aria-hidden="true"><circle cx="-8" cy="8" r="1.5"/><circle cx="-4" cy="9.6" r="1.5"/><circle cx="0" cy="10.2" r="1.5"/><circle cx="4" cy="9.6" r="1.5"/><circle cx="8" cy="8" r="1.5"/></g><text class="w" y="48">va</text><text class="g" y="66">отива</text></g>
+              <g class="goccia" data-k="4" role="button" tabindex="0" aria-label="lontano — далече" transform="translate(318 95.3)"><use href="#frase-goccia"/><g class="mini" aria-hidden="true"><circle cx="-8" cy="8" r="1.5"/><circle cx="-4" cy="9.6" r="1.5"/><circle cx="0" cy="10.2" r="1.5"/><circle cx="4" cy="9.6" r="1.5"/><circle cx="8" cy="8" r="1.5"/></g><text class="w" y="48">lontano</text><text class="g" y="66">далече</text></g>
+            </g>
+            <text class="senso" id="frase-senso" x="195" y="226" role="button" tabindex="0" aria-label="Цялата фраза: Piano piano si va lontano — Полека-лека се стига далече">Полека-лека се стига далече.</text>
+            <text class="fase" id="frase-fase" x="195" y="258">цялото · чуй фразата като мелодия</text>
+          </svg>
+        </div>
+        <figcaption class="frase-testo">
+          <span class="sc frase-eti">обяснение</span>
+          <p class="frase-sp"><span class="it">La frase intera</span> · цялата фраза. Първо цялото — като мелодия. После думите — всяка сама. Накрая пак цялото — вече разбрано, без нито една зубрена дума.</p>
+          <span class="sc frase-eti">направи</span>
+          <button class="tap" data-tap id="frase-avanti" type="button"><i></i><span>докоснете — цяло · части · цяло</span></button>
+          <span class="dim" style="font-style:italic">докоснете капка — какво носи сама · докоснете смисъла — цялата фраза</span>
+        </figcaption>
+      </figure>
       <p class="domanda">Кое те спира?</p>
       <div class="custodi" id="custodi" role="group" aria-label="Кое те спира? избери до три"></div>
       <button class="ancora" id="ancora" type="button">избери отново</button>
@@ -388,7 +541,7 @@ body:not(.con-nome) .virgola,body:not(.con-nome) .nome-txt{display:none}
 <section data-stage="5" id="parla" class="stage" aria-label="Ритъмът">
   <div class="col">
     <div class="scrim">
-      <p class="parola"><span class="it">parla!</span><span class="gloss">говори!</span></p>
+      <p class="parola"><span class="it">Parla!</span><span class="gloss">говори!</span></p>
       <h2>Италиански език за начинаещи</h2>
       <p>Италиански език за начинаещи — класически сугестопедичен курс по оригиналния учебник, в два последователни етапа. От първия ден се говори — текстовете се поднасят като истории, с музика, без зубрене на списъци с думи.</p>
       <p>Групите са между 4 и 7 души. Присъствен, с възможност за онлайн при достатъчно кандидати.</p>
@@ -413,7 +566,7 @@ body:not(.con-nome) .virgola,body:not(.con-nome) .nome-txt{display:none}
         <p class="domanda">Избери си италианско име</p>
         <p class="dim" style="font-style:italic">новата самоличност започва оттук — страницата ще те нарича така</p>
         <div class="nomi" id="nomi" role="group" aria-label="италианско име"></div>
-        <p class="piacere"><span class="it">piacere</span>, <span class="it nome-txt"></span></p>
+        <p class="piacere"><span class="it">Piacere</span>, <span class="it nome-txt"></span></p>
       </div>
     </div>
   </div>
@@ -422,7 +575,7 @@ body:not(.con-nome) .virgola,body:not(.con-nome) .nome-txt{display:none}
 <!-- 6 · ce l'ho fatta -->
 <section data-stage="6" id="ce-lho-fatta" class="stage vuoto" aria-label="Първият разговор">
   <div class="centro">
-    <p class="parola"><span class="it">ce l'ho fatta<span class="virgola">, </span><span class="nome-txt"></span></span><span class="gloss">успях</span></p>
+    <p class="parola"><span class="it">Ce l'ho fatta<span class="virgola">, </span><span class="nome-txt"></span></span><span class="gloss">успях</span></p>
     <p class="eco">смелост да проговорите.</p>
     <p class="eco piccolo">хората говорят от първия ден</p>
   </div>
@@ -432,7 +585,7 @@ body:not(.con-nome) .virgola,body:not(.con-nome) .nome-txt{display:none}
 <section data-stage="7" id="il-tesoro" class="stage" aria-label="Курсове">
   <div class="col">
     <div class="scrim">
-      <p class="parola"><span class="it">il tesoro<span class="virgola">, </span><span class="nome-txt"></span></span><span class="gloss">съкровището</span></p>
+      <p class="parola"><span class="it">Il tesoro<span class="virgola">, </span><span class="nome-txt"></span></span><span class="gloss">съкровището</span></p>
       <h2>Курсове</h2>
       <p class="gruppi">Следващи групи:</p>
       <div class="stagioni" id="stagioni"></div>
@@ -443,7 +596,7 @@ body:not(.con-nome) .virgola,body:not(.con-nome) .nome-txt{display:none}
           <span class="it" style="font-size:1.6rem;color:color-mix(in srgb,var(--verde) 85%,var(--avorio))">Venezia</span>
           <h3 id="conv-title"></h3>
           <p id="conv-body"></p>
-          <p class="presto"><span class="it">presto</span> · скоро</p>
+          <p class="presto"><span class="it">Presto</span> · скоро</p>
           <span class="sc">ниво <span id="conv-level"></span></span>
         </div>
       </article>
@@ -455,7 +608,7 @@ body:not(.con-nome) .virgola,body:not(.con-nome) .nome-txt{display:none}
 <!-- 8 · la luce -->
 <section data-stage="8" id="la-luce" class="stage oro" aria-label="Контакти">
   <div class="centro">
-    <p class="parola"><span class="it">la luce</span><span class="gloss">светлината</span></p>
+    <p class="parola"><span class="it">La luce</span><span class="gloss">светлината</span></p>
     <h2 class="brand-grande it">Ciao Maria</h2>
     <p class="insegnante">Мария Мèскин<br><span class="sc">сугестопедагог · италиански език</span></p>
     <address class="contatti">
@@ -464,11 +617,34 @@ body:not(.con-nome) .virgola,body:not(.con-nome) .nome-txt{display:none}
       <a class="riga" href="tel:+359889781054">Тел.: 0889781054</a>
       <a class="riga" href="mailto:meskin0810@gmail.com">Имейл: meskin0810@gmail.com</a>
     </address>
-    <p class="parola fine"><span class="it">a presto<span class="virgola">, </span><span class="nome-txt"></span></span></p>
+    <p class="parola fine"><span class="it">A presto<span class="virgola">, </span><span class="nome-txt"></span></span></p>
   </div>
 </section>
 
 </main>
+<div id="frase-carta" class="mmcard" role="dialog" aria-modal="true" aria-labelledby="fc-nm" hidden>
+  <div class="mmc">
+    <div class="mmc-tb"><span class="mmc-lvl" id="fc-lvl">цяло · част · цяло</span><span class="mmc-cur" title="валута: светлина">✧ светлина</span></div>
+    <div class="mmc-art" aria-hidden="true"><svg viewBox="-30 -30 60 62"><use href="#frase-goccia"/><g><circle cx="-8" cy="8" r="1.5"/><circle cx="-4" cy="9.6" r="1.5"/><circle cx="0" cy="10.2" r="1.5"/><circle cx="4" cy="9.6" r="1.5"/><circle cx="8" cy="8" r="1.5"/></g></svg></div>
+    <div class="mmc-nm it" id="fc-nm">piano</div>
+    <div class="mmc-bg" id="fc-bg">полека</div>
+    <div class="mmc-sola" id="fc-sola">сама: полека · тихо · етаж · план · пиано</div>
+    <div class="mmc-intera"><span class="it">Piano piano si va lontano.</span><span class="bg">Полека-лека се стига далече.</span></div>
+    <div class="mmc-nota"><span id="fc-nota">Хващаш цялото — смисълът идва сам. Думите после.</span><span class="sc">Лозанов · Цяло-Част-Цяло</span></div>
+    <button class="mmc-x" type="button" aria-label="Затвори">✕</button>
+  </div>
+</div>
+<div id="benv-carta" class="mmcard" role="dialog" aria-modal="true" aria-labelledby="bc-nm" hidden>
+  <div class="mmc">
+    <div class="mmc-tb"><span class="mmc-lvl" id="bc-lvl">цялото · la parola</span><span class="mmc-cur">✧ дума-семе</span></div>
+    <div class="mmc-art" aria-hidden="true"><svg viewBox="-30 -30 60 62"><use href="#frase-goccia" class="ic"/></svg></div>
+    <div class="mmc-nm it" id="bc-nm">Ciao</div>
+    <div class="mmc-bg" id="bc-bg">здравей</div>
+    <div class="mmc-intera"><span class="bg" id="bc-parte">Италиански чрез сугестопедия – не само език, който учите, а свят, в който влизате.</span></div>
+    <div class="mmc-nota"><span id="bc-nota">Първата дума на света. С нея влизате — без нито едно правило.</span><span class="sc">Benvenuti · Цяло-Част-Цяло</span></div>
+    <button class="mmc-x" type="button" aria-label="Затвори">✕</button>
+  </div>
+</div>
 <footer class="fine-pagina"><span class="it">Ciao Maria</span><span class="sc">· 2026 · Мария Мèскин</span></footer>
 
 <script>
@@ -478,13 +654,13 @@ body:not(.con-nome) .virgola,body:not(.con-nome) .nome-txt{display:none}
 const DATI = {
   seasons: [
     { id:'autunno', season:'Есен 2026', it:'Autunno', flag:'dates',
-      art:{ src:'assets/arcimboldo-autunno.webp', alt:'Есента на Арчимболдо', credit:'Giuseppe Arcimboldo · L’Autunno · 1573 · Musée du Louvre, Paris' },
+      art:{ src:'assets/tiziano-flora.webp', alt:'Флора на Тициан — богиня на цветята и пролетта', credit:'Tiziano · Flora · c. 1517 · Galleria degli Uffizi, Firenze' },
       parts:[
         { id:'parte-1', part:'Част 1', dates:'13 октомври – 12 декември 2026 г.', hours:'72 часа', condition:'при минимална група от 4 души', price:'540 €', price_note:'Цената включва учебник и материали.', early_price:null },
         { id:'parte-2', part:'Част 2', dates:'17 ноември – 10 декември 2026 г.', hours:'48 часа', condition:null, price:'340 €', price_note:null, early_price:null }
       ] },
     { id:'inverno', season:'Зима 2027', it:'Inverno', flag:'currency',
-      art:{ src:'assets/arcimboldo-inverno.webp', alt:'Зимата на Арчимболдо', credit:'Giuseppe Arcimboldo · L’Inverno · 1573 · Musée du Louvre, Paris' },
+      art:{ src:'assets/leonardo-dama-ermellino.webp', alt:'Дама с хермелин — Леонардо да Винчи', credit:"Leonardo da Vinci · Dama con l'ermellino · c. 1489–1490 · Muzeum Narodowe, Kraków" },
       parts:[
         { id:'parte-1-inverno', part:'Част 1', dates:'12 януари – 18 февруари 2027 г.', hours:'72 часа', condition:null, price:'540 лв.', price_note:null, early_price:'486 лв.' },
         { id:'parte-2-inverno', part:'Част 2', dates:'23 февруари – 18 март 2027 г.', hours:'48 часа', condition:null, price:'340 лв.', price_note:null, early_price:'306 лв.' }
@@ -698,12 +874,12 @@ THREE.ColorManagement.enabled = false;              // цветовете се �
 
 /* ===================== ЕДНОТО ПОЛЕ · position:fixed зад всички секции ===================== */
 const canvas = document.getElementById('field');
-const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches || /[?&]reduced=1/.test(location.search);   // MET-1009 · канонът: ?reduced=1 ≡ постер (както в 4-тия script)
 const isNarrow = () => innerWidth < 820 || innerHeight > innerWidth;
 const params = new URLSearchParams(location.search);
 const deepStage = Math.min(8, Math.max(0, parseInt(params.get('stage') || '0', 10) || 0));
-const NOTTE = '#050a16';
-const VERDE = new THREE.Color('#3fe3a1'), ROSSO = new THREE.Color('#ff5d6e'), AVORIO = new THREE.Color('#f1f2f1'), ORO = new THREE.Color('#e9c27c');
+const NOTTE = '#102a42';
+const VERDE = new THREE.Color('#4ce3ab'), ROSSO = new THREE.Color('#ff6a5c'), AVORIO = new THREE.Color('#f5efe4'), ORO = new THREE.Color('#f0c987');
 
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false, powerPreference: 'high-performance' });
 let pixelRatio = Math.min(devicePixelRatio || 1, isNarrow() ? 1.5 : 2);
@@ -729,16 +905,20 @@ mix(dot(hash3(i+vec3(0,1,1)),f-vec3(0,1,1)),dot(hash3(i+vec3(1,1,1)),f-vec3(1,1,
 `;
 
 /* ===================== PAROLE DI VETRO · думите от Мурано ===================== */
-const WORDS = [['ciao','здравей'],['grazie','благодаря'],['prego','моля'],['piacere','приятно ми е'],['andiamo','да тръгваме'],['allora','и така'],['coraggio','смелост'],['buongiorno','добър ден'],['buonasera','добър вечер'],['benvenuta','добре дошла'],['per favore','ако обичате'],['scusi','извинете'],['va bene','добре'],['certo','разбира се'],['bellissimo','прекрасно'],['insieme','заедно'],['domani','утре'],['finalmente','най-накрая'],['volentieri','с удоволствие'],['a presto','до скоро'],['piano piano','полека-лека'],['parla','говори'],['sogno','мечта'],['amore','любов']];
+const WORDS = [['Ciao','здравей'],['Grazie','благодаря'],['Prego','моля'],['Piacere','приятно ми е'],['Andiamo','да тръгваме'],['Allora','и така'],['Coraggio','смелост'],['Buongiorno','добър ден'],['Buonasera','добър вечер'],['Benvenuta','добре дошла'],['Per favore','ако обичате'],['Scusi','извинете'],['Va bene','добре'],['Certo','разбира се'],['Bellissimo','прекрасно'],['Insieme','заедно'],['Domani','утре'],['Finalmente','най-накрая'],['Volentieri','с удоволствие'],['A presto','до скоро'],['Piano piano','полека-лека'],['Parla','говори'],['Sogno','мечта'],['Amore','любов']];
 const COUNT = isNarrow() ? 14 : 24;
 const phases = new Float32Array(COUNT), hues = new Float32Array(COUNT), glows = new Float32Array(COUNT), alives = new Float32Array(COUNT), cells = new Float32Array(COUNT);
 for (let i = 0; i < COUNT; i++) { phases[i] = Math.random() * Math.PI * 2; hues[i] = Math.random(); alives[i] = 1; cells[i] = i % WORDS.length; }
+/* MET-1009 · думите-семена на hero-играта = първите 4 капки · СЪЩИЯТ атлас (Ciao · Parla · Piano piano · Coraggio) · размяна, не дубликат */
+const SEMI = [0, 21, 20, 6];
+SEMI.forEach((c, k) => { if (k < COUNT) { const old = cells[k]; cells[k] = c; if (c < COUNT && c !== k) cells[c] = old; } });
 const aPhase = new THREE.InstancedBufferAttribute(phases, 1), aHue = new THREE.InstancedBufferAttribute(hues, 1), aCell = new THREE.InstancedBufferAttribute(cells, 1);
 const aGlow = new THREE.InstancedBufferAttribute(glows, 1).setUsage(THREE.DynamicDrawUsage);
 const aAlive = new THREE.InstancedBufferAttribute(alives, 1).setUsage(THREE.DynamicDrawUsage);
 const glassUniforms = { uTime: { value: 0 }, uVerde: { value: VERDE }, uRosso: { value: ROSSO }, uOro: { value: ORO }, uWarm: { value: 0 } };
+const AZZURRO = new THREE.Color('#79c7ff'); glassUniforms.uAzzurro = { value: AZZURRO };   // MET-1009 · третият цвят на трикольора · през стъклото, не като флаг
 
-const bellGeo = new THREE.SphereGeometry(1, isNarrow() ? 28 : 36, isNarrow() ? 18 : 24, 0, Math.PI * 2, 0, Math.PI * 0.62);
+const bellGeo = new THREE.SphereGeometry(1, isNarrow() ? 28 : 36, isNarrow() ? 20 : 28);
 bellGeo.setAttribute('aPhase', aPhase); bellGeo.setAttribute('aHue', aHue); bellGeo.setAttribute('aGlow', aGlow); bellGeo.setAttribute('aAlive', aAlive);
 const bellMat = new THREE.ShaderMaterial({
   transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, side: THREE.DoubleSide, uniforms: glassUniforms,
@@ -751,12 +931,12 @@ const bellMat = new THREE.ShaderMaterial({
       vHue = aHue; vGlow = aGlow; vAlive = aAlive;
       float pulse = sin(uTime*1.5 + aPhase); vPulse = pulse;
       vec3 p = position;
-      float skirt = smoothstep(0.1, -0.7, p.y);
-      float squash = 1.0 + pulse*0.12*(1.0-skirt);
-      p.xz *= squash * (1.0 + skirt*0.22*sin(uTime*1.5+aPhase+1.7));
-      p.y  *= 1.0 - pulse*0.08;
+      float pinch = smoothstep(-0.15, 1.0, p.y);          // капка: 0 долу (обло) · 1 горе (връх)
+      p.xz *= (1.0 - pinch*pinch*0.95);                   // заостри върха → капка
+      p.y  += pinch*pinch*0.55;                           // издърпай върха нагоре
+      p.xz *= 1.0 + pulse*0.06;                           // нежно дишане
       float n = noise3(p*2.2 + vec3(0.0, uTime*0.4, aPhase));
-      p += normal * n * (0.05 + skirt*0.22);
+      p += normal * n * 0.05;                             // лека повърхностна вълничка
       vY = p.y;
       vec4 mv = modelViewMatrix * instanceMatrix * vec4(p,1.0);
       vN = normalize(normalMatrix * mat3(instanceMatrix) * normal);
@@ -765,12 +945,14 @@ const bellMat = new THREE.ShaderMaterial({
     }`,
   fragmentShader: `
     uniform vec3 uVerde, uRosso, uOro; uniform float uWarm;
+    uniform vec3 uAzzurro;   /* MET-1009 · трикольорът: azzurro между verde и rosso */
     varying vec3 vN; varying vec3 vV; varying float vHue; varying float vY; varying float vPulse; varying float vGlow; varying float vAlive;
     void main(){
       vec3 a = mix(uVerde, uOro, uWarm); vec3 b = mix(uRosso, uOro*0.92, uWarm);
       float nv = abs(dot(normalize(vN), normalize(vV)));
       float fr = pow(1.0 - nv, 2.0);
       vec3 irid = mix(a, b, 0.5 + 0.5*sin(vHue*6.2831 + fr*5.0 + vY*2.0));   // трикольорът през стъклото · verde→rosso по fresnel
+      irid = mix(irid, uAzzurro, 0.46 * (1.0 - uWarm) * pow(max(0.0, sin(vHue*6.2831 + fr*5.0 + vY*2.0 + 2.094)), 3.0));   // MET-1009 · azzurro-лента между verde и rosso (синьо-зелено-червено през стъклото)
       float core = smoothstep(-0.35, 0.95, vY) * 0.42 * (0.65+0.35*vPulse);
       float fill = pow(nv, 2.0) * 0.14;
       vec3 col = irid * (fr*1.3 + fill) + mix(b, a, 0.35*vPulse+0.35) * core;
@@ -781,6 +963,54 @@ const bellMat = new THREE.ShaderMaterial({
 });
 const bells = new THREE.InstancedMesh(bellGeo, bellMat, COUNT);
 bells.instanceMatrix.setUsage(THREE.DynamicDrawUsage); bells.frustumCulled = false; scene.add(bells);
+
+/* ===================== IL MONDO · светът зад стъклото (MET-1009) · класически образ (PD · кредит в HTML), който капките-семена отварят · не е прах-слой ===================== */
+const mondoUniforms = { uMap: { value: null }, uHas: { value: 0 }, uOpen: { value: 0 }, uDim: { value: 0.68 }, uImgAspect: { value: 1.35 }, uNotte: { value: new THREE.Color(NOTTE) },
+  uPlane: { value: new THREE.Vector4(0, 0, 1, 1) }, uIris: { value: new THREE.Vector3(0, 0, 1) }, uSemi: { value: [new THREE.Vector4(), new THREE.Vector4(), new THREE.Vector4(), new THREE.Vector4()] } };
+new THREE.TextureLoader().load('assets/turner-venezia-dogana.webp', t => { mondoUniforms.uMap.value = t; mondoUniforms.uImgAspect.value = t.image.width / t.image.height; mondoUniforms.uHas.value = 1; });
+const mondoMat = new THREE.ShaderMaterial({
+  transparent: true, depthWrite: false, uniforms: mondoUniforms,
+  vertexShader: `varying vec2 vUv; varying vec3 vW; void main(){ vUv = uv; vec4 w = modelMatrix * vec4(position, 1.0); vW = w.xyz; gl_Position = projectionMatrix * viewMatrix * w; }`,
+  fragmentShader: `
+    uniform sampler2D uMap; uniform float uHas, uOpen, uDim, uImgAspect; uniform vec3 uNotte, uIris; uniform vec4 uPlane; uniform vec4 uSemi[4];
+    varying vec2 vUv; varying vec3 vW;
+    void main(){
+      float pa = uPlane.z / uPlane.w; vec2 uv = vUv - 0.5;
+      if (pa > uImgAspect) uv.y *= uImgAspect / pa; else uv.x *= pa / uImgAspect;                       // cover · изрязва излишъка
+      vec3 c = texture2D(uMap, uv + 0.5).rgb;
+      float m = (1.0 - smoothstep(uIris.z * 0.45, uIris.z, distance(vW.xy, uIris.xy))) * min(1.0, 0.35 + uOpen) * step(0.02, uOpen);   // ирисът · отваря се с пропорцията
+      for (int k = 0; k < 4; k++) { float dk = distance(vW.xy, uSemi[k].xy); m = max(m, uSemi[k].w * (1.0 - smoothstep(uSemi[k].z * 0.4, uSemi[k].z, dk))); }   // прозорецът на летящото семе
+      float vig = smoothstep(0.0, 0.18, 0.5 - max(abs(vUv.x - 0.5), abs(vUv.y - 0.5)));                    // мек ръб към нощта
+      gl_FragColor = vec4(mix(uNotte, c, uDim), m * vig * uHas);
+    }`
+});
+const mondo = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), mondoMat); mondo.position.z = -6; mondo.renderOrder = -1; mondo.frustumCulled = false; scene.add(mondo);
+function mondoFit(){ const kz = (CAMZ - mondo.position.z) / CAMZ, W = view.W * kz * 1.06, H = view.H * kz * 1.06; mondo.scale.set(W, H, 1); mondoUniforms.uPlane.value.set(0, 0, W, H); }
+
+/* ---- семената · четат състоянието на hero-драйвера (4-ти script · window.__hero) · капката каца в слота си · скролът е господар ---- */
+const heroTmp = new THREE.Vector3(), semeW = [0, 0, 0, 0]; let heroLast = -2;
+const SEME_S = isNarrow() ? [0.66, 1.0, 0.82] : [0.85, 1.25, 1.0];                                         // [паркирано, текущо, цялото]
+function heroState(){ const h = window.__hero; return (h && stage === 1 && !h.poster) ? h : null; }
+function семеЦел(k, out){ const h = heroState(); if (!h || k > h.beat || !h.slots || !h.slots[k]) return 0;
+  const r = h.slots[k].getBoundingClientRect(); if (!r.width) return 0;
+  projectToPlane(r.left + r.width / 2, r.top + r.height / 2, out); out.z = 0.6;
+  return h.beat === 4 ? 3 : k === h.beat ? 2 : 1; }                                                          // 1 паркирано · 2 текущото · 3 цялото
+function heroFrame(dt){
+  mondoFit();
+  const h = heroState(), beat = h ? h.beat : -1, kk = reduce ? 1 : Math.min(1, dt * 1.4);
+  if (beat !== heroLast) {
+    if (beat >= 0 && beat < 4 && words[beat]) { const w = words[beat]; w.glow = 1.2; if (isFinite(w.pos.x) && isFinite(w.pos.y)) spawnBubbles(w.pos.x, w.pos.y, 9, 0.35); }   // семето светва и издишва
+    if (beat === 4) for (let i = 0; i < 4 && i < COUNT; i++) words[i].glow = 0.9;
+    heroLast = beat; }
+  const openT = beat < 0 ? 0 : 0.1 + 0.9 * Math.min(beat, 4) / 4;                                          // пропорцията k/4 отваря света
+  mondoUniforms.uOpen.value += (openT - mondoUniforms.uOpen.value) * kk;
+  const kz = (CAMZ - mondo.position.z) / CAMZ, Hp = view.H * kz;
+  mondoUniforms.uIris.value.set(0, Hp * 0.2, (0.12 + 1.3 * mondoUniforms.uOpen.value) * Hp * 0.5);
+  for (let i = 0; i < 4; i++) { const u = mondoUniforms.uSemi.value[i], w = words[i]; if (!w) { u.w = 0; continue; }
+    const tg = (i === beat && beat < 4) ? 1 : 0; semeW[i] += (tg - semeW[i]) * (reduce ? 1 : Math.min(1, dt * (tg ? 3 : 0.9)));
+    const t = (mondo.position.z - camera.position.z) / (w.pos.z - camera.position.z);                     // проекция на капката върху равнината на света
+    u.set(camera.position.x + (w.pos.x - camera.position.x) * t, camera.position.y + (w.pos.y - camera.position.y) * t, (2.4 + 0.4 * Math.sin(elapsed * 2.0 + i)) * kz, semeW[i]); }
+}
 
 const veilGeo = new THREE.CylinderGeometry(0.88, 0.05, 2.4, 20, 18, true); veilGeo.translate(0, -1.35, 0);
 veilGeo.setAttribute('aPhase', aPhase); veilGeo.setAttribute('aHue', aHue); veilGeo.setAttribute('aAlive', aAlive);
@@ -816,7 +1046,7 @@ const veilMat = new THREE.ShaderMaterial({
     }`
 });
 const veils = new THREE.InstancedMesh(veilGeo, veilMat, COUNT);
-veils.instanceMatrix.setUsage(THREE.DynamicDrawUsage); veils.frustumCulled = false; scene.add(veils);
+veils.instanceMatrix.setUsage(THREE.DynamicDrawUsage); veils.frustumCulled = false; veils.visible = false; /* капка: без пипала (медуза→капка) */ scene.add(veils);
 
 /* атлас с думите · Italiana · 2 колони × 12 реда */
 const atlasCanvas = document.createElement('canvas'); atlasCanvas.width = 1024; atlasCanvas.height = 1536;
@@ -1054,6 +1284,7 @@ const bubMat = new THREE.ShaderMaterial({
     gl_FragColor = vec4(col*ring, ring*vA*0.7); }`
 });
 scene.add(new THREE.Points(bubGeo, bubMat));
+bubGeo.boundingSphere = new THREE.Sphere(new THREE.Vector3(), 100);   // NaN-фикс: radius>0 → recompute никога не се вика
 let bubHead = 0;
 function spawnBubbles(wx, wy, n, tint){
   for (let k = 0; k < n; k++) {
@@ -1163,15 +1394,20 @@ function simWords(dt){
   for (let i = 0; i < COUNT; i++) {
     const w = words[i], t = elapsed * spd + w.seed;
     tmpV.set(w.home.x + Math.sin(t) * amp + Math.sin(t * 0.43 + w.seed) * amp * 0.55, w.home.y + Math.cos(t * 0.8) * amp * 0.7 + Math.sin(elapsed * 1.5 + w.seed) * 0.25, w.home.z + Math.sin(t * 0.6 + 2.0) * 2.5);
+    const семе = i < 4 ? семеЦел(i, heroTmp) : 0;                                                          // MET-1009 · семе → слотът му е домът
     w.vel.lerp(tmpV.sub(w.pos).multiplyScalar(0.35), 1 - Math.pow(0.02, dt));
+    if (семе) w.vel.lerp(tmpV.copy(heroTmp).sub(w.pos).multiplyScalar(2.4), 1 - Math.pow(0.001, dt));   // MET-1009 · по-бърза пружина към слота
     w.vel.x += current.x * dt * (2.2 - w.scale * 0.6); w.vel.y += current.y * dt * (2.2 - w.scale * 0.6);
     if (pointerActive) { const ax = w.pos.x - stirPoint.x, ay = w.pos.y - stirPoint.y, d = Math.hypot(ax, ay); if (d < 7 && d > 1e-3) { w.vel.x += ax / d * (7 - d) * 0.9 * dt; w.vel.y += ay / d * (7 - d) * 0.9 * dt; } }
     w.pos.addScaledVector(w.vel, dt);
     w.glow *= Math.pow(0.3, dt); w.aliveT += (w.aliveTarget - w.aliveT) * Math.min(dt * 1.6, 1);
     dummy.position.copy(w.pos);
     dummy.rotation.set(w.tilt.x + Math.sin(elapsed * 0.3 + w.seed) * 0.18 + w.vel.z * 0.04, 0, w.tilt.z + Math.cos(elapsed * 0.26 + w.seed) * 0.18 - w.vel.x * 0.04);
+    if (семе) dummy.rotation.set(0, 0, Math.sin(elapsed * 0.9 + w.seed) * 0.05);                            // MET-1009 · кацналото семе стои изправено
     dummy.scale.setScalar(w.scale); dummy.updateMatrix();
+    if (семе) { dummy.scale.setScalar(SEME_S[семе - 1]); dummy.updateMatrix(); }                            // MET-1009 · мащаб по роля
     bells.setMatrixAt(i, dummy.matrix); veils.setMatrixAt(i, dummy.matrix); wordMesh.setMatrixAt(i, dummy.matrix);
+    if (семе) { dummy.scale.setScalar(1e-4); dummy.updateMatrix(); wordMesh.setMatrixAt(i, dummy.matrix); }   // MET-1009 · думата на семето е HTML под слота (текст извън полето)
     glows[i] = w.glow; alives[i] = w.aliveT;
   }
   bells.instanceMatrix.needsUpdate = veils.instanceMatrix.needsUpdate = wordMesh.instanceMatrix.needsUpdate = true;
@@ -1194,6 +1430,7 @@ function frame(dt){
   dustUniforms.uTime.value = elapsed; dustUniforms.uAssembly.value = asm; dustUniforms.uSwirl.value = swirl; dustUniforms.uMouse.value.copy(pointerActive ? stirPoint : tmpV.set(0, 999, 0));
   glassUniforms.uTime.value = elapsed; bubMat.uniforms.uTime.value = elapsed;
   simWords(dt);
+  heroFrame(dt);                                                                                           // MET-1009 · семената + светът
   const lean = isNarrow() ? 0.5 : 1.4, breathe = Math.sin(elapsed * 0.1) * 0.35;
   const tx = flight ? cityWorld[flight.k].x * 0.55 : ndc.x * lean + breathe, ty = flight ? cityWorld[flight.k].y * 0.55 : ndc.y * lean * 0.6, tz = flight ? 21 : CAMZ;
   camera.position.x += (tx - camera.position.x) * Math.min(dt * 1.6, 1); camera.position.y += (ty - camera.position.y) * Math.min(dt * 1.6, 1); camera.position.z += (tz - camera.position.z) * Math.min(dt * 1.8, 1);
@@ -1245,7 +1482,161 @@ window.__field = {
   flyTo, setName(n){ nome = n; if (dustKind === 'name') loadHome('name'); if (reduce) renderOnce(); },
   setBeads(n){ beadsN = n; dustUniforms.uBeads.value = n; if (dustKind === 'ring') loadHome('ring'); if (reduce) renderOnce(); }
 };
+Object.defineProperties(window.__field, { семе: { get(){ return heroLast; } }, mondo: { get(){ return +mondoUniforms.uOpen.value.toFixed(3); } }, semi: { get(){ return SEMI.slice(); } } });   // MET-1009 · гейт-четци (живи getters · Object.assign би ги снимал веднъж)
+canvas.addEventListener('webglcontextlost', e => { e.preventDefault(); if (rafId !== null) { cancelAnimationFrame(rafId); rafId = null; } document.documentElement.classList.add('nogl'); });   // MET-1009 · изпуснат GL-контекст → HTML-постерът, не черен екран
 boot();
+</script>
+<script>
+/* ===================== 4-ти script · ДРАЙВЕР · „La frase intera" (MET-996) · канон metalandia-нов-контрол · двигател metalandia-живо-платно (2D-ред · нула GL) ===================== */
+(function(){
+'use strict';
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches || /[?&]reduced=1/.test(location.search);
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+/* — Прах-диригент · ЕДИН rAF за всички наслойки · рисува само видимото · заспива при 0 активни — */
+const наЕкран=(el,z=0)=>{const r=el.getBoundingClientRect();return r.bottom>-z&&r.top<(innerHeight||0)+z};
+const Прах=(()=>{ const реги=[]; let жив=false, t0=performance.now(), посл=t0, празни=0;
+  function кадър(now){ const dt=Math.min(0.05,(now-посл)/1000); посл=now; const t=(now-t0)/1000; let активни=0;
+    for(const r of реги){ if(r.когато&&!r.когато()) continue; if(r.el&&!наЕкран(r.el,160)) continue; r.рисувай(t,dt); активни++; }
+    if(reduce){ жив=false; return; }                 // reduced → един кадър · постерът
+    празни=активни?0:празни+1; if(празни>150){ жив=false; return; }  // заспива при 0 активни
+    requestAnimationFrame(кадър); }
+  const буди=()=>{ if(!жив){ жив=true; посл=performance.now(); празни=0; requestAnimationFrame(кадър) } };
+  addEventListener('scroll',буди,{passive:true}); addEventListener('resize',буди);
+  return { добави(r){ реги.push(r); буди(); return r }, буди, get жив(){return жив} }; })();
+/* — платно · прозрачен 2D-canvas · DPR-коректен · размер от getBoundingClientRect, не от viewport-ширина — */
+const DPRm=Math.min(2,window.devicePixelRatio||1);
+function платно(host,cls,id){ const cv=document.createElement('canvas'); cv.className=cls; if(id)cv.id=id;
+  cv.setAttribute('aria-hidden','true'); host.appendChild(cv); const ctx=cv.getContext?cv.getContext('2d'):null;
+  const o={cv,ctx,W:0,H:0,resize(){const r=cv.getBoundingClientRect(); if(!r.width||!ctx)return;
+    o.W=r.width;o.H=r.height; cv.width=Math.round(o.W*DPRm); cv.height=Math.round(o.H*DPRm);
+    ctx.setTransform(DPRm,0,0,DPRm,0,0)}}; addEventListener('resize',o.resize); return o }
+/* — валута-цвят · злато (Мета · нишката) ↔ светлина (Метта · в капките) — */
+const ЗЛт=[232,199,126], СВт=[255,245,214];
+const цвт=(m,a)=>'rgba('+((ЗЛт[0]+(СВт[0]-ЗЛт[0])*m)|0)+','+((ЗЛт[1]+(СВт[1]-ЗЛт[1])*m)|0)+','+((ЗЛт[2]+(СВт[2]-ЗЛт[2])*m)|0)+','+clamp(a,0,1).toFixed(2)+')';
+/* — драйвер · MED-V1 · скролът е господар · тапът държи до смяна на скрол-стойността — */
+function драйвер(стъпки, изчисли, приложи, начало){
+  let авто=null, ръчно=null, котва=null, тек=(начало??null), ключ=0;
+  const ефект=()=>{const e=ръчно!==null?ръчно:авто; if(e!==null&&e!==тек){тек=e; приложи(e)}};
+  return { скрол(){ if(performance.now()<ключ)return; const a=изчисли(); if(a===null)return;
+             if(ръчно!==null&&a!==котва)ръчно=null; авто=a; ефект() },
+           тап(i){ ръчно=((i%стъпки)+стъпки)%стъпки; котва=авто; ефект() },
+           заключи(ms){ ключ=performance.now()+(ms||900) },
+           get тек(){return тек} }; }
+/* — пулс-подсказка .tap → .seen (нула повторно мигане) — */
+document.querySelectorAll('[data-tap]').forEach(el=>{const seen=()=>el.classList.add('seen');
+  el.addEventListener('pointerdown',seen,{passive:true}); el.addEventListener('click',seen)});
+
+/* ===================== КОНТРОЛЪТ · BENVENUTI · hero-играта (MET-1009) · канон metalandia-нов-контрол · капките-семена = първите 4 капки на СЪЩОТО поле (без нов прах) · Цяло → Части → Цяло ===================== */
+(function(){
+const тан=document.getElementById('benvenuta'), панел=document.getElementById('benv-panel'); if(!тан||!панел) return;
+const семена=[...панел.querySelectorAll('.seme')], брой=document.getElementById('benv-n'), фазаБ=document.getElementById('benv-fase');
+const ФАЗИ=['цялото · като мелодия','част 1 · влизането','част 2 · часовете','част 3 · резултатът','цялото · вече разбрано'];
+const СЕМЕНА=[
+  {it:'Ciao',        bg:'здравей',     b:'0', nota:'Първата дума на света. С нея влизате — без нито едно правило.'},
+  {it:'Parla',       bg:'говори',      b:'1', nota:'Не „учи да говориш“ — говори. Новата самоличност започва сама.'},
+  {it:'Piano piano', bg:'полека-лека', b:'2', nota:'Без напрежение и без изпитване. Полека-лека се стига далече.'},
+  {it:'Coraggio',    bg:'смелост',     b:'3', nota:'Резултатът не е речникът. Смелостта да проговорите.'}];
+тан.classList.add('gioco'); if(reduce) тан.classList.add('postero');                                   // reduced → постер: цялата покана видима · нула хореография
+window.__hero={beat:0,poster:reduce,slots:семена.map(b=>b.querySelector('.slot'))};                   // полето чете оттук · един източник · скролът е господар
+function изчисли(){ const r=тан.getBoundingClientRect(), H=innerHeight||1, span=r.height-H; if(span<=0) return 0;
+  const p=clamp(-r.top/span,0,1); return p<.10?0:p<.34?1:p<.58?2:p<.82?3:4; }                          // стабилна котва: горният ръб на секцията · монотонно надолу
+function приложи(e){ панел.dataset.beat=e; window.__hero.beat=e; брой.textContent=(Math.min(e,3)+1)+' / 4'; фазаБ.textContent=ФАЗИ[e];
+  семена.forEach((b,k)=>{ b.classList.toggle('ora',e<4&&k===e); b.classList.toggle('presa',e===4||k<e); b.classList.toggle('dopo',e<4&&k>e) }); }
+const дрБ=драйвер(5, изчисли, приложи, null);
+/* карта · role=dialog · Esc/✕ · клавиатура (бутоните носят Enter/Space) · носи значението от Стъпка 0 */
+const картаБ=document.getElementById('benv-carta'); let предиБ=null;
+const bc={lvl:document.getElementById('bc-lvl'),nm:document.getElementById('bc-nm'),bg:document.getElementById('bc-bg'),parte:document.getElementById('bc-parte'),nota:document.getElementById('bc-nota'),x:картаБ.querySelector('.mmc-x')};
+function отвориБ(k){ const d=СЕМЕНА[k], el=панел.querySelector(k<2?'.b[data-b="'+d.b+'"]':'.s[data-b="'+d.b+'"]');
+  bc.lvl.textContent=(k?'част '+k+' / 3':'цялото')+' · la parola'; bc.nm.textContent=d.it; bc.bg.textContent=d.bg; bc.parte.textContent=el?el.textContent.trim():''; bc.nota.textContent=d.nota;
+  предиБ=document.activeElement; картаБ.hidden=false; bc.x.focus(); }
+function затвориБ(){ if(картаБ.hidden) return; картаБ.hidden=true; if(предиБ&&предиБ.focus) предиБ.focus(); }
+bc.x.addEventListener('click',затвориБ); картаБ.addEventListener('click',e=>{ if(e.target===картаБ) затвориБ() });
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') затвориБ() });
+семена.forEach((b,k)=>b.addEventListener('click',e=>{ e.stopPropagation(); отвориБ(k) }));
+/* тапът: следващата капка · държи (MED-V1) */
+const следващБ=()=>{ дрБ.тап(((дрБ.тек??-1)+1)%5); дрБ.заключи(1400) };
+document.getElementById('benv-avanti').addEventListener('click',следващБ);
+document.getElementById('semi').addEventListener('click',e=>{ if(!e.target.closest('.seme')) следващБ() });
+addEventListener('scroll',()=>дрБ.скрол(),{passive:true}); addEventListener('resize',()=>дрБ.скрол());
+дрБ.скрол(); if(дрБ.тек===null) приложи(0);
+window.__benv={ get бийт(){return дрБ.тек}, get reduced(){return reduce}, следващ:следващБ, отвори:отвориБ, затвори:затвориБ };
+})();
+
+/* ===================== КОНТРОЛЪТ · la frase intera · Цяло → Части → Цяло ===================== */
+const фиг=document.getElementById('frase'); if(!фиг) return;
+const сцена=document.getElementById('frase-scena');
+const капки=[...фиг.querySelectorAll('.goccia')];
+const сенсо=document.getElementById('frase-senso'), фазаEl=document.getElementById('frase-fase');
+const ФАЗИ=['цялото · чуй фразата като мелодия','частите · всяка дума сама','цялото · вече разбрано'];
+const ЦЯЛО={it:'Piano piano si va lontano.',bg:'Полека-лека се стига далече.',sola:'пет думи · една мелодия',nota:'Хващаш цялото — смисълът идва сам. Думите после.'};
+const ДУМИ=[
+  {it:'piano',  bg:'полека', sola:['полека','тихо','етаж','план','пиано'], nota:'Сама има пет значения. Цялото избира едно — без речник.', x:62,  y:94.2,  dy:0},
+  {it:'piano',  bg:'полека', sola:['полека','тихо','етаж','план','пиано'], nota:'Повторена, значи още по-полека. Италианският удвоява, не степенува.', x:140, y:100.7, dy:18},
+  {it:'si',     bg:'се',     sola:['се','да (sì)'],                       nota:'Сама е „се“ или „да“. Мелодията на цялото ти казва кое.', x:200, y:102,   dy:8},
+  {it:'va',     bg:'отива',  sola:['отива','върви','става'],              nota:'Сама „отива“. В цялото — „стига“. Смисълът е в цялото.', x:245, y:100.9, dy:24},
+  {it:'lontano',bg:'далече', sola:['далече','далечен'],                  nota:'Накрая на фразата — целта. Хванеш ли цялото, тя вече е твоя.', x:318, y:95.3,  dy:12}
+];
+const P0=[30,90],P1=[195,114],P2=[360,90];                       // нишката · квадратна Безие
+const безие=u=>{const a=(1-u)*(1-u),b=2*(1-u)*u,c=u*u;return [a*P0[0]+b*P1[0]+c*P2[0], a*P0[1]+b*P1[1]+c*P2[1]]};
+const пл=платно(сцена,'frase-prah','frase-prah');
+let фаза=null, микс=0, ярк=.6, глосТик=-1;
+const поз=ДУМИ.map(d=>({x:d.x,y:d.y}));
+const целX=k=>{const d=ДУМИ[k]; return фаза===1? 195+(d.x-195)*1.12 : d.x};
+const целY=k=>{const d=ДУМИ[k]; return фаза===1? d.y+d.dy : d.y};
+function изчисли(){ const r=сцена.getBoundingClientRect(), H=innerHeight||1; if(r.bottom<0||r.top>H||!r.height) return null;
+  const p=(H-r.top)/(H+r.height); return p<.34?0:p<.66?1:2; }         // стабилна котва: горният ръб на сцената
+const др=драйвер(3, изчисли, e=>{ фаза=e; фиг.dataset.fase=e; фазаEl.textContent=ФАЗИ[e]; Прах.буди(); }, null);
+/* холограмен поток: прахът тече по нишката МЕЖДУ капките (цялото) · капе от всяка капка към значението ѝ (частта) */
+const ПОТОК=Array.from({length:72},()=>({u:Math.random(),v:.05+Math.random()*.07,w:Math.random()*6.2832,r:.7+Math.random()*1.1}));
+const КАПЕНЕ=Array.from({length:50},(_,i)=>({k:i%5,f:Math.random(),v:.55+Math.random()*.6,ox:(Math.random()-.5)*6,r:.6+Math.random()*.9}));
+Прах.добави({ el:сцена, рисувай(t,dt){
+  др.скрол();
+  if(!пл.W) пл.resize();
+  const k1=reduce?1:Math.min(1,dt*3.4);
+  капки.forEach((g,k)=>{ const p=поз[k]; p.x+=(целX(k)-p.x)*k1; p.y+=(целY(k)-p.y)*k1; g.setAttribute('transform','translate('+p.x.toFixed(1)+' '+p.y.toFixed(1)+')') });
+  const цм=фаза===1?1:0; микс=reduce?цм:микс+(цм-микс)*Math.min(1,dt*3);
+  const ця=фаза===2?1:фаза===0?.6:.3; ярк=reduce?ця:ярк+(ця-ярк)*Math.min(1,dt*2);
+  if(фаза===1&&!reduce){ const тик=Math.floor(t/.75); if(тик!==глосТик){ глосТик=тик;        // сама „piano" трепти между значенията си
+      [0,1].forEach((k,j)=>{ const s=ДУМИ[k].sola; капки[k].querySelector('.g').textContent=s[(тик+j*2)%s.length] }) } }
+  else if(фаза!==1&&глосТик!==-1){ глосТик=-1; [0,1].forEach(k=>{ капки[k].querySelector('.g').textContent=ДУМИ[k].bg }) }
+  const {ctx,W,H}=пл; if(!ctx||!W) return; const s=W/390;
+  ctx.clearRect(0,0,W,H); ctx.globalCompositeOperation='lighter';
+  for(let k=0;k<5;k++){ const p=поз[k], cx=p.x*s, cy=(p.y+6)*s, R=26*s;                       // ореол · светлина в капката
+    const g=ctx.createRadialGradient(cx,cy,0,cx,cy,R); g.addColorStop(0,цвт(1,.05+.16*ярк)); g.addColorStop(1,цвт(.6,0));
+    ctx.fillStyle=g; ctx.beginPath(); ctx.arc(cx,cy,R,0,6.2832); ctx.fill(); }
+  const aП=(1-микс)*(.32+.5*ярк);                                                              // поток по нишката · цялото
+  if(aП>.01) for(const q of ПОТОК){ q.u=(q.u+q.v*dt)%1; q.w+=dt*2.1; const b=безие(q.u); const y=b[1]+Math.sin(q.w)*3.5;
+    let dmin=99; for(let k=0;k<5;k++){ const d=Math.hypot(b[0]-поз[k].x,y-поз[k].y); if(d<dmin)dmin=d }
+    const m=1-clamp(dmin/36,0,1);                                                              // светлина до капката → злато между
+    ctx.fillStyle=цвт(m,aП*(.45+.55*m)); ctx.beginPath(); ctx.arc(b[0]*s,y*s,q.r*s,0,6.2832); ctx.fill(); }
+  if(микс>.01) for(const q of КАПЕНЕ){ q.f+=q.v*dt; if(q.f>1){ q.f-=1; q.ox=(Math.random()-.5)*6 }   // капене · частта
+    const p=поз[q.k], x=p.x+q.ox*q.f, y=p.y+22+q.f*30;
+    ctx.fillStyle=цвт(1,микс*(1-q.f)*.8); ctx.beginPath(); ctx.arc(x*s,y*s,q.r*s*(1-q.f*.4),0,6.2832); ctx.fill(); }
+  ctx.globalCompositeOperation='source-over';
+}});
+/* — карта · role=dialog · Esc/✕ · клавиатура — */
+const карта=document.getElementById('frase-carta'); let преди=null;
+const fc={lvl:document.getElementById('fc-lvl'),nm:document.getElementById('fc-nm'),bg:document.getElementById('fc-bg'),sola:document.getElementById('fc-sola'),nota:document.getElementById('fc-nota'),x:карта.querySelector('.mmc-x')};
+function отвори(k){ const d=k<0?ЦЯЛО:ДУМИ[k];
+  fc.lvl.textContent=k<0?'цялото · la frase intera':'част '+(k+1)+' / 5 · la parola';
+  fc.nm.textContent=d.it; fc.bg.textContent=d.bg; fc.sola.textContent=k<0?d.sola:'сама: '+d.sola.join(' · '); fc.nota.textContent=d.nota;
+  преди=document.activeElement; карта.hidden=false; fc.x.focus(); }
+function затвори(){ if(карта.hidden) return; карта.hidden=true; if(преди&&преди.focus) преди.focus(); }
+fc.x.addEventListener('click',затвори);
+карта.addEventListener('click',e=>{ if(e.target===карта) затвори() });
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') затвори() });
+const бутон=(el,k)=>{ el.addEventListener('click',e=>{ e.stopPropagation(); отвори(k) });
+  el.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); e.stopPropagation(); отвори(k) } }) };
+капки.forEach(бутон); бутон(сенсо,-1);
+/* — тапът: следващ кадър · държи (MED-V1) — */
+const следващ=()=>{ др.тап(((др.тек??-1)+1)%3); др.заключи(1400); Прах.буди() };
+сцена.addEventListener('click',следващ);
+document.getElementById('frase-avanti').addEventListener('click',следващ);
+фиг.addEventListener('pointerdown',()=>фиг.querySelectorAll('[data-tap]').forEach(el=>el.classList.add('seen')),{passive:true});
+addEventListener('scroll',()=>др.скрол(),{passive:true});
+пл.resize(); др.скрол(); if(др.тек===null){ фиг.dataset.fase='0'; фазаEl.textContent=ФАЗИ[0]; }
+window.__frase={ get фаза(){return фаза}, get reduced(){return reduce}, get платно(){return пл}, get диригент(){return Прах.жив}, отвори, затвори, следващ };
+})();
 </script>
 </body>
 </html>

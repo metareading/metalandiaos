@@ -1,0 +1,52 @@
+[
+  {
+    "key": "01",
+    "artist": "Leonardo da Vinci",
+    "title": "Lady with an Ermine",
+    "year": "c. 1490",
+    "file": "ep4-01.webp",
+    "commons": "File:Lady with an Ermine - Leonardo da Vinci - Google Art Project.jpg",
+    "credit": "Leonardo da Vinci · Lady with an Ermine · c. 1490",
+    "scene": "Влизане"
+  },
+  {
+    "key": "02",
+    "artist": "John William Waterhouse",
+    "title": "Ulysses and the Sirens",
+    "year": "1891",
+    "file": "ep4-02.webp",
+    "commons": "File:John William Waterhouse - Ulysses and the Sirens (1891).jpg",
+    "credit": "John William Waterhouse · Ulysses and the Sirens · 1891",
+    "scene": "Умения 1–2"
+  },
+  {
+    "key": "03",
+    "artist": "John William Waterhouse",
+    "title": "The Magic Circle",
+    "year": "1886",
+    "file": "ep4-03.webp",
+    "commons": "File:John William Waterhouse - Magic Circle.JPG",
+    "credit": "John William Waterhouse · The Magic Circle · 1886",
+    "scene": "Умения 3–4"
+  },
+  {
+    "key": "04",
+    "artist": "Sandro Botticelli",
+    "title": "Primavera",
+    "year": "c. 1480",
+    "file": "ep4-04.webp",
+    "commons": "File:Botticelli-primavera.jpg",
+    "credit": "Sandro Botticelli · Primavera · c. 1480",
+    "scene": "Умения 5–6"
+  },
+  {
+    "key": "05",
+    "artist": "Frederic Leighton",
+    "title": "Perseus on Pegasus Hastening to the Rescue of Andromeda",
+    "year": "1895",
+    "file": "ep4-05.webp",
+    "commons": "File:Frederic Leighton (1830-1896) - Perseus, on Pegasus, Hastening to the Rescue of Andromeda - L.F6.1902.0.0 - Leicester Museum ^ Art Gallery.jpg",
+    "credit": "Frederic Leighton · Perseus on Pegasus Hastening to the Rescue of Andromeda · 1895",
+    "scene": "Еликсирът"
+  }
+]

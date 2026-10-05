@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex,nofollow">
-<meta name="theme-color" content="#0b0b0b">
+<meta name="theme-color" content="#ffffff">
 <link rel="icon" href="data:,">
 <title>TEDxSofia 2026 · Смисълът да даваш · за партньорите</title>
-<style>html,body{margin:0;background:#0b0b0b}</style>
+<style>html,body{margin:0;background:#ffffff}</style>
 </head>
 <body>
 <!-- ═══ TEDxSofia 2026 · „Смисълът да даваш“ · страница за партньори · MET-1235 · композиция върху Еп4 НЖ (донор a8d4f7c9) · сглобено от build.py · [НЕПРОВЕРЕНО] endpoint ═══ -->
@@ -1342,6 +1342,41 @@ body.mrpg-popup-open {
 .fcard input.bad{border-color:#c13232;box-shadow:0 0 0 3px rgba(193,50,50,.18)}
 .fcard .mrpg__status{min-height:22px;font-weight:600}
 footer .sig{color:#E62B1E}
+
+/* ── MET-1260 · светъл фон с TED червено (като tedxsofia.org · дума 03.10 · ОВ Деси „черният фон тежи“) · само добавки · сцените на праха (карта · път) остават тъмни рамки ── */
+#nzp,#nzp-fx{--bg:#ffffff;--bg2:#f7f5f4;--bg3:#efeceb;--ink:#111111;--ink2:#2e2e2e;--mute:#6b6b6b}
+#nzp,#nzp-fx{--light:#1a1a1a;--light2:#3a3a3a}
+#s-karta,#pathpin{--light:#fffaf9;--light2:#fff0ed;--ink:#F6F6F6;--ink2:#eaeaea;--mute:#9a9a9a}
+:where(#nzp,#nzp-fx) h1,:where(#nzp,#nzp-fx) h2,:where(#nzp,#nzp-fx) h3,:where(#nzp,#nzp-fx) b,:where(#nzp,#nzp-fx) strong{color:#111}
+.wbox .t,.wi-card .wi-nm,.sp .ttl,.sp .pic .w,.dayc .arc,.dayc .mo2 .w,.stlab.on,.ladder li.on .w,.wbox .row span.lit,.slot .w,.item .w{color:#111}
+.hud{background:#fff}
+.hud.l .ico,.hud.l b{text-shadow:none}
+.path{background:linear-gradient(180deg,#fff 0%,#f7f5f4 100%)}
+.hero,.wheelsec,.form,.day,.vodach,.monster,.scale,.sched,.bring,.price{background:var(--bg)}
+.hero{background:linear-gradient(180deg,#fff 0%,#fbf7f6 100%)}
+.vodach{background:#f7f5f4}
+.clockwrap::after{background:linear-gradient(180deg,#fff,rgba(255,255,255,0))}
+#bar{background:rgba(255,255,255,.92);border-bottom-color:rgba(230,43,30,.35)}
+#cards,#toast{background:rgba(255,255,255,.96);color:#111;box-shadow:0 12px 30px -14px rgba(0,0,0,.35)}
+.hero .toggle button,.tap,.things button,.faces button{background:rgba(255,255,255,.85);color:#111}
+.mo .back,.deck{background:#f4f1f0}
+.choice input:checked + span{background:#E62B1E;color:#fff}
+.fcard .cta{background:#E62B1E}
+.clockimg .center{box-shadow:0 0 0 5px #fff,0 0 0 6px rgba(230,43,30,.5),0 20px 40px -20px rgba(0,0,0,.4)}
+/* прахът свети върху тъмно → на светло: обърната светлост, запазен тон (червеното остава червено) */
+#fig-hero canvas,#fig-wheel canvas,#fig-heart canvas,#fig-clock canvas{filter:invert(1) hue-rotate(180deg)}
+/* оферта · първият екран */
+.offer{margin:14px 0 4px;padding:14px 16px 12px;border:1.5px solid #E62B1E;border-radius:16px;background:#fff;box-shadow:0 16px 34px -22px rgba(140,17,8,.55);text-align:center}
+.offer .of-k{font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;color:#E62B1E;font-weight:600}
+.offer .of-p{font-family:var(--serif);font-size:1.5rem;line-height:1.2;margin-top:6px;color:#111}
+.offer .of-p b{font-weight:700}
+.offer .of-p b:first-child{color:#E62B1E;font-size:2.1rem}
+.offer .of-p span{font-family:var(--sans);font-size:.86rem;color:var(--mute)}
+.offer .of-p i{font-style:normal;color:#E62B1E;margin:0 .15em}
+.offer .of-r{font-size:.98rem;margin-top:4px;color:#111}
+.offer .of-r span:first-child{font-weight:700}
+.offer .cta{display:flex;justify-content:center;margin-top:10px;padding:12px 14px;font-size:1rem;border-radius:12px}
+.offer .of-more{display:block;margin-top:9px;font-size:.92rem;color:#8c1108;text-decoration:underline;text-underline-offset:3px}
 </style>
 <div id="nzp">
 <!-- ═══ HUD · ъглите на екрана: светлина (Метта) вляво · злато (Мета) вдясно · брандът по средата ═══ -->
@@ -1377,7 +1412,7 @@ footer .sig{color:#E62B1E}
   <div class="wrap">
     <h1><span>TEDxSofia 2026</span><span>Смисълът да даваш</span></h1>
     <p class="when"><b>28.11.2026</b> · 24 лектори · 278 гости</p>
-    <p class="quest">В навечерието на коледните празници</p>
+    <div class="offer" id="offer"><div class="of-k">Едно от 24 коледни предложения</div><div class="of-p"><b>200 евро</b> <span>без ДДС</span> <i>+</i> <b>код за отстъпка</b></div><div class="of-r"><span>общо 1000 души</span> · <span>1 декември</span> · <span>5 декември</span></div><a class="cta" href="#form">Искам подробната страница →</a><a class="of-more" href="#wheel">Ако искате да подкрепите с по-голям пакет →</a></div>
     <div class="stage mfig tapable" id="fig-hero" data-bleed="mobile" data-tap>
       <div class="glow"></div>
       <canvas data-фигура="hero" role="img" aria-label="От времето, което ни учи да вземаме, към смисъла да даваш"></canvas>
@@ -1398,10 +1433,47 @@ footer .sig{color:#E62B1E}
     </div>
   </div>
 </section>
+<!-- ═══ 3 · 24x24 · ЧАСОВНИКЪТ НА СРОКА (донор #fig-clock · рецепта clock · 4 момента) · до 20.10 → 28.11 → 1 декември → 5 декември · части: 4 карти ═══ -->
+<section class="day magic" id="day">
+  <div class="wrap">
+    <div class="kicker" data-reveal>24x24 · Дигитален адвент календар</div>
+    <h2 data-reveal>Едно от 24 <em>коледни предложения</em></h2>
+    <p class="lead" data-reveal>Тази коледна изненада ще пристигне в пощата на всички участници в годините, лектори и на екипа, общо 1000 души, точно на 1 декември, когато започва отброяването до Коледа и голямото коледно пазаруване.</p>
+    <div class="daygrid">
+      <div class="clockwrap" id="clockwrap">
+        <div class="mfig tapable" id="fig-clock" data-bleed="always" data-tap>
+          <div class="clockimg" id="clockimg" aria-hidden="true"><div class="center" id="ccenter">
+            <img src="img/c1.webp" alt="" width="1200" height="896" decoding="async" class="on">
+            <img src="img/c2.webp" alt="" width="771" height="1008" loading="lazy" decoding="async">
+            <img src="img/c3.webp" alt="" width="1200" height="896" loading="lazy" decoding="async">
+            <img src="img/c4.webp" alt="" width="896" height="1200" loading="lazy" decoding="async">
+          </div></div>
+          <canvas data-фигура="clock" role="img" aria-label="Часовникът на срока: червен пръстен, по който слънцето минава от 20.10 през 28.11 до 1 и 5 декември"></canvas>
+          <div class="clock" id="clock">
+            <svg viewBox="0 0 300 300" aria-hidden="true">
+              <circle class="ringd" cx="150" cy="150" r="132"/>
+              <g id="cdots"></g>
+              <g id="chrs"></g>
+              <g class="sung" id="sung"><circle class="sun" cx="150" cy="18" r="10"/></g>
+            </svg>
+          </div>
+          <div class="tap" aria-hidden="true"><i></i><span>докоснете — следващият момент</span></div>
+        </div>
+        <div class="clabel" aria-live="polite"><div class="tm" id="cl-tm">Вашият отговор</div></div>
+      </div>
+      <div class="moments" id="moments">
+        <div class="mo part" data-i="0"><div class="inner"><div class="back" aria-hidden="true"><img src="img/m-back.webp" alt="" width="720" height="894" loading="lazy" decoding="async"><span class="cue">докоснете — обърнете</span></div><div class="front"><div class="tm">Вашият отговор</div><h3>до 20.10.2026</h3><p>Вие определяте размера и условията на отстъпката. Ние поемаме оформлението, представянето на събитието и двете изпращания.</p><ul><li><b>200 евро</b> без ДДС за участие</li><li><b>код</b> за отстъпка за вашия онлайн магазин</li><li><b>лого,</b> подходяща снимка и описания до 300 и до 150 знака</li><li><b>ясни условия</b> и срок на валидност на кода, който да обхваща коледното пазаруване</li></ul></div></div></div>
+        <div class="mo part" data-i="1"><div class="inner"><div class="back" aria-hidden="true"><img src="img/m-back.webp" alt="" width="720" height="894" loading="lazy" decoding="async"><span class="cue">докоснете — обърнете</span></div><div class="front"><div class="tm">Благодарност от сцената</div><h3>28.11.2026</h3><p>Благодарност от сцената в началото и в края на събитието, с показване на логата на всички 24 партньори.</p></div></div></div>
+        <div class="mo part" data-i="2"><div class="inner"><div class="back" aria-hidden="true"><img src="img/m-back.webp" alt="" width="720" height="894" loading="lazy" decoding="async"><span class="cue">докоснете — обърнете</span></div><div class="front"><div class="tm">Първи имейл</div><h3>1 декември</h3><p>Представяне на вашия бранд с описание до 300 знака, линк и код за отстъпка. И двата имейла — всички участници в годините, лектори и на екипа, общо 1000 души.</p><a class="goto" href="#form">Искам подробната страница →</a></div></div></div>
+        <div class="mo part" data-i="3"><div class="inner"><div class="back" aria-hidden="true"><img src="img/m-back.webp" alt="" width="720" height="894" loading="lazy" decoding="async"><span class="cue">докоснете — обърнете</span></div><div class="front"><div class="tm">Втори имейл</div><h3>5 декември</h3><p>Напомняне с кратко описание до 150 знака, линк и код, по време на коледното пазаруване.</p></div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
 <!-- ═══ 2 · ВЪРТЕЛЕЖКАТА · колелото на даровете (донор #fig-wheel · рецепта spark) · 8 възела: ДАР I–V · 24x24 · идеи · Ваша идея · части: 4 ═══ -->
 <section class="wheelsec magic" id="wheel">
   <div class="wrap">
-    <div class="kicker" data-reveal>ДАР I – ДАР V · 24x24 · идеи</div>
+    <div class="kicker" data-reveal>Ако искате да подкрепите с по-голям пакет · ДАР I – ДАР V</div>
     <h2 data-reveal>Смисълът да даваш <em>за партньорите</em></h2>
     <p class="lead" data-reveal>Когато станете наш партньор, вие получавате възможност <b>директно да общувате с публика, която цени идеите</b>, споделя ги и ги разпространява – както онлайн, така и в реалния живот. <b>Докоснете дар — картата му се ражда от праха.</b></p>
   </div>
@@ -1465,43 +1537,6 @@ footer .sig{color:#E62B1E}
       <div class="wbox part" data-reveal><div class="t"><b>Смисълът да даваш</b> за партньорите</div><p>На първо място нашите партньори получават възможност за <b>директна комуникация с гостите и лекторите</b> по време на паузите.</p><div class="row" id="w-meta"><span data-a="0">ДАР I</span><span data-a="1">ДАР II</span><span data-a="2">ДАР III</span><span data-a="3">ДАР IV</span><span data-a="4">ДАР V</span><span data-a="5">24x24</span><span data-a="6">Идеи</span><span data-a="7">Ваша идея</span></div></div>
       <div class="wbox part" data-reveal><div class="t"><b>+83</b> · Превъзходен</div><p>За да не остане и капка съмнение в СМИСЪЛА ДА станете наш партньор, ще ви споделим какъв е нашият NPS от последното ни събитие: <a href="#form">+83</a>.</p></div>
       <div class="wbox part" data-reveal><div class="t"><b>84</b> видео лекции</div><p>TEDxSofia има 84 видео лекции в своя YouTube канал, които продължават да вдъхновяват хора, които дори не сме срещали.</p></div>
-    </div>
-  </div>
-</section>
-<!-- ═══ 3 · 24x24 · ЧАСОВНИКЪТ НА СРОКА (донор #fig-clock · рецепта clock · 4 момента) · до 20.10 → 28.11 → 1 декември → 5 декември · части: 4 карти ═══ -->
-<section class="day magic" id="day">
-  <div class="wrap">
-    <div class="kicker" data-reveal>24x24 · Дигитален адвент календар</div>
-    <h2 data-reveal>Едно от 24 <em>коледни предложения</em></h2>
-    <p class="lead" data-reveal>Тази коледна изненада ще пристигне в пощата на всички участници, лектори и на екипа, общо 300 души, точно на 1 декември, когато започва отброяването до Коледа и голямото коледно пазаруване.</p>
-    <div class="daygrid">
-      <div class="clockwrap" id="clockwrap">
-        <div class="mfig tapable" id="fig-clock" data-bleed="always" data-tap>
-          <div class="clockimg" id="clockimg" aria-hidden="true"><div class="center" id="ccenter">
-            <img src="img/c1.webp" alt="" width="1200" height="896" decoding="async" class="on">
-            <img src="img/c2.webp" alt="" width="771" height="1008" loading="lazy" decoding="async">
-            <img src="img/c3.webp" alt="" width="1200" height="896" loading="lazy" decoding="async">
-            <img src="img/c4.webp" alt="" width="896" height="1200" loading="lazy" decoding="async">
-          </div></div>
-          <canvas data-фигура="clock" role="img" aria-label="Часовникът на срока: червен пръстен, по който слънцето минава от 20.10 през 28.11 до 1 и 5 декември"></canvas>
-          <div class="clock" id="clock">
-            <svg viewBox="0 0 300 300" aria-hidden="true">
-              <circle class="ringd" cx="150" cy="150" r="132"/>
-              <g id="cdots"></g>
-              <g id="chrs"></g>
-              <g class="sung" id="sung"><circle class="sun" cx="150" cy="18" r="10"/></g>
-            </svg>
-          </div>
-          <div class="tap" aria-hidden="true"><i></i><span>докоснете — следващият момент</span></div>
-        </div>
-        <div class="clabel" aria-live="polite"><div class="tm" id="cl-tm">Вашият отговор</div></div>
-      </div>
-      <div class="moments" id="moments">
-        <div class="mo part" data-i="0"><div class="inner"><div class="back" aria-hidden="true"><img src="img/m-back.webp" alt="" width="720" height="894" loading="lazy" decoding="async"><span class="cue">докоснете — обърнете</span></div><div class="front"><div class="tm">Вашият отговор</div><h3>до 20.10.2026</h3><p>Вие определяте размера и условията на отстъпката. Ние поемаме оформлението, представянето на събитието и двете изпращания.</p><ul><li><b>200 евро</b> без ДДС за участие</li><li><b>код</b> за отстъпка за вашия онлайн магазин</li><li><b>лого,</b> подходяща снимка и описания до 300 и до 150 знака</li><li><b>ясни условия</b> и срок на валидност на кода, който да обхваща коледното пазаруване</li></ul></div></div></div>
-        <div class="mo part" data-i="1"><div class="inner"><div class="back" aria-hidden="true"><img src="img/m-back.webp" alt="" width="720" height="894" loading="lazy" decoding="async"><span class="cue">докоснете — обърнете</span></div><div class="front"><div class="tm">Благодарност от сцената</div><h3>28.11.2026</h3><p>Благодарност от сцената в началото и в края на събитието, с показване на логата на всички 24 партньори.</p></div></div></div>
-        <div class="mo part" data-i="2"><div class="inner"><div class="back" aria-hidden="true"><img src="img/m-back.webp" alt="" width="720" height="894" loading="lazy" decoding="async"><span class="cue">докоснете — обърнете</span></div><div class="front"><div class="tm">Първи имейл</div><h3>1 декември</h3><p>Представяне на вашия бранд с описание до 300 знака, линк и код за отстъпка. И двата имейла ще бъдат изпратени до всички 300 участници.</p><a class="goto" href="#form">Искам подробната страница →</a></div></div></div>
-        <div class="mo part" data-i="3"><div class="inner"><div class="back" aria-hidden="true"><img src="img/m-back.webp" alt="" width="720" height="894" loading="lazy" decoding="async"><span class="cue">докоснете — обърнете</span></div><div class="front"><div class="tm">Втори имейл</div><h3>5 декември</h3><p>Напомняне с кратко описание до 150 знака, линк и код, по време на коледното пазаруване.</p></div></div></div>
-      </div>
     </div>
   </div>
 </section>

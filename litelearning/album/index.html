@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="bg">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#150f1f">
+<title>LITE LEARNING – Център по Класическа Сугестопедия</title>
+<!--
+  ПРОТОТИП · MET-1234 · throwaway (изтрий или погълни след оценката)
+  Въпрос: какво прави Fable 5.1 от темплейт + текст + минимални изисквания, БЕЗ умението metalandia-нов-контрол?
+  Темплейт: https://fable-25.netlify.app/carousel/ (Wintermere · three.js въртележка на здрач) + прахът на https://fable-25.netlify.app/eidolon/
+  Текст: https://kursovepoangliiski.com/ — ДОСЛОВНО (verify.py го доказва) · нула измислен текст, числа и цени.
+  Механика: поток в покой → тап/свайп = фокус → „Повече…" = картата. 7 карти = 7-те точки от менюто на сайта.
+  Един rAF (tick) · reduced-motion / без WebGL → постер (DOM) · three r160 vendor-нат локално (../../vendor/three.module.js).
+  Пускане: python3 -m http.server 8899 --directory ~/metalandiaos → http://localhost:8899/_proto/eng-carousel-test/
+-->
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 2 L28 12 L4 12 Z' fill='%23c23a22'/%3E%3Crect x='7' y='12' width='18' height='3' fill='%23e8b45a'/%3E%3Crect x='9' y='15' width='2.5' height='12' fill='%23f2e4c4'/%3E%3Crect x='20.5' y='15' width='2.5' height='12' fill='%23f2e4c4'/%3E%3Ccircle cx='16' cy='21' r='4' fill='%23e8b45a'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Yeseva+One&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#f4e8cf;--paper:#f7eeda;--cinnabar:#b8341f;--red:#c23a22;--brass:#e8a33c;--bulb:#ffd9a0;--night:#150f1f;--aub:#251c31;--ink:#2b1d2c;
+  --display:"Yeseva One","Playfair Display",Georgia,"Times New Roman",serif;
+  --text:Lora,Georgia,"Times New Roman",serif;
+  --sat:env(safe-area-inset-top,0px);--sab:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--night);color:var(--cream);font-family:var(--text);overflow:hidden;overscroll-behavior:none;
+  -webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent;-webkit-text-size-adjust:100%}
+button{font:inherit;color:inherit;cursor:pointer}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ── сцената ── */
+#stage{position:fixed;inset:0;touch-action:none;user-select:none;-webkit-user-select:none;cursor:grab;
+  background:linear-gradient(#0e0a1c 0%,#2a1e42 34%,#5a3a58 52%,#a45c4e 63%,#3a2438 64%,#150f1f 100%)}
+#stage:active{cursor:grabbing}
+#gl{display:block;width:100%;height:100%;opacity:0;transition:opacity 1.2s ease}
+body.ready #gl{opacity:1}
+.scrim{position:fixed;left:0;right:0;pointer-events:none;z-index:2}
+.scrim.top{top:0;height:26%;background:linear-gradient(rgba(14,10,28,.82),rgba(14,10,28,0))}
+.scrim.bot{bottom:0;height:34%;background:linear-gradient(rgba(21,15,31,0),rgba(21,15,31,.9) 58%,#150f1f)}
+
+/* ── шапка ── */
+.hdr{position:fixed;left:0;right:0;top:0;z-index:6;display:flex;justify-content:space-between;align-items:center;
+  padding:calc(var(--sat) + 6px) 12px 0 14px;pointer-events:none}
+.hdr a,.hdr button{pointer-events:auto}
+.tel{display:inline-flex;align-items:center;min-height:44px;font:500 13.5px/1 var(--text);letter-spacing:.03em;color:var(--cream);
+  text-decoration:none;text-shadow:0 1px 8px rgba(0,0,0,.7);transition:opacity .5s}
+.tel span{color:var(--brass);letter-spacing:.14em;text-transform:uppercase;font-size:10.5px;margin-right:7px}
+.menu-btn{min-height:40px;font:500 11.5px/1 var(--text);letter-spacing:.22em;text-transform:uppercase;color:var(--cream);
+  background:rgba(26,18,38,.5);border:1px solid rgba(232,163,60,.6);border-radius:999px;padding:0 16px;
+  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+
+/* ── заглавие (цялото) ── */
+.title{position:fixed;left:0;right:0;top:calc(var(--sat) + 58px);z-index:4;text-align:center;pointer-events:none;
+  transition:opacity .6s,transform .9s cubic-bezier(.2,.7,.2,1)}
+.title h1{margin:0;font:400 clamp(36px,10.8vw,68px)/1 var(--display);letter-spacing:.015em;color:var(--cream);
+  text-shadow:0 2px 16px rgba(14,10,28,.9),0 0 44px rgba(232,163,60,.35)}
+.title h1 span{color:var(--brass)}
+.title .sub{margin:9px 0 0;font:500 clamp(11.5px,3.25vw,15px)/1.3 var(--text);letter-spacing:.2em;text-transform:uppercase;color:var(--bulb);
+  text-shadow:0 1px 10px rgba(14,10,28,.95)}
+body:not(.s-flow) .title{opacity:0;transform:translateY(-16px)}
+.tag{position:fixed;left:8px;right:8px;bottom:calc(var(--sab) + 76px);z-index:4;margin:0;text-align:center;
+  font:italic 400 min(4.35vw,18px)/1.4 var(--text);white-space:nowrap;color:var(--cream);text-shadow:0 1px 12px rgba(0,0,0,.85);pointer-events:none;
+  transition:opacity .5s,transform .7s}
+body:not(.s-flow) .tag{opacity:0;transform:translateY(10px)}
+
+/* ── фокус: „Повече…“ ── */
+.cap{position:fixed;left:0;right:0;bottom:calc(var(--sab) + 72px);z-index:5;text-align:center;opacity:0;transform:translateY(14px);
+  transition:opacity .45s,transform .6s cubic-bezier(.2,.7,.2,1);pointer-events:none}
+body.s-focus .cap{opacity:1;transform:none}
+body.s-focus .cap .more{pointer-events:auto}
+.more{min-height:48px;font:600 16px/1 var(--text);letter-spacing:.06em;color:#2a1608;background:linear-gradient(#ffdf9a,#e8a33c);
+  border:0;border-radius:999px;padding:0 34px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.35),0 8px 30px rgba(232,163,60,.5)}
+
+/* ── крушките = 7-те карти ── */
+.bulbs{position:fixed;left:0;right:0;bottom:calc(var(--sab) + 12px);z-index:6;display:flex;justify-content:center;align-items:center;gap:0;pointer-events:none}
+.bulbs button{pointer-events:auto;position:relative;width:38px;height:46px;border:0;background:none;padding:0}
+.bulbs button::before{content:"";position:absolute;left:50%;top:50%;width:11px;height:11px;margin:-5.5px 0 0 -5.5px;border-radius:50%;
+  background:#4c3a55;box-shadow:0 0 0 1.5px rgba(232,163,60,.55);transition:transform .45s cubic-bezier(.3,1.6,.5,1),background .5s,box-shadow .5s}
+.bulbs button.lit::before{background:#ffe6b0;box-shadow:0 0 0 1.5px #e8a33c,0 0 14px 4px rgba(255,190,100,.8)}
+.bulbs button.cur::before{transform:scale(1.55)}
+.bulbs i{font:400 22px/1 var(--text);font-style:normal;color:var(--brass);opacity:.9;padding:0 4px;animation:nudge 1.6s ease-in-out infinite}
+.bulbs i:last-child{animation-direction:reverse}
+body.touched .bulbs i{opacity:0;animation:none;transition:opacity .6s}
+@keyframes nudge{0%,100%{transform:translateX(0)}50%{transform:translateX(-5px)}}
+
+.hint{position:fixed;left:50%;top:59%;z-index:3;width:74px;height:74px;margin:-37px 0 0 -37px;border-radius:50%;pointer-events:none;
+  border:2px solid rgba(255,226,168,.9);opacity:0;animation:ripple 2.4s ease-out 2.2s infinite}
+.hint::after{content:"";position:absolute;inset:26px;border-radius:50%;background:rgba(255,226,168,.9);box-shadow:0 0 18px 6px rgba(255,190,100,.55)}
+body.touched .hint,body:not(.s-flow) .hint,body.poster .hint{display:none}
+@keyframes ripple{0%{opacity:0;transform:scale(.45)}18%{opacity:.95}100%{opacity:0;transform:scale(1.5)}}
+
+/* ── картата (лист) ── */
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:8;height:76svh;background:var(--paper);color:var(--ink);border-radius:22px 22px 0 0;
+  transform:translateY(104%);transition:transform .75s cubic-bezier(.2,.85,.2,1);display:flex;flex-direction:column;
+  box-shadow:0 -18px 60px rgba(10,6,18,.65);visibility:hidden}
+body.s-open .sheet{transform:none;visibility:visible}
+.sheet article{display:none}
+.sheet article.on{display:block}
+
+body:not(.s-flow) .tel{opacity:0;pointer-events:none}
+.sheet-head{position:relative;display:flex;align-items:center;gap:4px;padding:18px 10px 6px;flex:0 0 auto;touch-action:none}
+.sheet-head::before{content:"";position:absolute;left:50%;top:7px;width:44px;height:4px;margin-left:-22px;border-radius:4px;background:rgba(43,29,44,.22)}
+.sheet .nav{flex:0 0 44px;width:44px;height:44px;border-radius:50%;border:1px solid rgba(43,29,44,.2);background:rgba(255,255,255,.4);color:var(--ink);font:400 24px/1 var(--text);padding:0 0 4px}
+.sheet .nav.x{font-size:15px;padding:0;margin-left:6px;background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.dots{display:flex;justify-content:center;align-items:center;gap:9px;flex:1}
+.dots i{width:9px;height:9px;border-radius:50%;background:rgba(43,29,44,.14);box-shadow:inset 0 0 0 1.5px rgba(184,52,31,.35);transition:transform .4s,background .4s}
+.dots i.lit{background:#f2b550;box-shadow:inset 0 0 0 1.5px #c9822a}
+.dots i.cur{transform:scale(1.55);background:var(--cinnabar);box-shadow:none}
+.sheet-body{flex:1 1 auto;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:6px 22px calc(var(--sab) + 60px);scrollbar-width:none}
+.sheet-body::-webkit-scrollbar,.rail::-webkit-scrollbar,.prail::-webkit-scrollbar{display:none}
+.sheet h2{font:400 clamp(25px,7.2vw,34px)/1.12 var(--display);color:var(--cinnabar);margin:8px 0 16px;text-wrap:balance}
+.sheet p{font:400 18px/1.62 var(--text);margin:0 0 1em}
+.sheet p.lead{font-size:20.5px;line-height:1.5;color:#3b2140}
+.sheet p.em{color:#6b2a1e}
+.sheet h3{position:relative;font:400 22px/1.2 var(--display);color:var(--ink);margin:1.7em 0 .7em;padding-left:27px}
+.sheet h3::before,hr.orn::after,.quotes li::before{content:"";position:absolute;width:16px;height:16px;background:var(--brass);clip-path:polygon(50% 0,62% 38%,100% 50%,62% 62%,50% 100%,38% 62%,0 50%,38% 38%)}
+.sheet h3::before{left:0;top:.26em}
+.sheet h4{font:600 18.5px/1.3 var(--text);color:var(--cinnabar);margin:1.4em 0 .5em}
+.sheet a{color:var(--cinnabar);text-decoration-thickness:1px;text-underline-offset:3px}
+.sheet strong{font-weight:600;color:#3a1d22}
+ul.lit{list-style:none;padding:0;margin:0 0 1.3em}
+ul.lit li{position:relative;padding-left:30px;margin:0 0 .75em;font:400 18px/1.55 var(--text)}
+ul.lit li::before{content:"";position:absolute;left:4px;top:.48em;width:11px;height:11px;border-radius:50%;background:#f6c56a;box-shadow:0 0 0 1.5px #c9822a,0 0 10px 2px rgba(240,170,70,.55)}
+.ticket{position:relative;margin:1.3em 0;padding:18px 18px 13px;background:#fffaf0;border:1.5px dashed rgba(184,52,31,.5);border-radius:16px;text-align:center}
+.ticket::before,.ticket::after{content:"";position:absolute;top:50%;width:18px;height:18px;margin-top:-9px;border-radius:50%;background:var(--paper);border:1.5px dashed rgba(184,52,31,.5)}
+.ticket::before{left:-10px;clip-path:inset(-2px -2px -2px 50%)}.ticket::after{right:-10px;clip-path:inset(-2px 50% -2px -2px)}
+.ticket p{margin:0 0 .42em;font-size:17.5px;line-height:1.5}
+.ticket h4{margin:0 0 .55em;font:400 21px/1.2 var(--display);color:var(--cinnabar)}
+.ticket.price{background:var(--aub);border-color:rgba(232,163,60,.75);color:var(--cream)}
+.ticket.price strong{color:var(--bulb)}.ticket.price::before,.ticket.price::after{border-color:rgba(232,163,60,.75)}
+.ticket.place{border-style:solid;border-color:rgba(43,29,44,.16);background:rgba(255,255,255,.42)}.ticket.place::before,.ticket.place::after{display:none}
+hr.orn{position:relative;border:0;height:16px;width:128px;margin:1.4em auto;background:linear-gradient(var(--brass),var(--brass)) left center/46px 2px no-repeat,linear-gradient(var(--brass),var(--brass)) right center/46px 2px no-repeat}
+hr.orn::after{left:50%;top:0;margin-left:-8px;background:var(--cinnabar)}
+details.acc{border-top:1.5px solid rgba(184,52,31,.28)}
+details.acc:last-child{border-bottom:1.5px solid rgba(184,52,31,.28)}
+summary{list-style:none;cursor:pointer}summary::-webkit-details-marker{display:none}
+details.acc>summary{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:62px;padding:8px 0;font:400 20.5px/1.2 var(--display);color:var(--cinnabar)}
+details>summary::after{content:"+";flex:0 0 36px;height:36px;border-radius:50%;background:var(--cinnabar);color:var(--paper);font:400 24px/34px var(--text);text-align:center;transition:transform .45s cubic-bezier(.3,1.5,.5,1)}
+details[open]>summary::after{transform:rotate(45deg)}
+details.story{border-top:1px solid rgba(43,29,44,.14)}
+details.story>summary{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:54px;font:600 17.5px/1.3 var(--text);color:var(--ink)}
+details.story>summary::after{flex-basis:30px;height:30px;line-height:28px;font-size:20px;background:none;color:var(--cinnabar);box-shadow:inset 0 0 0 1.5px rgba(184,52,31,.5)}
+.rail{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;margin:4px -22px 0;padding:6px 22px 14px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.law{flex:0 0 86%;scroll-snap-align:center;background:radial-gradient(120% 80% at 50% 0%,#3d2750,#231733 72%);color:var(--cream);border-radius:20px;padding:24px 20px 14px;border:1.5px solid rgba(232,163,60,.6);box-shadow:0 10px 26px rgba(26,14,34,.3)}
+.sheet .law h4{font:400 24px/1.15 var(--display);color:#ffdf9a;margin:0 0 .6em}
+.sheet .law p{font-size:17px;line-height:1.56;color:var(--cream)}.sheet .law p.em{color:var(--bulb)}
+.rail+.dots{margin:0 0 20px}
+.quotes{list-style:none;padding:0;margin:0 0 1em;display:grid;gap:12px}
+.quotes li{position:relative;background:#fffaf0;border-radius:14px;padding:14px 16px 14px 42px;font:italic 400 17.5px/1.5 var(--text);box-shadow:0 2px 0 rgba(184,52,31,.16);--r:-.5deg;transform:rotate(var(--r))}
+.quotes li:nth-child(even){--r:.45deg;background:#fff3da}
+.quotes li::before{left:14px;top:19px;width:14px;height:14px}
+.poem{margin:1.4em 0;padding:18px 20px;border-left:3px solid var(--brass);background:rgba(255,255,255,.4);border-radius:0 14px 14px 0}
+.sheet .poem p{font:italic 400 19px/1.45 var(--text);margin:0 0 .55em}
+.poem cite{display:block;font:500 14.5px/1.4 var(--text);font-style:normal;letter-spacing:.04em;color:#7a4a3a;margin-top:.9em}
+.who{text-align:center;margin:0 0 1.2em}.sheet .who p{margin:0 0 .15em}.sheet .who p:first-child{font:400 27px/1.2 var(--display);color:var(--ink);margin-bottom:.2em}
+.telbig{text-align:center}.telbig a{display:flex;align-items:center;justify-content:center;min-height:58px;margin-top:8px;border-radius:999px;background:linear-gradient(#ffdf9a,#e8a33c);color:#2a1608;font:600 22px/1 var(--text);letter-spacing:.03em;text-decoration:none;box-shadow:0 8px 24px rgba(232,163,60,.45)}
+.formlink{display:flex;align-items:center;justify-content:space-between;gap:12px;border-top:1.5px solid rgba(184,52,31,.28);padding-top:16px;margin-top:1.4em}
+.sheet .formlink span{font:400 20.5px/1.2 var(--display);color:var(--cinnabar)}
+.formlink a{display:inline-flex;align-items:center;min-height:46px;padding:0 22px;border-radius:999px;background:var(--cinnabar);color:var(--paper);font:600 16px/1 var(--text);text-decoration:none}
+/* разкриване: блоковете изплуват · думите на увода светват една по една като гонката на крушките */
+.rv{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .85s cubic-bezier(.2,.7,.2,1);transition-delay:var(--d,0ms)}
+.rv.in{opacity:1;transform:none}
+.quotes li.rv{transform:translateY(18px) rotate(-2.5deg)}.quotes li.rv.in{transform:rotate(var(--r))}
+.lead .w{opacity:.13;transition:opacity .5s ease;transition-delay:calc(var(--d,0ms) + var(--i)*32ms)}
+.lead.in .w{opacity:1}
+
+/* ── Menu ── */
+.menu{position:fixed;inset:0;z-index:12;display:flex;flex-direction:column;justify-content:center;padding:calc(var(--sat) + 64px) 30px calc(var(--sab) + 26px);
+  background:radial-gradient(120% 70% at 50% 0%,rgba(62,40,78,.97),rgba(21,15,31,.985) 72%);opacity:0;visibility:hidden;transition:opacity .4s,visibility 0s .4s}
+body.menu-on .menu{opacity:1;visibility:visible;transition:opacity .4s}
+body.menu-on .hdr{z-index:13}
+.menu ul{list-style:none;margin:0;padding:0}
+.menu li{opacity:0;transform:translateY(14px);transition:opacity .5s,transform .6s cubic-bezier(.2,.7,.2,1);transition-delay:calc(var(--i)*42ms)}
+body.menu-on .menu li{opacity:1;transform:none}
+.menu button{display:flex;align-items:center;gap:14px;width:100%;min-height:54px;padding:0;background:none;border:0;text-align:left;font:400 clamp(22px,6.5vw,30px)/1.15 var(--display);color:var(--cream)}
+.menu button::before{content:"";flex:0 0 11px;height:11px;border-radius:50%;background:#4c3a55;box-shadow:0 0 0 1.5px rgba(232,163,60,.55)}
+.menu button.lit::before{background:#ffe6b0;box-shadow:0 0 0 1.5px #e8a33c,0 0 14px 4px rgba(255,190,100,.8)}
+.menu .grp{font:500 11.5px/1 var(--text);letter-spacing:.24em;text-transform:uppercase;color:var(--brass);padding:16px 0 6px 25px}
+.menu .sub button{padding-left:25px;font-size:clamp(20px,5.8vw,26px)}
+.menu-foot{margin:26px 0 0 25px;font:400 12px/1.4 var(--text);letter-spacing:.06em;color:rgba(244,232,207,.55)}
+
+/* ── наградата (7/7) ── */
+.reward{position:fixed;left:18px;right:18px;top:50%;z-index:9;max-width:520px;margin:0 auto;transform:translateY(-44%) scale(.94);opacity:0;visibility:hidden;text-align:center;padding:30px 22px 26px;border-radius:24px;
+  background:radial-gradient(120% 90% at 50% 0%,rgba(70,44,88,.93),rgba(27,18,38,.95));border:1.5px solid rgba(232,163,60,.8);box-shadow:0 0 0 7px rgba(232,163,60,.12),0 30px 80px rgba(0,0,0,.55);
+  transition:opacity .6s,transform .8s,visibility 0s .6s}
+body.reward-on .reward{opacity:1;visibility:visible;transform:translateY(-50%);transition:opacity 1s .9s,transform 1.2s .9s cubic-bezier(.2,.8,.2,1)}
+.rq{font:400 clamp(23px,6.5vw,31px)/1.25 var(--display);color:#ffe2a8;margin:0 0 16px;text-wrap:balance}
+.rby{font:500 12px/1 var(--text);letter-spacing:.22em;text-transform:uppercase;color:var(--brass);margin:0 0 22px}
+.reward .more{display:inline-flex;align-items:center;text-decoration:none;pointer-events:auto;white-space:nowrap;font-size:min(4.1vw,16px);padding:0 22px}
+body.reward-on .title,body.reward-on .tag{opacity:0}
+
+/* ── постер: reduced-motion или без WebGL → нула GL · нула движение · картите са лента ── */
+.poster-art,.prail{display:none}
+body.poster #gl{display:none}
+body.poster .poster-art{display:block;position:absolute;inset:0;width:100%;height:100%}
+body.poster .prail{display:flex;position:fixed;left:0;right:0;top:50%;transform:translateY(-42%);z-index:5;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;padding:10px 12vw;scrollbar-width:none}
+.pcard{flex:0 0 76vw;max-width:340px;min-height:min(46svh,400px);scroll-snap-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:30px 22px 26px;text-align:center;
+  border-radius:22px;border:1.5px solid var(--brass);outline:2px dotted rgba(246,232,205,.55);outline-offset:-10px;background:linear-gradient(rgba(52,32,70,.96),rgba(24,15,36,.98));color:var(--cream)}
+.pcard b{font:400 30px/1.12 var(--display)}.pcard span{font:italic 400 17.5px/1.45 var(--text)}
+.pcard em{font:600 15px/1 var(--text);font-style:normal;color:#2a1608;background:linear-gradient(#ffdf9a,#e8a33c);border-radius:999px;padding:13px 26px}
+body.poster .cap,body.poster .bulbs i{display:none}
+body.poster.s-open .prail{visibility:hidden}
+
+@media (min-width:900px){
+  .sheet{left:auto;right:22px;top:22px;bottom:22px;height:auto;width:min(540px,44vw);border-radius:22px;transform:translateX(112%)}
+  .sheet-head::before{display:none}
+  .title{top:calc(var(--sat) + 40px)}.title h1{font-size:clamp(48px,5.4vw,84px)}
+  .tag{font-size:21px}
+  .menu{align-items:center}.menu ul{min-width:420px}
+  .reward{left:0;right:0}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+<link rel="stylesheet" href="album.css">
+<script type="importmap">{"imports":{"three":"../../vendor/three.module.js"}}</script>
+</head>
+<body class="s-flow">
+
+<div id="stage" role="img" aria-label="Въртележка на здрач със седем карти от прах"
+     data-fascia="LITE LEARNING|Център по Класическа Сугестопедия||„Колкото повече, толкова повече“|една роза|ОБИЧАНА|много повече||cheerful and patient teacher|a wonderful person, teacher and friend">
+  <canvas id="gl" aria-hidden="true"></canvas>
+  <svg class="poster-art" viewBox="0 0 375 812" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <g fill="none" stroke="#0c0814" stroke-width="4"><circle cx="34" cy="262" r="112"/><path d="M34 150V374M-78 262H146M-45 183L113 341M-45 341L113 183"/></g>
+    <path d="M187 138 L-60 268 H434 Z" fill="#c23a22"/>
+    <path d="M187 138 L-10 268 H40 Z M187 138 L92 268 H140 Z M187 138 L188 268 H236 Z M187 138 L286 268 H334 Z M187 138 L384 268 H434 Z" fill="#efe0c0"/>
+    <rect x="-20" y="264" width="415" height="12" fill="#7a1f14"/><rect x="-20" y="276" width="415" height="40" fill="#ecdcb4"/>
+    <rect x="-20" y="280" width="415" height="3" fill="#b8341f"/><rect x="-20" y="309" width="415" height="3" fill="#b8341f"/>
+    <g fill="#ffe2a8"><circle cx="18" cy="270" r="4"/><circle cx="66" cy="270" r="4"/><circle cx="114" cy="270" r="4"/><circle cx="162" cy="270" r="4"/><circle cx="210" cy="270" r="4"/><circle cx="258" cy="270" r="4"/><circle cx="306" cy="270" r="4"/><circle cx="354" cy="270" r="4"/><circle cx="187" cy="132" r="7"/></g>
+    <rect x="158" y="316" width="58" height="330" fill="#5c1710"/>
+    <ellipse cx="187" cy="700" rx="340" ry="78" fill="#7a4c2c"/><ellipse cx="187" cy="700" rx="340" ry="78" fill="none" stroke="#b8341f" stroke-width="5"/>
+    <ellipse cx="187" cy="700" rx="150" ry="34" fill="none" stroke="#ecdcb4" stroke-width="3" opacity=".7"/>
+  </svg>
+</div>
+<div class="scrim top"></div><div class="scrim bot"></div>
+
+<header class="hdr">
+  <a class="tel" href="tel:+359884265504"><span>За контакт:</span>+359 88 426 55 04</a>
+  <button class="menu-btn" type="button" aria-haspopup="true">Menu</button>
+</header>
+
+<div class="title">
+  <h1>LITE <span>LEARNING</span></h1>
+  <p class="sub">Център по Класическа Сугестопедия</p>
+</div>
+<p class="tag"></p>
+
+<div class="hint" aria-hidden="true"></div>
+<div class="cap"><button class="more" type="button">Повече…</button></div>
+<nav class="bulbs" aria-label="Menu"></nav>
+<p class="sr" id="live" aria-live="polite"></p>
+
+<section class="sheet" id="sheet" aria-hidden="true" tabindex="-1">
+  <header class="sheet-head">
+    <button class="nav prev" type="button" aria-label="назад">‹</button>
+    <div class="dots sheet-dots" aria-hidden="true"></div>
+    <button class="nav next" type="button" aria-label="напред">›</button>
+    <button class="nav x" type="button" aria-label="затвори">✕</button>
+  </header>
+  <div class="sheet-body">
+<!-- CONTENT:BEGIN -->
+
+<!-- CONTENT:END -->
+  </div>
+</section>
+<!-- REWARD:BEGIN -->
+<aside class="reward" id="reward" aria-hidden="true">
+  <p class="rq">„Колкото повече, толкова повече“ – много изненади, голямо вълшебство, музика, театър, приятелство на английски език</p>
+  <p class="rby">От учениците ми…</p>
+  <a class="more" href="tel:+359884265504">За контакт: +359 88 426 55 04</a>
+</aside>
+<!-- REWARD:END -->
+<nav class="menu" id="menu" aria-hidden="true" aria-label="Menu">
+  <ul>
+    <li><button type="button" data-go="">Начало</button></li>
+  </ul>
+  <p class="menu-foot">Copyright © 2026 LITE LEARNING</p>
+</nav>
+
+<script type="module">
+import { mount } from './engine.js';
+import config from './config.js';
+import { prepare, decor } from './album.js';
+prepare(config);                         // думите и джобовете → DOM (преди двигателят да прочете картите)
+mount({ decor });                        // двигателят (engine.js) и цирковият декор не се пипат · албумът е модул отвън
+</script>
+</body>
+</html>

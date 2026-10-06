@@ -1,0 +1,46 @@
+/* MET-1264 · „Албум“ · кожата е на английската въртележка: само нейните токени (:root на страницата) */
+.album{position:fixed;left:0;right:0;bottom:calc(var(--sab) + 54px);z-index:5;margin:0;padding:0 10px;pointer-events:none;
+  transition:opacity .5s,transform .6s cubic-bezier(.2,.7,.2,1)}
+.album::before{content:"";position:absolute;left:0;right:0;top:0;bottom:calc(-54px - var(--sab));       /* листът на албума = бордът, върху който стъпва въртележката */
+  background:linear-gradient(rgba(37,28,49,.94),rgba(21,15,31,.98) 46%);box-shadow:0 -16px 28px rgba(21,15,31,.55)}
+.album::after{content:"";position:absolute;left:0;right:0;top:-3px;height:7px;                          /* рамото с крушките — както бордът на шатрата */
+  background:radial-gradient(circle,var(--paper) 0 .8px,var(--bulb) 1px 1.8px,transparent 2.2px) 50% 50%/21px 7px repeat-x,linear-gradient(var(--red),var(--cinnabar));
+  box-shadow:0 -1px 0 var(--brass),0 1px 0 var(--brass),0 0 14px rgba(232,163,60,.35)}
+body:not(.ready) .album,body.s-open .album,body.menu-on .album,body.reward-on .album{opacity:0;transform:translateY(12px)}
+body.s-open .album .pk,body.menu-on .album .pk,body.reward-on .album .pk{pointer-events:none}
+.cap,.tag{display:none}                                   /* листът се отваря от картата или от джоба ѝ */
+.album-g{position:relative;display:grid;grid-template-columns:repeat(var(--cols,4),minmax(0,1fr));gap:6px 5px;max-width:372px;margin:0 auto;padding:15px 0 4px}
+.album-n{margin:0;display:flex;align-items:center;justify-content:center;font:400 23px/1 var(--display);letter-spacing:.03em;color:var(--brass);text-shadow:0 1px 10px rgba(21,15,31,.9)}
+.album-n.tick{animation:tick .6s cubic-bezier(.2,.7,.2,1)}
+@keyframes tick{0%{color:var(--bulb);transform:scale(1.3)}}
+
+/* джобът: празен = призрак на картата в ъгълчета за снимки · пълен = мини-въртележка (шатра · крушки · думата) */
+.pk{position:relative;height:78px;min-width:0;padding:0;border:0;background:none;color:var(--cream);font:400 18px/1.06 var(--display);pointer-events:auto;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.pk::before{content:"";position:absolute;inset:0;border-radius:10px;border:1.5px dotted rgba(244,232,207,.4);background:rgba(21,15,31,.4);transition:border-color .4s,background .5s,box-shadow .5s}
+.pk::after{content:"";position:absolute;left:1.5px;right:1.5px;top:1.5px;height:19px;opacity:0;transition:opacity .5s;clip-path:polygon(50% 0,100% 79%,100% 100%,0 100%,0 79%);
+  background:radial-gradient(circle,var(--bulb) 0 1.2px,transparent 1.5px) 50% 100%/9px 4px repeat-x,linear-gradient(var(--cinnabar),var(--cinnabar)) 0 100%/100% 4px no-repeat,
+    repeating-conic-gradient(from 126deg at 50% 0,var(--red) 0 13.5deg,var(--cream) 13.5deg 27deg)}
+.pk b{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:22px 3px 4px;font-weight:400;
+  background:linear-gradient(135deg,var(--brass) 5px,transparent 5.5px) 0 0/11px 11px no-repeat,linear-gradient(225deg,var(--brass) 5px,transparent 5.5px) 100% 0/11px 11px no-repeat,
+    linear-gradient(45deg,var(--brass) 5px,transparent 5.5px) 0 100%/11px 11px no-repeat,linear-gradient(315deg,var(--brass) 5px,transparent 5.5px) 100% 100%/11px 11px no-repeat}
+.pk b::before{content:"";position:absolute;left:50%;top:50%;width:16px;height:16px;margin:-8px;background:var(--brass);opacity:.36;transition:opacity .4s,transform .6s cubic-bezier(.2,.7,.2,1);
+  clip-path:polygon(50% 0,62% 38%,100% 50%,62% 62%,50% 100%,38% 62%,0 50%,38% 38%)}
+.pk b span{display:block;white-space:nowrap;opacity:0;text-shadow:0 0 10px rgba(255,217,160,.5);transition:opacity .45s}
+.pk.near::before,body.poster .pk.next::before{border-color:var(--bulb);background:rgba(232,163,60,.16);box-shadow:0 0 20px rgba(232,163,60,.42)}
+.pk.near b::before,body.poster .pk.next b::before{opacity:1;transform:scale(1.3) rotate(90deg)}
+.pk.take::before{border-style:solid;border-color:var(--bulb);background:rgba(232,163,60,.12);box-shadow:0 0 28px rgba(255,217,160,.5)}
+.pk.take b::before,.pk.in b::before{opacity:0}
+.pk.in::before{border:1.5px solid var(--brass);background:linear-gradient(var(--aub),var(--night));box-shadow:0 5px 16px rgba(232,163,60,.3)}
+.pk.in::after,.pk.in b span{opacity:1}
+.pk.in{animation:ride 3.4s ease-in-out infinite;animation-delay:calc(var(--i) * -.49s)}                 /* вози се в ритъма на въртележката */
+@keyframes ride{50%{transform:translateY(-3px)}}
+.pk.pop{animation:pop .7s cubic-bezier(.2,.7,.2,1)}
+@keyframes pop{0%{transform:scale(1.2)}}
+.pk.again{animation:again .5s}
+@keyframes again{30%{transform:translateY(-6px)}60%{transform:translateY(2px)}}
+body.album-done .album-n{color:var(--bulb)}
+body.album-done .pk.in::before{box-shadow:0 0 20px rgba(255,217,160,.55)}
+body.poster .album{position:sticky;background:var(--night)}
+@media (prefers-reduced-motion:reduce){.pk.in,.pk.pop,.pk.again,.album-n.tick{animation:none}}
+.album-dust{position:fixed;inset:0;width:100%;height:100%;z-index:6;pointer-events:none}
+body.s-open .album-dust,body.menu-on .album-dust,body.reward-on .album-dust,body.poster .album-dust{display:none}

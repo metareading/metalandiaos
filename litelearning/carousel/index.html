@@ -1,0 +1,1021 @@
+<!doctype html>
+<html lang="bg">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#150f1f">
+<title>LITE LEARNING – Център по Класическа Сугестопедия</title>
+<!--
+  ПРОТОТИП · MET-1234 · throwaway (изтрий или погълни след оценката)
+  Въпрос: какво прави Fable 5.1 от темплейт + текст + минимални изисквания, БЕЗ умението metalandia-нов-контрол?
+  Темплейт: https://fable-25.netlify.app/carousel/ (Wintermere · three.js въртележка на здрач) + прахът на https://fable-25.netlify.app/eidolon/
+  Текст: https://kursovepoangliiski.com/ — ДОСЛОВНО (verify.py го доказва) · нула измислен текст, числа и цени.
+  Механика: поток в покой → тап/свайп = фокус → „Повече…" = картата. 7 карти = 7-те точки от менюто на сайта.
+  Един rAF (tick) · reduced-motion / без WebGL → постер (DOM) · three r160 vendor-нат локално (../../vendor/three.module.js).
+  Пускане: python3 -m http.server 8899 --directory ~/metalandiaos → http://localhost:8899/_proto/eng-carousel-test/
+-->
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 2 L28 12 L4 12 Z' fill='%23c23a22'/%3E%3Crect x='7' y='12' width='18' height='3' fill='%23e8b45a'/%3E%3Crect x='9' y='15' width='2.5' height='12' fill='%23f2e4c4'/%3E%3Crect x='20.5' y='15' width='2.5' height='12' fill='%23f2e4c4'/%3E%3Ccircle cx='16' cy='21' r='4' fill='%23e8b45a'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Yeseva+One&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#f4e8cf;--paper:#f7eeda;--cinnabar:#b8341f;--red:#c23a22;--brass:#e8a33c;--bulb:#ffd9a0;--night:#150f1f;--aub:#251c31;--ink:#2b1d2c;
+  --display:"Yeseva One","Playfair Display",Georgia,"Times New Roman",serif;
+  --text:Lora,Georgia,"Times New Roman",serif;
+  --sat:env(safe-area-inset-top,0px);--sab:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--night);color:var(--cream);font-family:var(--text);overflow:hidden;overscroll-behavior:none;
+  -webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent;-webkit-text-size-adjust:100%}
+button{font:inherit;color:inherit;cursor:pointer}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ── сцената ── */
+#stage{position:fixed;inset:0;touch-action:none;user-select:none;-webkit-user-select:none;cursor:grab;
+  background:linear-gradient(#0e0a1c 0%,#2a1e42 34%,#5a3a58 52%,#a45c4e 63%,#3a2438 64%,#150f1f 100%)}
+#stage:active{cursor:grabbing}
+#gl{display:block;width:100%;height:100%;opacity:0;transition:opacity 1.2s ease}
+body.ready #gl{opacity:1}
+.scrim{position:fixed;left:0;right:0;pointer-events:none;z-index:2}
+.scrim.top{top:0;height:26%;background:linear-gradient(rgba(14,10,28,.82),rgba(14,10,28,0))}
+.scrim.bot{bottom:0;height:34%;background:linear-gradient(rgba(21,15,31,0),rgba(21,15,31,.9) 58%,#150f1f)}
+
+/* ── шапка ── */
+.hdr{position:fixed;left:0;right:0;top:0;z-index:6;display:flex;justify-content:space-between;align-items:center;
+  padding:calc(var(--sat) + 6px) 12px 0 14px;pointer-events:none}
+.hdr a,.hdr button{pointer-events:auto}
+.tel{display:inline-flex;align-items:center;min-height:44px;font:500 13.5px/1 var(--text);letter-spacing:.03em;color:var(--cream);
+  text-decoration:none;text-shadow:0 1px 8px rgba(0,0,0,.7);transition:opacity .5s}
+.tel span{color:var(--brass);letter-spacing:.14em;text-transform:uppercase;font-size:10.5px;margin-right:7px}
+.menu-btn{min-height:40px;font:500 11.5px/1 var(--text);letter-spacing:.22em;text-transform:uppercase;color:var(--cream);
+  background:rgba(26,18,38,.5);border:1px solid rgba(232,163,60,.6);border-radius:999px;padding:0 16px;
+  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+
+/* ── заглавие (цялото) ── */
+.title{position:fixed;left:0;right:0;top:calc(var(--sat) + 58px);z-index:4;text-align:center;pointer-events:none;
+  transition:opacity .6s,transform .9s cubic-bezier(.2,.7,.2,1)}
+.title h1{margin:0;font:400 clamp(36px,10.8vw,68px)/1 var(--display);letter-spacing:.015em;color:var(--cream);
+  text-shadow:0 2px 16px rgba(14,10,28,.9),0 0 44px rgba(232,163,60,.35)}
+.title h1 span{color:var(--brass)}
+.title .sub{margin:9px 0 0;font:500 clamp(11.5px,3.25vw,15px)/1.3 var(--text);letter-spacing:.2em;text-transform:uppercase;color:var(--bulb);
+  text-shadow:0 1px 10px rgba(14,10,28,.95)}
+body:not(.s-flow) .title{opacity:0;transform:translateY(-16px)}
+.tag{position:fixed;left:8px;right:8px;bottom:calc(var(--sab) + 76px);z-index:4;margin:0;text-align:center;
+  font:italic 400 min(4.35vw,18px)/1.4 var(--text);white-space:nowrap;color:var(--cream);text-shadow:0 1px 12px rgba(0,0,0,.85);pointer-events:none;
+  transition:opacity .5s,transform .7s}
+body:not(.s-flow) .tag{opacity:0;transform:translateY(10px)}
+
+/* ── фокус: „Повече…“ ── */
+.cap{position:fixed;left:0;right:0;bottom:calc(var(--sab) + 72px);z-index:5;text-align:center;opacity:0;transform:translateY(14px);
+  transition:opacity .45s,transform .6s cubic-bezier(.2,.7,.2,1);pointer-events:none}
+body.s-focus .cap{opacity:1;transform:none}
+body.s-focus .cap .more{pointer-events:auto}
+.more{min-height:48px;font:600 16px/1 var(--text);letter-spacing:.06em;color:#2a1608;background:linear-gradient(#ffdf9a,#e8a33c);
+  border:0;border-radius:999px;padding:0 34px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.35),0 8px 30px rgba(232,163,60,.5)}
+
+/* ── крушките = 7-те карти ── */
+.bulbs{position:fixed;left:0;right:0;bottom:calc(var(--sab) + 12px);z-index:6;display:flex;justify-content:center;align-items:center;gap:0;pointer-events:none}
+.bulbs button{pointer-events:auto;position:relative;width:38px;height:46px;border:0;background:none;padding:0}
+.bulbs button::before{content:"";position:absolute;left:50%;top:50%;width:11px;height:11px;margin:-5.5px 0 0 -5.5px;border-radius:50%;
+  background:#4c3a55;box-shadow:0 0 0 1.5px rgba(232,163,60,.55);transition:transform .45s cubic-bezier(.3,1.6,.5,1),background .5s,box-shadow .5s}
+.bulbs button.lit::before{background:#ffe6b0;box-shadow:0 0 0 1.5px #e8a33c,0 0 14px 4px rgba(255,190,100,.8)}
+.bulbs button.cur::before{transform:scale(1.55)}
+.bulbs i{font:400 22px/1 var(--text);font-style:normal;color:var(--brass);opacity:.9;padding:0 4px;animation:nudge 1.6s ease-in-out infinite}
+.bulbs i:last-child{animation-direction:reverse}
+body.touched .bulbs i{opacity:0;animation:none;transition:opacity .6s}
+@keyframes nudge{0%,100%{transform:translateX(0)}50%{transform:translateX(-5px)}}
+
+.hint{position:fixed;left:50%;top:59%;z-index:3;width:74px;height:74px;margin:-37px 0 0 -37px;border-radius:50%;pointer-events:none;
+  border:2px solid rgba(255,226,168,.9);opacity:0;animation:ripple 2.4s ease-out 2.2s infinite}
+.hint::after{content:"";position:absolute;inset:26px;border-radius:50%;background:rgba(255,226,168,.9);box-shadow:0 0 18px 6px rgba(255,190,100,.55)}
+body.touched .hint,body:not(.s-flow) .hint,body.poster .hint{display:none}
+@keyframes ripple{0%{opacity:0;transform:scale(.45)}18%{opacity:.95}100%{opacity:0;transform:scale(1.5)}}
+
+/* ── картата (лист) ── */
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:8;height:76svh;background:var(--paper);color:var(--ink);border-radius:22px 22px 0 0;
+  transform:translateY(104%);transition:transform .75s cubic-bezier(.2,.85,.2,1);display:flex;flex-direction:column;
+  box-shadow:0 -18px 60px rgba(10,6,18,.65);visibility:hidden}
+body.s-open .sheet{transform:none;visibility:visible}
+.sheet article{display:none}
+.sheet article.on{display:block}
+
+body:not(.s-flow) .tel{opacity:0;pointer-events:none}
+.sheet-head{position:relative;display:flex;align-items:center;gap:4px;padding:18px 10px 6px;flex:0 0 auto;touch-action:none}
+.sheet-head::before{content:"";position:absolute;left:50%;top:7px;width:44px;height:4px;margin-left:-22px;border-radius:4px;background:rgba(43,29,44,.22)}
+.sheet .nav{flex:0 0 44px;width:44px;height:44px;border-radius:50%;border:1px solid rgba(43,29,44,.2);background:rgba(255,255,255,.4);color:var(--ink);font:400 24px/1 var(--text);padding:0 0 4px}
+.sheet .nav.x{font-size:15px;padding:0;margin-left:6px;background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.dots{display:flex;justify-content:center;align-items:center;gap:9px;flex:1}
+.dots i{width:9px;height:9px;border-radius:50%;background:rgba(43,29,44,.14);box-shadow:inset 0 0 0 1.5px rgba(184,52,31,.35);transition:transform .4s,background .4s}
+.dots i.lit{background:#f2b550;box-shadow:inset 0 0 0 1.5px #c9822a}
+.dots i.cur{transform:scale(1.55);background:var(--cinnabar);box-shadow:none}
+.sheet-body{flex:1 1 auto;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:6px 22px calc(var(--sab) + 60px);scrollbar-width:none}
+.sheet-body::-webkit-scrollbar,.rail::-webkit-scrollbar,.prail::-webkit-scrollbar{display:none}
+.sheet h2{font:400 clamp(25px,7.2vw,34px)/1.12 var(--display);color:var(--cinnabar);margin:8px 0 16px;text-wrap:balance}
+.sheet p{font:400 18px/1.62 var(--text);margin:0 0 1em}
+.sheet p.lead{font-size:20.5px;line-height:1.5;color:#3b2140}
+.sheet p.em{color:#6b2a1e}
+.sheet h3{position:relative;font:400 22px/1.2 var(--display);color:var(--ink);margin:1.7em 0 .7em;padding-left:27px}
+.sheet h3::before,hr.orn::after,.quotes li::before{content:"";position:absolute;width:16px;height:16px;background:var(--brass);clip-path:polygon(50% 0,62% 38%,100% 50%,62% 62%,50% 100%,38% 62%,0 50%,38% 38%)}
+.sheet h3::before{left:0;top:.26em}
+.sheet h4{font:600 18.5px/1.3 var(--text);color:var(--cinnabar);margin:1.4em 0 .5em}
+.sheet a{color:var(--cinnabar);text-decoration-thickness:1px;text-underline-offset:3px}
+.sheet strong{font-weight:600;color:#3a1d22}
+ul.lit{list-style:none;padding:0;margin:0 0 1.3em}
+ul.lit li{position:relative;padding-left:30px;margin:0 0 .75em;font:400 18px/1.55 var(--text)}
+ul.lit li::before{content:"";position:absolute;left:4px;top:.48em;width:11px;height:11px;border-radius:50%;background:#f6c56a;box-shadow:0 0 0 1.5px #c9822a,0 0 10px 2px rgba(240,170,70,.55)}
+.ticket{position:relative;margin:1.3em 0;padding:18px 18px 13px;background:#fffaf0;border:1.5px dashed rgba(184,52,31,.5);border-radius:16px;text-align:center}
+.ticket::before,.ticket::after{content:"";position:absolute;top:50%;width:18px;height:18px;margin-top:-9px;border-radius:50%;background:var(--paper);border:1.5px dashed rgba(184,52,31,.5)}
+.ticket::before{left:-10px;clip-path:inset(-2px -2px -2px 50%)}.ticket::after{right:-10px;clip-path:inset(-2px 50% -2px -2px)}
+.ticket p{margin:0 0 .42em;font-size:17.5px;line-height:1.5}
+.ticket h4{margin:0 0 .55em;font:400 21px/1.2 var(--display);color:var(--cinnabar)}
+.ticket.price{background:var(--aub);border-color:rgba(232,163,60,.75);color:var(--cream)}
+.ticket.price strong{color:var(--bulb)}.ticket.price::before,.ticket.price::after{border-color:rgba(232,163,60,.75)}
+.ticket.place{border-style:solid;border-color:rgba(43,29,44,.16);background:rgba(255,255,255,.42)}.ticket.place::before,.ticket.place::after{display:none}
+hr.orn{position:relative;border:0;height:16px;width:128px;margin:1.4em auto;background:linear-gradient(var(--brass),var(--brass)) left center/46px 2px no-repeat,linear-gradient(var(--brass),var(--brass)) right center/46px 2px no-repeat}
+hr.orn::after{left:50%;top:0;margin-left:-8px;background:var(--cinnabar)}
+details.acc{border-top:1.5px solid rgba(184,52,31,.28)}
+details.acc:last-child{border-bottom:1.5px solid rgba(184,52,31,.28)}
+summary{list-style:none;cursor:pointer}summary::-webkit-details-marker{display:none}
+details.acc>summary{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:62px;padding:8px 0;font:400 20.5px/1.2 var(--display);color:var(--cinnabar)}
+details>summary::after{content:"+";flex:0 0 36px;height:36px;border-radius:50%;background:var(--cinnabar);color:var(--paper);font:400 24px/34px var(--text);text-align:center;transition:transform .45s cubic-bezier(.3,1.5,.5,1)}
+details[open]>summary::after{transform:rotate(45deg)}
+details.story{border-top:1px solid rgba(43,29,44,.14)}
+details.story>summary{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:54px;font:600 17.5px/1.3 var(--text);color:var(--ink)}
+details.story>summary::after{flex-basis:30px;height:30px;line-height:28px;font-size:20px;background:none;color:var(--cinnabar);box-shadow:inset 0 0 0 1.5px rgba(184,52,31,.5)}
+.rail{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;margin:4px -22px 0;padding:6px 22px 14px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.law{flex:0 0 86%;scroll-snap-align:center;background:radial-gradient(120% 80% at 50% 0%,#3d2750,#231733 72%);color:var(--cream);border-radius:20px;padding:24px 20px 14px;border:1.5px solid rgba(232,163,60,.6);box-shadow:0 10px 26px rgba(26,14,34,.3)}
+.sheet .law h4{font:400 24px/1.15 var(--display);color:#ffdf9a;margin:0 0 .6em}
+.sheet .law p{font-size:17px;line-height:1.56;color:var(--cream)}.sheet .law p.em{color:var(--bulb)}
+.rail+.dots{margin:0 0 20px}
+.quotes{list-style:none;padding:0;margin:0 0 1em;display:grid;gap:12px}
+.quotes li{position:relative;background:#fffaf0;border-radius:14px;padding:14px 16px 14px 42px;font:italic 400 17.5px/1.5 var(--text);box-shadow:0 2px 0 rgba(184,52,31,.16);--r:-.5deg;transform:rotate(var(--r))}
+.quotes li:nth-child(even){--r:.45deg;background:#fff3da}
+.quotes li::before{left:14px;top:19px;width:14px;height:14px}
+.poem{margin:1.4em 0;padding:18px 20px;border-left:3px solid var(--brass);background:rgba(255,255,255,.4);border-radius:0 14px 14px 0}
+.sheet .poem p{font:italic 400 19px/1.45 var(--text);margin:0 0 .55em}
+.poem cite{display:block;font:500 14.5px/1.4 var(--text);font-style:normal;letter-spacing:.04em;color:#7a4a3a;margin-top:.9em}
+.who{text-align:center;margin:0 0 1.2em}.sheet .who p{margin:0 0 .15em}.sheet .who p:first-child{font:400 27px/1.2 var(--display);color:var(--ink);margin-bottom:.2em}
+.telbig{text-align:center}.telbig a{display:flex;align-items:center;justify-content:center;min-height:58px;margin-top:8px;border-radius:999px;background:linear-gradient(#ffdf9a,#e8a33c);color:#2a1608;font:600 22px/1 var(--text);letter-spacing:.03em;text-decoration:none;box-shadow:0 8px 24px rgba(232,163,60,.45)}
+.formlink{display:flex;align-items:center;justify-content:space-between;gap:12px;border-top:1.5px solid rgba(184,52,31,.28);padding-top:16px;margin-top:1.4em}
+.sheet .formlink span{font:400 20.5px/1.2 var(--display);color:var(--cinnabar)}
+.formlink a{display:inline-flex;align-items:center;min-height:46px;padding:0 22px;border-radius:999px;background:var(--cinnabar);color:var(--paper);font:600 16px/1 var(--text);text-decoration:none}
+/* разкриване: блоковете изплуват · думите на увода светват една по една като гонката на крушките */
+.rv{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .85s cubic-bezier(.2,.7,.2,1);transition-delay:var(--d,0ms)}
+.rv.in{opacity:1;transform:none}
+.quotes li.rv{transform:translateY(18px) rotate(-2.5deg)}.quotes li.rv.in{transform:rotate(var(--r))}
+.lead .w{opacity:.13;transition:opacity .5s ease;transition-delay:calc(var(--d,0ms) + var(--i)*32ms)}
+.lead.in .w{opacity:1}
+
+/* ── Menu ── */
+.menu{position:fixed;inset:0;z-index:12;display:flex;flex-direction:column;justify-content:center;padding:calc(var(--sat) + 64px) 30px calc(var(--sab) + 26px);
+  background:radial-gradient(120% 70% at 50% 0%,rgba(62,40,78,.97),rgba(21,15,31,.985) 72%);opacity:0;visibility:hidden;transition:opacity .4s,visibility 0s .4s}
+body.menu-on .menu{opacity:1;visibility:visible;transition:opacity .4s}
+body.menu-on .hdr{z-index:13}
+.menu ul{list-style:none;margin:0;padding:0}
+.menu li{opacity:0;transform:translateY(14px);transition:opacity .5s,transform .6s cubic-bezier(.2,.7,.2,1);transition-delay:calc(var(--i)*42ms)}
+body.menu-on .menu li{opacity:1;transform:none}
+.menu button{display:flex;align-items:center;gap:14px;width:100%;min-height:54px;padding:0;background:none;border:0;text-align:left;font:400 clamp(22px,6.5vw,30px)/1.15 var(--display);color:var(--cream)}
+.menu button::before{content:"";flex:0 0 11px;height:11px;border-radius:50%;background:#4c3a55;box-shadow:0 0 0 1.5px rgba(232,163,60,.55)}
+.menu button.lit::before{background:#ffe6b0;box-shadow:0 0 0 1.5px #e8a33c,0 0 14px 4px rgba(255,190,100,.8)}
+.menu .grp{font:500 11.5px/1 var(--text);letter-spacing:.24em;text-transform:uppercase;color:var(--brass);padding:16px 0 6px 25px}
+.menu .sub button{padding-left:25px;font-size:clamp(20px,5.8vw,26px)}
+.menu-foot{margin:26px 0 0 25px;font:400 12px/1.4 var(--text);letter-spacing:.06em;color:rgba(244,232,207,.55)}
+
+/* ── наградата (7/7) ── */
+.reward{position:fixed;left:18px;right:18px;top:50%;z-index:9;max-width:520px;margin:0 auto;transform:translateY(-44%) scale(.94);opacity:0;visibility:hidden;text-align:center;padding:30px 22px 26px;border-radius:24px;
+  background:radial-gradient(120% 90% at 50% 0%,rgba(70,44,88,.93),rgba(27,18,38,.95));border:1.5px solid rgba(232,163,60,.8);box-shadow:0 0 0 7px rgba(232,163,60,.12),0 30px 80px rgba(0,0,0,.55);
+  transition:opacity .6s,transform .8s,visibility 0s .6s}
+body.reward-on .reward{opacity:1;visibility:visible;transform:translateY(-50%);transition:opacity 1s .9s,transform 1.2s .9s cubic-bezier(.2,.8,.2,1)}
+.rq{font:400 clamp(23px,6.5vw,31px)/1.25 var(--display);color:#ffe2a8;margin:0 0 16px;text-wrap:balance}
+.rby{font:500 12px/1 var(--text);letter-spacing:.22em;text-transform:uppercase;color:var(--brass);margin:0 0 22px}
+.reward .more{display:inline-flex;align-items:center;text-decoration:none;pointer-events:auto;white-space:nowrap;font-size:min(4.1vw,16px);padding:0 22px}
+body.reward-on .title,body.reward-on .tag{opacity:0}
+
+/* ── постер: reduced-motion или без WebGL → нула GL · нула движение · картите са лента ── */
+.poster-art,.prail{display:none}
+body.poster #gl{display:none}
+body.poster .poster-art{display:block;position:absolute;inset:0;width:100%;height:100%}
+body.poster .prail{display:flex;position:fixed;left:0;right:0;top:50%;transform:translateY(-42%);z-index:5;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;padding:10px 12vw;scrollbar-width:none}
+.pcard{flex:0 0 76vw;max-width:340px;min-height:min(46svh,400px);scroll-snap-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:30px 22px 26px;text-align:center;
+  border-radius:22px;border:1.5px solid var(--brass);outline:2px dotted rgba(246,232,205,.55);outline-offset:-10px;background:linear-gradient(rgba(52,32,70,.96),rgba(24,15,36,.98));color:var(--cream)}
+.pcard b{font:400 30px/1.12 var(--display)}.pcard span{font:italic 400 17.5px/1.45 var(--text)}
+.pcard em{font:600 15px/1 var(--text);font-style:normal;color:#2a1608;background:linear-gradient(#ffdf9a,#e8a33c);border-radius:999px;padding:13px 26px}
+body.poster .cap,body.poster .bulbs i{display:none}
+body.poster.s-open .prail{visibility:hidden}
+
+@media (min-width:900px){
+  .sheet{left:auto;right:22px;top:22px;bottom:22px;height:auto;width:min(540px,44vw);border-radius:22px;transform:translateX(112%)}
+  .sheet-head::before{display:none}
+  .title{top:calc(var(--sat) + 40px)}.title h1{font-size:clamp(48px,5.4vw,84px)}
+  .tag{font-size:21px}
+  .menu{align-items:center}.menu ul{min-width:420px}
+  .reward{left:0;right:0}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+<script type="importmap">{"imports":{"three":"../../vendor/three.module.js"}}</script>
+</head>
+<body class="s-flow">
+
+<div id="stage" role="img" aria-label="Въртележка на здрач със седем карти от прах"
+     data-fascia="LITE LEARNING|Център по Класическа Сугестопедия||„Колкото повече, толкова повече“|една роза|ОБИЧАНА|много повече||cheerful and patient teacher|a wonderful person, teacher and friend">
+  <canvas id="gl" aria-hidden="true"></canvas>
+  <svg class="poster-art" viewBox="0 0 375 812" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <g fill="none" stroke="#0c0814" stroke-width="4"><circle cx="34" cy="262" r="112"/><path d="M34 150V374M-78 262H146M-45 183L113 341M-45 341L113 183"/></g>
+    <path d="M187 138 L-60 268 H434 Z" fill="#c23a22"/>
+    <path d="M187 138 L-10 268 H40 Z M187 138 L92 268 H140 Z M187 138 L188 268 H236 Z M187 138 L286 268 H334 Z M187 138 L384 268 H434 Z" fill="#efe0c0"/>
+    <rect x="-20" y="264" width="415" height="12" fill="#7a1f14"/><rect x="-20" y="276" width="415" height="40" fill="#ecdcb4"/>
+    <rect x="-20" y="280" width="415" height="3" fill="#b8341f"/><rect x="-20" y="309" width="415" height="3" fill="#b8341f"/>
+    <g fill="#ffe2a8"><circle cx="18" cy="270" r="4"/><circle cx="66" cy="270" r="4"/><circle cx="114" cy="270" r="4"/><circle cx="162" cy="270" r="4"/><circle cx="210" cy="270" r="4"/><circle cx="258" cy="270" r="4"/><circle cx="306" cy="270" r="4"/><circle cx="354" cy="270" r="4"/><circle cx="187" cy="132" r="7"/></g>
+    <rect x="158" y="316" width="58" height="330" fill="#5c1710"/>
+    <ellipse cx="187" cy="700" rx="340" ry="78" fill="#7a4c2c"/><ellipse cx="187" cy="700" rx="340" ry="78" fill="none" stroke="#b8341f" stroke-width="5"/>
+    <ellipse cx="187" cy="700" rx="150" ry="34" fill="none" stroke="#ecdcb4" stroke-width="3" opacity=".7"/>
+  </svg>
+</div>
+<div class="scrim top"></div><div class="scrim bot"></div>
+
+<header class="hdr">
+  <a class="tel" href="tel:+359884265504"><span>За контакт:</span>+359 88 426 55 04</a>
+  <button class="menu-btn" type="button" aria-haspopup="true">Menu</button>
+</header>
+
+<div class="title">
+  <h1>LITE <span>LEARNING</span></h1>
+  <p class="sub">Център по Класическа Сугестопедия</p>
+</div>
+<p class="tag">Английски език с лекота и в приятна среда</p>
+
+<div class="hint" aria-hidden="true"></div>
+<div class="cap"><button class="more" type="button">Повече…</button></div>
+<nav class="bulbs" aria-label="Menu"></nav>
+<p class="sr" id="live" aria-live="polite"></p>
+
+<section class="sheet" id="sheet" aria-hidden="true" tabindex="-1">
+  <header class="sheet-head">
+    <button class="nav prev" type="button" aria-label="назад">‹</button>
+    <div class="dots sheet-dots" aria-hidden="true"></div>
+    <button class="nav next" type="button" aria-label="напред">›</button>
+    <button class="nav x" type="button" aria-label="затвори">✕</button>
+  </header>
+  <div class="sheet-body">
+<!-- CONTENT:BEGIN -->
+    <article id="c-about" data-title="За нас" data-teaser="Работим с една наука на любовта, вярата, свободата, щастието и красотата…">
+<h2>„LITE LEARNING“ CLASSICAL SUGGESTOPEDIA CENTER</h2>
+<p class="lead">„LITE LEARNING” Център по Класическа Сугестопедия е новото име на първия „Център по Класическа Сугестопедия“ в София след дългогодишно отсъствие на проф. д-р Лозанов от България. Създаден е на 17ти Септември 2011г., в деня на Вяра, Надежда и Любов, на ул. Христо Белчев 9, ет3., където освен, че бе открито едно езиково училище, в този ден се постави и началото на голямото завръщане на Сугестопедията в София и в страната ни като цяло.</p>
+<p>С благодарност към хората, които са оставили богатството на тази „методика на бъдещето“ в ръцете на едни обикновени преподаватели с големи сърца, нашето най-голямо желание е Сугестопедията да бъде съхранявана в чистия й вид, обогатявана и разпространявана така, че ученици и преподаватели да бъдат облагодетелствани от нея по най-добрия начин.</p>
+<p>Работим с една наука на любовта, вярата, свободата, щастието и красотата, и то без да пестим усилия, като не преставаме да се стремим да изучаваме дебрите на тази наука и на човешката душа всеки ден.</p>
+<p>В „LITE LEARNING“ Център по Класическа Сугестопедия се изучава Английски език с лекота и в приятна среда, като езикови курсове има и за най-малките.</p>
+<h3>Сугестопед – Галина Спасова</h3>
+<p>Здравейте, аз съм Галина!<br>Преподавател-сугестопед съм с над 20 години опит в сферата на чуждоезиковото обучение.</p>
+<p>Завърших Софийски университет ‘Св. Климент Охридски’, специалност Английска филология. Следдипломна квалификация – Сугестопедия (Сертификат № 256/2010, подновен 2012г.) към Фондация „ПРОФ. Д-Р ГЕОРГИ ЛОЗАНОВ И ПРОФ. Д-Р ЕВЕЛИНА ГАТЕВА“</p>
+<p>След срещата ми с проф. д-р Георги Лозанов през 2010та година работата ми придоби много повече смисъл!</p>
+<p>Нещо отличително за мен като човек е непрестанния порив за откривателстване и развитие. В опита си като сугестопед през последните години успях да се срещна с ученици от почти всички възрасти и нива на английския език и да разработя многобройни материали.</p>
+<p>“LITE LEARNING” Център по Класическа Сугестопедия основах през 2011та година с много Вяра, Надежда и Любов и с послание към търсещите знания да ги постигнат с лекота и озарение!<br>Хоризонтът пред мен в този момент е обучението на млади сугестопеди, менторство и подкрепа на обучените преподаватели, както и разпространяването и съхраняването на Сугестопедията в класическия й вид.</p>
+<p>Работата ми е едно от най-интересните неща в живота ми. Обичам децата, обичам да пътувам, да уча чужди езици, да танцувам, рисувам, пея и катеря планини, да се смея и да се радвам на това чудо живота!</p>
+<h3>От учениците ми…</h3>
+<ul class="quotes"><li>Преподавател, който с усмивка на уста, топлина и доверие достигна до резервите на уморената ми психика; умствен релакс и душевно спокойствие</li><li>cheerful and patient teacher; exciting and interesting experience for me</li><li>VERY POSITIVE PERSON; ENTHUSIASTIC, INFECTING OTHER PEOPLE WITH HER ENTHUSIASM; VERY CREATIVE AND ARTISTIC; IT’S A REAL PLEASURE AND DELIGHT TO BE TAUGHT BY HER</li><li>създава усещането, че процесът на обучение е много лесен; приятна атмосфера и положителни емоции; впечатление, че ние водим процеса; работим всички като добър екип</li><li>много повече</li><li>една роза</li><li>много открита и спонтанна; усещането при учене е за отпускане, а не за натоварване; обстановката е въздействаща, наситена с послания, среда много близка до естествената; много смях и взаимопомощ</li><li>a wonderful person, teacher and friend; fun and enjoyable experience</li><li>ОБИЧАНА</li><li>FUNNY- lessons were like you make fun and in the same time you learn so much; RELAX</li><li>усещане за помощ и подкрепа; нежно и ненатрапчиво; много забавление и радост.</li><li>„Колкото повече, толкова повече“ – много изненади, голямо вълшебство, музика, театър, приятелство на английски език</li><li>Ще се радвам отново да си моята учителка!</li></ul>
+    </article>
+    <article id="c-what" data-title="Какво е Сугестопедия?" data-teaser="Това е оригинална методика, специално разработена за учене на чужди езици…">
+<h2>Какво е Сугестопедия?</h2>
+<p class="lead">Това е оригинална методика, специално разработена за учене на чужди езици, както и за обучение във всички дисциплини, създадена от проф. д-р Георги Лозанов и призната на световно ниво. При нея със средствата на класическото изкуство, театър, танц, игра и много емоция се спомага за отключване на резервите, с които човешкия мозък разполага за учене и се постига бързо натрупване на знания, които остават трайно в паметта и се възпроизвеждат също така бързо и естествено.</p>
+<p>Системата е насочена също към подобряване цялостното психическо състояние на обучаващите се, като изключва излишното натоварване и стрес, типични за познатите традиционни методи на обучение. Сугестопедията увеличава нивата на мотивация, интереса, креативността и засилва многократно нивото на възприемане на нови знания, правейки ученето на чуждия език леко, приятно и желано занимание.</p>
+<h3>Кой може да участва?</h3>
+<ul class="lit"><li>Курсът е отворен за всяка възраст.</li><li>Курсът е както за абсолютно начинаещи, така и за тези, които вече имат известни познания по езика.</li><li>Курсът е особено подходящ за всички онези, за които говоримото изразяване на чужд език е предизвикателсво.</li></ul>
+<h3>Какво представлява самият курс?</h3>
+<ul class="lit"><li>Сугестопедичният курс по английски език се състои от 100 учебни часа (45минути), разпределени в 25 дни по 4 учебни часа дневно, без почивните дни.</li><li>Работи се по сугестопедичен учебник и специално разработени допълнителни материали.</li><li>Цикълът на един сугестопедичен урок се състои от четири етапа: въведение, активен и пасивен концертен сеанс, разработка и представяне.</li><li>Във всеки един от етапите седемте закона на сугестопедията/резервопедията се спазват едновременно, неотделимо един от друг при всеки момент на общуването.</li><li>Няма домашна работа.</li><li>Гаранция за многократно завишени резултати има при 100% посещаемост.</li></ul>
+<h3>Резултати от сугестопедичния курс:</h3>
+<ul class="lit"><li>Бързи и дълготрайни знания с минимум усилие. (Доказано е чрез експерименти, че голяма част от пасивно натрупаните знания, дори започва да се активира естествено с течение на времето.)</li><li>Езиковата бариера пада и обучаващите се развиват много добра способност за говоримо справяне с различни езикови ситуации.</li><li>Повишено ниво на мотивацията и интерес към нови знания не само по чуждия език, но и като цяло.</li><li>Курсистите се чувстват по- уверени, ентусиазирани и положително настроени. Тази атмосфера се предава и на работното място.</li><li>Уменията за работа в екип се подобряват чувствително, поради груповите занимания и интензивното общуване по време на обучението.</li><li>Цялостно подобряване на психическото състояние на курсистите.</li></ul>
+<details class="acc" id="laws"><summary>Седем закона в Сугестопедията/Резервопедията</summary>
+<div class="rail" data-rail><section class="law"><h4>Любов</h4><p class="em"><em>Тук не говорим за онази сантименталната любов, а любов към човешкото същество. </em></p>
+<p>При условия на положителни емоции, творческата интелектуална дейност и глобализираният учебен процес се отличават с липса на умора. Принципът на радост и концентративно спокойствие се прилага чрез система от игри и смях, чрез нагледните материали, които са не толкова илюстративни, а стимулиращи по характер, както и цялостната организация на учебния процес.</p>
+<p>В създадената среда на доверие и спокойствие лесно се насъчава себеизявата и общуването.</p></section><section class="law"><h4>Свобода</h4><p class="em"><em>Свободата на обучаващия се да избира как сам да възприеме знанията.</em></p>
+<p>Свободата дава възможност на учащия се да се вслуша във вътрешния си глас и да избере своя собствен път към резервите на психиката в различните моменти на процеса на обучение. Той избира да се включи или не във всяко едно занимание. Свободата не се диктува от преподавателя, тя е спонтанно чувство у курсистите.</p></section><section class="law"><h4>Убедеността на преподавателя, че нещо необикновено се случва</h4><p class="em"><em>Когато учителят е с нагласа, че нещо необикновено се случва, вярвайки в изключителните способности на учащите да възприемат на нивото на резервите, това автоматично резонира в тях и резервите се разкриват.</em></p>
+<p>Състоянието на увереност, че нещо необикновено се случва, води до състояние на вдъхновение у учителя. Неговото отношение и поведение е подчинено на тази вяра в необикновеността на този процес и той излъчва автентични сигнали, които стимулират курсистите и дават тласък на разкриването на собствените им резерви.</p></section><section class="law"><h4>Многократно увеличен учебен материал</h4><p class="em"><em>Материалът при работа чрез Сугестопедия е задължително няколкократно увеличен, спрямо този, използван в традиционните методики.</em></p>
+<p>Професорът е убеден, че колкото повече се натоварва паметта, толкова резултатите са по-добри. Освен увеличения ритъм на усвояване на знания, методиката има психопрофилактичен, психохигиенен и възпитателен ефект.</p></section><section class="law"><h4>Принципът: Цяло – Част, Част – Цяло; Частта чрез Цялото</h4><p class="em"><em>Частта е неделима от цялото и затова частите се преподават чрез цялото, в общия контекст, в глобалната история. </em></p>
+<p>Елементите не бива да се преподават и изучават изолирано. Например, думите, граматиката не съществуват отделно от езика, а са част от речта. Всяко цяло е част от по-голямо цяло и така до безкрай. Човешкото същество реагира като цяло и възприема дразнителите в тяхната комплексност. Това е още едно доказателство, че елементите не съществуват отделно, а винаги като част от цялото.</p></section><section class="law"><h4>Златната Пропорция</h4><p>Можем да я открием навсякъде в природата, както и в класическото изкуство.</p>
+<p class="em"><em>Съществува цяла наука за Златното сечение, или Златната пропорция, която се определя числото 1,618… за коефициент на хармоничност. </em></p>
+<p>В Сугестопедията златната пропорция е на първо място при определяне на времетраенето и съотношението на отделните компоненти, което допълнително подпомага процеса на разкриване на резервите на учащите се като им позволява да учат без умора.</p></section><section class="law"><h4>Приложение на Класическото Изкуство и Естетиката</h4><p class="em"><em>Класическото изкуство и естетиката излъчват безброй неспецифични стимули, които периферно въздействат положително на личността.</em></p>
+<p>Сугестопедичното изкуство, въведено чрез специално подбрани произведения на класическата музика, песни и арии, литературни произведения, репродукции на шедьоври на изобразителното изкуство и т.н., създава условия за психорелаксация и хармония, които помагат за по-добра възприемчивост и стимулират разкриването психичните резерви в приятна атмосфера. То помага да се достигне до състояние на вдъхновение и да се отклони вниманието от страха, свързан с ученето, а също така и обогатява културата участниците в процеса.</p></section></div><div class="dots" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+</details>
+<details class="acc" id="founders"><summary>За проф. д-р Георги Лозанов и проф. д-р Евелина Гатева</summary>
+<p class="em"><em>Проф. д-р Георги Лозанов е световноизвестен лекар, психиатър, психотерапевт, физиолог на мозъка и педагог. Той е създател е на науката Сугестология и на нейното педагогическо приложение – Сугестопедия. Неговата методика е наблюдавана официално от 25-членна международна комисия на ЮНЕСКО през 1978 година, оценена като най – добра и препоръчана за прилагане по всички предмети във всички страни. </em></p>
+<p>В резултат на всеотдайната си работа за кратко време след завъшването на Медицинския Университет в София през 1951 година Д-р Лозанов се превръща в един от най-добрите психиатри в София. Той започва да прави опити в областта на неограничените възможности на човешката личност в институциите, в които работи. Стриктен в експериментите и почтен в отношението си, изследва 43 ясновидци в България като най-сериозно внимание отделя върху изследванията върху Ванга Димитрова.</p>
+<p>Страстен защитник на психотерапията като път към лекуване на соматични и психосоматични заболявания, изследва ролята на внушението в клиниката и като комуникативен фактор. Доказва силата на парасъзнанието чрез операцията на ингвинална херния без упойка, само чрез сугестия в будно състояние. А през 1965 година предизвиква световната научна мисъл с опита за запаметяване на 1000 френски думи за един ден. Опитът успешно доказва паметовите резерви, за което българската държава поверява на професора техническа база, за да се развива науката Сугестология.</p>
+<p>И така през 1966та д-р Лозанов основава и ръководи в продължение на 19години държавен Научно Изследователски Институт по Сугестология в София, където ще се създаде и развие като експериментален клон на сугестологията и нейното приложение в педагогиката – Сугестопедията. Със създаването й, светът на образованието вече никога няма да остане същия.</p>
+<p>10 години д-р Лозанов ръководи и създанения от него Център по Сугестология и Развитие на Личността към СУ „ Св. Климент Охридски”, София, а след това 6 години – Международен Център по Десугестология във Виена, Австрия и Международен Център за Обучаване на Преподаватели, Викторсберг, Австрия. Знанието за сугестопедията се разпространява в десетки институти и учебни школи по света, които д-р Лозанов ръководи методически.</p>
+<p>През 1994 година по покана на кметството на Виена, д-р Георги Лозанов приема и австрийско гражданство.</p>
+<p>След дългогодишно отсъствие от родината си през 2008 година д-р Лозанов отново се завръща в България и се установява в тихия град Сливен, където продължава да работи до последния си дъх. Обучава преподаватели от цял свят.</p>
+<p>Напуска този свят на Гергьовден, 6.05.2012 година, на 86 годишна възраст, заобиколен с Любовта на учениците си.</p>
+<p>Дълбок поклон!</p>
+<hr class="orn">
+<p>Един човек, който изключително много допринася за развитието на Сугестопедията и подобравя съществено методиката е проф. д-р Евелина Гатева, чието име е редно да се спомене с това на д-р Лозанов.</p>
+<p>Само шест години след основаването на института д-р Гатева запова да работи в него и д-р Лозанов я описва като „изключително талантлив сътрудник”,…който „ми помогна да намеря по-добре мястото на класическото изкуство, което бях започнал да внедрявам.”</p>
+<p>Д-р Гатева е музикант, оперна певица, лингвист, създател на сугестопедичното изкуство, залегнало в програмите за обучение на деца и възрастни.</p>
+<p>Тя обогатява с примери методиката, реформира учебниците, композира много песни за чуждоезиковото обучение и детските опери, които са необходими за обучението по математика в началните класове на експерименталните паралелки в България и Австрия.</p>
+<p>За съжаление д-р Гатева си отива млада от този свят още през 1997година.</p>
+<p>Тя обаче продължава да живее в сърцата на всички последователи на сугестопедията, които четат нейните ръководства и бележки, пеят ежедневно песните, които е създала и се вдъхновяват от записите на нейните представяния по цял свят.</p>
+<hr class="orn">
+<blockquote class="poem"><p><em>„Ако можехме да пеем, докато<br>говорим</em></p><p><em>Ако можехме да танцуваме,<br>докато се движим,</em></p><p><em>Ако можехме да рисуваме,<br>докато пишем,</em></p><p><em>Ако можехме да преодолеем<br>времето,</em></p><p><em>пространството и скоростта,</em></p><p><em>Докато мислим…</em></p><p><em>За да усетим Любовта на Създателя”</em></p><cite><em>Из записките на проф. д-р Евелина Гатева</em></cite></blockquote>
+<p><a href="http://dr-lozanov.com/bg/bg1.htm" target="_blank" rel="noopener">Личен сайт на проф. д-р Георги Лозанов.</a></p>
+</details>
+    </article>
+    <article id="c-kids" data-title="Курсове за деца" data-teaser="Най-забавният, естествен и лесен начин вашето дете да научи английски език!">
+<h2>Сугестопедични курсове по английски език за деца</h2>
+<p class="lead">Имате желание детето ви да научи Английски език без излишно натоварване?<br>Добре дошли в света на Сугестопедията! Детето ви може не само да приеме новия език с радост, но и ще има мотивация, желание и вдъхновение да научи много повече. Уроците протичат с много смях и игра, с песни, танци и класическо изкуство, под внимателната грижа на опитни сугестопеди.</p>
+<h3>Учебна година 2024-2025</h3>
+<div class="ticket"><h4>Нови групи:</h4><p><strong>7 юли – 18 юли / </strong><strong>21 юли- 2 август </strong></p><p><strong>9.00ч.- 12.30ч.</strong></p><p><strong>и</strong></p><p><strong>7 юли – 18 юли / </strong><strong>21 юли- 2 август</strong></p><p><strong>14.00ч.- 17.30ч.</strong></p><p>(от понеделник до петък, 40 уч.часа)</p><p><strong>*интензивен сугестопедичен курс за нива</strong></p><p>А1.1, А1.2, А2.1, А2.2</p><p>* адрес: гр. София, ул. „11ти Август“ 10, Сугестопедична къща „7 ключа“</p></div>
+<hr class="orn">
+<div class="ticket"><p><strong>Индивидуални занимания и консултации</strong></p><p>Интензивност: 2уч.ч. на ден през работните дни, минимум 1 път седмично</p></div>
+<p class="em"><em>Сугестопедията за деца се нарича още Превантивна Сугестопедия, тъй като оказва влияние и върху цялостното поведение на детето, водейки не само до по-високо ниво на креатовност, но и действайки психохигиенно с наблюдение за понижаване на нивото на агресия при децата, повишен интерес и спокойствие, самочувствие и инициативност.</em></p>
+<p>Заниманията по английски език за деца са разпределени в 5 седмици, като в първата учебна седмица посещенията са всеки делничен ден, докато в следващите 4 седмици са по 3 пъти седмично.</p>
+<p>По време на ваканциите курсовете са по-интензивни и са всеки делничен ден, обикновено в рамките на 2-3 седмици.</p>
+<p>Един курс се състои от 40 уч.ч.</p>
+<div class="ticket price"><p><strong>Цена: </strong> от 620лв. до 700лв. спрямо нивото</p><p>Цена на учебно помагало и допълнителни материали – 30лв.</p><p><strong>Индивидуално обучение:</strong> интензивно – 35лв./уч. ч; разсрочено – 40лв./уч. ч;</p></div>
+<p>Водещ:</p>
+<p><strong>Сертифициран преподавател – сугестопед: Галина Спасова</strong></p>
+<p>За повече информация и уговорка за събеседване за определяне на ниво на Вас или детето Ви се свържете с преподавателя <a href="#c-contact" data-go="c-contact">тук</a>.</p>
+    </article>
+    <article id="c-adults" data-title="Курсове за възрастни" data-teaser="Искате ли да разговаряте на английски език свободно и без притеснение?">
+<h2>Сугестопедични курсове по английски език за възрастни</h2>
+<p class="lead">Вярвате ли, че чужд език се учи бързо, лесно и с радост?<br>Вярвате ли, че възрастта не е от значение?<br>Вярвате ли, че все пак има начин да преборите езиковата бариера и да говорите гладко и уверено на чуждия език?<br>Нужни са ви само няколко седмици, за да се убедите в това! А ние обещаваме да няма скучни домашни!</p>
+<p>В продължение на 80 до 120 учебни часа, разпределени по 4-6 уч.ч. на ден (в зависимост дали е през уикенда или в работната седмица), без натоварване и в приятна обстановка, вие ще започнете да общувате и да се изразявате свободно на английски език. В наше лице ще срещнете високо ниво на професионализъм, много подкрепа и постоянна обратна връзка, както и индивидуално отношение спрямо потребностите ви.</p>
+<h3>Учебна година 2024-2025</h3>
+<p>В делничните следобеди и вечери от м. март до м. юни</p>
+<p><a href="#c-talk" data-go="c-talk"><em><strong>ComeAlon’ </strong></em></a>срещи за малки и големи! Виж <a href="#c-talk" data-go="c-talk" data-sub="comealon">тук</a>!</p>
+<div class="ticket"><h4>Нови групи:</h4><p><strong>8ми април – 3ти юни</strong></p><p><strong>13.30ч. – 17.00ч. (4 уч.ч. на ден)</strong></p><p>Сугестопедичен курс за ниво <strong>A2</strong> по учебника „The Return“ в <strong>60 уч.ч</strong>.<br>Курсът се провежда 2 пъти седмично във<strong> вторник и четвъртък следобед</strong>.</p><p><strong>Цена:</strong> 720 лв. (учебникът и допълнителните материали се заплащат отделно и на стойност 50лв.)</p></div>
+<hr class="orn">
+<div class="ticket"><p><strong>8ми април – 3ти юни</strong></p><p><strong>9.00ч. – 12.30ч. (4 уч.ч. на ден)</strong></p><p>Сугестопедичен курс за ниво <strong>B1-B2</strong> по учебника „The Journey“ в <strong>60 уч.ч</strong>.<br>Курсът се провежда 2 пъти седмично във<strong> вторник и четвъртък сутрин</strong>.</p><p><strong>Цена: </strong>720 лв. (учебникът и допълнителните материали се заплащат отделно на стойност 50лв.)</p></div>
+<div class="ticket place"><p><strong>*Място за провеждане:</strong> Сугестопедия център „Lite Learning“,</p><p>кв. Дружба 1, ул. Кап. Димитър Списаревски 19</p></div>
+<h3>Обучението е разработено в три модула:</h3>
+<ul class="lit"><li><strong>Първи модул- начално или основно ниво (A1-A2): </strong>80<strong>–</strong>100 учебни часа, разпределени в 5 – 10 работни седмици;</li><li><strong>Втори модул – ниско средно и средно ниво(A2-B1):</strong> 60 до 80 учебни часа, разпределени в 4-8 работни седмици;</li><li><strong>Трети модул – високо средно и високо ниво(B1-B2):</strong> 60 учебни часа, разпределени в няколко поредни уикенда или комбинация уикенд занимания плюс такива през работната седмица</li><li>Неинтензивни курсове за практикуване на езика (<strong>за нива A2, B1, B2</strong>) – между 30 и 50 уч.ч.</li></ul>
+<p><strong>Големина на групите: 4 – 8 човека.</strong></p>
+<p><strong>Индивидуално обучение: </strong>присъствено – интензивно (над 2 пъти седмично) – 35лв./уч. ч; разсрочено – 40лв./уч. ч; онлайн – интензивно (над 2 пъти седмично) – 30лв./уч. ч; разсрочено – 35лв.</p>
+<p>За повече информация, както и за запазване на час за провеждане на събеседване с тест, моля натиснете <a href="#c-contact" data-go="c-contact">тук</a>.</p>
+    </article>
+    <article id="c-talk" data-title="Говорилница – Творилница" data-teaser="Продължаваме да учим заедно и извън курсовете с веселие и креативност!">
+<h2>Говорилница – Творилница</h2>
+<p class="lead">Продължаваме да учим заедно и извън курсовете с веселие и креативност!</p>
+<details class="acc" id="comealon"><summary>ComеAlon‘ events</summary>
+<p>Това е събитие за хора, говорещи английски език на определено ниво, които биха желали да общуват със себеподобни с цел практикуване на езика. Обстановката е приятна и неангажираща, като в същото време се разискват интересни теми, играят се езикови игри, дискутира се дори граматика, ако е необходимо. В компанията на опитния сугестопед Галина Спасова, не само ще се отърсите от бариерите си, но ще се вдъхновите за много повече!</p>
+<p><strong>“ComeАlon‘</strong>!” идва от комбинация между „ Come alone!“ (Ела сам!) и “Come along!“ (Присъедини се!). Ела при нас и намери приятелска компания за практикуване на езика. Заедно е винаги по-лесно!</p>
+<div class="ticket"><p><strong>Кога:</strong> всеки четвъртък вечер от 27 март до 12 юни (без празниците и априлската ваканция) от 18.30 до 20.00ч.</p><p><strong>Къде:</strong> ул. Кап. Димитър Списаревски 19, Дружба 1 (до метростанция Дружба)</p><p><strong>Продължителност:</strong> 2 уч.часа</p><p><strong>Ниво:</strong> около B1</p><p><strong>Вход:</strong> 40лв. на занятие (с предварително запазване на място)</p></div>
+<ul class="lit"><li>При закупуване на ваучер от <strong>6 посещения</strong> в рамките на периода 27.03-12.06, заплащаш само <strong>200 лв.</strong></li></ul>
+<p><strong>За доброволци – модератори с високо ниво</strong> – вход свободен!</p>
+<p>*За да се регистрираш за доброволец, трябва да изпратиш мейл на spasova.galina@gmail.com, с който заявяваш желание и посочваш дата. Доброволците участват в игрите и дискусиите и подкрепят участниците в езика. Брой доброволци за събитие: максимум 2ма. Доброволците ще бъдат различни на отделните събития.</p>
+</details>
+<details class="acc" id="cool"><summary>*COOL THEATRE LAB*</summary>
+<p>Това е едно вълнуващо събитие от поредицата <strong>ГОВОРИЛНИЦА- ТВОРИЛНИЦА</strong>, в което в 5 поредни срещи ще сътворим заедно една или повече интересни пиеси.</p>
+<h4>Какво представлява театралната лаборатория?</h4>
+<p>Събиране на идеи, проучване, структуриране, писане, корекции и завършване на текст, подходящ за пиеса и съответно нейното изиграване пред публика, подготовка на реквизити и декори.</p>
+<h4>Защо театрална и защо лаборатория?</h4>
+<p><strong>Театърът</strong> е неизменна част от процеса в сугестопедичното обучение. Той е полезен за хората, които искат да проговорят съответния чужд език, защото им дава поле за изява, докато сценичната треска става все по-малка или изчезва в определен момент. Театърът, към който се стремим, няма много общо с този на голямата сцена. Той е пълен с импровизации, но в същото време достатъчно обмислен и структуриран. Фокусът не е толкова върху добрата сценична игра, колкото върху езика – произношението, научаването на нови граматически и лексикални структури и тяхното усъвършенстване.</p>
+<p><strong>Лаборатория</strong> е, защото всеки един от нас ще участва в създаването на нещо ново- т.е. ще има възможността за творчество и принос, дейно участие във всеки един от етапите, включително работа с текст, работа в екип, представяне с този екип и най-вече работа с езика на активно ниво.</p>
+<p>Едно от най-прекрасните неща в този процес е идеята са <em>инициатива</em>, която липсва в повечето стандартни обучения и която сугестопедията се опитва да отприщи в хората. По-лесно е, когато всичко е дадено наготово, но защо не пробваме да оставим нещо в историята, просто за разнообразие?!</p>
+<p>Креативно-съзидателният процес, провокиран от *Cool Thatre Lab* не само ще ви очарова, но и ще ви даде един много полезно-приятен начин да общувате с интересни творчески личности, стремящи се към израстване и запълване на времето си със съществени и живи занимания!</p>
+<h4>Кога ще се провежда?</h4>
+<div class="ticket"><p>Заниманията ще се провеждат в<strong> събота/неделя 10.00ч. до 13.30ч.</strong> (4 уч.ч.)</p><p class="em"><em>12.04.2025г. – първоначална среща/кастинг и брейнсторминг + 4 поредни срещи през месец май: </em></p><p>3.05.2025;</p><p>10.05.2025;</p><p>17.05.2025;</p><p>25.05.2025<em> (включва и самото представление).</em></p><p class="em"><em>* форматът предполага мин. 1-2 часа седмично занимание по пиесата вкъщи</em></p></div>
+<div class="ticket price"><p><strong>Ниво: B1- B2 (тинейджъри и възрастни)</strong></p><p><strong>Цена: 280лв.</strong></p><p><strong>Водещ сугестопед:</strong> Галина Спасова</p></div>
+</details>
+<details class="acc" id="tvorim"><summary>Тук творим</summary>
+<details class="story"><summary>Story – By David Anderson</summary>
+<p>It was a sunny day. The birds were singing their songs. In the distance an uncommon sound could be heard. There was a small white house behind the trees. Around the plants there were pastel colours. The scent of summer floated in the air. All at once the bell rang. It turned out that an old friend of Mr Floid was in front of the door. He had arrived with his flabbergasting and charming motorbike. Suddenly a compelling desire took hold of Mr Floid and he got on the motorbike and rode away.That was the beginning of a beginning. A pilot was born.</p>
+</details>
+<details class="story"><summary>Travel inside – By Emma</summary>
+<p><strong>Travel inside</strong></p>
+<p>I would like to tell you about my friend Jack – one of the most extraordinary people I’ve ever met. Jack is from Thailand by origin and he is very grateful to his family for two “western” things: his name and the fact that every Friday they eat pizza at home.</p>
+<p>In his youth Jack wasn’t dedicated to his studies at all, on the contrary – he was dazzled by the shine of night clubs, parties and ladies. He worked as a DJ in a disco and spent every single night there. Surrounded by new acquaintances and a lot of alcohol, Jack was sure he belonged to that place.</p>
+<p>In the meantime his mother was deeply worried about him. She took her courage in both hands and urged her son to think seriously about his future. Touched by his mother’s words, enfeebled by her kindness and concern, Jack (who usually was a disobedient young man) was determined to carry out his mother’s request.</p>
+<p>But what was the right way to fulfill his duty and change his life?</p>
+<p>All in a flash he saw it. He would become a monk at least for a month. Jack thought that this time would be enough to think over his actions, to change his attitude toward life, priorities and values. So he left his home, family and friends and entered in a monastery in Thailand. But the first step in that direction completely changed everything. He got to the core of his soul and mind.</p>
+<p>When I met Jack 3 years ago he was still a monk. That was his ninth year. But at that time he was a teaching monk who travelled all over the world to teach people how to be happier, healthier and a little bit better to each other. Jack was motivated to go beyond everyday rudimental needs and to understand what makes people tick.</p>
+<p>I asked him why he was still a monk after so many years. He explained that he didn’t deserve his mother’s love yet. He didn’t miss the night life, but his mother’s hug and the pizza every Friday.</p>
+</details>
+<details class="story"><summary>Story – By Emma</summary>
+<p>Yesterday read an article about my favourite Hollywood actress, Sidney, and I was shocked by her story. <strong>I would never have suspected</strong> that such a famous and adored woman like her had had an utterly difficult childhood.</p>
+<p>In the article it was written that she was born in a small village in Africa in a tribe with strange traditions. When the little baby opened her eyes… they were blue. A screech of fear cut the air at that moment. The elder of the tribe <strong>ostracized</strong> Sidney and her mother, as he said , “for the sake of the tribe’s dignity”, and they were <strong>alienated by</strong> the other members of the tribe. Sidney and her mother were forced to survive on their own in the desert.</p>
+<p>Seven years later there was a revolution in several African tribes. People defied the rules of the elders and their ominous decisions, and chased all of them out. The tribes established a new order and the elders were sent into oblivion.</p>
+<p>Because of these events Sidney and her mother <strong>could have the opportunity</strong> to come back home and continue with their ordinary life. But they didn’t want that anymore. Her mother had <strong>an unexpected glimpse of</strong> courage so she bought tickets for the next ship to America. As they said, the rest was history.</p>
+<p>By Emma</p>
+</details>
+<details class="story"><summary>A Stupid Story – By Andrew Walker</summary>
+<p><strong>A Stupid Story</strong></p>
+<p>By Andrew Walker</p>
+<p>It was the night of the annual race. All the competitors were on the start line and were expecting the signal. That night they had to defy physical limitations. The tension was kept deep inside their hearts and they wouldn’t allow anything to bring them out of focus. The goal was clear and only a few moments remained before they had to go into a bitter struggle. They were just about to go when some ominous noise broke the silence. Suddenly they spotted a dazzling light was coming directly towards them… In a flicker of an instant ten slime spots appeared and the noise and the light disappeared.</p>
+<p>The next day, two carefree snails were hanging around when they saw the spots. The younger one said to the other – “Who could cause such a mischief?”. The other one, brushing aside the indignation of his fellow-traveler, said – “Stupid racers, how many times have I told them not to compete along the highway but they wouldn’t listen to me”.</p>
+</details>
+<details class="story"><summary>It was love at first sight</summary>
+<p>I had my own firm. I organized events. One day some clients came into my office.They wanted the organization of special event to celebrate the 50–year anniversary of the establishment of their company. I was very exited about it. At that time my life was related to my job only. I was focused on the development to my firm. The event that I had to organize was the biggest in my career. I was compleatly in love with my job.<br>The event was to take place in a day but the day before it I had to welcome one of the main participants at the airport. He was from France. I had never seen him before and I didn‘t know what he looked like. One of my colleagues and I went to the airport. She was also my close friend. When we reached the airport the plain had already landed. My colleague wondered if we would be able to recognize our guest. I told her: „Don‘t worry I am sure that we wil.“Then she asked me: „How come you are so sure, have you see him before?“ I said:“No, I have not but you will see that we will recognize him at once.“</p>
+<p>We waited for a long time, it was full of people. Suddenly, I spotted our guest. I said to my friend: „Here he is!“ She looked at me with wide open eyes. Our guest was unbelievably handsome. That was the first thing that came to my mind when I saw him. A smile lingered on my face. We stood there, looking at each other. I looked into his eyes and I was almost hypnotized. It seemed to me that I was staring into his eyes for hours. After I checked myself I went on: „Hello Mr. Exupery, how was your flight?“ “Very nice, thank you.“ I left my colleague go on with the conversation, because I was not able to talk anymore. I was trying to figure out what had just happened.</p>
+<p>We took him to the hotel. After that we had to go to dinner together with our handsome guest and some other people from the event. We went to the restaurant. I was very nervous. He was sitting opposite me. We stood there, looking at each other, talking about everything. When the dinner was over I went home. I couldn’t sleep that night at all. I was so excited. On the next day was the anniversary. Everything passed very well, me and Mr. Exupery exchanging glances all the time. When everything was over I saw him off to the airport and he told me: “I want to see you again I think there is something special between us.” At that moment I was the happiest woman in the world because I had just experienced love at first sight!</p>
+<p class="em"><em>Jennyanydots</em></p>
+</details>
+</details>
+    </article>
+    <article id="c-posts" data-title="Публикации" data-teaser="Вече пет години даваме светлина и помагаме на малки и големи да учат с лекота!">
+<h2>Публикации</h2>
+<h3>Станахме на 5!</h3>
+<p class="lead">На 17-ти Септември, 2016г. „ЛАЙТ ЛЪРНИНГ“ Център по Класическа Сугестопедия стана на 5 години!</p>
+<p>Отворихме врати през 2011та година на красивия празник на Вяра, Надежа и Любов и вървяхме напред с непреклонна вяра, нестихваща надежда и неспираща любов. Проправихме отново пътя на Класическата Сугестопедия и в столицата на България, където Сугестопедията се заражда още през 60години на миналия век.</p>
+<p>Вече пет години даваме светлина и помагаме на малки и големи да учат с лекота! Това са пет години, изпълнени с много изпитания, предизвикателства, радост, смях и игри; пет години, в които направихме много приятели, пяхме хубави песни и бяхме деца; пет години на изключително усърдие, внимание и обич, и най-вече за нас една петгодишна осъществена мечта, която ни дава криле да мечтаем още повече!</p>
+<p>Пожелавам на училището ни и на екипа още много такива щастливи години! Да бъдем здрави, за да осъществяваме още много мечти на много хора, осмелили се да мечтаят, и да бъдем повод за безброй красиви моменти! За нас е истинско богатство да бъдем проводник на нещо толкова благородно и истинско!</p>
+<p>С най-голяма благодарност и признателност искаме да поздравим г-жа Ванина Бодурова, нашата учителка, вдъхновителка и една смела крехка жена, без която тази мечта нямаше да бъде реалност!</p>
+<p>Благодарим и на вече покойните проф. д-р Георги Лозанов и на невероятната проф. д-р Евелина Гатева, които не спират да ни вдъхновяват, а чрез нас и хиляди хора, докоснали се до Сугестопедията!</p>
+<p>С обич,<br><a href="#c-about" data-go="c-about">Галина Спасова</a><br>Основател на ЛАЙТ ЛЪРНИНГ Център по Класическа Сугестопедия<br>Сугестопед, Английски език</p>
+<hr class="orn">
+<h3>Още един необикновен разказ за Сугестопедията</h3>
+<p>На 14.11.2015 бе посещението на Ванина Бодурова в град Добрич с подкрепата на йога клуб „Харапа“.<br>Още един необикновен разказ за Сугестопедията. С благодарност!</p>
+    </article>
+    <article id="c-contact" data-title="Контакти" data-teaser="За контакт: +359 88 426 55 04">
+<h2>Контакти</h2>
+<div class="who"><p><strong>Lite Learning </strong></p><p>Център по Класическа Сугестопедия</p><p>към</p><p>Фондация „Проф. д-р Георги Лозанов и<br>проф. д-р Евелина Гатева“</p><p>Сугестопед –<strong> Галина Спасова</strong></p></div>
+<p class="telbig">Tел.: <a href="tel:+359884265504">+359 88 426 55 04</a></p>
+<div class="ticket place"><p>Нов адрес:</p><p><a href="https://maps.app.goo.gl/QkitE8NiA7H8cJWG6" target="_blank" rel="noopener">гр. София, ж.к. Дружба 1, ул. „Кап. Димитър Сисаревски“ 19</a></p></div>
+<p class="formlink"><span>Форма за запитване:</span> <a href="https://kursovepoangliiski.com/%D0%BA%D0%BE%D0%BD%D1%82%D0%B0%D0%BA%D1%82%D0%B8/" target="_blank" rel="noopener">Повече…</a></p>
+    </article>
+<!-- CONTENT:END -->
+  </div>
+</section>
+<!-- REWARD:BEGIN -->
+<aside class="reward" id="reward" aria-hidden="true">
+  <p class="rq">„Колкото повече, толкова повече“ – много изненади, голямо вълшебство, музика, театър, приятелство на английски език</p>
+  <p class="rby">От учениците ми…</p>
+  <a class="more" href="tel:+359884265504">За контакт: +359 88 426 55 04</a>
+</aside>
+<!-- REWARD:END -->
+<nav class="menu" id="menu" aria-hidden="true" aria-label="Menu">
+  <ul>
+    <li><button type="button" data-go="">Начало</button></li>
+    <li><button type="button" data-go="c-about">За нас</button></li>
+    <li class="grp">Курсове</li>
+    <li class="sub"><button type="button" data-go="c-what">Какво е Сугестопедия?</button></li>
+    <li class="sub"><button type="button" data-go="c-kids">Курсове за деца</button></li>
+    <li class="sub"><button type="button" data-go="c-adults">Курсове за възрастни</button></li>
+    <li><button type="button" data-go="c-talk">Говорилница – Творилница</button></li>
+    <li><button type="button" data-go="c-posts">Публикации</button></li>
+    <li><button type="button" data-go="c-contact">Контакти</button></li>
+  </ul>
+  <p class="menu-foot">Copyright © 2026 LITE LEARNING</p>
+</nav>
+
+<script type="module">
+import * as THREE from 'three';
+
+/* ───────── помощни ───────── */
+const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const Q = new URLSearchParams(location.search);
+const REDUCED = Q.has('reduced') || matchMedia('(prefers-reduced-motion: reduce)').matches;
+const clamp = (v, a, b) => Math.min(b, Math.max(a, v)), lerp = (a, b, t) => a + (b - a) * t;
+const smooth = (a, b, v) => { const t = clamp((v - a) / (b - a), 0, 1); return t * t * (3 - 2 * t); };
+const wrapPi = a => { a = (a + Math.PI) % (Math.PI * 2); if (a < 0) a += Math.PI * 2; return a - Math.PI; };
+const body = document.body, stage = $('#stage'), canvas = $('#gl');
+
+/* ───────── картите идват от DOM-а (текстът живее само там) ───────── */
+const CARDS = $$('#sheet article').map((el, i) => ({ i, el, title: el.dataset.title, teaser: el.dataset.teaser || '' }));
+const N = CARDS.length, STEP = Math.PI * 2 / N;
+CARDS.forEach(c => { c.a = c.i * STEP; c.A = 0; c.ph = c.i * 1.7; });
+
+/* ───────── състояние: flow (поток) → focus (фокус) → open (картата) ───────── */
+const S = { mode: 'flow', idx: 0, rot: 0.42, vel: 0, target: 0, fK: 0, oK: 0, drag: null, stir: 0, px: 0, seen: new Set(), near: -1, boost: 0, shots: 0, done: false, off: -1, tIdle: 0 };
+const W_FLOW = -Math.PI * 2 / 50;                       // една обиколка ≈ 50 s · картите идват отдясно
+const nearest = (rot = S.rot) => ((Math.round(-rot / STEP) % N) + N) % N;
+const targetFor = (i, rot = S.rot) => -CARDS[i].a + Math.PI * 2 * Math.round((rot + CARDS[i].a) / (Math.PI * 2));
+
+const bulbsNav = $('.bulbs');
+bulbsNav.innerHTML = '<i aria-hidden="true">‹</i>' + CARDS.map(c => `<button type="button" aria-label="${c.title}"></button>`).join('') + '<i aria-hidden="true">›</i>';
+const bulbBtns = $$('button', bulbsNav);
+const sheet = $('#sheet'), sbody = $('.sheet-body'), sheetDotsBox = $('.sheet-dots');
+sheetDotsBox.innerHTML = '<i></i>'.repeat(N); const sheetDots = $$('i', sheetDotsBox);
+const menuBtns = $$('#menu button'); menuBtns.forEach(b => { b.dataset.i = CARDS.findIndex(c => c.el.id === b.dataset.go); });
+$$('#menu li').forEach((li, i) => li.style.setProperty('--i', i));
+function hud() {
+  body.classList.remove('s-flow', 's-drag', 's-focus', 's-open'); body.classList.add('s-' + S.mode);
+  const cur = S.mode === 'flow' || S.mode === 'drag' ? S.near : S.idx;
+  for (const els of [bulbBtns, sheetDots]) els.forEach((b, i) => { b.classList.toggle('cur', i === cur); b.classList.toggle('lit', S.seen.has(i)); });
+  menuBtns.forEach(b => b.classList.toggle('lit', S.seen.has(+b.dataset.i)));
+}
+function flow() { S.mode = 'flow'; hud(); render1(); }
+function focus(i) {
+  S.idx = ((i % N) + N) % N; S.target = targetFor(S.idx); S.mode = 'focus'; S.tIdle = performance.now(); hud();
+  $('#live').textContent = CARDS[S.idx].title + ' — ' + CARDS[S.idx].teaser; posterGo(S.idx); render1();
+}
+function open(i = S.idx) {
+  if (i !== S.idx || S.mode === 'flow' || S.mode === 'drag') focus(i);
+  S.mode = 'open'; S.seen.add(S.idx); const c = CARDS[S.idx];
+  CARDS.forEach(k => k.el.classList.toggle('on', k === c));
+  sheet.setAttribute('aria-hidden', 'false'); body.classList.remove('reward-on', 'menu-on'); hud(); reveal(c.el); render1();
+}
+function close() {
+  if (S.mode !== 'open') return;
+  S.mode = body.classList.contains('poster') ? 'flow' : 'focus'; S.tIdle = performance.now(); sheet.setAttribute('aria-hidden', 'true'); hud(); render1();
+  if (S.seen.size === N && !S.done) celebrate();
+}
+function celebrate() {                                   // 7/7 → златната обиколка: всички карти сглобени, прахът става злато, думите на учениците
+  S.done = true; S.boost = 1; S.shots = 3; S.mode = 'flow'; body.classList.add('done', 'reward-on'); $('#reward').setAttribute('aria-hidden', 'false'); hud(); render1();
+}
+function go(id, sub) {
+  body.classList.remove('menu-on'); const c = CARDS.find(c => c.el.id === id); if (!c) { if (S.mode === 'open') { S.mode = 'focus'; sheet.setAttribute('aria-hidden', 'true'); } return flow(); }
+  open(c.i); const d = sub && document.getElementById(sub);
+  if (d) { d.open = true; setTimeout(() => d.scrollIntoView({ block: 'start', behavior: REDUCED ? 'auto' : 'smooth' }), 420); }
+}
+let posterGo = () => {};
+
+/* ───────── листът: разкриване на текста ───────── */
+const io = 'IntersectionObserver' in window ? new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { root: sbody, rootMargin: '0px 0px -4% 0px', threshold: .03 }) : null;
+function splitWords(el) {                                // думите стават <span> (текстът не се променя) → светват една по една
+  let i = 0; const walk = n => { for (const ch of [...n.childNodes]) {
+    if (ch.nodeType === 3) { const f = document.createDocumentFragment(); ch.textContent.split(/(\s+)/).forEach(tok => { if (!tok) return; if (/^\s+$/.test(tok)) f.append(tok); else { const w = document.createElement('span'); w.className = 'w'; w.style.setProperty('--i', i++); w.textContent = tok; f.append(w); } }); ch.replaceWith(f); }
+    else if (ch.nodeType === 1 && ch.tagName !== 'BR') walk(ch); } }; walk(el);
+}
+for (const c of CARDS) {
+  $$('h2, h3, h4, p, ul.lit > li, .quotes > li, .ticket, hr.orn, details, .rail, .dots, blockquote', c.el).forEach(el => {
+    const host = el.parentElement.closest('.ticket, .law, blockquote'); if (!host) el.classList.add('rv'); });
+  $$('.lead', c.el).forEach(splitWords);
+  const h2 = $('h2', c.el); if (h2 && h2.textContent.trim() === c.title) h2.classList.add('sr');   // същото заглавие вече свети на картата над листа
+}
+function reveal(el) {
+  const r = $$('.rv', el); r.forEach((x, k) => { x.classList.remove('in'); x.style.setProperty('--d', (k < 7 ? 300 + k * 90 : 0) + 'ms'); });
+  sbody.scrollTop = 0; void sbody.offsetHeight;
+  if (io && !REDUCED) r.forEach(x => io.observe(x)); else r.forEach(x => x.classList.add('in'));
+}
+$$('[data-rail]').forEach(rail => {                      // въртележка във въртележката: 7-те закона
+  const dots = [...rail.nextElementSibling.children], upd = () => { const i = Math.round(rail.scrollLeft / Math.max(1, rail.scrollWidth - rail.clientWidth) * (dots.length - 1)); dots.forEach((d, k) => d.classList.toggle('cur', k === i)); };
+  rail.addEventListener('scroll', upd, { passive: true }); upd();
+});
+sheet.addEventListener('click', e => { const a = e.target.closest('[data-go]'); if (a) { e.preventDefault(); go(a.dataset.go, a.dataset.sub); } });
+$('.sheet .prev').addEventListener('click', () => open(S.idx - 1)); $('.sheet .next').addEventListener('click', () => open(S.idx + 1)); $('.sheet .x').addEventListener('click', close);
+{ let y0 = null; const hd = $('.sheet-head');
+  hd.addEventListener('pointerdown', e => { y0 = e.clientY; }); hd.addEventListener('pointercancel', () => { y0 = null; });
+  hd.addEventListener('pointerup', e => { if (y0 !== null && e.clientY - y0 > 44) close(); y0 = null; }); }
+$('.menu-btn').addEventListener('click', () => { const on = body.classList.toggle('menu-on'); $('#menu').setAttribute('aria-hidden', String(!on)); body.classList.add('touched'); });
+$('#menu').addEventListener('click', e => { const b = e.target.closest('button'); if (b) go(b.dataset.go); });
+$('#reward').addEventListener('click', e => { if (!e.target.closest('a')) body.classList.remove('reward-on'); });
+let render1 = () => {};                                  // постерът/GL го презаписват
+
+/* ───────── WebGL сцената ───────── */
+const U = { uTime: { value: 0 }, uPR: { value: 1 }, uScale: { value: 1 }, uAspect: { value: 1 }, uStir: { value: 0 }, uGold: { value: 0 }, uPointer: { value: new THREE.Vector2(9, 9) } };
+const R_PLAT = 3.7, R_RIDE = 2.0, R_HORSE = 3.08, CW = 1.6, CH = 2.05, CY = 2.15, FOV = 50, HORSES = [];
+const POSE = { flow: { y: 2.9, z: 10.6, ly: 2.45 }, focus: { y: 2.3, z: 8.2, ly: 1.5 }, open: { y: 2.3, z: 8.2, ly: 0 } };   // z и ly се смятат във fit()
+let renderer, scene, camera, carousel, frames = 0, raf = 0, tPrev = 0, wheel = null;
+const star1 = { mesh: null, t0: -9, next: 7, x: 0, y: 0 };
+
+const FLOW_GLSL = `
+vec3 flow(vec3 p, float t){
+  return vec3(sin(p.y*1.7+t*1.1)+sin(p.z*1.3-t*.7), sin(p.z*1.5+t*.9)+sin(p.x*1.1+t*.6), sin(p.x*1.9-t*.8)+sin(p.y*1.2+t*1.3));
+}
+vec4 stir(vec4 clip, float amt, vec2 pointer, float aspect){
+  vec2 q = clip.xy/clip.w - pointer; q.x *= aspect;
+  float f = exp(-dot(q,q)*20.)*amt;
+  vec2 d = vec2(-q.y, q.x)*f*.42 + q*f*.3; d.x /= aspect;
+  clip.xy += d*clip.w; return clip;
+}`;
+
+function canvasTex(cv, srgb = true) { const t = new THREE.CanvasTexture(cv); if (srgb) t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8; return t; }
+function rrect(x, a, b, w, h, r) { x.beginPath(); if (x.roundRect) x.roundRect(a, b, w, h, r); else { x.moveTo(a + r, b); x.arcTo(a + w, b, a + w, b + h, r); x.arcTo(a + w, b + h, a, b + h, r); x.arcTo(a, b + h, a, b, r); x.arcTo(a, b, a + w, b, r); x.closePath(); } }
+function wrapLines(x, text, maxW) {
+  const words = text.split(/\s+/), lines = []; let cur = '';
+  for (const w of words) { const t = cur ? cur + ' ' + w : w; if (!cur || x.measureText(t).width <= maxW) cur = t; else { lines.push(cur); cur = w; } }
+  if (cur) lines.push(cur); return lines;
+}
+function star(x, cx, cy, r, col) { x.fillStyle = col; x.beginPath(); for (let k = 0; k < 8; k++) { const a = k * Math.PI / 4, rr = k % 2 ? r * .36 : r; x.lineTo(cx + Math.sin(a) * rr, cy - Math.cos(a) * rr); } x.closePath(); x.fill(); }
+
+/* картата: билет от нощно стъкло · рамка от месинг · гирлянда от 7 крушки (свети нейната) · заглавие · тийзър · „Повече…“ */
+function paintCard(c, glow) {
+  const W = 624, H = 800, cv = document.createElement('canvas'); cv.width = W; cv.height = H; const x = cv.getContext('2d');
+  if (!glow) {
+    const g = x.createLinearGradient(0, 0, 0, H); g.addColorStop(0, 'rgba(52,32,70,.95)'); g.addColorStop(1, 'rgba(24,15,36,.97)');
+    rrect(x, 10, 10, W - 20, H - 20, 34); x.fillStyle = g; x.fill();
+    const rg = x.createRadialGradient(W / 2, 120, 10, W / 2, 120, 400); rg.addColorStop(0, 'rgba(255,190,110,.22)'); rg.addColorStop(1, 'rgba(255,190,110,0)'); x.fillStyle = rg; x.fill();
+  }
+  rrect(x, 16, 16, W - 32, H - 32, 30); x.lineWidth = glow ? 7 : 5; x.strokeStyle = '#e8a33c'; x.stroke();
+  x.save(); x.setLineDash([2, 13]); x.lineCap = 'round'; x.lineWidth = 4.5; x.strokeStyle = 'rgba(246,232,205,.8)'; rrect(x, 35, 35, W - 70, H - 70, 20); x.stroke(); x.restore();
+  // гирлянда
+  const gx = u => 86 + u * (W - 172), gy = u => 78 + 4 * 30 * u * (1 - u);
+  x.beginPath(); for (let k = 0; k <= 40; k++) x.lineTo(gx(k / 40), gy(k / 40)); x.lineWidth = 2; x.strokeStyle = 'rgba(232,163,60,.75)'; x.stroke();
+  for (let k = 0; k < N; k++) {
+    const u = (k + .5) / N, on = k === c.i, r = on ? 12 : 6.5;
+    if (on) { const hg = x.createRadialGradient(gx(u), gy(u) + 6, 2, gx(u), gy(u) + 6, 46); hg.addColorStop(0, 'rgba(255,214,150,.75)'); hg.addColorStop(1, 'rgba(255,170,80,0)'); x.fillStyle = hg; x.fillRect(gx(u) - 50, gy(u) - 44, 100, 100); }
+    x.beginPath(); x.arc(gx(u), gy(u) + 6, r, 0, 7); x.fillStyle = on ? '#fff0c8' : 'rgba(232,163,60,.85)'; x.fill();
+  }
+  // заглавие (менюто на сайта · дословно)
+  x.textAlign = 'center'; x.textBaseline = 'alphabetic';
+  const maxW = W - 2 * 62; let fs = 100, lines = [];
+  for (; fs >= 48; fs -= 4) { x.font = `400 ${fs}px "Yeseva One", Georgia, serif`; lines = wrapLines(x, c.title, maxW); if (lines.length <= 3 && lines.every(l => x.measureText(l).width <= maxW)) break; }
+  const lh = fs * 1.1, ty = 318 - (lines.length - 1) * lh / 2 + fs * .34;
+  x.fillStyle = '#fbf0d8'; if (!glow) { x.shadowColor = 'rgba(255,180,90,.55)'; x.shadowBlur = 22; }
+  lines.forEach((l, k) => x.fillText(l, W / 2, ty + k * lh)); x.shadowBlur = 0;
+  // разделител
+  const ry = 318 + lines.length * lh / 2 + 34; x.fillStyle = '#e8a33c'; x.fillRect(W / 2 - 92, ry, 70, 3); x.fillRect(W / 2 + 22, ry, 70, 3); star(x, W / 2, ry + 1.5, 13, '#ffd98e');
+  // тийзър (дословно от сайта)
+  x.font = 'italic 400 37px Lora, Georgia, serif'; x.fillStyle = 'rgba(246,234,208,.92)';
+  const tl = wrapLines(x, c.teaser, W - 2 * 64).slice(0, 4), t0 = ry + 70;
+  tl.forEach((l, k) => x.fillText(l, W / 2, t0 + k * 49));
+  // долен орнамент
+  star(x, W / 2, H - 74, 11, '#ffd98e'); star(x, W / 2 - 44, H - 74, 7, '#e8a33c'); star(x, W / 2 + 44, H - 74, 7, '#e8a33c');
+  return cv;
+}
+
+function fasciaTex(words, k0) {                        // надпис по борда: дословни думи от сайта (data-fascia)
+  const W = 4096, H = 176, cv = document.createElement('canvas'); cv.width = W; cv.height = H; const x = cv.getContext('2d');
+  x.fillStyle = '#ecdcb4'; x.fillRect(0, 0, W, H);
+  x.fillStyle = '#b8341f'; x.fillRect(0, 10, W, 6); x.fillRect(0, H - 16, W, 6);
+  x.textBaseline = 'middle'; x.textAlign = 'left'; x.font = '400 104px "Yeseva One", Georgia, serif';
+  const parts = []; words.forEach((w, i) => { parts.push({ t: w, w: x.measureText(w).width, c: (i + k0) % 2 ? '#3a2440' : '#a32d1a' }); parts.push({ star: 1, w: 64 }); });
+  const sum = parts.reduce((a, p) => a + p.w, 0), k = Math.min(1, (W - 60 * parts.length) / sum), gap = (W - sum * k) / parts.length; let cx = gap / 2;
+  for (const p of parts) {
+    if (p.star) star(x, cx + 32 * k, H / 2, 30, '#c98a2b');
+    else { x.save(); x.translate(cx, H / 2 + 5); x.scale(k, 1); x.fillStyle = p.c; x.fillText(p.t, 0, 0); x.restore(); }
+    cx += p.w * k + gap;
+  }
+  return canvasTex(cv);
+}
+function lanternTex() {                                 // сводест прозорец-фенер по барабана
+  const W = 128, H = 640, cv = document.createElement('canvas'); cv.width = W; cv.height = H; const x = cv.getContext('2d');
+  const path = () => { x.beginPath(); x.moveTo(14, H - 14); x.lineTo(14, 70); x.arc(W / 2, 70, W / 2 - 14, Math.PI, 0); x.lineTo(W - 14, H - 14); x.closePath(); };
+  const g = x.createLinearGradient(0, 0, 0, H); g.addColorStop(0, '#fff1c9'); g.addColorStop(.45, '#ffc873'); g.addColorStop(1, '#d9792e'); path(); x.fillStyle = g; x.fill();
+  x.strokeStyle = '#6a3a14'; x.lineWidth = 7; path(); x.stroke(); x.lineWidth = 4;
+  x.beginPath(); x.moveTo(W / 2, 20); x.lineTo(W / 2, H - 14); for (let k = 1; k < 5; k++) { x.moveTo(14, 70 + k * (H - 84) / 5); x.lineTo(W - 14, 70 + k * (H - 84) / 5); } x.stroke();
+  return canvasTex(cv);
+}
+function paintHorse() {                                  // кон от въртележка (скачащ) · рисуван, после става прах
+  const Z = 512, cv = document.createElement('canvas'); cv.width = cv.height = Z; const x = cv.getContext('2d');
+  const CREAM = '#f6e7c4', GOLD = '#f0b040', RED = '#d2432a';
+  x.lineCap = 'round'; x.lineJoin = 'round';
+  const limb = (pts, w0, w1, col) => { x.strokeStyle = col; for (let i = 0; i < pts.length - 1; i++) { x.lineWidth = w0 + (w1 - w0) * i / (pts.length - 2 || 1); x.beginPath(); x.moveTo(pts[i][0], pts[i][1]); x.lineTo(pts[i + 1][0], pts[i + 1][1]); x.stroke(); } };
+  // опашка
+  x.strokeStyle = GOLD; x.lineWidth = 26; x.beginPath(); x.moveTo(150, 236); x.bezierCurveTo(92, 206, 62, 250, 70, 318); x.stroke();
+  x.lineWidth = 15; x.beginPath(); x.moveTo(70, 318); x.bezierCurveTo(72, 352, 60, 372, 46, 388); x.stroke();
+  // задни крака (изпънати назад) · предни (свити)
+  limb([[176, 292], [132, 352], [84, 372]], 34, 17, CREAM); limb([[200, 300], [168, 372], [126, 410]], 32, 16, CREAM);
+  limb([[316, 290], [368, 322], [352, 372]], 30, 15, CREAM); limb([[296, 300], [338, 348], [312, 394]], 28, 15, CREAM);
+  x.fillStyle = GOLD; [[84, 372], [126, 410], [352, 372], [312, 394]].forEach(([a, b]) => { x.beginPath(); x.arc(a, b, 11, 0, 7); x.fill(); });
+  // тяло
+  x.fillStyle = CREAM; x.save(); x.translate(250, 264); x.rotate(-.1); x.beginPath(); x.ellipse(0, 0, 118, 60, 0, 0, 7); x.fill(); x.restore();
+  // врат
+  x.beginPath(); x.moveTo(296, 222); x.bezierCurveTo(318, 178, 334, 140, 352, 104); x.lineTo(402, 128); x.bezierCurveTo(392, 176, 378, 236, 352, 286); x.closePath(); x.fill();
+  // глава
+  x.save(); x.translate(392, 122); x.rotate(.62); x.beginPath(); x.ellipse(0, 0, 58, 28, 0, 0, 7); x.fill(); x.restore();
+  x.beginPath(); x.moveTo(350, 96); x.lineTo(352, 62); x.lineTo(372, 90); x.closePath(); x.fill(); x.beginPath(); x.moveTo(368, 92); x.lineTo(378, 60); x.lineTo(392, 96); x.closePath(); x.fill();
+  // грива
+  x.strokeStyle = GOLD; x.lineWidth = 20; x.beginPath(); x.moveTo(346, 84); x.bezierCurveTo(318, 110, 300, 150, 286, 208); x.stroke();
+  x.lineWidth = 11; [[330, 112, 304, 122], [314, 142, 286, 156], [302, 176, 274, 194]].forEach(([a, b, c, d]) => { x.beginPath(); x.moveTo(a, b); x.quadraticCurveTo((a + c) / 2, b - 6, c, d); x.stroke(); });
+  // юзда
+  x.strokeStyle = RED; x.lineWidth = 6; x.beginPath(); x.moveTo(372, 100); x.lineTo(408, 150); x.moveTo(398, 112); x.lineTo(420, 132); x.stroke();
+  // седло + чул
+  x.fillStyle = RED; x.beginPath(); x.moveTo(196, 212); x.quadraticCurveTo(250, 190, 300, 208); x.lineTo(306, 262); x.quadraticCurveTo(250, 290, 198, 268); x.closePath(); x.fill();
+  x.strokeStyle = GOLD; x.lineWidth = 6; x.beginPath(); x.moveTo(198, 268); x.quadraticCurveTo(250, 290, 306, 262); x.stroke(); x.beginPath(); x.moveTo(196, 212); x.quadraticCurveTo(250, 190, 300, 208); x.stroke();
+  x.lineWidth = 7; x.strokeStyle = RED; x.beginPath(); x.moveTo(252, 280); x.lineTo(254, 322); x.stroke();
+  // око
+  x.fillStyle = '#3a2440'; x.beginPath(); x.arc(396, 112, 5, 0, 7); x.fill();
+  return cv;
+}
+function deckTex() {                                    // дъсченият под: лъчи + два боядисани пръстена
+  const Z = 1024, cv = document.createElement('canvas'); cv.width = cv.height = Z; const x = cv.getContext('2d'), c = Z / 2;
+  const g = x.createRadialGradient(c, c, 40, c, c, c); g.addColorStop(0, '#8a5a34'); g.addColorStop(.7, '#7a4c2c'); g.addColorStop(1, '#5e3a22'); x.fillStyle = g; x.fillRect(0, 0, Z, Z);
+  x.strokeStyle = 'rgba(40,20,10,.55)'; x.lineWidth = 3; for (let i = 0; i < 56; i++) { const a = i / 56 * Math.PI * 2; x.beginPath(); x.moveTo(c + Math.cos(a) * 90, c + Math.sin(a) * 90); x.lineTo(c + Math.cos(a) * c, c + Math.sin(a) * c); x.stroke(); }
+  [[.985, 16, '#b8341f'], [.93, 7, '#ecdcb4'], [.42, 10, '#ecdcb4'], [.38, 6, '#b8341f']].forEach(([r, w, col]) => { x.beginPath(); x.arc(c, c, c * r, 0, 7); x.lineWidth = w; x.strokeStyle = col; x.stroke(); });
+  return canvasTex(cv);
+}
+function stripeTex(a, b, stripes) {
+  const cv = document.createElement('canvas'); cv.width = 1024; cv.height = 128; const x = cv.getContext('2d'), w = 1024 / stripes;
+  for (let i = 0; i < stripes; i++) { x.fillStyle = i % 2 ? a : b; x.fillRect(i * w, 0, w + 1, 128); }
+  const sh = x.createLinearGradient(0, 0, 0, 128); sh.addColorStop(0, 'rgba(0,0,0,0)'); sh.addColorStop(1, 'rgba(40,15,5,.28)'); x.fillStyle = sh; x.fillRect(0, 0, 1024, 128);
+  return canvasTex(cv);
+}
+
+function build() {
+  renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.14; renderer.outputColorSpace = THREE.SRGBColorSpace;
+  renderer.setClearColor(0x150f1f, 1);
+  scene = new THREE.Scene(); scene.fog = new THREE.Fog(0x241b35, 20, 64);
+  camera = new THREE.PerspectiveCamera(FOV, 1, .1, 220);
+
+  /* здрач: купол + звезди + земя */
+  { const cv = document.createElement('canvas'); cv.width = 4; cv.height = 512; const x = cv.getContext('2d'), g = x.createLinearGradient(0, 0, 0, 512);
+    [[0, '#0e0a1c'], [.42, '#2a1e42'], [.66, '#5a3a58'], [.82, '#a45c4e'], [.92, '#d99457'], [1, '#e8ae62']].forEach(s => g.addColorStop(s[0], s[1]));
+    x.fillStyle = g; x.fillRect(0, 0, 4, 512);
+    const sky = new THREE.Mesh(new THREE.SphereGeometry(90, 24, 18, 0, Math.PI * 2, 0, Math.PI * .62), new THREE.MeshBasicMaterial({ map: canvasTex(cv), side: THREE.BackSide, fog: false }));
+    sky.position.y = -6; scene.add(sky); }
+  { const n = 460, pos = new Float32Array(n * 3);
+    for (let i = 0; i < n; i++) { const th = Math.random() * Math.PI * 2, ph = Math.acos(1 - Math.random() * .62), r = 82; pos[i * 3] = r * Math.sin(ph) * Math.cos(th); pos[i * 3 + 1] = r * Math.cos(ph) - 4; pos[i * 3 + 2] = r * Math.sin(ph) * Math.sin(th); }
+    const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+    scene.add(new THREE.Points(g, new THREE.PointsMaterial({ color: 0xfff4dc, size: .6, sizeAttenuation: true, transparent: true, opacity: .85, fog: false }))); }
+  { const cv = document.createElement('canvas'); cv.width = cv.height = 256; const x = cv.getContext('2d'); x.fillStyle = '#241a2e'; x.fillRect(0, 0, 256, 256);
+    for (let i = 0; i < 2600; i++) { x.fillStyle = `rgba(${40 + Math.random() * 26 | 0},${28 + Math.random() * 20 | 0},${44 + Math.random() * 22 | 0},.5)`; x.fillRect(Math.random() * 256, Math.random() * 256, 2, 2); }
+    const tex = canvasTex(cv); tex.wrapS = tex.wrapT = THREE.RepeatWrapping; tex.repeat.set(14, 14);
+    const ground = new THREE.Mesh(new THREE.CircleGeometry(90, 48), new THREE.MeshStandardMaterial({ map: tex, color: 0x9a8aa0, roughness: .95 }));
+    ground.rotation.x = -Math.PI / 2; scene.add(ground); }
+
+  /* светлини */
+  scene.add(new THREE.HemisphereLight(0x4a3a68, 0x1c1426, .6));
+  const dusk = new THREE.DirectionalLight(0xd98a5a, .5); dusk.position.set(-18, 8, -24); scene.add(dusk);
+  const heart = new THREE.PointLight(0xffc06a, 62, 30, 1.9); heart.position.set(0, 3.4, 0); scene.add(heart);
+  const under = new THREE.PointLight(0xff9d4a, 18, 14, 2); under.position.set(0, 1.2, 0); scene.add(under);
+  const fill = new THREE.PointLight(0xe8a468, 90, 40, 2); fill.position.set(3.6, 4.4, 12.4); scene.add(fill);
+
+  const M = {
+    cream: new THREE.MeshStandardMaterial({ color: 0xe9d9b4, roughness: .62, metalness: .04 }),
+    red: new THREE.MeshStandardMaterial({ color: 0xa32d1a, roughness: .5, metalness: .06 }),
+    brass: new THREE.MeshStandardMaterial({ color: 0xd9a24a, roughness: .42, metalness: .35, emissive: 0x6a4410, emissiveIntensity: .55 }),
+    wood: new THREE.MeshStandardMaterial({ color: 0x6e4a2f, roughness: .8 }),
+    mirror: new THREE.MeshStandardMaterial({ color: 0xffd9a0, roughness: .2, metalness: .6, emissive: 0xffb45e, emissiveIntensity: 1.25 }),
+  };
+
+  /* ═══ въртележката ═══ */
+  carousel = new THREE.Group(); scene.add(carousel);
+  const add = (geo, mat, y, parent = carousel) => { const m = new THREE.Mesh(geo, mat); m.position.y = y; parent.add(m); return m; };
+  add(new THREE.CylinderGeometry(R_PLAT, R_PLAT, .22, 64), M.wood, .6);
+  add(new THREE.CircleGeometry(R_PLAT, 64), new THREE.MeshStandardMaterial({ map: deckTex(), roughness: .7 }), .712).rotation.x = -Math.PI / 2;
+  add(new THREE.TorusGeometry(R_PLAT, .07, 10, 64), M.red, .72).rotation.x = Math.PI / 2;
+  { const tex = stripeTex('#b8341f', '#e6d3a8', 32);
+    add(new THREE.CylinderGeometry(R_PLAT, R_PLAT + .15, .5, 64, 1, true), new THREE.MeshStandardMaterial({ map: tex, roughness: .6, side: THREE.DoubleSide, emissive: 0xff9a50, emissiveMap: tex, emissiveIntensity: .3 }), .35); }
+  add(new THREE.CylinderGeometry(.62, .72, 2.9, 24), M.red, 2.15);
+  const lanternMat = new THREE.MeshBasicMaterial({ map: lanternTex(), transparent: true, depthWrite: false, toneMapped: false });
+  for (let i = 0; i < 8; i++) { const a = i / 8 * Math.PI * 2, p = add(new THREE.PlaneGeometry(.34, 1.7), lanternMat, 2.2); p.position.x = Math.sin(a) * .7; p.position.z = Math.cos(a) * .7; p.rotation.y = a;
+    const a2 = a + Math.PI / 8, rib = add(new THREE.CylinderGeometry(.03, .03, 2.7, 6), M.brass, 2.15); rib.position.x = Math.sin(a2) * .69; rib.position.z = Math.cos(a2) * .69; }
+  add(new THREE.TorusGeometry(.72, .07, 10, 24), M.brass, 3.5).rotation.x = Math.PI / 2;
+  { const tex = stripeTex('#c23a22', '#efe0c0', 36);
+    add(new THREE.ConeGeometry(R_PLAT + .55, 1.75, 64, 1, true), new THREE.MeshStandardMaterial({ map: tex, roughness: .72, side: THREE.DoubleSide, emissive: 0xffb066, emissiveMap: tex, emissiveIntensity: .34 }), 4.62);
+    add(new THREE.TorusGeometry(R_PLAT + .55, .06, 8, 64), M.red, 3.76).rotation.x = Math.PI / 2;
+    const arcs = (stage.dataset.fascia || '').split('||').map(g => g.split('|').filter(Boolean)).filter(g => g.length);   // надписът по борда върти се с въртележката
+    arcs.forEach((words, i) => { const ft = fasciaTex(words, i), th = Math.PI * 2 / arcs.length;
+      add(new THREE.CylinderGeometry(R_PLAT + .5, R_PLAT + .5, .44, 40, 1, true, i * th, th), new THREE.MeshStandardMaterial({ map: ft, roughness: .55, emissive: 0xffffff, emissiveMap: ft, emissiveIntensity: .4 }), 3.46); });
+    add(new THREE.CylinderGeometry(R_PLAT + .49, R_PLAT + .49, .44, 64, 1, true), new THREE.MeshStandardMaterial({ color: 0x4a1a22, roughness: .8, side: THREE.BackSide, emissive: 0x2a0e14, emissiveIntensity: .5 }), 3.46);
+    add(new THREE.SphereGeometry(.24, 16, 12), M.brass, 5.62); }
+
+  /* крушките: ЕДИН Points (ядро + ореол в шейдъра) · гонката по стрехата */
+  const bp = [], bb = [];
+  const bulb = (x, y, z, size, ca = -1) => { bp.push(x, y, z); bb.push(Math.random() * 6.283, ca, size); };
+  for (let i = 0; i < 48; i++) { const a = i / 48 * Math.PI * 2; bulb(Math.sin(a) * (R_PLAT + .66), 3.76, Math.cos(a) * (R_PLAT + .66), i % 6 === 0 ? 1.5 : 1.05, a); }
+  for (let i = 0; i < 24; i++) { const a = (i + .5) / 24 * Math.PI * 2; bulb(Math.sin(a) * (R_PLAT + .54), 3.19, Math.cos(a) * (R_PLAT + .54), .85); }
+  for (let i = 0; i < 10; i++) for (let k = 0; k < 4; k++) { const t = i / 10, a = k / 4 * Math.PI * 2 + .4, r = (R_PLAT + .45) * (1 - t) + .3 * t; bulb(Math.sin(a) * (r + .1), 3.86 + t * 1.7, Math.cos(a) * (r + .1), .85); }
+  bulb(0, 5.92, 0, 1.9);
+  for (let i = 0; i < 32; i++) { const a = (i + .5) / 32 * Math.PI * 2; bulb(Math.sin(a) * (R_PLAT + .1), .84, Math.cos(a) * (R_PLAT + .1), .6); }
+  const bulbMat = new THREE.ShaderMaterial({
+    uniforms: { uTime: U.uTime, uPR: U.uPR, uScale: U.uScale }, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
+    vertexShader: `attribute vec3 aB; uniform float uTime,uPR,uScale; varying float vI;
+      void main(){ vec4 mv=modelViewMatrix*vec4(position,1.); gl_Position=projectionMatrix*mv;
+        float chase = aB.y<0. ? 1. : .42+.58*(.5+.5*sin(aB.y*4.-uTime*2.6));
+        vI=chase; gl_PointSize=clamp(aB.z*(1.+sin(uTime*5.2+aB.x)*.07)*uScale*uPR*112./(-mv.z),2.,190.); }`,
+    fragmentShader: `varying float vI; void main(){ float d=length(gl_PointCoord-.5)*2.; if(d>1.)discard;
+        float core=1.-smoothstep(.08,.24,d), halo=pow(max(1.-d,0.),2.2);
+        gl_FragColor=vec4((vec3(1.,.9,.7)*core*1.7+vec3(1.,.58,.24)*halo*.8)*vI,1.); }`
+  });
+  { const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(bp, 3)); g.setAttribute('aB', new THREE.Float32BufferAttribute(bb, 3));
+    const p = new THREE.Points(g, bulbMat); p.frustumCulled = false; carousel.add(p); }
+
+  /* светло езеро под въртележката */
+  { const cv = document.createElement('canvas'); cv.width = cv.height = 256; const x = cv.getContext('2d'), g = x.createRadialGradient(128, 128, 10, 128, 128, 126);
+    g.addColorStop(0, 'rgba(255,180,90,.5)'); g.addColorStop(1, 'rgba(255,160,70,0)'); x.fillStyle = g; x.fillRect(0, 0, 256, 256);
+    const pool = new THREE.Mesh(new THREE.CircleGeometry(8.4, 40), new THREE.MeshBasicMaterial({ map: canvasTex(cv), transparent: true, blending: THREE.AdditiveBlending, depthWrite: false }));
+    pool.rotation.x = -Math.PI / 2; pool.position.y = .012; scene.add(pool); }
+
+  /* далечен панаир: виенско колело + шатри (силуети срещу здрача) */
+  { const sil = new THREE.MeshBasicMaterial({ color: 0x0c0814, fog: false });
+    wheel = new THREE.Group(); wheel.add(new THREE.Mesh(new THREE.TorusGeometry(6.2, .13, 6, 56), sil));
+    for (let i = 0; i < 8; i++) { const s = new THREE.Mesh(new THREE.BoxGeometry(.07, 12.4, .07), sil); s.rotation.z = i / 8 * Math.PI; wheel.add(s); }
+    for (let i = 0; i < 16; i++) { const a = i / 16 * Math.PI * 2, c = new THREE.Mesh(new THREE.BoxGeometry(.7, .5, .3), sil); c.position.set(Math.cos(a) * 6.2, Math.sin(a) * 6.2 - .3, 0); wheel.add(c); }
+    wheel.position.set(-8.6, 8.4, -30); scene.add(wheel);
+    const leg = new THREE.Mesh(new THREE.ConeGeometry(2.6, 8.6, 4, 1, true), sil); leg.position.set(-8.6, 4.2, -30.2); scene.add(leg);
+    [[9, -27, 3.2], [15, -32, 4.2], [-17, -26, 3], [3.5, -36, 3.6]].forEach(([x, z, s]) => { const t = new THREE.Mesh(new THREE.ConeGeometry(s, s * 1.15, 8), sil); t.position.set(x, s * .55, z); scene.add(t); }); }
+
+  /* ═══ ездачите: 7 карти · всяка = пилон + кристален лист (чете се) + ~3800 зрънца прах (сглобява се/разпада се) ═══ */
+  const grainMat = new THREE.ShaderMaterial({
+    transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
+    vertexShader: `attribute vec3 aDust; attribute vec4 aSeed; attribute vec3 aCol;
+      uniform float uTime,uA,uFocus,uPR,uScale,uStir,uAspect,uSz; uniform vec2 uPointer; varying vec3 vCol; varying float vAl;
+      ${FLOW_GLSL}
+      void main(){
+        float a = clamp(uA*1.35 - aSeed.x*.35, 0., 1.); a = a*a*(3.-2.*a);
+        vec3 dust = aDust + flow(aDust*.55 + aSeed.yzw*6.283, uTime*.22)*.42;
+        vec3 home = position + flow(position*5. + aSeed.yzw*6.283, uTime*.9)*.006*(1.-uFocus*.7);
+        vec3 p = mix(dust, home, a);
+        float arc = sin(a*3.14159);
+        p += (aSeed.yzw-.5)*arc*.8; p.y += arc*.3;
+        vec4 mv = modelViewMatrix*vec4(p,1.);
+        gl_Position = stir(projectionMatrix*mv, uStir*(1.-a*.6), uPointer, uAspect);
+        float tw = .7+.3*sin(uTime*(2.+aSeed.y*3.)+aSeed.z*40.);
+        float sz = mix(2.5/uSz, 1.1, a)*(.55+aSeed.w*.9)*(1.+uFocus*.18);
+        gl_PointSize = clamp(sz*uSz*uScale*uPR*6.2/(-mv.z), 1., 48.);
+        vCol = mix(aCol*vec3(1.,.82,.6), aCol, a); vAl = mix(.62/(uSz*uSz), .95, a)*tw;
+      }`,
+    fragmentShader: `varying vec3 vCol; varying float vAl;
+      void main(){ vec2 c=gl_PointCoord-.5; float d=dot(c,c)*4.; if(d>1.)discard; float g=pow(1.-d,2.2); gl_FragColor=vec4(vCol*g*vAl,1.); }`
+  });
+  const poleGeo = new THREE.CylinderGeometry(.045, .045, 3.1, 10), planeGeo = new THREE.PlaneGeometry(CW, CH);
+  for (const c of CARDS) {
+    const pole = new THREE.Mesh(poleGeo, M.brass); pole.position.set(Math.sin(c.a) * (R_RIDE - .14), 2.2, Math.cos(c.a) * (R_RIDE - .14)); carousel.add(pole);
+    const g = new THREE.Group(); g.position.set(Math.sin(c.a) * R_RIDE, CY, Math.cos(c.a) * R_RIDE); g.rotation.y = c.a; carousel.add(g); c.g = g;
+    c.plane = new THREE.Mesh(planeGeo, new THREE.MeshBasicMaterial({ map: canvasTex(paintCard(c, false)), transparent: true, opacity: 0, depthWrite: false, toneMapped: false }));
+    c.plane.userData.i = c.i; g.add(c.plane);
+    // зрънцата: проба от „светещия“ слой на картата
+    const cv = paintCard(c, true), W = cv.width, H = cv.height, px = cv.getContext('2d').getImageData(0, 0, W, H).data, cand = [];
+    for (let i = 3; i < px.length; i += 4) if (px[i] > 70) cand.push(i >> 2);
+    const n = 3800, pos = new Float32Array(n * 3), dust = new Float32Array(n * 3), seed = new Float32Array(n * 4), col = new Float32Array(n * 3);
+    for (let i = 0; i < n; i++) {
+      const k = cand[(Math.random() * cand.length) | 0], x = k % W, y = (k / W) | 0;
+      pos[i * 3] = ((x + Math.random()) / W - .5) * CW; pos[i * 3 + 1] = (.5 - (y + Math.random()) / H) * CH; pos[i * 3 + 2] = .012 + Math.random() * .03;
+      let u = Math.random() * 2 - 1, th = Math.random() * 6.283, r = Math.cbrt(Math.random()), s = Math.sqrt(1 - u * u);
+      dust[i * 3] = r * s * Math.cos(th) * 2.3; dust[i * 3 + 1] = r * u * 2.1 + .25; dust[i * 3 + 2] = r * s * Math.sin(th) * 2.3 - .3;
+      seed[i * 4] = Math.random(); seed[i * 4 + 1] = Math.random(); seed[i * 4 + 2] = Math.random(); seed[i * 4 + 3] = Math.random();
+      const b = 1.05 + Math.random() * .35; col[i * 3] = px[k * 4] / 255 * b; col[i * 3 + 1] = px[k * 4 + 1] / 255 * b * .9; col[i * 3 + 2] = px[k * 4 + 2] / 255 * b * .72;
+    }
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.BufferAttribute(pos, 3)); geo.setAttribute('aDust', new THREE.BufferAttribute(dust, 3));
+    geo.setAttribute('aSeed', new THREE.BufferAttribute(seed, 4)); geo.setAttribute('aCol', new THREE.BufferAttribute(col, 3));
+    c.mat = grainMat.clone(); c.mat.uniforms = { ...U, uA: { value: 0 }, uFocus: { value: 0 }, uSz: { value: 1 } };
+    const pts = new THREE.Points(geo, c.mat); pts.frustumCulled = false; g.add(pts);
+  }
+
+  /* ═══ конете от прах: между картите, на външния кръг · галопират в такт, сглобяват се отпред и се разпадат отзад ═══ */
+  { const cv = paintHorse(), Z = cv.width, px = cv.getContext('2d').getImageData(0, 0, Z, Z).data, cand = [];
+    for (let i = 3; i < px.length; i += 4) if (px[i] > 90) { const k = i >> 2, e = px[i - 12] < 90 || px[i + 12] < 90 || px[i - Z * 12] < 90 || px[i + Z * 12] < 90; cand.push(k); if (e) cand.push(k, k); }   // контурът тежи ×3 → силуетът се чете
+    const n = 6000, HS = 1.72, pos = new Float32Array(n * 3), dust = new Float32Array(n * 3), seed = new Float32Array(n * 4), col = new Float32Array(n * 3);
+    for (let i = 0; i < n; i++) {
+      const k = cand[(Math.random() * cand.length) | 0], x = k % Z, y = (k / Z) | 0;
+      pos[i * 3] = -((x + Math.random()) / Z - .5) * HS; pos[i * 3 + 1] = (.5 - (y + Math.random()) / Z) * HS; pos[i * 3 + 2] = (Math.random() - .5) * .16;   // огледално: гледа по посоката на въртене
+      const u = Math.random() * 2 - 1, th = Math.random() * 6.283, r = Math.cbrt(Math.random()), q = Math.sqrt(1 - u * u);
+      dust[i * 3] = r * q * Math.cos(th) * 2; dust[i * 3 + 1] = r * u * 1.9 + .5; dust[i * 3 + 2] = r * q * Math.sin(th) * 2;
+      for (let j = 0; j < 4; j++) seed[i * 4 + j] = Math.random();
+      const b = 1 + Math.random() * .3; col[i * 3] = px[k * 4] / 255 * b; col[i * 3 + 1] = px[k * 4 + 1] / 255 * b * .86; col[i * 3 + 2] = px[k * 4 + 2] / 255 * b * .62;
+    }
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.BufferAttribute(pos, 3)); geo.setAttribute('aDust', new THREE.BufferAttribute(dust, 3));
+    geo.setAttribute('aSeed', new THREE.BufferAttribute(seed, 4)); geo.setAttribute('aCol', new THREE.BufferAttribute(col, 3));
+    for (let i = 0; i < N; i++) {
+      const a = (i + .5) * STEP, pole = new THREE.Mesh(poleGeo, M.brass); pole.position.set(Math.sin(a) * R_HORSE, 2.2, Math.cos(a) * R_HORSE); carousel.add(pole);
+      const g = new THREE.Group(); g.position.set(Math.sin(a) * (R_HORSE + .03), 1.56, Math.cos(a) * (R_HORSE + .03)); g.rotation.y = a; carousel.add(g);
+      const mat = grainMat.clone(); mat.uniforms = { ...U, uA: { value: 0 }, uFocus: { value: 0 }, uSz: { value: 1.9 } };
+      const pts = new THREE.Points(geo, mat); pts.frustumCulled = false; g.add(pts); HORSES.push({ a, g, mat, A: 0, ph: i * 1.8 });
+    } }
+
+  /* ═══ прахът, който пълни цялото пространство (eidolon): носи се, трепти, обикаля с въртележката, пръстът го разбърква ═══ */
+  { const n = 9000, pos = new Float32Array(n * 3), seed = new Float32Array(n * 4);
+    for (let i = 0; i < n; i++) {
+      pos[i * 3] = (Math.random() * 2 - 1) * 11; pos[i * 3 + 1] = .15 + Math.pow(Math.random(), 1.25) * 9.5; pos[i * 3 + 2] = -13 + Math.random() * 23.2;
+      seed[i * 4] = Math.random(); seed[i * 4 + 1] = Math.random(); seed[i * 4 + 2] = Math.random(); seed[i * 4 + 3] = Math.random();
+    }
+    const geo = new THREE.BufferGeometry(); geo.setAttribute('position', new THREE.BufferAttribute(pos, 3)); geo.setAttribute('aSeed', new THREE.BufferAttribute(seed, 4));
+    const mat = new THREE.ShaderMaterial({
+      uniforms: U, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
+      vertexShader: `attribute vec4 aSeed; uniform float uTime,uPR,uScale,uStir,uAspect,uGold; uniform vec2 uPointer; varying vec3 vCol; varying float vAl;
+        ${FLOW_GLSL}
+        void main(){
+          vec3 p = position + flow(position*.33 + aSeed.xyz*6.283, uTime*.13)*.95;
+          float r = length(p.xz), ang = -uTime*.05*smoothstep(12., 2.5, r);
+          float cs = cos(ang), sn = sin(ang); p.xz = mat2(cs, -sn, sn, cs)*p.xz;
+          vec4 mv = modelViewMatrix*vec4(p,1.);
+          gl_Position = stir(projectionMatrix*mv, uStir, uPointer, uAspect);
+          float sz = clamp((1.+aSeed.w*aSeed.w*3.4)*(1.+uGold*.7)*uScale*uPR*6.6/(-mv.z), 1., 40.);
+          gl_PointSize = sz;
+          float lit = .42 + .58*exp(-dot(p.xz,p.xz)*.02);
+          float tw = .5+.5*sin(uTime*(.8+aSeed.x*2.4)+aSeed.y*40.);
+          vAl = lit*(.3+.7*tw)*clamp(8./sz, .1, 1.)*(1.+uGold*1.5);
+          vCol = mix(mix(vec3(1.,.78,.5), vec3(1.,.94,.82), aSeed.z), vec3(1.,.8,.34), uGold*.7);
+        }`,
+      fragmentShader: `varying vec3 vCol; varying float vAl;
+        void main(){ vec2 c=gl_PointCoord-.5; float d=dot(c,c)*4.; if(d>1.)discard; float g=pow(1.-d,2.); gl_FragColor=vec4(vCol*g*vAl,1.); }`
+    });
+    const pts = new THREE.Points(geo, mat); pts.frustumCulled = false; scene.add(pts); }
+
+  /* падаща звезда (на всеки ~15 s · три на финала) */
+  { const cv = document.createElement('canvas'); cv.width = 256; cv.height = 8; const x = cv.getContext('2d'), g = x.createLinearGradient(0, 0, 256, 0);
+    g.addColorStop(0, 'rgba(255,240,210,0)'); g.addColorStop(.85, 'rgba(255,236,200,.9)'); g.addColorStop(1, '#fff'); x.fillStyle = g; x.fillRect(0, 0, 256, 8);
+    star1.mesh = new THREE.Mesh(new THREE.PlaneGeometry(6, .11), new THREE.MeshBasicMaterial({ map: canvasTex(cv), transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, fog: false, opacity: 0 }));
+    star1.mesh.rotation.z = -.42; star1.mesh.visible = false; scene.add(star1.mesh); }
+
+  fit(); addEventListener('resize', () => { fit(); render1(); });
+  render1 = () => { if (!raf) { step(performance.now() / 1000, 0); renderer.render(scene, camera); } };
+}
+
+function fit() {
+  const w = innerWidth, h = innerHeight, desk = w >= 900; renderer.setSize(w, h, false); camera.aspect = w / h; camera.clearViewOffset(); camera.updateProjectionMatrix(); S.off = -1;
+  const tv = Math.tan(FOV * Math.PI / 360), th = tv * camera.aspect, dist = (wf, hf) => Math.max(CW / (2 * th * wf), CH / (2 * tv * hf));
+  const aim = (cy, cz, yW, ndc) => cy + cz * Math.tan(Math.atan((yW - cy) / (cz - R_RIDE)) - Math.atan(ndc * tv));   // накъде да гледа камерата, за да застане yW на височина ndc
+  POSE.flow.z = R_RIDE + dist(.54, .30); POSE.focus.z = POSE.open.z = R_RIDE + dist(.76, desk ? .54 : .5);
+  POSE.focus.ly = aim(POSE.focus.y, POSE.focus.z, CY, desk ? .02 : .16);
+  POSE.open.ly = desk ? POSE.focus.ly : aim(POSE.open.y, POSE.open.z, CY + .2, .7);          // листът покрива долните 76% → заглавието на картата остава над него
+  U.uAspect.value = camera.aspect; U.uScale.value = h / 812; U.uPR.value = renderer.getPixelRatio();
+}
+
+/* ───────── една стъпка на света (вика се САМО от tick → един rAF) ───────── */
+function step(t, dt) {
+  const d = S.drag;
+  if (S.mode === 'flow') { S.vel += (W_FLOW * (1 + 7 * S.boost) - S.vel) * (1 - Math.exp(-dt * 1.4)); S.rot += S.vel * dt; }
+  else if (!(d && d.h)) { const k = 44, c = 2 * Math.sqrt(k) * .9; S.vel += (-k * (S.rot - S.target) - c * S.vel) * dt; S.rot += S.vel * dt; }
+  carousel.rotation.y = S.rot;
+  S.boost *= Math.exp(-dt * .42); if (S.boost < .003) S.boost = 0; const all = smooth(0, .3, S.boost);
+  if (S.mode === 'focus' && !d && performance.now() - S.tIdle > 18000) flow();        // тапът държи · после потокът се връща сам
+  const e = 1 - Math.exp(-dt * 4.2);
+  S.fK += ((S.mode === 'flow' ? 0 : S.mode === 'drag' ? .3 : 1) - S.fK) * e; S.oK += ((S.mode === 'open' ? 1 : 0) - S.oK) * e;
+  const f = S.fK * S.fK * (3 - 2 * S.fK), o = S.oK * S.oK * (3 - 2 * S.oK);
+  const cy = lerp(lerp(POSE.flow.y, POSE.focus.y, f), POSE.open.y, o), cz = lerp(lerp(POSE.flow.z, POSE.focus.z, f), POSE.open.z, o), ly = lerp(lerp(POSE.flow.ly, POSE.focus.ly, f), POSE.open.ly, o);
+  camera.position.set(Math.sin(t * .13) * .16 * (1 - f) + S.px * .3, cy + Math.sin(t * .17) * .04, cz); camera.lookAt(-S.px * .12, ly, 0);
+  const off = innerWidth >= 900 ? Math.round(o * Math.min(540, innerWidth * .44) / 2) : 0;                 // десктоп: листът е вдясно → сцената се отмества наляво
+  if (off !== S.off) { S.off = off; if (off) camera.setViewOffset(innerWidth, innerHeight, off, 0, innerWidth, innerHeight); else camera.clearViewOffset(); }
+  for (const c of CARDS) {
+    const dd = Math.abs(wrapPi(c.a + S.rot)), aFlow = lerp(1 - smooth(.35, 2.6, dd), 1, all), isF = c.i === S.idx;
+    const aT = lerp(aFlow, isF ? 1 : aFlow * .1, clamp((S.fK - .3) / .7, 0, 1));
+    c.A += (aT - c.A) * (dt ? 1 - Math.exp(-dt * 5) : 1);
+    c.mat.uniforms.uA.value = c.A; c.mat.uniforms.uFocus.value = isF ? f : 0;
+    c.plane.material.opacity = smooth(.7, .975, c.A);
+    c.g.position.y = CY + Math.sin(t * 1.25 + c.ph) * .08 * (1 - .75 * f); c.g.rotation.z = Math.sin(t * .9 + c.ph) * .018 * (1 - f);
+  }
+  for (const h of HORSES) {
+    const aT = lerp(1 - smooth(.6, 2.3, Math.abs(wrapPi(h.a + S.rot))), 1, all);           // до картата във фокус конете остават цели (нула облак пред текста)
+    h.A += (aT - h.A) * (dt ? 1 - Math.exp(-dt * 4) : 1); h.mat.uniforms.uA.value = h.A;
+    h.g.position.y = 1.56 + Math.sin(t * 1.9 + h.ph) * .17; h.g.rotation.z = Math.sin(t * 1.9 + h.ph + 1.1) * .06;
+  }
+  if (wheel) wheel.rotation.z += dt * .05;
+  if (S.shots > 0 ? t > star1.t0 + .8 : t > star1.next) { star1.t0 = t; star1.x = -11 + Math.random() * 10; star1.y = 19 + Math.random() * 7; star1.next = t + 9 + Math.random() * 9; if (S.shots > 0) S.shots--; }
+  const sk = (t - star1.t0) / 1.5; star1.mesh.visible = sk >= 0 && sk < 1;
+  if (star1.mesh.visible) { star1.mesh.position.set(star1.x + sk * 15, star1.y - sk * 6.7, -44); star1.mesh.material.opacity = Math.sin(sk * Math.PI) * .95; }
+  U.uGold.value = S.boost; U.uTime.value = t; U.uStir.value += (S.stir - U.uStir.value) * (1 - Math.exp(-dt * 5));
+  const near = nearest(); if (near !== S.near) { S.near = near; if (S.mode === 'flow' || S.mode === 'drag') hud(); }
+}
+function tick(now) {
+  raf = requestAnimationFrame(tick);
+  const t = now / 1000, dt = Math.min(.05, tPrev ? t - tPrev : .016); tPrev = t; frames++;
+  step(t, dt); renderer.render(scene, camera);
+}
+
+/* ───────── жестове: свайп върти · тап фокусира · тап върху фокусираната карта я отваря ───────── */
+const ray = new THREE.Raycaster(), v2 = new THREE.Vector2();
+function pick(x, y) {
+  if (!camera) return -1; v2.set(x / innerWidth * 2 - 1, -(y / innerHeight) * 2 + 1); ray.setFromCamera(v2, camera);
+  const hit = ray.intersectObjects(CARDS.map(c => c.plane), false)[0]; return hit ? hit.object.userData.i : -1;
+}
+const setPointer = e => { U.uPointer.value.set(e.clientX / innerWidth * 2 - 1, -(e.clientY / innerHeight) * 2 + 1); S.px += ((e.clientX / innerWidth * 2 - 1) * (e.pointerType === 'mouse' ? 1 : 0) - S.px) * .08; };
+stage.addEventListener('pointerdown', e => {
+  if (!e.isPrimary) return; body.classList.add('touched'); try { stage.setPointerCapture(e.pointerId); } catch (_) {}
+  S.drag = { x0: e.clientX, y0: e.clientY, t: performance.now(), rot0: S.rot, mode0: S.mode, moved: false, h: false }; S.stir = 1; setPointer(e);
+});
+stage.addEventListener('pointermove', e => {
+  setPointer(e); if (e.pointerType === 'mouse') S.stir = 1;
+  const d = S.drag; if (!d) return;
+  const dx = e.clientX - d.x0, dy = e.clientY - d.y0;
+  if (!d.moved && Math.hypot(dx, dy) > 9) { d.moved = true; d.h = Math.abs(dx) >= Math.abs(dy); if (d.h && S.mode !== 'open') { S.mode = 'drag'; hud(); } }
+  if (d.moved && d.h && S.mode === 'drag') {
+    const now = performance.now(), nr = d.rot0 + dx * STEP / (innerWidth * .62), ddt = Math.max(.004, (now - d.t) / 1000);
+    S.vel = lerp(S.vel, (nr - S.rot) / ddt, .5); S.rot = nr; d.t = now; render1();
+  }
+});
+const release = e => {
+  const d = S.drag; S.drag = null; if (e.pointerType !== 'mouse') S.stir = 0; if (!d) return;
+  if (!d.moved) {                                         // тап
+    if (body.classList.contains('reward-on')) { body.classList.remove('reward-on'); return; }
+    const hit = pick(e.clientX, e.clientY);
+    if (S.mode === 'flow') focus(hit >= 0 ? hit : nearest());
+    else if (S.mode === 'focus') { if (hit === S.idx) open(); else if (hit >= 0) focus(hit); else flow(); }
+    else if (S.mode === 'open') close();
+  } else if (d.h && S.mode === 'drag') {                  // свайп → най-близката карта по посоката на замаха
+    let i = nearest(S.rot + clamp(S.vel * .12, -STEP * .5, STEP * .5));     // един замах = една карта (инерцията добавя най-много половин стъпка)
+    if (d.mode0 !== 'flow' && i === S.idx && Math.abs(S.rot - d.rot0) > STEP * .16) i = S.idx + (S.rot < d.rot0 ? 1 : -1);
+    focus(i);
+  } else if (!d.h && S.mode === 'focus' && e.clientY - d.y0 < -40) open();   // дръпни картата нагоре
+};
+stage.addEventListener('pointerup', release); stage.addEventListener('pointercancel', release);
+stage.addEventListener('pointerleave', () => { if (!S.drag) S.stir = 0; });
+$('.more').addEventListener('click', () => open());
+bulbBtns.forEach((b, i) => b.addEventListener('click', () => { body.classList.add('touched'); if (S.mode !== 'flow' && S.idx === i) open(); else focus(i); }));
+addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight') focus((S.mode === 'flow' ? nearest() : S.idx) + 1); else if (e.key === 'ArrowLeft') focus((S.mode === 'flow' ? nearest() : S.idx) - 1);
+  else if (e.key === 'Escape') { if (S.mode === 'open') close(); else flow(); }
+  else if ((e.key === 'Enter' || e.key === ' ') && S.mode === 'focus' && document.activeElement === body) { e.preventDefault(); open(); }
+});
+let wheelT = 0;
+stage.addEventListener('wheel', e => { const now = performance.now(); if (now - wheelT < 420 || S.mode === 'open') return; const dl = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY; if (Math.abs(dl) < 8) return; wheelT = now; focus((S.mode === 'flow' ? nearest() : S.idx) + (dl > 0 ? 1 : -1)); }, { passive: true });
+
+/* ───────── пускане ───────── */
+function poster(why) {
+  body.classList.add('poster', 'ready'); body.dataset.poster = why;
+  const rail = document.createElement('div'); rail.className = 'prail';
+  for (const c of CARDS) { const b = document.createElement('button'); b.type = 'button'; b.className = 'pcard'; b.dataset.i = c.i;
+    for (const [tag, text] of [['b', c.title], ['span', c.teaser], ['em', $('.more').textContent]]) { const e = document.createElement(tag); e.textContent = text; b.append(e); } rail.append(b); }
+  rail.addEventListener('click', e => { const b = e.target.closest('.pcard'); if (b) open(+b.dataset.i); });
+  rail.addEventListener('scroll', () => { const i = Math.round(rail.scrollLeft / Math.max(1, rail.scrollWidth - rail.clientWidth) * (N - 1)); if (i !== S.near) { S.near = i; hud(); } }, { passive: true });
+  body.append(rail); S.near = 0; hud();
+  posterGo = i => { rail.children[i].scrollIntoView({ inline: 'center', block: 'nearest' }); if (S.mode === 'focus') { S.mode = 'flow'; S.near = i; hud(); } };
+}
+const fontsReady = () => Promise.race([
+  Promise.all(['400 80px "Yeseva One"', '400 30px Lora', 'italic 400 30px Lora', '600 30px Lora'].map(f => document.fonts.load(f, 'Център LITE'))).catch(() => {}),
+  new Promise(r => setTimeout(r, 2600))]);
+(async () => {
+  hud();
+  if (REDUCED) return poster('reduced');
+  try { await fontsReady(); build(); } catch (err) { console.warn('GL', err); return poster('no-gl'); }
+  step(performance.now() / 1000, 0); for (const c of CARDS) { c.A = 1 - smooth(.35, 2.6, Math.abs(wrapPi(c.a + S.rot))); } step(performance.now() / 1000, 0);
+  renderer.render(scene, camera); body.classList.add('ready');
+  document.addEventListener('visibilitychange', () => { if (document.hidden) { cancelAnimationFrame(raf); raf = 0; } else if (!raf) { tPrev = 0; raf = requestAnimationFrame(tick); } });
+  if (!document.hidden) raf = requestAnimationFrame(tick);
+})();
+
+/* гейт-кука (Playwright): кадри · състояние · управление */
+window.__proto = { dbg: () => ({ renderer, scene, camera, carousel }), frames: () => frames, state: () => ({ mode: S.mode, idx: S.idx, near: S.near, seen: [...S.seen], rot: S.rot, poster: body.dataset.poster || null }), focus, open, close, flow,
+  fps: (ms = 2000) => new Promise(r => { const f0 = frames, t0 = performance.now(); setTimeout(() => r(Math.round((frames - f0) / (performance.now() - t0) * 10000) / 10), ms); }) };
+</script>
+</body>
+</html>

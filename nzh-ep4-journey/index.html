@@ -33,7 +33,7 @@
         JR.choose(поле,стойност)          → POST {tk,karta,<поле>:стойност} към maitapp-choice · връща Promise (reject = не е записано)
         JR.choose({поле:стойност,…})      → ЕДИН POST с няколко полета (К3: сфера + цел) · {opened:1} праща рамката сама при отваряне на Картата
         JR.reload()                       → редът наново (JR.row се обновява) · JR.ladder(стъпала,onPick) → общият код на атентиометъра (К5 и К8)
-        JR.now() · JR.eventYmd(row) · JR.eventLabel(row) → часът (?now= само на локален хост) и датата на събитието (JR.cfg.event · 1 място)
+        JR.now() · JR.eventYmd(row) · JR.eventLabel(row) · JR.dayLabel(±дни) · JR.hourLabel(+мин) → часът (?now= само на локален хост) и денят+часът на събитието (JR.cfg.event + JR.cfg.hour · 1 място) · в HTML само <span data-event-label> / <span data-event-hour> (пълнят се при зареждане)
         JR.complete({lead,text,href})     → показва CTA „[lead · ]Карта N+1 · <име> →“ (text/href ги надписват · за Карта 8)
         JR.store.get()/set({…})           → локално състояние за този tk (localStorage · безопасно при блокиран)
         JR.fill(root,row)                 → [data-fill="k3_cel"] → текст от реда
@@ -888,8 +888,8 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
 (function () {
   'use strict';
   var API = 'https://primary-production-110e3.up.railway.app/webhook/';
-  /* event = ЕДИНСТВЕНОТО място с датата на събитието (запасна, когато редът няма event) · К1 ics, К2, К4, К5, К7, К8 я четат оттук (JR.eventYmd / JR.eventLabel) */
-  var CFG = { rowUrl: API + 'maitapp-row', choiceUrl: API + 'maitapp-choice', event: '2026-10-12' };
+  /* event + hour = ЕДИНСТВЕНОТО място с деня и часа на събитието (Европа/София) · event е запасна дата, когато редът няма event · К1 ics, К2, К4, К5, К6, К7, К8 четат оттук (JR.eventYmd · JR.eventLabel · JR.dayLabel · JR.hourLabel) */
+  var CFG = { rowUrl: API + 'maitapp-row', choiceUrl: API + 'maitapp-choice', event: '2026-10-12', hour: '19:00' };
   var MONTHS = ['януари', 'февруари', 'март', 'април', 'май', 'юни', 'юли', 'август', 'септември', 'октомври', 'ноември', 'декември'];
   var NAMES = { 1: 'Раница', 2: 'Сърце', 3: 'Метамер', 4: 'Чудовища', 5: 'Водач', 6: 'План', 7: 'Действие', 8: 'Трансформацията' };
   var MSG = {
@@ -912,7 +912,17 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
     return isNaN(t) ? Date.now() : t;
   };
   JR.eventYmd = function (row) { return row && /^\d{4}-\d{2}-\d{2}/.test(row.event || '') ? row.event.slice(0, 10) : CFG.event; };
-  JR.eventLabel = function (row) { var e = JR.eventYmd(row); return Number(e.slice(8, 10)) + ' ' + MONTHS[Number(e.slice(5, 7)) - 1]; };
+  /* „<ден> <месец>“ за деня на събитието + offsetDays (отрицателно = преди) */
+  JR.dayLabel = function (offsetDays, row) {
+    var d = new Date(Date.parse(JR.eventYmd(row) + 'T00:00:00Z') + (offsetDays || 0) * 86400000);
+    return d.getUTCDate() + ' ' + MONTHS[d.getUTCMonth()];
+  };
+  JR.eventLabel = function (row) { return JR.dayLabel(0, row); };
+  /* „ЧЧ:ММ“ за часа на събитието + addMinutes (К5 „в <час>“, К6 часовете на плана) */
+  JR.hourLabel = function (addMinutes) {
+    var p = CFG.hour.split(':'), t = ((Number(p[0]) * 60 + Number(p[1]) + (addMinutes || 0)) % 1440 + 1440) % 1440;
+    return ('0' + Math.floor(t / 60)).slice(-2) + ':' + ('0' + (t % 60)).slice(-2);
+  };
 
   function $(s, r) { return (r || document).querySelector(s); }
   JR.$ = $;
@@ -1014,6 +1024,7 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
         if (!row) return;
         JR.row = row;
         Array.prototype.forEach.call(document.querySelectorAll('[data-event-label]'), function (el) { el.textContent = JR.eventLabel(row); });
+        Array.prototype.forEach.call(document.querySelectorAll('[data-event-hour]'), function (el) { el.textContent = JR.hourLabel(0); });
         var h = handlers[karta];
         if (h && h.show) h.show(row);
         m.setAttribute('data-state', 'ready');
@@ -1096,13 +1107,13 @@ JR.card(1, { show: function (row) {
   $('#k1-cal-ok').setAttribute('href', ics(row));
   refresh();
 
-  /* календарът от реда: денят на събитието · 19:00 Европа/София · личният линк в описанието */
+  /* календарът от реда: денят и часът на събитието (JR.cfg) · Европа/София · личният линк в описанието */
   function ics(r) {
     var ev = JR.eventYmd(r);
     var y = +ev.slice(0, 4), m = +ev.slice(5, 7) - 1, d = +ev.slice(8, 10);
     function lastSun(mo) { var x = new Date(Date.UTC(y, mo + 1, 0)); return Date.UTC(y, mo, x.getUTCDate() - x.getUTCDay()); }
     var t = Date.UTC(y, m, d), off = t >= lastSun(2) && t < lastSun(9) ? 3 : 2;
-    var a = new Date(t + (19 - off) * 3600000), b = new Date(a.getTime() + 3600000);
+    var hm = JR.cfg.hour.split(':'), a = new Date(t + ((Number(hm[0]) - off) * 60 + Number(hm[1])) * 60000), b = new Date(a.getTime() + 3600000);
     var f = function (x) { return x.toISOString().replace(/[-:]|\.\d{3}/g, ''); };
     var esc = function (s) { return String(s).replace(/[\\,;]/g, '\\$&').replace(/\n/g, '\\n'); };
     var desc = 'Влезте с камера · активно участие. Само гледане — 21 €.' + (r.join_url ? '\nЛичният Ви линк: ' + r.join_url : '');
@@ -1166,7 +1177,7 @@ JR.card(1, { show: function (row) {
       </div>
     </div></div>
   <div class="jr-k2">
-    <p class="jr-k2-line">Това е пътят Ви до <span data-event-label>12 октомври</span>.</p>
+    <p class="jr-k2-line">Това е пътят Ви до <span data-event-label></span>.</p>
     <p class="jr-k2-lock" id="k2-lock" role="status" hidden>отключва се на <span id="k2-date"></span> · <a id="k2-open" href="#">отвори сега</a></p>
     <p class="jr-err" id="k2-err" role="alert" hidden>Не се записа. Опитайте пак.</p>
   </div>
@@ -1212,8 +1223,7 @@ JR.card(1, { show: function (row) {
     var u = Date.parse(row['unlocked_' + part.karta] || ''), now = nowMs();
     if (!isNaN(u) && u <= now) return { open: true };
     if (!isNaN(u)) return { open: false, label: dateLabel(u + 3 * 3600000) };
-    var ev = Date.parse(JR.eventYmd(row) + 'T00:00:00Z');
-    return { open: false, label: dateLabel(ev - part.ahead * 86400000) };
+    return { open: false, label: JR.dayLabel(-part.ahead, row) };
   }
 
   JR.card(2, { show: function (row) {
@@ -1537,7 +1547,7 @@ JR.card(4, { show: function (row) {
 <section data-karta="5" class="jr-card" hidden>
 <div class="k5-wrap">
   <img class="k5-deck" src="https://maitapp.com/img/deck-vodach.jpg" alt="Митрандир с фенер води по пътя" title="Металандия · акварел" width="1376" height="768" decoding="async">
-  <p class="k5-line" id="k5-line">Митрандир ще води Вас<span id="k5-chud" hidden> и <span id="k5-chud-n"></span></span> към <span id="k5-cel">целта Ви</span> на <span data-event-label>12 октомври</span> в 19:00.</p>
+  <p class="k5-line" id="k5-line">Митрандир ще води Вас<span id="k5-chud" hidden> и <span id="k5-chud-n"></span></span> към <span id="k5-cel">целта Ви</span> на <span data-event-label></span> в <span data-event-hour></span>.</p>
   <p class="k5-q">Как усещате целта си сега?</p>
   <p class="jr-err" id="k5-err" role="alert" hidden>Не се записа. Опитайте пак.</p>
   <div class="kk-control kk-control--atentiometar" data-kk-control="fig-scale"><div class="mfig tapable" id="fig-scale" data-bleed="always" data-tap>
@@ -1720,12 +1730,12 @@ JR.card(5, { show: function (row) {
 <script>
 JR.card(6, { show: function (row) {
   var $ = JR.$, SK = [
-    { n: 'Водачът', t: '19:06', f: 'friedrich-wanderer', cr: 'Friedrich · Wanderer above the Sea of Fog', a: 'Вие водите AI в кръга си.', b: '„{G}“ срещу {M}: измерете преди/след.' },
-    { n: 'Вкусникът', t: '19:06', f: 'vermeer-woman-in-blue', cr: 'Vermeer · Woman in Blue Reading a Letter', a: 'Окото, което пази името Ви.', b: '„{G}“ срещу {M}: три поправки.' },
-    { n: 'Гласът на волята', t: '19:22', f: 'mucha-zodiac', cr: 'Mucha · Zodiac', a: 'AI, който познава Вашия свят.', b: 'Проект за „{G}“ срещу {M}.' },
-    { n: 'Стигна!', t: '19:22', f: 'demorgan-aurora', cr: 'De Morgan · Aurora Triumphans', a: 'Мярка и край, без дооправяне.', b: 'Кое е „готово“ за „{G}“ срещу {M}?' },
-    { n: 'Кога Джарвис мълчи', t: '19:38', f: 'millais-autumn', cr: 'Millais · Autumn Leaves', a: 'Кое тръгва само, кое остава Ваше.', b: 'Автомат или ръка: „{G}“ срещу {M}.' },
-    { n: 'Многото мостове', t: '19:38', f: 'courbet-oak-flagey', cr: 'Courbet · The Oak at Flagey', a: 'Едно призвание, няколко моста.', b: 'Първият мост за „{G}“ срещу {M}.' }
+    { n: 'Водачът', m: 6, f: 'friedrich-wanderer', cr: 'Friedrich · Wanderer above the Sea of Fog', a: 'Вие водите AI в кръга си.', b: '„{G}“ срещу {M}: измерете преди/след.' },
+    { n: 'Вкусникът', m: 6, f: 'vermeer-woman-in-blue', cr: 'Vermeer · Woman in Blue Reading a Letter', a: 'Окото, което пази името Ви.', b: '„{G}“ срещу {M}: три поправки.' },
+    { n: 'Гласът на волята', m: 22, f: 'mucha-zodiac', cr: 'Mucha · Zodiac', a: 'AI, който познава Вашия свят.', b: 'Проект за „{G}“ срещу {M}.' },
+    { n: 'Стигна!', m: 22, f: 'demorgan-aurora', cr: 'De Morgan · Aurora Triumphans', a: 'Мярка и край, без дооправяне.', b: 'Кое е „готово“ за „{G}“ срещу {M}?' },
+    { n: 'Кога Джарвис мълчи', m: 38, f: 'millais-autumn', cr: 'Millais · Autumn Leaves', a: 'Кое тръгва само, кое остава Ваше.', b: 'Автомат или ръка: „{G}“ срещу {M}.' },
+    { n: 'Многото мостове', m: 38, f: 'courbet-oak-flagey', cr: 'Courbet · The Oak at Flagey', a: 'Едно призвание, няколко моста.', b: 'Първият мост за „{G}“ срещу {M}.' }
   ];
   var goal = row.k3_cel || 'целта', mon = row.k4_chudovishte || 'чудовището';
   var chosen = row.k6_umenie || JR.store.get().k6 || null, cur = -1, opener = null;
@@ -1735,15 +1745,18 @@ JR.card(6, { show: function (row) {
   function pathAt(t) { return [0.80 * Math.sin(Math.PI * (1.5 * t - 0.5)), 0.86 - 1.72 * t]; }   /* същата крива като двигателя (път) · сверява се със звездите му по-долу */
   function light(i) { var m = window.__мфиг; if (m && m.задай) m.задай('path', (i / 5) * 0.86, true); drawLine(i); }
   var svgNS = 'http://www.w3.org/2000/svg', line = null, soft = null, lit = null;
+  /* двигателят мери фигурата в първия си кадър (дотогава ширината ѝ е 0 → проектирай дава ±Infinity) · чертаем/местим едва след това; слушателят m.слушай го вика на всеки кадър */
+  function measured(m) { var f = m.намери && m.намери('path'); return !!(f && f.ш > 0); }
   function drawLine(i) {
-    var m = window.__мфиг; if (!line || !m || !m.проектирай) return;
+    var m = window.__мфиг; if (!line || !m || !m.проектирай || !measured(m)) return;
     var r = stage.getBoundingClientRect(); if (!r.width) return;
     line.setAttribute('viewBox', '0 0 ' + (r.width | 0) + ' ' + (r.height | 0));
     function d(t1) { var o = [], n = Math.max(2, Math.round(t1 * 40)), k, q; for (k = 0; k <= n; k++) { q = pathAt(t1 * k / n); q = m.проектирай('path', q[0], q[1]); o.push((k ? 'L' : 'M') + q.x.toFixed(1) + ' ' + q.y.toFixed(1)); } return o.join(' '); }
     soft.setAttribute('d', d(1)); lit.setAttribute('d', i > 0 ? d(i / 5) : '');
   }
   function place() {
-    var m = window.__мфиг; if (!m || !m.проектирай) return;
+    var m = window.__мфиг; if (!m || !m.проектирай || !measured(m)) return;
+    var bx = $('#k6-nodes'); if (bx) bx.style.visibility = '';
     nodes.forEach(function (b, k) { var q = pathAt(k / 5), p = m.проектирай('path', q[0], q[1]); if (!p) return; b.style.left = p.x + 'px'; b.style.top = p.y + 'px'; b.classList.toggle('l', q[0] >= 0.1); });
     drawLine(cur < 0 ? 0 : cur);
   }
@@ -1779,7 +1792,7 @@ JR.card(6, { show: function (row) {
   var ul = $('#k6-list');
   SK.forEach(function (s, k) {
     var li = document.createElement('li'), b = document.createElement('button');
-    b.type = 'button'; b.innerHTML = '<span></span><small></small>'; b.firstChild.textContent = (k + 1) + ' ' + s.n; b.lastChild.textContent = s.t;
+    b.type = 'button'; b.innerHTML = '<span></span><small></small>'; b.firstChild.textContent = (k + 1) + ' ' + s.n; b.lastChild.textContent = JR.hourLabel(s.m);
     b.addEventListener('click', function () { open(k, b); }); li.appendChild(b); ul.appendChild(li);
   });
 
@@ -1790,13 +1803,13 @@ JR.card(6, { show: function (row) {
     var ok = !!(m && m.проектирай && m.възли && m.възли.length === 5);
     for (var k = 0; ok && k < 5; k++) { var q = pathAt(k / 4); ok = Math.abs(q[0] - m.възли[k][0]) < 1e-6 && Math.abs(q[1] - m.възли[k][1]) < 1e-6; }
     if (!ok) { $('#k6-stage').hidden = true; $('#k6-list').hidden = false; done(); return; }
-    var box = document.createElement('div'); box.className = 'k6-nodes'; box.id = 'k6-nodes';
+    var box = document.createElement('div'); box.className = 'k6-nodes'; box.id = 'k6-nodes'; box.style.visibility = 'hidden';
     line = document.createElementNS(svgNS, 'svg'); line.setAttribute('class', 'pathline k6-line'); line.setAttribute('aria-hidden', 'true');
     soft = document.createElementNS(svgNS, 'path'); soft.setAttribute('class', 'soft'); lit = document.createElementNS(svgNS, 'path'); line.appendChild(soft); line.appendChild(lit);
     stage.appendChild(line); stage.appendChild(box);
     SK.forEach(function (s, k) {
       var b = document.createElement('button'); b.type = 'button'; b.className = 'k6-node'; b.innerHTML = '<b></b><span><i></i><small></small></span>';
-      b.firstChild.textContent = k + 1; b.querySelector('i').textContent = s.n; b.querySelector('i').style.fontStyle = 'normal'; b.querySelector('small').textContent = s.t;
+      b.firstChild.textContent = k + 1; b.querySelector('i').textContent = s.n; b.querySelector('i').style.fontStyle = 'normal'; b.querySelector('small').textContent = JR.hourLabel(s.m);
       b.addEventListener('click', function (e) { e.stopPropagation(); open(k, b); });
       box.appendChild(b); nodes.push(b);
     });
@@ -1853,7 +1866,7 @@ JR.card(6, { show: function (row) {
 </section>
 <script>
 (function () {
-  var START_H = 19, REPORT_H = 20;
+  var HM = JR.cfg.hour.split(':'), START_H = Number(HM[0]), START_M = Number(HM[1]);   /* часът на събитието е в рамката (JR.cfg.hour) · отчетът е 1 час след началото */
   function pad(n) { return (n < 10 ? '0' : '') + n; }
   var eventYmd = JR.eventYmd;                                  /* датата на събитието е в рамката (JR.cfg.event) */
   /* лятно/зимно време в София · на ниво ден (последна неделя март → последна неделя октомври) */
@@ -1886,10 +1899,10 @@ JR.card(6, { show: function (row) {
     }
     return { ms: clock(), fixed: false };
   }
-  /* чиста функция: join до 20:00 (вкл. 19:00–20:00) · отчет от 20:00 */
+  /* чиста функция: join до 1 час след началото (вкл. началния час) · отчет след това */
   function mode(nowMs, ev) {
     var y = +ev.slice(0, 4), m = +ev.slice(5, 7) - 1, d = +ev.slice(8, 10);
-    return nowMs >= sofiaMs(y, m, d, REPORT_H, 0, 0) ? 'report' : 'join';
+    return nowMs >= sofiaMs(y, m, d, START_H, START_M, 0) + 3600000 ? 'report' : 'join';
   }
   window.JR.k7 = { mode: mode, parseNow: parseNow, resolveNow: resolveNow, eventYmd: eventYmd };
 

@@ -49,6 +49,13 @@
 .jr-card{padding:0;overflow:visible}
 .jr-card[hidden],.jr [hidden]{display:none!important}
 .jr-fallback{max-width:560px;margin:0 auto;padding:72px 22px;text-align:center;font-family:var(--serif);font-size:1.5rem;line-height:1.3;color:var(--light)}
+/* публичен изглед без tk (тенк-ю след формата · реклами) · 0 лични данни · 0 Zoom линк · ≤40 думи */
+.jr-public{max-width:560px;margin:0 auto;padding:16px 16px 48px;text-align:center}
+.jr-public img{width:min(100%,300px);height:auto;margin:0 auto 6px;border-radius:16px}
+.jr-public h1{text-align:center;margin-top:8px}
+.jr-public h1 span{display:block}
+.jr-public h1 span+span{font-size:.62em;color:var(--gold)}
+.jr-public .jr-pub-note{margin-top:10px;font-size:.95rem;color:var(--mute)}
 /* Карта 1 · Раница */
 .jr-card .hero{padding:12px 0 32px}
 .jr-card .hero .wrap{max-width:560px}
@@ -893,8 +900,6 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
   var MONTHS = ['януари', 'февруари', 'март', 'април', 'май', 'юни', 'юли', 'август', 'септември', 'октомври', 'ноември', 'декември'];
   var NAMES = { 1: 'Раница', 2: 'Сърце', 3: 'Метамер', 4: 'Чудовища', 5: 'Водач', 6: 'План', 7: 'Действие', 8: 'Трансформацията' };
   var MSG = {
-    badKarta: 'Нямаме такава Карта. Отворете линка от имейла си.',
-    noTk: 'Липсва личният Ви линк. Отворете линка от имейла си.',
     unknown: 'Не намираме Вашия ред. Отворете линка от имейла си.',
     offline: 'Няма връзка. Опитайте пак.'
   };
@@ -1008,11 +1013,24 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
   }
   JR.fallback = fallback;
 
+  /* без личен tk (тенк-ю след формата · линк от реклама) → публичен изглед · нула заявки към реда */
+  function publicView() {
+    var m = $('#journey');
+    Array.prototype.forEach.call(document.querySelectorAll('[data-karta]'), function (s) { s.hidden = true; });
+    $('#jr-next').hidden = true;
+    Array.prototype.forEach.call(document.querySelectorAll('[data-event-label]'), function (el) { el.textContent = JR.eventLabel(null); });
+    Array.prototype.forEach.call(document.querySelectorAll('[data-event-hour]'), function (el) { el.textContent = JR.hourLabel(0); });
+    $('#jr-public').hidden = false;
+    var hud = $('#jr-hud');
+    if (hud) hud.textContent = 'НоваЖена';
+    m.setAttribute('data-state', 'public');
+  }
+
   /* вика се веднъж, след последния блок Карта */
   JR.start = function () {
     var m = $('#journey');
-    if (!karta) return fallback(MSG.badKarta);
-    if (!tkOk) return fallback(MSG.noTk);
+    if (!tkOk) return publicView();
+    if (!karta) karta = JR.karta = 1;              /* tk без валидна karta → Карта 1 */
     show(karta);                                    /* синхронно · преди двигателя · контролът се мери видим */
     fetch(CFG.rowUrl + '?tk=' + encodeURIComponent(tk))
       .then(function (r) {
@@ -1038,6 +1056,13 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
 
 <main class="jr" id="journey" data-state="loading">
 <p class="jr-fallback" id="jr-fallback" role="alert" hidden></p>
+<section class="jr-public" id="jr-public" hidden>
+  <img src="https://maitapp.com/img/nz3/hero-now.webp" alt="Героинята при първата светлина — с искра в гърдите" width="896" height="1200" decoding="async">
+  <h1><span>НоваЖена</span><span>6-те AI умения</span></h1>
+  <p class="jr-q">Благодарим за записването!</p>
+  <p class="jr-prompt">Личният Ви линк към Пътеката идва по имейл. Онлайн · <span data-event-label></span> · <span data-event-hour></span>.</p>
+  <p class="jr-pub-note">С камера и активно участие — безплатно · само гледане — 21 €.</p>
+</section>
 
 <!--KARTA 1 BEGIN · MET-1438 · Раница-->
 <section data-karta="1" class="jr-card" hidden>
@@ -1188,6 +1213,7 @@ JR.card(1, { show: function (row) {
 [data-karta="2"] .things .part b{display:none}
 [data-karta="2"] #fig-heart .tap{display:none}
 [data-karta="2"] .things .part{min-height:48px;display:flex;align-items:center;justify-content:center}
+@media (min-width:900px){[data-karta="2"] .things{display:none}}  /* на десктоп имената са под печатите (.seal span) → списъкът би ги повторил: показват се веднъж (лимит 35 думи) */
 .jr-k2{max-width:560px;margin:0 auto;padding:6px 18px 8px;text-align:center}
 .jr-k2-line{margin:6px 0 10px;font-family:var(--serif);font-weight:600;font-size:min(1.5rem,6vw);line-height:1.25;color:var(--light)}
 .jr-k2-lock{margin:0 0 6px;font-size:1.02rem;line-height:1.4;color:var(--ink2)}
@@ -1528,7 +1554,7 @@ JR.card(4, { show: function (row) {
 <!--KARTA 5 BEGIN · Водач · атентиометърът е ЕДИН на страницата (#fig-scale) · Карта 8 го ползва с JR.adopt('atentiometar', слот)-->
 <style>
 .k5-wrap{max-width:560px;margin:0 auto;padding:12px 18px 8px}
-.k5-deck{display:block;width:100%;height:auto;aspect-ratio:2/1;object-fit:cover;object-position:50% 40%;border-radius:16px;border:1px solid rgba(232,199,126,.32)}
+.k5-deck{display:block;width:min(100%,200px);height:auto;margin:0 auto;aspect-ratio:4/5;object-fit:cover;object-position:50% 20%;border-radius:16px;border:1px solid rgba(232,199,126,.32)}
 .k5-line{margin:16px 0 4px;font-family:var(--serif);font-weight:600;font-size:min(1.45rem,6vw);line-height:1.25;color:var(--light);text-align:center}
 .k5-q{margin:10px 0 12px;text-align:center;font-size:1.08rem;line-height:1.3;color:var(--ink2)}
 .k5-wrap .jr-err{margin:0 0 10px}
@@ -1546,8 +1572,8 @@ JR.card(4, { show: function (row) {
 </style>
 <section data-karta="5" class="jr-card" hidden>
 <div class="k5-wrap">
-  <img class="k5-deck" src="https://maitapp.com/img/deck-vodach.jpg" alt="Митрандир с фенер води по пътя" title="Металандия · акварел" width="1376" height="768" decoding="async">
-  <p class="k5-line" id="k5-line">Митрандир ще води Вас<span id="k5-chud" hidden> и <span id="k5-chud-n"></span></span> към <span id="k5-cel">целта Ви</span> на <span data-event-label></span> в <span data-event-hour></span>.</p>
+  <img class="k5-deck" src="https://maitapp.com/img/nz/vodach.webp" alt="Димитър Караманчев" title="Димитър Караманчев" width="900" height="1125" decoding="async">
+  <p class="k5-line" id="k5-line">Димитър Караманчев ще води Вас<span id="k5-chud" hidden> и <span id="k5-chud-n"></span></span> към <span id="k5-cel">целта Ви</span> на <span data-event-label></span> в <span data-event-hour></span>.</p>
   <p class="k5-q">Как усещате целта си сега?</p>
   <p class="jr-err" id="k5-err" role="alert" hidden>Не се записа. Опитайте пак.</p>
   <div class="kk-control kk-control--atentiometar" data-kk-control="fig-scale"><div class="mfig tapable" id="fig-scale" data-bleed="always" data-tap>
@@ -1582,10 +1608,17 @@ JR.card(5, { show: function (row) {
   var $ = JR.$, FIELD = 'k5_usesht_nachalo';
   var STEPS = ['Побърква ме', 'Дразни ме', 'Приемам', 'Радва ме', 'Вдъхновява ме'];
   function txt(v) { return typeof v === 'string' ? v.trim() : ''; }
+  /* лимитът 30 думи (Карта + стъпала + CTA): бюджет на изречението = 14 думи, от тях 9 са рамката („Димитър Караманчев ще води Вас · към · на · <дата> · в“) · с чудовище още „и“ + името му → целта е най-много 5 думи (+ „…“), по-малко при по-дълго име (мин. 1) · пълният текст остава в реда */
+  function nw(s) { return s.split(/\s+/).filter(Boolean).length; }
+  function shortGoal(g, chud) {
+    var w = g.split(/\s+/).filter(Boolean), room = 5 - (chud ? 1 + nw(chud) : 0), max = Math.max(1, Math.min(6, room));
+    return w.length > max ? w.slice(0, max).join(' ') + '…' : g;
+  }
   var chud = txt(row.k4_chudovishte), cel = txt(row.k3_cel);
   $('#k5-chud').hidden = !chud;
   $('#k5-chud-n').textContent = chud;
-  if (cel) $('#k5-cel').textContent = cel;
+  if (cel) $('#k5-cel').textContent = shortGoal(cel, chud);
+  else if (chud && nw(chud) >= 3) $('#k5-cel').textContent = 'целта';          /* без цел + 3-думно чудовище: „целта Ви“ би минало лимита */
 
   var cur = STEPS.indexOf(row[FIELD]), seq = 0;
   function mark(i) {

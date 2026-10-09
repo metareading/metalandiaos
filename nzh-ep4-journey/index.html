@@ -44,6 +44,7 @@
 /* HUD: броячите на играта не значат нищо за участничката — остава марка + „Карта N от 8“ */
 #hud-light,#hud-gold,#cards,#toast,#fly,#cardpop,#album{display:none!important}
 #bar .brand{text-decoration:none}
+#bar .row>.brand{grid-column:2}  /* HUD-овете са скрити → марката държи средната колона (иначе пада вляво) */
 #bar .brand #jr-hud{display:block;color:var(--light)}
 .jr{min-height:calc(100svh - var(--bar));background:var(--bg)}
 .jr-card{padding:0;overflow:visible}

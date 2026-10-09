@@ -1765,11 +1765,11 @@ JR.card(5, { show: function (row) {
 JR.card(6, { show: function (row) {
   var $ = JR.$, SK = [
     { n: 'Водачът', m: 6, f: 'friedrich-wanderer', cr: 'Friedrich · Wanderer above the Sea of Fog', a: 'Вие водите AI в кръга си.', b: '„{G}“ срещу {M}: измерете преди/след.' },
-    { n: 'Вкусникът', m: 6, f: 'vermeer-woman-in-blue', cr: 'Vermeer · Woman in Blue Reading a Letter', a: 'Окото, което пази името Ви.', b: '„{G}“ срещу {M}: три поправки.' },
+    { n: 'Вкусникът', m: 14, f: 'vermeer-woman-in-blue', cr: 'Vermeer · Woman in Blue Reading a Letter', a: 'Окото, което пази името Ви.', b: '„{G}“ срещу {M}: три поправки.' },
     { n: 'Гласът на волята', m: 22, f: 'mucha-zodiac', cr: 'Mucha · Zodiac', a: 'AI, който познава Вашия свят.', b: 'Проект за „{G}“ срещу {M}.' },
-    { n: 'Стигна!', m: 22, f: 'demorgan-aurora', cr: 'De Morgan · Aurora Triumphans', a: 'Мярка и край, без дооправяне.', b: 'Кое е „готово“ за „{G}“ срещу {M}?' },
+    { n: 'Стигна!', m: 30, f: 'demorgan-aurora', cr: 'De Morgan · Aurora Triumphans', a: 'Мярка и край, без дооправяне.', b: 'Кое е „готово“ за „{G}“ срещу {M}?' },
     { n: 'Кога Джарвис мълчи', m: 38, f: 'millais-autumn', cr: 'Millais · Autumn Leaves', a: 'Кое тръгва само, кое остава Ваше.', b: 'Автомат или ръка: „{G}“ срещу {M}.' },
-    { n: 'Многото мостове', m: 38, f: 'courbet-oak-flagey', cr: 'Courbet · The Oak at Flagey', a: 'Едно призвание, няколко моста.', b: 'Първият мост за „{G}“ срещу {M}.' }
+    { n: 'Многото мостове', m: 46, f: 'courbet-oak-flagey', cr: 'Courbet · The Oak at Flagey', a: 'Едно призвание, няколко моста.', b: 'Първият мост за „{G}“ срещу {M}.' }
   ];
   var goal = row.k3_cel || 'целта', mon = row.k4_chudovishte || 'чудовището';
   var chosen = row.k6_umenie || JR.store.get().k6 || null, cur = -1, opener = null;

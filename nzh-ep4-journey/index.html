@@ -878,7 +878,7 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
 <div id="bar">
   <div class="row">
     <div class="hud l" id="hud-light" title="Метта · светлина"><i class="ico">✧</i><b id="hud-l">0</b><span>светлина</span></div>
-    <a class="brand" href="#top"><span id="jr-hud">Карта 1 от 8</span><small>12 октомври · Zoom</small></a>
+    <a class="brand" href="#top"><span id="jr-hud">Карта 1 от 8</span><small>15 октомври · Zoom</small></a>
     <div class="hud g" id="hud-gold" title="Мета · злато"><i class="ico">◆</i><b id="hud-g">0</b><span>злато</span></div>
   </div>
 </div>
@@ -896,7 +896,7 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
   'use strict';
   var API = 'https://primary-production-110e3.up.railway.app/webhook/';
   /* event + hour = ЕДИНСТВЕНОТО място с деня и часа на събитието (Европа/София) · event е запасна дата, когато редът няма event · К1 ics, К2, К4, К5, К6, К7, К8 четат оттук (JR.eventYmd · JR.eventLabel · JR.dayLabel · JR.hourLabel) */
-  var CFG = { rowUrl: API + 'maitapp-row', choiceUrl: API + 'maitapp-choice', event: '2026-10-12', hour: '19:00' };
+  var CFG = { rowUrl: API + 'maitapp-row', choiceUrl: API + 'maitapp-choice', event: '2026-10-15', hour: '19:00' };
   var MONTHS = ['януари', 'февруари', 'март', 'април', 'май', 'юни', 'юли', 'август', 'септември', 'октомври', 'ноември', 'декември'];
   var NAMES = { 1: 'Раница', 2: 'Сърце', 3: 'Метамер', 4: 'Чудовища', 5: 'Водач', 6: 'План', 7: 'Действие', 8: 'Трансформацията' };
   var MSG = {
@@ -3427,7 +3427,7 @@ JR.card(8, { show: function (row) {
   /* 12-те сфери на метасферата · имената за HUD/тостове (концептуалната ос · видимите лейбъли на колелото остават будечителите) */
   const СФЕРИ_ИМЕ={1:'Здраве',2:'Емоции',3:'Ум',4:'Характер',5:'Любов',6:'Род',7:'Среда',8:'Финанси',9:'Призвание',10:'Творчество',11:'Мъдрост',12:'Визия'};
   function чипСфера(){ const n=ИГРА.сфера|0, име=n?СФЕРИ_ИМЕ[n]:''; const sm=$('#bar .brand small'), sf=$('#sc-sf'), ml=$('#mm-sf');
-    if(sm){ sm.textContent=n?('сфера · '+име):'12 октомври · Zoom'; sm.classList.toggle('sf',!!n) }
+    if(sm){ sm.textContent=n?('сфера · '+име):'15 октомври · Zoom'; sm.classList.toggle('sf',!!n) }
     if(sf) sf.innerHTML=n?' — <b>'+име+'</b>':''; if(ml) ml.textContent=n?('Избрана сфера: '+име+' · стрелката се прибира тук · всяко стъпало на атентиометъра я расти'):'' }
   function датиГотови(){ $$('#dates div').forEach(d=>d.classList.toggle('got',!!ИГРА.карти['ден-'+(+d.dataset.d+1)])) }
   const alGo=$('#al-go'); if(alGo) alGo.addEventListener('click',()=>{ const mm=$('#mettamap'); if(!mm) return; mm.classList.remove('pulse'); void mm.offsetWidth; mm.classList.add('pulse'); setTimeout(()=>mm.classList.remove('pulse'),1300) });

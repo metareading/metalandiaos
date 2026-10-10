@@ -83,6 +83,7 @@
 .jr-tile.done h3::after{content:" ✓";color:var(--em)}
 .jr-tile .jr-help{grid-column:1/-1;margin-top:6px;font-size:.92rem;color:var(--ink)}
 .jr-next{max-width:560px;margin:18px auto 0;padding:0 18px 56px;text-align:center}
+.jr-next .jr-note{margin:10px 0 0;font-size:.95rem;line-height:1.35;opacity:.85}
 .jr-next .cta{display:flex;justify-content:center;text-align:center;padding:18px 22px;font-size:1.12rem;line-height:1.25}
 #fig-hero .tap{display:none}
 @media (min-width:720px){.jr-q{font-size:2.1rem}}
@@ -998,6 +999,7 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
     if (!href || !text) return;
     a.setAttribute('href', href);
     a.textContent = text;
+    var note = $('#jr-note'); note.textContent = o.note || ''; note.hidden = !o.note;
     box.hidden = false;
   };
 
@@ -2062,7 +2064,8 @@ JR.card(6, { show: function (row) {
 if (JR.karta === 8) JR.adopt('atentiometar', document.getElementById('k8-scale'));
 JR.card(8, { show: function (row) {
   var $ = JR.$;
-  var DEPOSIT_URL = 'https://maitapp.com/deposit-144';       /* ★ ПЛЕЙСХОЛДЪР: реалният URL на капаро 144 не е в репото — сменя се тук, на 1 място */
+  var DEPOSIT_URL = 'https://metareading.com/product/metalpolagane30/';   /* MET-1537 · капаро 144 = продуктът ИВ (30 мин) на стария WP сайт · сменя се тук, на 1 място */
+  var DEPOSIT_NOTE = 'Капаро и за програмата с ИВ.';    /* ★ чернова за Митрандир (CONTENT.md) */
   var STEPS = ['Побърква ме', 'Дразни ме', 'Приемам', 'Радва ме', 'Вдъхновява ме'];
   var PARTS = { cel: 'Цел', chudovishte: 'Чудовище', vodach: 'Водач', plan: 'План', deystvie: 'Действие' };
   /* 12 сфери → картината (класика, public domain) + кредит · авторитет: img/nz-sferi/12-сфери-мап.md (закован 17.09) · файловете са тези на началната страница */
@@ -2135,14 +2138,14 @@ JR.card(8, { show: function (row) {
     JR.choose('k8_usesht_krai', STEPS[i]).then(function () {
       if (my !== seq) return;
       d.k8_usesht_krai = STEPS[i];
-      JR.complete({ text: 'Продължете пътя →', href: DEPOSIT_URL });
+      JR.complete({ text: 'Продължете пътя →', href: DEPOSIT_URL, note: DEPOSIT_NOTE });
       setTimeout(function () { var c = $('#k8-card'); if (c && !c.hidden && c.scrollIntoView) c.scrollIntoView({ block: 'start', behavior: 'smooth' }); }, 400);
     }).catch(function () { if (my === seq) { cur = before; render(); $('#k8-err').hidden = false; } });
   }
 
   ladder = JR.ladder(STEPS, pick);                   /* общият код на К5 и К8 е в рамката */
   render();
-  if (cur >= 0) JR.complete({ text: 'Продължете пътя →', href: DEPOSIT_URL });
+  if (cur >= 0) JR.complete({ text: 'Продължете пътя →', href: DEPOSIT_URL, note: DEPOSIT_NOTE });
 
   /* „Запазете картата“ → PNG 1080×1350 (canvas · една рисунка, без анимация) */
   var W = 1080, H = 1350;
@@ -2191,7 +2194,63 @@ JR.card(8, { show: function (row) {
 </script>
 <!--KARTA 8 END-->
 
-<div class="jr-next" id="jr-next" hidden><a class="cta big" id="jr-cta" href="#"></a></div>
+<!--MET-1538 · оформление на Пътеката: главният контрол ≥ 76% от по-късата страна (vmin) · само CSS на потока · донорите непипнати (канвасите им слушат размера на сцената)-->
+<style>
+@media (min-width:720px){
+  .jr-card{--main-ctrl:76vmin}
+  /* К1 · две колони: пясъчният часовник вляво (цял екран) · заглавие → запазено → бутон → избор → „За вечерта“ вдясно в реда на спека */
+  .jr-card .hero .wrap{max-width:1120px;grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-areas:none;grid-template-rows:repeat(10,min-content) 1fr;column-gap:40px;align-items:start;padding:0 40px}
+  .jr-card .hero .wrap>*{grid-area:auto;grid-column:2}
+  .jr-card .hero .wrap>.kk-control--hero{grid-column:1;grid-row:1/-1;position:sticky;top:64px;align-self:start}
+  [data-karta="1"] #fig-hero{height:var(--main-ctrl)!important}
+  /* К2 · сърцето */
+  [data-karta="2"] #fig-heart{height:var(--main-ctrl)!important}
+  [data-karta="2"] .kk-control--heart{margin-top:18px}
+  /* К3 · сферата (кръгът е ~98% от ширината на .mettamap · 11% височина е празен запас на донора → скрит с отрицателен марж) */
+  section[data-karta="3"] .k3-wrap{max-width:820px}
+  section[data-karta="3"] .mettamap{max-width:max(440px,78vmin);margin-bottom:calc(-.1 * max(440px,78vmin))}
+  /* К4 · колелото */
+  [data-karta="4"] .jr-q{max-width:820px}
+  [data-karta="4"] .wheel{width:min(97vw,max(470px,var(--main-ctrl)))}
+  /* К5 · К8 · стълбата (атентиометър) */
+  /* К5 · К8 ★ две колони: въпросът + списъкът вляво (290px), циферблатът (сцената е на цялата ширина · дялът на двигателя) вдясно · цял в първия екран */
+  .k5-wrap,.k8-wrap{display:grid;grid-template-columns:290px minmax(0,calc(var(--main-ctrl) + 5vmin));column-gap:48px;max-width:calc(290px + 48px + max(560px,var(--main-ctrl) + 5vmin) + 64px);margin:0 auto;padding:12px 32px 8px}
+  .k5-wrap .kk-control--atentiometar,.k8-wrap .kk-control--atentiometar,.k8-wrap #k8-scale{display:contents}
+  .k5-wrap>*,.k8-wrap>*{grid-column:1;position:relative;z-index:2}
+  .k5-wrap .ladder,.k8-wrap .ladder{grid-column:1;position:relative;z-index:2;margin:6px 0 0}
+  .k5-wrap #fig-scale,.k8-wrap #fig-scale{grid-column:2;grid-row:1/5;z-index:1;align-self:start;width:100%!important;margin-left:0!important}
+  .k8-wrap #fig-scale{grid-row:1/3}
+  .k5-deck{width:min(100%,112px);margin:0}
+  .k5-line{font-size:1.12rem;margin:10px 0 2px;text-align:left}
+  .k5-q,.k8-q{text-align:left;margin:6px 0 8px;font-size:1.02rem}
+  .k8-q{font-size:1.25rem}
+  .k5-deck{grid-row:1}.k5-line{grid-row:2}.k5-q{grid-row:3}.k5-wrap .ladder{grid-row:4}
+  .k8-q{grid-row:1}.k8-wrap .ladder{grid-row:2}
+  .k8-card{grid-column:1/-1;grid-row:3}
+  /* К6 · пътят */
+  [data-karta="6"] #fig-path{height:var(--main-ctrl)!important}
+  /* К7 · бутонът */
+  .k7{max-width:calc(max(560px,var(--main-ctrl)) + 44px);padding-top:10vh}
+}
+</style>
+
+<style>
+/* MET-1538 · телефонен гейт 390x664 / 375x667 (Safari с ленти): главният контрол ≥ var(--main-ctrl) и цял в първия екран · само ниски телефони */
+@media (max-width:719px) and (max-height:720px){
+  .jr-card{--main-ctrl:76vmin}
+  [data-karta="1"] #fig-hero{height:var(--main-ctrl)!important}
+  /* К2 · „Докоснете“ до печат I отстрани (отгоре се реже от рамката на сцената) */
+  [data-karta="2"] #seals .seal.jr-hint::after{bottom:auto;left:100%;top:50%;transform:translate(8px,-50%)}
+  /* К5 · портретът намалява, за да е циферблатът цял в първия екран */
+  .k5-deck{width:min(100%,108px)}
+  .k5-line{margin:10px 0 2px}
+  .k5-q{margin:6px 0 8px}
+  .kk-control--atentiometar .ladder{margin-bottom:8px}
+  .kk-control--atentiometar .ladder li{min-height:44px}
+}
+</style>
+
+<div class="jr-next" id="jr-next" hidden><a class="cta big" id="jr-cta" href="#"></a><p class="jr-note" id="jr-note" hidden></p></div>
 </main>
 <script>JR.start();</script>
 

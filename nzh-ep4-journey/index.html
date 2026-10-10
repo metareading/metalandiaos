@@ -62,6 +62,10 @@
 .jr-card .hero .wrap{max-width:560px}
 .jr-card .hero h1{text-align:center}
 .jr-q{margin:14px 0 4px;font-family:var(--serif);font-weight:600;font-size:min(1.9rem,7vw);line-height:1.15;color:var(--light);text-align:center}
+.jr-saved{margin:0 0 10px;font-weight:700;color:var(--em);font-size:1.15rem}
+.jr-next-top{margin:0 0 16px}
+.jr-next-top .cta{display:flex;justify-content:center;text-align:center;padding:16px 22px;font-size:1.1rem;line-height:1.25}
+.jr-evening{margin:22px 0 10px;text-align:center;font-size:1.15rem}
 .jr-prompt{margin:0 0 14px;text-align:center;font-size:1.02rem;line-height:1.4;color:var(--ink2)}
 .jr-choice{display:grid;gap:10px;margin:0 0 20px}
 .jr-opt{display:flex;align-items:center;justify-content:center;gap:10px;min-height:56px;padding:12px 18px;border-radius:18px;border:1.5px solid rgba(232,199,126,.55);background:rgba(232,199,126,.08);color:var(--light);font:600 1.04rem/1.25 var(--sans);text-align:center}
@@ -872,6 +876,7 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
 .pcard .au,.pcard .au *{white-space:nowrap!important}
 .pcard .eu,.pcard .eu *{white-space:nowrap!important}
 #fab .cta,#fab .cta *{white-space:nowrap!important}
+[data-karta="2"] #seals .seal.jr-hint::after{white-space:nowrap!important}
 .k6-node span,.k6-node span *{white-space:nowrap!important}
 .k8-tag,.k8-tag *{white-space:nowrap!important}</style>
 
@@ -1078,18 +1083,20 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
       <div class="toggle" id="hero-toggle" aria-label="Преди и сега"><button data-s="0">Преди</button><button data-s="1" class="on">Сега</button></div>
     </div></div>
     <p class="jr-q">Искате ли да се събудите?</p>
-    <p class="jr-prompt" id="k1-prompt">Остават 3 стъпки, за да запазите мястото си.</p>
+    <p class="jr-prompt jr-saved" id="k1-saved">Мястото Ви е запазено ✓</p>
+    <div class="jr-next-top"><a class="cta" id="k1-next" href="#">Карта 2 · Пътят →</a></div>
     <div class="jr-choice" id="k1-choice" role="radiogroup" aria-label="Камера">
       <button type="button" class="jr-opt" role="radio" aria-checked="false" data-v="kamera">Участвам с камера — безплатно</button>
       <button type="button" class="jr-opt" role="radio" aria-checked="false" data-v="gleda">Само гледам — 21 €</button>
     </div>
     <p class="jr-err" id="k1-err" role="alert" hidden>Не се записа. Опитайте пак.</p>
+    <h2 class="jr-evening" id="k1-evening">За вечерта</h2>
     <ul class="jr-tiles">
       <li class="jr-tile" id="k1-mail"><h3>Имейл</h3><p>Линкът е на имейла Ви.</p>
         <div class="jr-acts two"><button type="button" class="cta" id="k1-mail-ok">Тук е ✓</button><button type="button" class="cta ghost" id="k1-mail-no">Няма го</button></div>
         <p class="jr-help" id="k1-help" hidden>Вижте „Промоции“ и „Спам“. <a href="mailto:start@metareading.com">Пишете ни</a></p></li>
       <li class="jr-tile" id="k1-cal"><h3>Календар</h3><p>Вечерта с аларма.</p>
-        <div class="jr-acts"><a class="cta" id="k1-cal-ok" download="nzh-ep4.ics" href="#">Добави</a></div></li>
+        <div class="jr-acts two"><a class="cta" id="k1-cal-g" target="_blank" rel="noopener" href="#">Google Calendar</a><a class="cta ghost" id="k1-cal-ok" download="nzh-ep4.ics" href="#">Друг календар (.ics)</a></div></li>
       <li class="jr-tile" id="k1-prep"><h3>Подготовка</h3><p>камера · слушалки · тетрадка</p>
         <div class="jr-acts"><button type="button" class="cta" id="k1-prep-ok">Готово ✓</button></div></li>
     </ul>
@@ -1100,16 +1107,11 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
 JR.card(1, { show: function (row) {
   var $ = JR.$, st = JR.store.get();
   var tiles = { mail: $('#k1-mail'), cal: $('#k1-cal'), prep: $('#k1-prep') };
-  var TXT = ['Остават 3 стъпки, за да запазите мястото си.', 'Остават 2 стъпки, за да запазите мястото си.', 'Остава 1 стъпка, за да запазите мястото си.'];
   var radios = [].slice.call(document.querySelectorAll('#k1-choice .jr-opt'));
 
+  /* плочките „За вечерта“ пазят ✓ локално · не заключват К2 (бутонът горе е винаги видим) */
   function refresh() {
-    var done = 0;
-    Object.keys(tiles).forEach(function (k) { var d = !!st[k]; tiles[k].classList.toggle('done', d); if (d) done++; });
-    var left = 3 - done;
-    $('#k1-prompt').hidden = left === 0;
-    if (left) $('#k1-prompt').textContent = TXT[3 - left];
-    else JR.complete({ lead: 'Мястото Ви е запазено ✓' });
+    Object.keys(tiles).forEach(function (k) { tiles[k].classList.toggle('done', !!st[k]); });
   }
   function mark(k) { st[k] = 1; JR.store.set(st); refresh(); }
 
@@ -1130,19 +1132,32 @@ JR.card(1, { show: function (row) {
   $('#k1-mail-no').addEventListener('click', function () { $('#k1-help').hidden = false; });
   $('#k1-prep-ok').addEventListener('click', function () { mark('prep'); });
   $('#k1-cal-ok').addEventListener('click', function () { mark('cal'); });
+  $('#k1-cal-g').addEventListener('click', function () { mark('cal'); });
   $('#k1-cal-ok').setAttribute('href', ics(row));
+  $('#k1-next').setAttribute('href', '?tk=' + JR.tk + '&karta=2');
+  $('#k1-cal-g').setAttribute('href', gcal(row));
   refresh();
 
-  /* календарът от реда: денят и часът на събитието (JR.cfg) · Европа/София · личният линк в описанието */
-  function ics(r) {
+  /* събитието от реда: денят и часът (JR.cfg) · Европа/София → UTC · личният линк в описанието · общо за .ics и Google Calendar */
+  function calEvent(r) {
     var ev = JR.eventYmd(r);
     var y = +ev.slice(0, 4), m = +ev.slice(5, 7) - 1, d = +ev.slice(8, 10);
     function lastSun(mo) { var x = new Date(Date.UTC(y, mo + 1, 0)); return Date.UTC(y, mo, x.getUTCDate() - x.getUTCDay()); }
     var t = Date.UTC(y, m, d), off = t >= lastSun(2) && t < lastSun(9) ? 3 : 2;
     var hm = JR.cfg.hour.split(':'), a = new Date(t + ((Number(hm[0]) - off) * 60 + Number(hm[1])) * 60000), b = new Date(a.getTime() + 3600000);
     var f = function (x) { return x.toISOString().replace(/[-:]|\.\d{3}/g, ''); };
-    var esc = function (s) { return String(s).replace(/[\\,;]/g, '\\$&').replace(/\n/g, '\\n'); };
     var desc = 'Влезте с камера · активно участие. Само гледане — 21 €.' + (r.join_url ? '\nЛичният Ви линк: ' + r.join_url : '');
+    return { ev: ev, a: a, b: b, f: f, title: 'НоваЖена · 6-те AI умения', desc: desc };
+  }
+  /* Google Calendar: същото събитие като .ics · отваря се в нов раздел */
+  function gcal(r) {
+    var e = calEvent(r);
+    return 'https://calendar.google.com/calendar/render?action=TEMPLATE&text=' + encodeURIComponent(e.title) + '&dates=' + e.f(e.a) + '/' + e.f(e.b) +
+      '&details=' + encodeURIComponent(e.desc);
+  }
+  function ics(r) {
+    var e = calEvent(r), ev = e.ev, a = e.a, b = e.b, f = e.f, desc = e.desc;
+    var esc = function (s) { return String(s).replace(/[\\,;]/g, '\\$&').replace(/\n/g, '\\n'); };
     var L = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Metalandia//NZh Ep4//BG', 'CALSCALE:GREGORIAN', 'METHOD:PUBLISH', 'BEGIN:VEVENT',
       'UID:nzh-ep4-' + ev.replace(/-/g, '') + '@metareading.com', 'DTSTAMP:' + f(new Date(JR.now())), 'DTSTART:' + f(a), 'DTEND:' + f(b),
       'SUMMARY:' + esc('НоваЖена · 6-те AI умения'), 'LOCATION:Zoom', 'DESCRIPTION:' + esc(desc),
@@ -1204,6 +1219,7 @@ JR.card(1, { show: function (row) {
     </div></div>
   <div class="jr-k2">
     <p class="jr-k2-line">Това е пътят Ви до <span data-event-label></span>.</p>
+    <p class="jr-k2-hint">5 карти до вечерта · всяка се отваря в свой ден · започнете от Цел.</p>
     <p class="jr-k2-lock" id="k2-lock" role="status" hidden>отключва се на <span id="k2-date"></span> · <a id="k2-open" href="#">отвори сега</a></p>
     <p class="jr-err" id="k2-err" role="alert" hidden>Не се записа. Опитайте пак.</p>
   </div>
@@ -1217,6 +1233,12 @@ JR.card(1, { show: function (row) {
 @media (min-width:900px){[data-karta="2"] .things{display:none}}  /* на десктоп имената са под печатите (.seal span) → списъкът би ги повторил: показват се веднъж (лимит 35 думи) */
 .jr-k2{max-width:560px;margin:0 auto;padding:6px 18px 8px;text-align:center}
 .jr-k2-line{margin:6px 0 10px;font-family:var(--serif);font-weight:600;font-size:min(1.5rem,6vw);line-height:1.25;color:var(--light)}
+.jr-k2-hint{margin:0 0 10px;font-size:1.02rem;line-height:1.4;color:var(--ink2)}
+/* подсказка за играта: печат I пулсира „Докоснете“ до първия тап на който и да е печат (само клас + CSS · байтовете на донора са непипнати) */
+[data-karta="2"] #seals .seal.jr-hint::after{content:"Докоснете";position:absolute;left:50%;bottom:100%;transform:translate(-50%,-6px);white-space:nowrap;pointer-events:none;font-family:var(--sans);font-weight:600;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:#fff5d6;text-shadow:0 1px 6px #000}
+[data-karta="2"] #seals .seal.jr-hint:not(.on){animation:jr-k2-pulse 1.8s ease-in-out infinite}
+@keyframes jr-k2-pulse{0%,100%{box-shadow:0 0 0 1px rgba(232,199,126,.7),0 0 16px rgba(232,199,126,.35),inset 0 0 0 3px rgba(60,32,16,.4)}50%{box-shadow:0 0 0 1px #fff5d6,0 0 0 7px rgba(232,199,126,.25),0 0 30px rgba(232,199,126,.95),inset 0 0 0 3px rgba(60,32,16,.4)}}
+@media (prefers-reduced-motion:reduce){[data-karta="2"] #seals .seal.jr-hint{animation:none!important}}
 .jr-k2-lock{margin:0 0 6px;font-size:1.02rem;line-height:1.4;color:var(--ink2)}
 .jr-k2-lock a{color:var(--light);font-weight:600;text-decoration:underline;text-underline-offset:3px;padding:10px 4px}
 </style>
@@ -1258,6 +1280,7 @@ JR.card(1, { show: function (row) {
     function mark(k) { things.forEach(function (b, i) { b.classList.toggle('on', i === k); }); }
     function link(part) { return '?tk=' + JR.tk + '&karta=' + part.karta; }
     function pick(k) {
+      unhint();                                        /* всеки път към избор (печат · списък · сърце) маха пулса */
       if (busy) return; busy = true;
       var part = PARTS[k];
       $('#k2-err').hidden = true;
@@ -1274,6 +1297,9 @@ JR.card(1, { show: function (row) {
         JR.complete();
       }).catch(function () { busy = false; $('#k2-err').hidden = false; });
     }
+    /* пулсът на печат I: само докато няма избор (не и за връщащ се с k2_chast) · маха се при първия избор по ВСЕКИ път */
+    function unhint() { if (seals[0]) seals[0].classList.remove('jr-hint'); }
+    if (seals[0] && PARTS.every(function (p) { return p.field !== row.k2_chast; })) seals[0].classList.add('jr-hint');
     seals.forEach(function (b, k) { b.addEventListener('click', function () { spinning = false; pick(k); }); });
     things.forEach(function (b, k) { b.addEventListener('click', function () { spinning = false; pick(k); }); });
     /* тап върху самото сърце: донорът го спира върху част (печатът светва) → тя е изборът · следващият тап пуска въртенето */

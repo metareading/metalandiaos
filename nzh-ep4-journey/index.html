@@ -944,6 +944,8 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
   function $(s, r) { return (r || document).querySelector(s); }
   JR.$ = $;
   JR.card = function (n, h) { handlers[n] = h; };
+  /* адресът на Карта n: с личен tk носи токена · без tk (редиректът на Skillplate) само ?karta=n · страницата върви от локалния ред */
+  JR.href = function (n) { return (tkOk ? '?tk=' + tk + '&' : '?') + 'karta=' + n; };
   /* контрол от донора, който е ЕДИН на страницата (атентиометър: К5 и К8) → премества се в слота на текущата Карта */
   JR.adopt = function (name, slot) { var el = $('.kk-control--' + name); if (el && slot) slot.appendChild(el); };
 
@@ -1038,14 +1040,22 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
     });
   };
 
+  /* живият n8n валидатор на maitapp-choice приема за К6 само старото име „Вкусникът“ (хранилището приема и „Вкус“) · на екрана умението е „Вкус“ → към webhook-а отива старото име, докато живият валидатор не се обнови */
+  var WIRE_NAME = { 'Вкус': 'Вкусникът' };
+  function wire(body) { var o = Object.assign({}, body); if (WIRE_NAME[o.k6_umenie]) o.k6_umenie = WIRE_NAME[o.k6_umenie]; return o; }
+  function post(body) {
+    return fetch(CFG.choiceUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(wire(body)) })
+      .then(function (r) { if (!r.ok) throw new Error('choice ' + r.status); return r.json(); });
+  }
+
   /* JR.choose(поле, стойност) или JR.choose({поле: стойност, …}) → ЕДИН POST · opened:1 = „Картата е отворена“ (decide-choice → unlocked_N) */
   JR.choose = function (field, value) {
     var body = { tk: tk, karta: karta };
     if (field && typeof field === 'object') Object.keys(field).forEach(function (k) { body[k] = field[k]; });
     else body[field] = value;
-    /* без tk (редиректът на Skillplate без токен) избирането остава в браузъра · при отваряне с личния линк К1 го дописва в реда */
+    /* без tk (редиректът на Skillplate без токен) избирането остава в браузъра (чакащо) · при отваряне с личния линк JR.start го дописва в реда, всяко поле веднъж */
     var sent = tkOk
-      ? fetch(CFG.choiceUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }).then(function (r) { if (!r.ok) throw new Error('choice ' + r.status); return r.json(); })
+      ? post(body)
       : Promise.resolve().then(function () {
         var pend = Object.assign({}, JR.store.get().pending);
         Object.keys(body).forEach(function (k) { if (k !== 'tk' && k !== 'karta' && k !== 'opened') pend[k] = body[k]; });
@@ -1059,6 +1069,13 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
         return j;
       });
   };
+
+  /* локалният ред (без tk) = ВСИЧКО от един „jr:“ запис: чакащите избори + кога е отворена всяка Карта (unlocked_N, както сървърът) · Картите го четат като истинския ред */
+  function localRow() {
+    var s = JR.store.get(), row = Object.assign({ event: CFG.event, join_url: null }, s.pending);
+    Object.keys(s.unlocked || {}).forEach(function (n) { row['unlocked_' + n] = s.unlocked[n]; });
+    return row;
+  }
 
   /* четене на реда: до 2 повторни опита (400 ms · 900 ms) при мрежов провал или сървърна грешка · 404 не се повтаря */
   var BACKOFF = [400, 900];
@@ -1075,6 +1092,7 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
 
   /* редът наново (след POST) · JR.row се обновява */
   JR.reload = function () {
+    if (!tkOk) return Promise.resolve().then(function () { var row = JR.row = localRow(); JR.hud(row); return row; });
     return fetchRow()
       .then(function (r) { if (!r.ok) throw new Error('row ' + r.status); return r.json(); })
       .then(function (row) { JR.row = row; JR.hud(row); return row; });
@@ -1103,7 +1121,7 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
   JR.complete = function (o) {
     o = o || {};
     var box = $('#jr-next'), a = $('#jr-cta'), n = karta + 1;
-    var href = o.href || (n <= 8 ? '?tk=' + tk + '&karta=' + n : '');
+    var href = o.href || (n <= 8 ? JR.href(n) : '');
     var text = o.text || (n <= 8 ? (o.lead ? o.lead + ' · ' : '') + 'Карта ' + n + ' · ' + NAMES[n] + ' →' : '');
     if (!href || !text) return;
     a.setAttribute('href', href);
@@ -1132,26 +1150,51 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
   }
   JR.fallback = fallback;
 
-  /* без личен tk (Skillplate пренасочва към адреса без токен · линк от реклама) → Карта 1 с локален ред · играта работи (избор на камера · Имейл · Календар), нула заявки · камерата се дописва в реда, когато страницата се отвори после с личния линк */
-  function anonymous() {
-    var m = $('#journey');
-    karta = JR.karta = 1;
-    show(1);
-    var row = { event: CFG.event, join_url: null, k1_kamera: (JR.store.get().pending || {}).k1_kamera || null };
-    JR.row = row;
+  /* без личен tk (Skillplate пренасочва към адреса без токен · линк от реклама) → ЦЯЛАТА Пътека К1→К8 от локален ред: всяка Карта се чете от „jr:“, всеки избор е чакащ там, точките се смятат от него · нула заявки · при отваряне после с личния линк чакащото отива в реда (flushLocal) */
+  function local(m) {
+    var u = Object.assign({}, JR.store.get().unlocked);
+    if (!u[karta]) { u[karta] = new Date(JR.now()).toISOString(); JR.store.set({ unlocked: u }); }     /* „отключена = отворена“ и локално */
+    var row = JR.row = localRow();
     JR.hud(row);
+    fillEvent(row);
+    var h = handlers[karta];
+    if (h && h.show) h.show(row);
+    m.setAttribute('data-state', 'public');
+  }
+  function fillEvent(row) {
     Array.prototype.forEach.call(document.querySelectorAll('[data-event-label]'), function (el) { el.textContent = JR.eventLabel(row); });
     Array.prototype.forEach.call(document.querySelectorAll('[data-event-hour]'), function (el) { el.textContent = JR.hourLabel(0); });
-    if (handlers[1] && handlers[1].show) handlers[1].show(row);
-    m.setAttribute('data-state', 'public');
+  }
+
+  /* с личния линк: чакащото от „jr:“ (без tk) влиза в този ред · ✓ Имейл/Календар/Подготовка и К6 преминават в магазина на tk · чакащите избори се виждат веднага и се пращат ПО ЕДИН път със своята Карта (последователно) · провалено остава в „jr:“ за следващото отваряне */
+  function flushLocal(row) {
+    var anon = null;
+    try { anon = JSON.parse(localStorage.getItem('jr:') || 'null'); } catch (e) {}
+    if (!anon || typeof anon !== 'object') return;
+    var own = JR.store.get(), merge = {};
+    ['mail', 'cal', 'prep', 'k6'].forEach(function (k) { if (anon[k] && !own[k]) merge[k] = anon[k]; });
+    try { if (Object.keys(merge).length) localStorage.setItem(JR.store.key, JSON.stringify(Object.assign(own, merge))); } catch (e) {}
+    var pend = anon.pending && typeof anon.pending === 'object' ? anon.pending : {}, todo = [], left = {};
+    Object.keys(pend).forEach(function (f) {
+      if (!/^k[1-8]_/.test(f) || !has(pend[f]) || has(row[f])) return;      /* нещо, което редът вече има, печели */
+      row[f] = pend[f]; todo.push(f);
+    });
+    todo.reduce(function (chain, f) {
+      return chain.then(function () {
+        var b = { tk: tk, karta: Number(f.charAt(1)) }; b[f] = pend[f];
+        return post(b).then(null, function () { left[f] = pend[f]; });
+      });
+    }, Promise.resolve()).then(function () {
+      try { if (Object.keys(left).length) localStorage.setItem('jr:', JSON.stringify({ pending: left })); else localStorage.removeItem('jr:'); } catch (e) {}
+    });
   }
 
   /* вика се веднъж, след последния блок Карта */
   JR.start = function () {
     var m = $('#journey');
-    if (!tkOk) return anonymous();
-    if (!karta) karta = JR.karta = 1;              /* tk без валидна karta → Карта 1 */
+    if (!karta) karta = JR.karta = 1;              /* без валидна karta → Карта 1 */
     show(karta);                                    /* синхронно · преди двигателя · контролът се мери видим */
+    if (!tkOk) return local(m);
     fetchRow()
       .then(function (r) {
         if (r.status === 404) { fallback(MSG.unknown); return null; }
@@ -1160,10 +1203,10 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
       })
       .then(function (row) {
         if (!row) return;
+        flushLocal(row);
         JR.row = row;
         JR.hud(row);
-        Array.prototype.forEach.call(document.querySelectorAll('[data-event-label]'), function (el) { el.textContent = JR.eventLabel(row); });
-        Array.prototype.forEach.call(document.querySelectorAll('[data-event-hour]'), function (el) { el.textContent = JR.hourLabel(0); });
+        fillEvent(row);
         var h = handlers[karta];
         if (h && h.show) h.show(row);
         m.setAttribute('data-state', 'ready');
@@ -1205,7 +1248,6 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
       </div>
     </div>
     <div class="jr-next-top" id="k1-next-box" hidden><a class="cta" id="k1-next" href="#">Карта 2 · Пътят →</a></div>
-    <p class="jr-prompt k1-anon" id="k1-anon" hidden>Личният Ви линк към Пътеката идва по имейл.</p>
     <div class="k1-panels">
     <div class="k1-panel key" id="k1-p-cam" hidden>
       <div class="jr-choice" id="k1-choice" role="radiogroup" aria-label="Камера">
@@ -1238,12 +1280,11 @@ body.jr-k1 #toast.show{transform:translate(-50%,0)}
 [data-karta="1"] #fig-hero{pointer-events:none}                              /* тапът на героя е изключен · нищо не я прескача над истинския ѝ прогрес */
 /* телефон · [малка героиня 42% | сега: 3 стъпки + частите една под друга] · нишките тръгват от нея към всяка част (рамката на двигателя ги чертае, K1 ги пренасочва отстрани) */
 [data-karta="1"] .hero{padding-top:6px;padding-bottom:20px}
-[data-karta="1"] .k1-wrap{display:grid;grid-template-columns:minmax(0,42%) minmax(0,1fr);grid-template-areas:"q q" "left right" "next next" "anon anon" "panels panels" "eve eve" "tiles tiles" "brand brand";column-gap:30px;align-items:start}
+[data-karta="1"] .k1-wrap{display:grid;grid-template-columns:minmax(0,42%) minmax(0,1fr);grid-template-areas:"q q" "left right" "next next" "panels panels" "eve eve" "tiles tiles" "brand brand";column-gap:30px;align-items:start}
 [data-karta="1"] .k1-wrap>.jr-title{grid-area:q;margin:2px 0 8px;font-size:min(1.6rem,6.4vw);line-height:1.12}
 [data-karta="1"] .k1-left{grid-area:left}
 [data-karta="1"] .k1-right{grid-area:right;align-self:center}
 [data-karta="1"] #k1-next-box{grid-area:next}
-[data-karta="1"] #k1-anon{grid-area:anon}
 [data-karta="1"] .k1-panels{grid-area:panels}
 [data-karta="1"] .jr-evening{grid-area:eve}
 [data-karta="1"] .jr-tiles{grid-area:tiles}
@@ -1276,7 +1317,6 @@ body.jr-k1 #toast.show{transform:translate(-50%,0)}
 .k1-help{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:12px 0 0!important;padding:12px 14px;border-radius:14px;border:1px solid rgba(232,199,126,.7);border-left:4px solid var(--gold);background:rgba(232,199,126,.12);font-size:.95rem;line-height:1.35;color:var(--ink)}
 .k1-help .cta{padding:8px 16px;min-height:40px;font-size:.9rem}
 [data-karta="1"] .jr-next-top{position:relative;z-index:3;margin:12px 0 0;animation:k1-cta .8s ease-out 1}
-[data-karta="1"] .k1-anon{margin:12px 0 0;color:var(--light)}
 [data-karta="1"] .jr-evening{margin:20px 0 8px;font-size:1.1rem}
 [data-karta="1"] .hero .wrap .k1-brand{margin:20px 0 0;font-size:1.25rem;line-height:1.15;text-align:center;text-shadow:none}
 [data-karta="1"] .k1-brand span:nth-child(2){font-size:.8em}
@@ -1297,7 +1337,7 @@ body.jr-k1 #toast.show{transform:translate(-50%,0)}
 </style>
 <script>
 JR.card(1, { show: function (row) {
-  var $ = JR.$, st = JR.store.get(), sec = document.querySelector('section[data-karta="1"]');
+  var $ = JR.$, all = JR.store.get(), st = { mail: all.mail, cal: all.cal, prep: all.prep }, sec = document.querySelector('section[data-karta="1"]');   /* st = само К1-ключовете · JR.store.set(st) не пипа pending/unlocked */
   document.body.classList.add('jr-k1');
   var K = ['mail', 'cal', 'cam'];                                         /* ред = нишка 0 · 1 · 2 (редът на .part в DOM) */
   var part = {}, panel = {};
@@ -1306,13 +1346,7 @@ JR.card(1, { show: function (row) {
   var radios = [].slice.call(document.querySelectorAll('#k1-choice .jr-opt'));
   function isDone(k) { return k === 'cam' ? camDone : !!st[k]; }
   function count() { return K.filter(isDone).length; }
-  /* без tk (линк от Skillplate без личен токен) стъпките живеят локално в „jr:“ · отворена после с личния линк от имейла, те се дописват в реда (без да пишат имейла си) */
-  var anon = null;
-  if (JR.tk) { try { anon = JSON.parse(localStorage.getItem('jr:') || 'null'); } catch (e) {} if (!anon || typeof anon !== 'object') anon = null; }
-  if (anon) {
-    ['mail', 'cal', 'prep'].forEach(function (k) { if (anon[k] && !st[k]) { st[k] = 1; if (k !== 'prep') JR.award('k1_' + k, null); } });
-    try { localStorage.setItem(JR.store.key, JSON.stringify(Object.assign(JR.store.get(), st))); } catch (e) {}
-  }
+  /* без tk стъпките и изборите живеят в „jr:“ (рамката: local · flushLocal) · с личния линк те вече са в реда и в магазина на tk преди тази Карта да се покаже */
 
   /* героинята: целта k/3 · ръчна (нула авто-морф) · двигателят още може да не е готов → повтаря докато намери фигурата */
   /* картата на почивките: всяко състояние е ФОРМА, никога прах · 0 = часовник · ⅓ = часовникът се отваря · ⅔ = жената почти оформена (крилете още прах) · 1 = крила · лентата 0.3–0.7 (облак) само се преминава в прехода */
@@ -1360,9 +1394,8 @@ JR.card(1, { show: function (row) {
   var box = $('#k1-next-box'), three = false;
   function showNext(reveal) {
     if (three) return; three = true;
-    var shown = JR.tk ? box : $('#k1-anon');                                     /* без tk няма ред за Карта 2 → вместо бутона: „Личният Ви линк … идва по имейл“ */
-    shown.hidden = false; relayout();
-    if (reveal) setTimeout(function () { JR.reveal(JR.tk ? $('#k1-next') : shown, window.innerWidth >= 720 ? 'end' : 'center'); }, 120);
+    box.hidden = false; relayout();                                               /* със или без tk: пътят продължава към Карта 2 (без tk от локалния ред) */
+    if (reveal) setTimeout(function () { JR.reveal($('#k1-next'), window.innerWidth >= 720 ? 'end' : 'center'); }, 120);
   }
 
   /* ритъм на едно действие: част + нишка светват веднага · точката лети (рамката) · героинята расте ~⅓ · при 3/3 бутонът идва след морфа */
@@ -1389,7 +1422,13 @@ JR.card(1, { show: function (row) {
   /* плочката „За вечерта“ · Подготовка пази ✓ локално · не е част, няма нишка, не точкува */
   var prep = $('#k1-prep');
   function refresh() { prep.classList.toggle('done', !!st.prep); }
-  $('#k1-prep-ok').addEventListener('click', function () { st.prep = 1; JR.store.set(st); refresh(); });
+  /* „Готово“ не е стъпка · но докато остават стъпки, води към първата незавършена (панелът ѝ се отваря и идва в екрана) · при 3/3 → към бутона за Карта 2 */
+  $('#k1-prep-ok').addEventListener('click', function () {
+    st.prep = 1; JR.store.set(st); refresh();
+    var nd = ['cam', 'mail', 'cal'].filter(function (k) { return !isDone(k); });
+    if (nd.length) { open(firstOpen()); JR.reveal(panel[nd[0]], 'center'); }
+    else if (!box.hidden) JR.reveal($('#k1-next'), window.innerWidth >= 720 ? 'end' : 'center');
+  });
 
   /* избор: камера или само гледане · частта Камера светва след записа (и при повторен избор остава светнала) */
   function pick(v) { radios.forEach(function (b) { b.setAttribute('aria-checked', String(b.getAttribute('data-v') === v)); }); }
@@ -1411,7 +1450,7 @@ JR.card(1, { show: function (row) {
   $('#k1-cal-ok').addEventListener('click', function () { mark('cal'); });
   $('#k1-cal-g').addEventListener('click', function () { mark('cal'); });
   $('#k1-cal-ok').setAttribute('href', ics(row));
-  if (JR.tk) $('#k1-next').setAttribute('href', '?tk=' + JR.tk + '&karta=2');
+  $('#k1-next').setAttribute('href', JR.href(2));
   $('#k1-cal-g').setAttribute('href', gcal(row));
 
   /* връщане: ✓ от JR.store и реда → части · нишки · героиня k/3 · бутонът при 3/3 (без летене и без reveal) */
@@ -1419,11 +1458,6 @@ JR.card(1, { show: function (row) {
   goal = count(); paint(); applyHero(); saidSteps();
   if (goal === 3) showNext(false);
   setTimeout(function () { relayout(); paint(); thread(); }, 450);
-  if (anon) {                                                                     /* камерата от анонимния избор → редът (веднъж) · провал = остава за следващото отваряне */
-    var pc = anon.pending && anon.pending.k1_kamera;
-    if (pc && !camDone) JR.choose('k1_kamera', pc).then(function () { pick(pc); mark('cam'); try { localStorage.removeItem('jr:'); } catch (e) {} }).catch(function () {});
-    else try { localStorage.removeItem('jr:'); } catch (e) {}
-  }
 
   /* събитието от реда: денят и часът (JR.cfg) · Европа/София → UTC · личният линк в описанието · общо за .ics и Google Calendar */
   function calEvent(r) {
@@ -1458,7 +1492,11 @@ JR.card(1, { show: function (row) {
 <!--KARTA 1 END-->
 
 <!--KARTA 2 BEGIN · Сърце · MET-1440-->
-<section data-karta="2" class="jr-card" hidden>
+<section data-karta="2" id="k2-sec" class="jr-card magic" hidden>   <!-- id = уникални id-та на нишките (lk-k2-sec-N) · без него mpath-овете на точките сочеха към скритите нишки на К1 (lk--N) и точката стоеше на (0,0) -->
+  <div class="jr-k2 jr-k2-top">
+    <h2 class="jr-k2-line jr-title">Това е пътят Ви до <span data-event-label></span>.</h2>
+    <p class="jr-k2-hint jr-intro">5 карти до вечерта · всяка се отваря в свой ден · започнете от Цел.</p>
+  </div>
   <div class="kk-control kk-control--heart" data-kk-control="fig-heart"><div class="mfig tapable" id="fig-heart" data-bleed="mobile" data-tap>
       <canvas data-фигура="heart" role="img" aria-label="Сърце от златни частици с три зъбчати пръстена и стрелка: върти се непрекъснато; докоснете го — спира и стрелката ляга на едно от петте неща"></canvas>
       <img class="poster" src="https://maitapp.com/img/nz/vodach.webp" alt="Димитър Караманчев — режисьорът на продукцията" width="900" height="1125" hidden loading="lazy" decoding="async">
@@ -1504,22 +1542,43 @@ JR.card(1, { show: function (row) {
         <div class="pic"><img src="https://maitapp.com/img/nz/pirin-sun.webp" alt="" width="1000" height="1115" loading="lazy" decoding="async"><div><div class="d">Носите</div><div class="w">Тенис ракета</div><p>Ако имате. Може и да се наеме на място.</p></div></div>
       </div>
     </div></div>
-  <div class="jr-k2">
-    <h2 class="jr-k2-line jr-title">Това е пътят Ви до <span data-event-label></span>.</h2>
-    <p class="jr-k2-hint jr-intro">5 карти до вечерта · всяка се отваря в свой ден · започнете от Цел.</p>
+  <div class="jr-k2 jr-k2-under">
     <p class="jr-k2-lock" id="k2-lock" role="status" hidden>отключва се на <span id="k2-date"></span> · <a id="k2-open" href="#">отвори сега</a></p>
     <p class="jr-err" id="k2-err" role="alert" hidden>Не се записа. Опитайте пак.</p>
   </div>
 </section>
 <style>
 /* Карта 2 · сърцето на донора е непипнато (canvas · печати · двигател) · тук са само надписите му и редовете под него */
+[data-karta="2"].magic{position:relative}                                    /* донорът рисува нишките (svg.links) от сърцето към .part само в секция.magic */
 [data-karta="2"] #sealbook{display:none!important}
-[data-karta="2"] .things .part b{display:none}
 [data-karta="2"] #fig-heart .tap{display:none}
-[data-karta="2"] .things .part{min-height:48px;display:flex;align-items:center;justify-content:center}
-@media (min-width:900px){[data-karta="2"] .things{display:none}}  /* на десктоп имената са под печатите (.seal span) → списъкът би ги повторил: показват се веднъж (лимит 35 думи) */
+/* редът I–V е под сърцето при ВСЯКА ширина (MET-1578) · в полета · нишки отгоре · цифра + име */
+[data-karta="2"] .things{width:calc(100% - 24px);max-width:640px;margin:34px auto 0;gap:6px}
+[data-karta="2"] .things .part{min-height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:6px 2px;letter-spacing:.02em}
+[data-karta="2"] #seals .seal span{display:none!important}                    /* имената са само в реда под сърцето (по веднъж) · цифрите I–V са етикети на самия контрол и остават върху печатите */
+[data-karta="2"] #jr-next{max-width:none;margin:14px 0 0;padding:0 0 40px}      /* бутонът към Карта 3 се мести в .jr-k2-under (JS) */
+/* десктоп (≥1100) = две колони като К1: сърцето + редът I–V с нишките вляво · заглавие → увод → „отключва се“ → CTA вдясно · всичко в първия екран */
+@media (min-width:1100px){
+  section[data-karta="2"]:not([hidden]){display:grid;grid-template-columns:var(--main-ctrl) minmax(0,420px);grid-template-rows:1fr auto auto 1fr;column-gap:48px;justify-content:center;align-items:start}
+  [data-karta="2"] .kk-control--heart{grid-column:1;grid-row:1/5}
+  [data-karta="2"] .jr-k2{grid-column:2;max-width:none;margin:0;padding:0;text-align:left}
+  [data-karta="2"] #jr-next{padding-bottom:0}
+  [data-karta="2"] .jr-k2-top{grid-row:2;align-self:end;padding-bottom:6px}
+  [data-karta="2"] .jr-k2-under{grid-row:3;align-self:start;padding-top:6px}
+  [data-karta="2"] .jr-k2-line{font-size:1.9rem;text-align:left;margin:0 0 8px}
+  [data-karta="2"] .jr-k2-top .jr-intro{text-align:left;margin:6px 0 0;font-size:1rem}
+  [data-karta="2"] .jr-k2-lock{margin:10px 0 4px}
+}
+[data-karta="2"] #seals .seal.on{transform:translate(-50%,-50%)}          /* светналият печат не расте: печат I е до горния ръб на сцената · растял би се режел от рамката */
+[data-karta="2"] svg.links path{transition:stroke .6s,stroke-width .6s}
+[data-karta="2"] svg.links path.lit{stroke:rgba(255,225,160,.92);stroke-width:1.6;stroke-dasharray:none;filter:drop-shadow(0 0 5px rgba(232,199,126,.85));animation:jr-k2-thread 1.1s ease-out 1}
+[data-karta="2"] svg.links circle{opacity:0;transition:opacity .7s}             /* точките текат само по светналата нишка (JS им дава opacity) */
+@keyframes jr-k2-thread{0%{stroke-width:5;stroke:#fff5d6}100%{stroke-width:1.6}}
+@media (prefers-reduced-motion:reduce){[data-karta="2"] svg.links path.lit{animation:none}}
 .jr-k2{max-width:560px;margin:0 auto;padding:6px 18px 8px;text-align:center}
-.jr-k2-line{margin:6px 0 10px;font-family:var(--serif);font-weight:600;font-size:min(1.5rem,6vw);line-height:1.25;color:var(--light)}
+.jr-k2-top{padding-bottom:0}
+.jr-k2-top .jr-intro{margin-top:6px}
+.jr-k2-line{margin:4px 0 6px;font-family:var(--serif);font-weight:600;font-size:min(1.5rem,5.2vw);line-height:1.2;color:var(--light)}
 /* подсказка за играта: печат I пулсира „Докоснете“ до първия тап на който и да е печат (само клас + CSS · байтовете на донора са непипнати) */
 [data-karta="2"] #seals .seal.jr-hint::after{content:"Докоснете";position:absolute;left:50%;bottom:100%;transform:translate(-50%,-6px);white-space:nowrap;pointer-events:none;font-family:var(--sans);font-weight:600;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:#fff5d6;text-shadow:0 1px 6px #000}
 [data-karta="2"] #seals .seal.jr-hint:not(.on){animation:jr-k2-pulse 1.8s ease-in-out infinite}
@@ -1550,6 +1609,17 @@ JR.card(1, { show: function (row) {
   [].forEach.call(sec.querySelectorAll('#sealbook .sp'), function (sp) { sp.textContent = ''; });
   var hint = sec.querySelector('#sealbook .hint'); if (hint) hint.remove();
   var grp = sec.querySelector('#things'); if (grp) grp.setAttribute('aria-label', 'Петте части на пътя');
+  /* нишките (svg.links) ги рисува донорът от .mfig към всяка .part · светналата е една · точките текат само по нея */
+  function paths() { return [].slice.call(sec.querySelectorAll('svg.links path')); }
+  function dots() { return [].slice.call(sec.querySelectorAll('svg.links circle')); }
+  function relayout() { window.dispatchEvent(new Event('resize')); }
+  /* избраната част светва навсякъде: печат · част (злато) · нишка + точки · останалите гаснат */
+  function light(k) {
+    seals.forEach(function (b, i) { b.classList.toggle('on', i === k); });
+    things.forEach(function (b, i) { b.classList.toggle('on', i === k); b.classList.toggle('lit', i === k); });
+    var d = dots();
+    paths().forEach(function (pt, i) { pt.classList.toggle('lit', i === k); [d[2 * i], d[2 * i + 1]].forEach(function (c) { if (c) c.style.opacity = i === k ? '1' : '0'; }); });
+  }
 
   var nowMs = JR.now;                                  /* ?now= само на локален хост (рамката) */
   function dateLabel(ms) { var d = new Date(ms); return d.getUTCDate() + ' ' + MONTHS[d.getUTCMonth()]; }
@@ -1563,8 +1633,9 @@ JR.card(1, { show: function (row) {
 
   JR.card(2, { show: function (row) {
     var $ = JR.$, spinning = true, busy = false;
-    function mark(k) { things.forEach(function (b, i) { b.classList.toggle('on', i === k); }); }
-    function link(part) { return '?tk=' + JR.tk + '&karta=' + part.karta; }
+    function mark(k) { light(k); }
+    function lock(st, part) { $('#k2-date').textContent = st.label; $('#k2-open').setAttribute('href', link(part)); $('#k2-lock').hidden = false; }
+    function link(part) { return JR.href(part.karta); }
     function pick(k) {
       unhint();                                        /* всеки път към избор (печат · списък · сърце) маха пулса */
       if (busy) return; busy = true;
@@ -1577,9 +1648,7 @@ JR.card(1, { show: function (row) {
         var st = state(fresh, part);
         busy = false; mark(k);
         if (st.open) { location.href = link(part); return; }
-        $('#k2-date').textContent = st.label;
-        $('#k2-open').setAttribute('href', link(part));
-        $('#k2-lock').hidden = false;
+        lock(st, part);
         JR.complete();
       }).catch(function () { busy = false; $('#k2-err').hidden = false; });
     }
@@ -1596,22 +1665,34 @@ JR.card(1, { show: function (row) {
       if (spinning) { spinning = false; setTimeout(function () { var k = seals.findIndex(function (b) { return b.classList.contains('on'); }); if (k >= 0) pick(k); }, 0); }
       else spinning = true;
     });
-    var done = PARTS.findIndex(function (p) { return p.field === row.k2_chast; });
-    if (done >= 0) { mark(done); JR.complete(); }
+    /* отначало като след клик на част I (или на записаната част): светнала · „отключва се“ + CTA към Карта 3 видими · нищо не се записва до тап */
+    var done = PARTS.findIndex(function (p) { return p.field === row.k2_chast; }), first = done >= 0 ? done : 0, st0 = state(row, PARTS[first]);
+    mark(first); if (!st0.open) lock(st0, PARTS[first]);
+    var nx = document.getElementById('jr-next'), under = sec.querySelector('.jr-k2-under'); if (nx && under) under.appendChild(nx);   /* CTA в същата колона под реда „отключва се“ */
+    JR.complete();
+    relayout(); setTimeout(relayout, 400); setTimeout(relayout, 1200);
   } });
 })();
 </script>
 <!--KARTA 2 END-->
 
-<!--KARTA 3 BEGIN · Метамер · MET-1441 · сфера + цел (единственото място за целта) · донорът #sfera е байт-идентичен, шумът му е скрит с CSS-->
+<!--KARTA 3 BEGIN · Метамер · MET-1441 · сфера + цел (единственото място за целта) · донорът #sfera е байт-идентичен, шумът му е скрит с CSS · MET-1579: картата на донора (#mmpart) е „отделната карта“ на избора-->
 <section data-karta="3" class="jr-card" hidden>
 <style>
-/* шумът на донора вън от екрана: пояснителният текст · лентата с числа и Тесте · подсказката · картата-част (Ниво · Личност · Съюзник · Пазач · Тесте) */
-section[data-karta="3"] .mettamap figcaption,section[data-karta="3"] .mm-leg,section[data-karta="3"] .mm-tap,section[data-karta="3"] #mmpart{display:none!important}
+/* шумът на донора вън от екрана: пояснителният текст · лентата с числа и Тесте · подсказката */
+section[data-karta="3"] .mettamap figcaption,section[data-karta="3"] .mm-leg,section[data-karta="3"] .mm-tap{display:none!important}
+/* MET-1579 · отделната карта на избора = #mmpart на донора (отваря се от двигателя при тап на сфера) · остава само образът и името на личността · Ниво · валута · холограма · Съюзник · Пазач · Тесте · „Разширявам се“ са шум (скрити с CSS) · образът е по-нисък, за да се събере с целите в екран */
+section[data-karta="3"] #mmpart .mmc-x,section[data-karta="3"] #mmpart .mmc-tb,section[data-karta="3"] #mmpart .mmc-holo-w,section[data-karta="3"] #mmpart .mmc-ln,section[data-karta="3"] #mmpart .mmc-guard,section[data-karta="3"] #mmpart .mmc-deck,section[data-karta="3"] #mmpart .mmc-go,section[data-karta="3"] #mmpart .mmc-bd,section[data-karta="3"] #mmpart .mmc-art .wait{display:none!important}
+section[data-karta="3"] #mmpart{margin:12px auto 0;width:min(86vw,360px)}
+section[data-karta="3"] #mmpart .mmc-art{aspect-ratio:16/9;max-height:none}
+section[data-karta="3"] #mmpart .mmc-imgs img{object-position:50% 18%}
+section[data-karta="3"] #mmpart .mmc-nm{font-size:1.25rem}
+body.jr-k3 #toast{bottom:auto;top:calc(var(--bar,50px) + 6px);transform:translate(-50%,-14px)}   /* тостът не покрива „Карта 4 · Чудовища →“, който току-що влезе в екрана · горе под лентата (като Карта 1) */
+body.jr-k3 #toast.show{transform:translate(-50%,0)}
 section[data-karta="3"] .mettamap{margin:6px auto 0}
 section[data-karta="3"] .k3-wrap{max-width:560px;margin:0 auto;padding:12px 18px 8px}
 section[data-karta="3"] #k3-q{margin:6px 0 0}
-#k3-panel{max-width:440px;margin:6px auto 0}
+#k3-panel{max-width:440px;margin:14px auto 0}
 #k3-panel h3{margin:0 0 8px;text-align:center;font-family:var(--serif);font-size:1.5rem;color:var(--gold)}
 #k3-panel .jr-choice{margin-bottom:10px}
 /* същият вид като бутоните на Карта 1 (.jr-opt) · собствен клас, за да не се мешат тестовете на Карта 1 */
@@ -1670,6 +1751,7 @@ section[data-karta="3"] #k3-q{margin:6px 0 0}
 <script>
 JR.card(3, { show: function (row) {
   var $ = JR.$;
+  document.body.classList.add('jr-k3');
   /* ★ чернова за дума на Митрандир · MET-1448 (проучване) ги подобрява по-късно · точните низове са и в CONTENT.md */
   var GOALS = {
     'Здраве': ['Да спя по-добре', 'Да се движа всеки ден'],
@@ -1700,14 +1782,27 @@ JR.card(3, { show: function (row) {
     goals.forEach(function (b, i) { b.textContent = GOALS[name][i]; });
     mark(-1); openOwn(false); own.value = ''; err.hidden = true;
     panel.hidden = false;
-    if (scroll) JR.reveal(panel, 'start');
+    if (scroll) setTimeout(function () { bringInto($('#mmpart').hidden ? panel : $('#mmpart'), panel); }, reduced ? 150 : 700);   /* картата на донора се отваря ~460 ms след тапа → после картата + целите влизат в екрана заедно */
   }
+  /* нововидимото влиза в екрана: групата от първия до последния елемент се центрира (ако е по-висока от екрана → долният ръб на последния) · без смяна на фокуса */
+  var reduced = (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) || /[?&]reduced=1/.test(location.search);
+  function bringInto(first, last) {
+    var bar = (document.querySelector('#bar') || { getBoundingClientRect: function () { return { height: 50 }; } }).getBoundingClientRect().height + 12;
+    var a = first.getBoundingClientRect(), b = last.getBoundingClientRect(), need = b.bottom - a.top, room = innerHeight - bar - 12;
+    var dy = need <= room ? (a.top - bar) - (room - need) / 2 : b.bottom - innerHeight + 12;
+    window.scrollBy({ top: dy, behavior: reduced ? 'instant' : 'smooth' });
+  }
+  /* докато картата на донора е отворена, докосване извън сферите не бива да я затваря (двигателят я затваря при всяко докосване навън → картата изчезва точно при избора на цел) */
+  document.addEventListener('pointerdown', function (e) { if (JR.karta === 3 && !(e.target.closest && e.target.closest('.mm-hit'))) e.stopPropagation(); }, true);
 
   /* сфера + цел = ЕДИН запис (двете полета на Карта 3 вървят заедно в един POST) */
   function save(cel, onOk) {
     err.hidden = true;
     JR.choose({ k3_sfera: sfera, k3_cel: cel })
-      .then(function () { onOk(); JR.complete({}); })
+      .then(function () {
+        onOk(); JR.complete({});
+        setTimeout(function () { var n = $('#jr-next'); if (n && !n.hidden) bringInto(n, n); }, 350);      /* „Запиши“ → „Карта 4 · Чудовища →“ влиза в екрана */
+      })
       .catch(function () { showErr(); });
   }
 
@@ -1742,12 +1837,13 @@ JR.card(3, { show: function (row) {
 </script>
 <!--KARTA 3 END-->
 
-<!--KARTA 4 BEGIN · Чудовища-->
-<section data-karta="4" class="jr-card" hidden>
+<!--KARTA 4 BEGIN · Чудовища · MET-1579: без % · редът-смисъл на чудовището е .part, вързан с Нишка (svg.links на двигателя · section.magic) към колелото-->
+<section data-karta="4" class="jr-card magic" hidden>
 <style>
 [data-karta="4"].jr-card{overflow-x:clip}   /* прахът на колелото (112%) не надава страницата */
 [data-karta="4"] .jr-q{padding:14px 18px 0;margin:0 auto;max-width:520px}
 [data-karta="4"] .jr-err{margin:6px 0 0}
+@media (min-width:720px){[data-karta="4"] .jr-q.jr-title{margin-bottom:26px;font-size:1.8rem}}   /* MET-1579 · прахът на колелото (канвас ~23px над фигурата) не бива да лежи под заглавието при 1280 */
 /* колелото се преоблича: нула нова геометрия · текстът и играта на донора вън · 8-те възела = антагонистите */
 [data-karta="4"] #w-metta,[data-karta="4"] #w-meta,[data-karta="4"] #wheelinfo,[data-karta="4"] #fig-wheel .tap,
 [data-karta="4"] #wlvl,[data-karta="4"] .wheel .lvl2,[data-karta="4"] .wheel .sl{display:none!important}
@@ -1763,9 +1859,18 @@ JR.card(3, { show: function (row) {
 [data-karta="4"] .wheel .node.sel text{fill:#fff;font-weight:600}
 [data-karta="4"] .wheel .spoke.sel{stroke:var(--gold);filter:drop-shadow(0 0 4px rgba(232,199,126,.8))}
 [data-karta="4"] .wheel .sect.sel{fill:rgba(255,245,214,.22);stroke:#fff5d6;filter:drop-shadow(0 0 8px rgba(255,245,214,.6))}
-[data-karta="4"] .jr-pct{max-width:520px;margin:6px auto 0;padding:0 18px;grid-template-columns:repeat(4,1fr)}
-[data-karta="4"] .k4-opt{display:flex;align-items:center;justify-content:center;min-height:52px;padding:10px 4px;border-radius:18px;border:1.5px solid rgba(232,199,126,.55);background:rgba(232,199,126,.08);color:var(--light);font:600 1.04rem/1.25 var(--sans);text-align:center}
-[data-karta="4"] .k4-opt[aria-checked="true"]{background:linear-gradient(120deg,#ffe1a0,#e2a458);color:#2a1908;border-color:transparent}
+/* MET-1579 · ред-смисъл (.part на двигателя) + обещание · Нишката е path на svg.links (двигателят я чертае от колелото към .part) · светва при избор */
+[data-karta="4"].magic{position:relative}
+body.jr-k4 #toast{bottom:auto;top:calc(var(--bar,50px) + 6px);transform:translate(-50%,-14px)}   /* тостът не покрива „Карта 5 · Водач →“ · горе под лентата (като Карта 1) */
+body.jr-k4 #toast.show{transform:translate(-50%,0)}
+[data-karta="4"] .k4-meaning{position:relative;z-index:3;width:min(520px,calc(100% - 36px));margin:40px auto 0;padding:16px 20px;box-sizing:border-box;border-radius:16px;border:1px solid rgba(232,199,126,.32);background:rgba(232,199,126,.05);font-family:var(--serif);font-weight:600;font-size:1.2rem;line-height:1.3;color:var(--light);text-align:center}
+[data-karta="4"] .k4-meaning[hidden],[data-karta="4"] .k4-promise[hidden]{display:none}
+[data-karta="4"] .k4-promise{position:relative;z-index:3;max-width:520px;margin:12px auto 0;padding:0 18px;font-size:1.02rem;line-height:1.4;color:var(--ink2);text-align:center}
+[data-karta="4"] svg.links path{stroke:none;transition:stroke .6s,stroke-width .6s}
+[data-karta="4"] svg.links path.lit{stroke:rgba(255,225,160,.92);stroke-width:1.6;stroke-dasharray:none;filter:drop-shadow(0 0 5px rgba(232,199,126,.85));animation:k4-thread 1.1s ease-out 1}
+[data-karta="4"] svg.links circle{opacity:0;transition:opacity .7s}
+@keyframes k4-thread{0%{stroke-width:5;stroke:#fff5d6}100%{stroke-width:1.6}}
+@media (prefers-reduced-motion:reduce){[data-karta="4"] svg.links path.lit{animation:none}}
 </style>
 <h2 class="jr-q jr-title" id="k4-q" aria-live="polite">Кое чудовище Ви спира най-много по пътя към целта?</h2>
   <div class="kk-control kk-control--wheel" data-kk-control="fig-wheel"><div class="mfig" id="fig-wheel" data-bleed="always" data-height="auto">
@@ -1795,34 +1900,55 @@ JR.card(3, { show: function (row) {
       </div>
     </div><div class="row" id="w-metta"><span data-s="0">Здраве</span><span data-s="1">Призвание</span><span data-s="2">Характер</span><span data-s="3">Визия</span></div><div class="row" id="w-meta"><span data-a="0">Любка</span><span data-a="1">Екопътечко</span><span data-a="2">Куражку</span><span data-a="3">Обемко</span><span data-a="4">Хола</span><span data-a="5">Фибоначко</span><span data-a="6">Творея</span><span data-a="7">Доверка</span></div></div>
 <p class="jr-err" id="k4-err" role="alert" hidden>Не се записа. Опитайте пак.</p>
-<div class="jr-choice jr-pct" id="k4-pct" role="radiogroup" aria-label="Колко Ви спира" hidden>
-  <button type="button" class="k4-opt" role="radio" aria-checked="false" data-v="25">25%</button>
-  <button type="button" class="k4-opt" role="radio" aria-checked="false" data-v="50">50%</button>
-  <button type="button" class="k4-opt" role="radio" aria-checked="false" data-v="75">75%</button>
-  <button type="button" class="k4-opt" role="radio" aria-checked="false" data-v="100">100%</button>
-</div>
+<div class="part k4-meaning" id="k4-meaning" role="status" hidden></div>
+<p class="k4-promise" id="k4-promise" hidden></p>
 </section>
 <script>
-/* Карта 4 · Чудовища · ANT = копие на ANTAGS от началната страница (img · име · О-дума) · тестът karta4_all го сверява с index.html на репото */
+/* Карта 4 · Чудовища · ANT = копие на ANTAGS от началната страница (img · име · О-дума · ред-смисъл) · редът-смисъл = sab на хоума, само „ти“ → „Вие“ (★ чернова за Митрандир · CONTENT.md „## Карта 4“) · тестът karta4_all го сверява с index.html на репото */
 JR.card(4, { show: function (row) {
-  var $ = JR.$, ANT = [["ant-его", "Его", "Обсъждане"], ["ant-бега", "Бега", "Отлагане"], ["ant-емо", "Емо", "Оплакване"], ["ant-нема", "Нема", "Обясняване"], ["ant-станка", "Станка Ученеврозова", "Оценяване"], ["ant-ума", "Ума Лисева", "Обмисляне"], ["ant-умчо", "Умчо Вълчев", "Осъждане"], ["ant-страхил", "Барон Страхил Прегорялконен", "Прегаряне"]];
+  var $ = JR.$, ANT = [
+    ["ant-его", "Его", "Обсъждане", "Гонитбата на чуждото одобрение, която изяжда Вашето."],
+    ["ant-бега", "Бега", "Отлагане", "Вечното отлагане — бягство от това, което е сега."],
+    ["ant-емо", "Емо", "Оплакване", "Бури от чувства, които Ви носят, вместо Вие да носите тях."],
+    ["ant-нема", "Нема", "Обясняване", "Маските и извиненията, зад които изчезвате."],
+    ["ant-станка", "Станка Ученеврозова", "Оценяване", "Инспекторът, който мери всичко с оценка — ражда учебна невроза."],
+    ["ant-ума", "Ума Лисева", "Обмисляне", "Анализът без край, който никога не стига до действие."],
+    ["ant-умчо", "Умчо Вълчев", "Осъждане", "Студената присъда, обърната първо срещу Вас самата."],
+    ["ant-страхил", "Барон Страхил Прегорялконен", "Прегаряне", "Прегарянето, което гори резервите Ви до пепел."]];
   var IMG = 'https://maitapp.com/img/', XL = 'http://www.w3.org/1999/xlink';
   var Q0 = 'Кое чудовище Ви спира най-много по пътя към целта?', PROMISE = 'На ' + JR.eventLabel(row) + ' ще го намалим заедно.';
-  var cel = String(row.k3_cel || '').trim(), q = $('#k4-q'), box = $('.wheel', $('#fig-wheel')), pct = $('#k4-pct');
-  var chips = [].slice.call(pct.querySelectorAll('.k4-opt'));
-  var st = { m: -1, p: 0 };
+  var cel = String(row.k3_cel || '').trim(), q = $('#k4-q'), box = $('.wheel', $('#fig-wheel')), meaning = $('#k4-meaning'), promise = $('#k4-promise');
+  var st = { m: -1 };
+  document.body.classList.add('jr-k4');
+  var reduced = (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) || /[?&]reduced=1/.test(location.search);
   var QUESTION = cel && cel.split(/\s+/).length <= 6 ? Q0.replace('целта?', function () { return '„' + cel + '“?'; }) : Q0;     /* функция-заместител: $& · $' в целта не се разгръщат */
-  var nodes = [], spokes = [], sects = [];
+  var nodes = [], spokes = [];
+  promise.textContent = PROMISE;
 
+  /* Нишката: path-ът на двигателя (svg.links) от колелото към .part · светва, когато има избор · точките текат само по светналата */
+  function thread(on) {
+    var sec = document.querySelector('section[data-karta="4"]');
+    [].forEach.call(sec.querySelectorAll('svg.links path'), function (pt) { pt.classList.toggle('lit', on); });
+    [].forEach.call(sec.querySelectorAll('svg.links circle'), function (c) { c.style.opacity = on ? '1' : '0'; });
+    meaning.classList.toggle('lit', on);
+    window.dispatchEvent(new Event('resize'));                      /* двигателят чертае нишките наново по новото разположение */
+  }
+  /* нововидимото (ред-смисъл → обещание → CTA) влиза в екрана заедно · групата се центрира · без смяна на фокуса */
+  function bringIntoView() {
+    var n = $('#jr-next'); if (!n || n.hidden) return;
+    var bar = (document.querySelector('#bar') || { getBoundingClientRect: function () { return { height: 50 }; } }).getBoundingClientRect().height + 12;
+    var a = meaning.getBoundingClientRect(), b = n.getBoundingClientRect(), need = b.bottom - a.top, room = innerHeight - bar - 12;
+    var dy = need <= room ? (a.top - bar) - (room - need) / 2 : a.top - bar;
+    window.scrollBy({ top: dy, behavior: reduced ? 'instant' : 'smooth' });
+  }
   function render() {
-    var done = st.m >= 0 && st.p > 0;
-    q.textContent = st.m < 0 ? QUESTION : done ? PROMISE : ANT[st.m][1] + ' · колко Ви спира?';
+    var done = st.m >= 0;
+    q.textContent = done ? ANT[st.m][1] : QUESTION;                 /* избрано → заглавието е името на чудовището */
     nodes.forEach(function (g, i) { g.classList.toggle('sel', i === st.m); spokes[i].classList.toggle('sel', i === st.m); });
     box.classList.toggle('has-sel', st.m >= 0);
-    pct.hidden = st.m < 0;
-    chips.forEach(function (b) { b.setAttribute('aria-checked', String(+b.getAttribute('data-v') === st.p)); });
-    sects.forEach(function (s, i) { s.classList.toggle('sel', i < st.p / 25); });
-    if (done) JR.complete(); else $('#jr-next').hidden = true;
+    meaning.hidden = promise.hidden = !done;
+    if (done) { meaning.textContent = ANT[st.m][3]; JR.complete(); } else $('#jr-next').hidden = true;
+    thread(done);
   }
   function fail() { $('#k4-err').hidden = false; }
 
@@ -1830,7 +1956,6 @@ JR.card(4, { show: function (row) {
   function dress() {
     var raw = [].slice.call(document.querySelectorAll('#wnodes .node'));
     if (raw.length !== ANT.length) { if (++tries < 30) setTimeout(dress, 100); return; }        /* таван: 30 × 100 ms (като К6) */
-    sects = [].slice.call(document.querySelectorAll('#wsects .sect'));
     spokes = [].slice.call(document.querySelectorAll('#wspokes .spoke'));
     raw.forEach(function (old, i) {
       var g = old.cloneNode(true);                      /* клонът губи слушателите на донора (играта събира карти) */
@@ -1843,22 +1968,15 @@ JR.card(4, { show: function (row) {
       g.addEventListener('click', go);
       g.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') go(e); });
     });
-    st.m = ANT.map(function (a) { return a[1]; }).indexOf(row.k4_chudovishte);   /* записаното от реда */
-    st.p = st.m >= 0 && [25, 50, 75, 100].indexOf(+row.k4_procent) >= 0 ? +row.k4_procent : 0;
+    st.m = ANT.map(function (a) { return a[1]; }).indexOf(row.k4_chudovishte);   /* записаното от реда (k4_procent в стар ред се игнорира) */
     render();
   }
   function pickMonster(i) {
     var before = st.m; if (i === before) return;
     st.m = i; $('#k4-err').hidden = true; render();
-    JR.choose('k4_chudovishte', ANT[i][1]).catch(function () { st.m = before; if (before < 0) st.p = 0; render(); fail(); });
+    JR.choose('k4_chudovishte', ANT[i][1]).then(function () { if (st.m === i) setTimeout(bringIntoView, reduced ? 100 : 350); })
+      .catch(function () { st.m = before; render(); fail(); });
   }
-  chips.forEach(function (b) {
-    b.addEventListener('click', function () {
-      var before = st.p, v = +b.getAttribute('data-v'); if (v === before) return;
-      st.p = v; $('#k4-err').hidden = true; render();
-      JR.choose('k4_procent', v).catch(function () { st.p = before; render(); fail(); });
-    });
-  });
   dress();
 } });
 </script>
@@ -1882,6 +2000,10 @@ JR.card(4, { show: function (row) {
 .kk-control--atentiometar .ladder li.chosen{border-color:transparent;background:linear-gradient(120deg,#ffe1a0,#e2a458)}
 .kk-control--atentiometar .ladder li.chosen .n,.kk-control--atentiometar .ladder li.chosen .w{color:#2a1908}
 .kk-control--atentiometar .ladder li:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+/* MET-1585 · текст никога върху праха: цифрите 1–5 на циферблата лежат върху канваса (същите цифри са в списъка до него) → скрити · и тостът за точките отива горе (не покрива бутона към Карта 6) */
+.kk-control--atentiometar #fig-scale svg text{display:none!important}
+body.jr-k5 #toast{bottom:auto;top:calc(var(--bar,50px) + 6px);transform:translate(-50%,-14px)}
+body.jr-k5 #toast.show{transform:translate(-50%,0)}
 </style>
 <section data-karta="5" class="jr-card" hidden>
 <div class="k5-wrap">
@@ -1918,6 +2040,7 @@ JR.card(4, { show: function (row) {
 </section>
 <script>
 JR.card(5, { show: function (row) {
+  document.body.classList.add('jr-k5');
   var $ = JR.$, FIELD = 'k5_usesht_nachalo';
   var STEPS = ['Побърква ме', 'Дразни ме', 'Приемам', 'Радва ме', 'Вдъхновява ме'];
   function txt(v) { return typeof v === 'string' ? v.trim() : ''; }
@@ -1959,7 +2082,11 @@ JR.card(5, { show: function (row) {
 <section data-karta="6" class="jr-card" hidden>
 <style>
 .k6{position:relative}
-.k6-main{padding:6px 0 4px}
+.k6-main{padding:6px 0 4px;position:sticky;top:var(--bar,50px);z-index:2}      /* MET-1585 · платното е закотвено, докато скролът го води */
+.k6-run{height:max(360px,calc(100svh - var(--bar,50px) - 150px))}                  /* пътека за скрол ≥ 5 стъпки × 60 px (документът остава поне 300 px по-висок от екрана) · скролът светва възлите (скролът е господар) */
+section[data-karta="6"]:not([hidden]) ~ .jr-next{position:sticky;bottom:-48px;z-index:5;margin-top:0}   /* бутонът към Карта 7 стои в екрана, докато платното е закотвено */
+body.jr-k6 #toast{bottom:auto;top:calc(var(--bar,50px) + 6px);transform:translate(-50%,-14px)}
+body.jr-k6 #toast.show{transform:translate(-50%,0)}
 .k6-main .jr-q{font-size:min(1.45rem,6vw);margin:10px 18px 12px}
 .k6-line path.soft{stroke:rgba(255,245,214,.4);stroke-width:1.4}
 .k6-main.off{visibility:hidden}
@@ -1968,11 +2095,16 @@ JR.card(5, { show: function (row) {
 .k6-nodes{position:absolute;inset:0;z-index:4;pointer-events:none}
 .k6-node{position:absolute;display:flex;align-items:center;gap:8px;padding:0;border:0;background:none;color:var(--ink);font-family:var(--sans);text-align:left;pointer-events:auto;cursor:pointer;transform:translate(-14px,-50%);min-height:44px;-webkit-tap-highlight-color:transparent}
 .k6-node.l{flex-direction:row-reverse;text-align:right;transform:translate(calc(-100% + 14px),-50%)}
-.k6-node b{position:relative;flex:none;display:grid;place-items:center;width:28px;height:28px;border-radius:50%;font:700 .95rem/1 var(--serif);color:#2a1908;background:radial-gradient(circle at 35% 30%,#fff1c4,#e2a458);box-shadow:0 0 0 3px rgba(232,199,126,.25),0 0 18px rgba(232,199,126,.7)}
+.k6-node b{position:relative;flex:none;display:grid;place-items:center;width:28px;height:28px;border-radius:50%;font:700 .95rem/1 var(--serif);color:#2a1908;background:radial-gradient(circle at 35% 30%,#6d6455,#2f2a22);box-shadow:0 0 0 3px rgba(232,199,126,.12);transition:background .5s,box-shadow .5s}
+.k6-node b::before{content:attr(data-n)}                                           /* цифрата е псевдо-съдържание: не е текстов възел върху канваса */
+.k6-node.lit b{background:radial-gradient(circle at 35% 30%,#fff1c4,#e2a458);box-shadow:0 0 0 3px rgba(232,199,126,.25),0 0 18px rgba(232,199,126,.7)}
+.k6-node span{transition:opacity .5s}
+.k6-node:not(.lit) span{opacity:.5}
 .k6-node span{display:block;white-space:nowrap;font:600 .95rem/1.15 var(--serif);color:#fff;text-shadow:0 1px 8px #000,0 0 16px rgba(13,10,8,.95)}
 .k6-node small{display:block;margin-top:2px;font:500 .66rem/1 var(--sans);letter-spacing:.1em;color:var(--light)}
 .k6-node:focus-visible b{outline:2px solid var(--light);outline-offset:3px}
 .k6-node.k6-pick b{background:radial-gradient(circle at 35% 30%,#e8fff3,#6FB59A);box-shadow:0 0 0 3px rgba(111,181,154,.35),0 0 18px rgba(111,181,154,.8)}
+.k6-node.k6-pick span{opacity:1}
 .k6-node.k6-pick b::after{content:"✦";position:absolute;transform:translate(15px,-15px);font-size:.8rem;color:var(--light)}
 .k6-line{position:absolute;inset:0;width:100%;height:100%;z-index:3}
 .k6-list{list-style:none;margin:0;padding:6px 18px;display:grid;gap:10px;max-width:560px;margin-inline:auto}
@@ -1982,10 +2114,14 @@ JR.card(5, { show: function (row) {
 .k6-card[hidden]{display:none}
 .k6-in{position:relative;max-width:480px;margin:0 auto;display:grid;gap:10px;animation:k6-in .55s cubic-bezier(.2,.7,.2,1)}
 .k6-art{margin:0;border-radius:18px;overflow:hidden;box-shadow:0 0 0 1px rgba(232,199,126,.4),0 18px 40px -20px #000}
-.k6-art img{display:block;width:100%;height:min(40svh,360px);object-fit:cover;object-position:center 30%;animation:k6-zoom 9s ease-out both}
+.k6-art img{display:block;width:100%;height:min(30svh,360px);object-fit:cover;object-position:center 30%;animation:k6-zoom 9s ease-out both}
 .k6-art figcaption{position:relative;z-index:1;padding:6px 12px;font-size:.72rem;line-height:1.3;color:var(--ink2);background:#15100c}
 .k6-in h3{margin:0;font:600 1.7rem/1.1 var(--serif);color:var(--gold)}
 .k6-in p{margin:0;font-size:1.02rem;line-height:1.4;color:var(--ink)}
+.k6-zkk{display:grid;gap:6px}
+.k6-zkk p{font-size:.95rem;line-height:1.35}
+.k6-zkk .k6-sub{font:600 1.05rem/1.3 var(--serif);color:var(--light)}
+.k6-zkk b{color:var(--gold);font-weight:600;margin-right:2px}
 .k6-in .cta{display:flex;justify-content:center;align-items:center;min-height:52px;border:0;font-family:var(--sans);margin-top:4px}
 .k6-in .cta[aria-pressed="true"]{background:linear-gradient(120deg,#c9f0dc,#6FB59A);color:#0d2a1c}
 .k6-x{position:absolute;top:8px;right:8px;width:44px;height:44px;border-radius:50%;border:1px solid rgba(232,199,126,.6);background:rgba(10,8,20,.72);color:var(--gold);font-size:1.15rem}
@@ -1993,6 +2129,14 @@ JR.card(5, { show: function (row) {
 @keyframes k6-zoom{from{transform:scale(1.08)}to{transform:scale(1)}}
 @media (prefers-reduced-motion:reduce){.k6-in,.k6-art img{animation:none}}
 @media (min-width:720px){.k6-main{max-width:560px;margin:0 auto}}
+@media (min-width:1000px){
+  .k6-main{max-width:var(--main-ctrl,608px)}
+  [data-karta="6"] #fig-path{width:100%!important;margin-left:0!important}        /* MET-1585 · платното е колоната (не е на цялата ширина) → имената вдясно са извън канваса · квадрат 76vmin (MET-1538) */
+  /* MET-1585 · на десктоп имената са в колона вдясно, ИЗВЪН канваса с праха (текст никога върху праха) · точката остава на пътя · тънка нишка я свързва с името (--lx я мери скриптът) */
+  .k6-node,.k6-node.l{flex-direction:row;text-align:left;transform:translate(-14px,-50%)}
+  .k6-node span{position:absolute;left:var(--lx,60px);top:50%;transform:translateY(-50%)}
+  .k6-node span::before{content:"";position:absolute;right:100%;top:50%;margin-right:8px;width:calc(var(--lx,60px) - 28px - 16px);height:1px;background:linear-gradient(90deg,rgba(232,199,126,.05),rgba(232,199,126,.45))}
+}
 </style>
 <div class="k6" id="k6">
   <div class="k6-main" id="k6-main">
@@ -2063,33 +2207,44 @@ JR.card(5, { show: function (row) {
     <div class="k6-in">
       <figure class="k6-art"><img id="k6-img" alt="" width="1000" height="800"><figcaption id="k6-cr"></figcaption></figure>
       <h3 id="k6-name"></h3>
-      <p id="k6-a"></p>
-      <p id="k6-b"></p>
+      <div class="k6-zkk" id="k6-zkk">
+        <p class="k6-sub" id="k6-sub"></p>
+        <p><b>Защо</b> <span id="k6-z"></span></p>
+        <p><b>Как</b> <span id="k6-k"></span></p>
+        <p><b>Какво</b> <span id="k6-kk"></span></p>
+      </div>
       <p class="jr-err" id="k6-err" role="alert" hidden>Не се записа. Опитайте пак.</p>
       <button type="button" class="cta" id="k6-pick" aria-pressed="false">Започвам оттук</button>
       <button type="button" class="k6-x" id="k6-x" aria-label="Затвори">✕</button>
     </div>
   </div>
+  <div class="k6-run" aria-hidden="true"></div>
   <div class="ka-okno" id="ka-okno" data-file="donori/karta-artefakt.html" data-home="" hidden></div>
 </div>
 </section>
 <script>
 JR.card(6, { show: function (row) {
+  document.body.classList.add('jr-k6');
   var $ = JR.$, SK = [
-    { n: 'Водачът', m: 6, f: 'friedrich-wanderer', cr: 'Friedrich · Wanderer above the Sea of Fog', a: 'Вие водите AI в кръга си.', b: '„{G}“ срещу {M}: измерете преди/след.' },
-    { n: 'Вкусникът', m: 14, f: 'vermeer-woman-in-blue', cr: 'Vermeer · Woman in Blue Reading a Letter', a: 'Окото, което пази името Ви.', b: '„{G}“ срещу {M}: три поправки.' },
-    { n: 'Гласът на волята', m: 22, f: 'mucha-zodiac', cr: 'Mucha · Zodiac', a: 'AI, който познава Вашия свят.', b: 'Проект за „{G}“ срещу {M}.' },
-    { n: 'Стигна!', m: 30, f: 'demorgan-aurora', cr: 'De Morgan · Aurora Triumphans', a: 'Мярка и край, без дооправяне.', b: 'Кое е „готово“ за „{G}“ срещу {M}?' },
-    { n: 'Кога Джарвис мълчи', m: 38, f: 'millais-autumn', cr: 'Millais · Autumn Leaves', a: 'Кое тръгва само, кое остава Ваше.', b: 'Автомат или ръка: „{G}“ срещу {M}.' },
-    { n: 'Многото мостове', m: 46, f: 'courbet-oak-flagey', cr: 'Courbet · The Oak at Flagey', a: 'Едно призвание, няколко моста.', b: 'Първият мост за „{G}“ срещу {M}.' }
+    { n: 'Водачът', m: 6, f: 'friedrich-wanderer', cr: 'Friedrich · Wanderer above the Sea of Fog', sub: 'Смелостта да бъдете „тази с AI“ в кръга си', z: 'Скоро всяка работа ще потърси някой за AI. Ако чакате, друга ще бъде „питайте нея“.', k: 'Прекарва дразнещата Ви цел през един инструмент пред очите Ви и засича минутите.', kk: 'Първото Ви „преди/след“ с числа — доказателството за понеделник.' },
+    { n: 'Вкус', m: 14, f: 'vermeer-woman-in-blue', cr: 'Vermeer · Woman in Blue Reading a Letter', sub: 'Окото, което решава какво заслужава Вашето име', z: 'AI пише гладко — и хората го надушват. Решат ли „не е тя“, спират да Ви вярват.', k: 'Взема първия AI-отговор на целта Ви. Променяте три неща и питате AI: „защо тези три?“', kk: 'Три поправки със „защо“ — първият ред от библиотеката на Вашия вкус.' },
+    { n: 'Гласът на волята', m: 22, f: 'mucha-zodiac', cr: 'Mucha · Zodiac', sub: 'AI, който знае Вашия свят, не общи съвети', z: 'Празен чат е умен стажант без въведение. С Вашите документи дава отговор, който никоя друга няма.', k: 'Отваря проект вместо празен чат. Пускате три неща: какво правите, какво сработи, какво се провали.', kk: 'Проект с Вашия контекст — втория път целта тръгва от половината път.' },
+    { n: 'Стигна!', m: 30, f: 'demorgan-aurora', cr: 'De Morgan · Aurora Triumphans', sub: 'Мярка и край — грозна версия, после „готово“', z: 'Съвършената версия никога не тръгва. Целта побърква, защото няма край.', k: 'Преди да пипнете целта: коя е мярката, кое число е „готово“? Грозна версия, поправка, стоп.', kk: 'Една мярка и едно „стига“ — край на безкрайното дооправяне.' },
+    { n: 'Кога Джарвис мълчи', m: 38, f: 'millais-autumn', cr: 'Millais · Autumn Leaves', sub: 'Присъствие — кое тръгва само, кое остава Ваше', z: 'Система, която работи сама, връща вечерта. Но без Вас грешката стига до клиента първа.', k: 'Два въпроса към целта: трябва ли Вие да я пускате? Нужен ли ѝ е AI изобщо?', kk: 'Две отметки — автомат или ръка, AI или просто правило — и свободна вечер.' },
+    { n: 'Многото мостове', m: 46, f: 'courbet-oak-flagey', cr: 'Courbet · The Oak at Flagey', sub: 'Едно призвание, няколко моста — никоя не е сама', z: 'Един доход е всички яйца в една кошница. AI Ви дава ръцете на малък екип.', k: 'Взема целта, минала през AI, и пита: на кого още трябва? Избирате един мост.', kk: 'Първият Ви мост, назован — и една публикация „ето какво направих“ за седмицата.' }
   ];
-  var goal = row.k3_cel || 'целта', mon = row.k4_chudovishte || 'чудовището';
   var chosen = row.k6_umenie || JR.store.get().k6 || null, cur = -1, opener = null;
+  if (chosen === 'Вкусникът') chosen = 'Вкус';                       /* старият запис на реда (и името към webhook-а) е „Вкусникът“ · на екрана е „Вкус“ */
   var main = $('#k6-main'), card = $('#k6-card'), pick = $('#k6-pick'), stage = $('#fig-path');
   var nodes = [], tm = 0;
 
   function pathAt(t) { return [0.80 * Math.sin(Math.PI * (1.5 * t - 0.5)), 0.86 - 1.72 * t]; }   /* същата крива като двигателя (път) · сверява се със звездите му по-долу */
   function light(i) { var m = window.__мфиг; if (m && m.задай) m.задай('path', (i / 5) * 0.86, true); drawLine(i); }
+  /* MED-V1 (метални-живо-платно): скролът е господар · 60 px скрол = един възел · тапът държи до смяна на скрол-стъпката (като драйвера на донора: ръчно се пуска, щом авто ≠ котва) */
+  var STEP = 60, litTo = -1, held = null, anchor = 0;
+  function autoAt() { return Math.max(0, Math.min(5, Math.floor((window.pageYOffset || 0) / STEP))); }
+  function apply(i) { if (i === litTo) return; litTo = i; nodes.forEach(function (b, k) { b.classList.toggle('lit', k <= i); }); light(i); }
+  function sync() { if (!card.hidden || !nodes.length) return; var a = autoAt(); if (held !== null && a !== anchor) held = null; apply(held !== null ? held : a); }
   var svgNS = 'http://www.w3.org/2000/svg', line = null, soft = null, lit = null;
   /* двигателят мери фигурата в първия си кадър (дотогава ширината ѝ е 0 → проектирай дава ±Infinity) · чертаем/местим едва след това; слушателят m.слушай го вика на всеки кадър */
   function measured(m) { var f = m.намери && m.намери('path'); return !!(f && f.ш > 0); }
@@ -2103,8 +2258,8 @@ JR.card(6, { show: function (row) {
   function place() {
     var m = window.__мфиг; if (!m || !m.проектирай || !measured(m)) return;
     var bx = $('#k6-nodes'); if (bx) bx.style.visibility = '';
-    nodes.forEach(function (b, k) { var q = pathAt(k / 5), p = m.проектирай('path', q[0], q[1]); if (!p) return; b.style.left = p.x + 'px'; b.style.top = p.y + 'px'; b.classList.toggle('l', q[0] >= 0.1); });
-    drawLine(cur < 0 ? 0 : cur);
+    nodes.forEach(function (b, k) { var q = pathAt(k / 5), p = m.проектирай('path', q[0], q[1]); if (!p) return; b.style.left = p.x + 'px'; b.style.top = p.y + 'px'; b.classList.toggle('l', q[0] >= 0.1); b.style.setProperty('--lx', Math.round(stage.getBoundingClientRect().width + 28 - (p.x - 14)) + 'px'); });
+    drawLine(litTo < 0 ? 0 : litTo);
   }
   function markPick() { nodes.forEach(function (b, k) { b.classList.toggle('k6-pick', SK[k].n === chosen); }); [].forEach.call($('#k6-list').querySelectorAll('button'), function (b, k) { b.classList.toggle('k6-pick', SK[k].n === chosen); }); }
   function done() { markPick(); if (chosen) JR.complete(); }
@@ -2114,14 +2269,13 @@ JR.card(6, { show: function (row) {
     $('#k6-img').src = 'img/v4/' + s.f + '.webp';
     $('#k6-cr').textContent = s.cr;
     $('#k6-name').textContent = s.n;
-    $('#k6-a').textContent = s.a;
-    $('#k6-b').textContent = s.b.replace('{G}', function () { return goal; }).replace('{M}', function () { return mon; });     /* функция-заместител: $& · $' от потребителя не се разгръщат */
+    $('#k6-sub').textContent = s.sub; $('#k6-z').textContent = s.z; $('#k6-k').textContent = s.k; $('#k6-kk').textContent = s.kk;       /* буквално от Програмата (кратката версия) · нищо от реда на потребителя в картата */
     $('#k6-err').hidden = true;
     pick.setAttribute('aria-pressed', String(chosen === s.n)); pick.textContent = chosen === s.n ? 'Избрано ✓' : 'Започвам оттук';
     card.hidden = false; card.scrollTop = 0; main.classList.add('off');
-    light(i); pick.focus({ preventScroll: true });
+    held = i; anchor = autoAt(); apply(i); pick.focus({ preventScroll: true });       /* тапът държи */
   }
-  function close() { if (card.hidden) return; card.hidden = true; main.classList.remove('off'); if (opener) opener.focus({ preventScroll: true }); }
+  function close() { if (card.hidden) return; card.hidden = true; main.classList.remove('off'); sync(); if (opener) opener.focus({ preventScroll: true }); }
 
   pick.addEventListener('click', function () {
     var s = SK[cur]; if (chosen === s.n) return close();
@@ -2152,16 +2306,17 @@ JR.card(6, { show: function (row) {
     var box = document.createElement('div'); box.className = 'k6-nodes'; box.id = 'k6-nodes'; box.style.visibility = 'hidden';
     line = document.createElementNS(svgNS, 'svg'); line.setAttribute('class', 'pathline k6-line'); line.setAttribute('aria-hidden', 'true');
     soft = document.createElementNS(svgNS, 'path'); soft.setAttribute('class', 'soft'); lit = document.createElementNS(svgNS, 'path'); line.appendChild(soft); line.appendChild(lit);
-    stage.appendChild(line); stage.appendChild(box);
+    stage.appendChild(line); $('#k6-stage').appendChild(box);       /* възлите и имената са в сцената-обвивка, не в канваса (канвасът реже всичко извън себе си) */
     SK.forEach(function (s, k) {
       var b = document.createElement('button'); b.type = 'button'; b.className = 'k6-node'; b.innerHTML = '<b></b><span><i></i><small></small></span>';
-      b.firstChild.textContent = k + 1; b.querySelector('i').textContent = s.n; b.querySelector('i').style.fontStyle = 'normal'; b.querySelector('small').textContent = JR.hourLabel(s.m);
+      b.firstChild.setAttribute('data-n', k + 1); b.setAttribute('aria-label', (k + 1) + ' ' + s.n + ' ' + JR.hourLabel(s.m)); b.querySelector('i').textContent = s.n; b.querySelector('i').style.fontStyle = 'normal'; b.querySelector('small').textContent = JR.hourLabel(s.m);
       b.addEventListener('click', function (e) { e.stopPropagation(); open(k, b); });
       box.appendChild(b); nodes.push(b);
     });
     stage.addEventListener('click', function (e) { if (!e.target.closest('.k6-node')) e.stopImmediatePropagation(); }, true);   /* допир по платното: звездите са на донора (5), възлите са тук (6) */
     if (m.слушай) m.слушай('path', place);
-    place(); [200, 700, 1500].forEach(function (ms) { setTimeout(place, ms); }); window.addEventListener('resize', place);
+    sync(); window.addEventListener('scroll', sync, { passive: true });
+    place(); [200, 700, 1500].forEach(function (ms) { setTimeout(place, ms); }); window.addEventListener('resize', function () { place(); sync(); });
     done();
   })();
   if (chosen) done();
@@ -2495,6 +2650,7 @@ JR.card(8, { show: function (row) {
   /* К3 · сферата (кръгът е ~98% от ширината на .mettamap · 11% височина е празен запас на донора → скрит с отрицателен марж) */
   section[data-karta="3"] .k3-wrap{max-width:820px}
   section[data-karta="3"] .mettamap{max-width:max(440px,78vmin);margin-bottom:calc(-.1 * max(440px,78vmin))}
+  section[data-karta="3"] #mmpart{padding-bottom:calc(.1 * max(440px,78vmin))}   /* MET-1579 · картата на донора е в .mettamap → връща отрицателния марж отгоре, за да не застъпва целите */
   /* К4 · колелото */
   [data-karta="4"] .jr-q{max-width:820px}
   [data-karta="4"] .wheel{width:min(97vw,max(470px,var(--main-ctrl)))}
@@ -2514,7 +2670,7 @@ JR.card(8, { show: function (row) {
   .k8-q{grid-row:1}.k8-wrap .ladder{grid-row:2}
   .k8-card{grid-column:1/-1;grid-row:3}
   /* К6 · пътят */
-  [data-karta="6"] #fig-path{height:var(--main-ctrl)!important}
+  [data-karta="6"] #fig-path{height:var(--main-ctrl)!important}   /* MET-1585 · под платното остава място за бутона към Карта 7 */
   /* К7 · бутонът */
   .k7{max-width:calc(max(560px,var(--main-ctrl)) + 44px);padding-top:10vh}
 }
@@ -2526,6 +2682,8 @@ JR.card(8, { show: function (row) {
   .jr-card{--main-ctrl:76vmin}
   /* К2 · „Докоснете“ до печат I отстрани (отгоре се реже от рамката на сцената) */
   [data-karta="2"] #seals .seal.jr-hint::after{bottom:auto;left:100%;top:50%;transform:translate(8px,-50%)}
+  [data-karta="2"] #fig-heart{height:var(--main-ctrl)!important}            /* ниски телефони: сърцето 76vmin → заглавие · сърце · ред · „отключва се“ · CTA заедно в първия екран */
+  [data-karta="2"] .things{margin-top:30px}
   /* К5 · портретът намалява, за да е циферблатът цял в първия екран */
   .k5-deck{width:min(100%,108px)}
   .k5-line{margin:10px 0 2px}

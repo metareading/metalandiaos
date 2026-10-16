@@ -1,0 +1,27 @@
+/* MET-1755 · 24-те лекции 1:1 от TED_LIST.docx (Петя · TEDxSofia) · №10, 14, 16, 19, 20, 22, 23, 24 нямат ред-идея — нарочно празно */
+var ЛЕКЦИИ = [
+  { n: 1, speaker: "Jill Bolte Taylor", talk: "My Stroke of Insight", idea: "Мозъкът ни може да избере свързаност", url: "https://www.ted.com/talks/jill_bolte_taylor_my_stroke_of_insight" },
+  { n: 2, speaker: "Daniel Kahneman", talk: "The Riddle of Experience vs. Memory", idea: "Хората помнят преживявания, не моменти.", url: "https://www.ted.com/talks/daniel_kahneman_the_riddle_of_experience_vs_memory" },
+  { n: 3, speaker: "Dan Ariely", talk: "What Makes Us Feel Good About Our Work?", idea: "Смисълът движи мотивацията.", url: "https://www.ted.com/talks/dan_ariely_what_makes_us_feel_good_about_our_work" },
+  { n: 4, speaker: "Simon Sinek", talk: "Start With Why", idea: "Хората купуват „защо“, не „какво“.", url: "https://www.ted.com/talks/simon_sinek_how_great_leaders_inspire_action" },
+  { n: 5, speaker: "Brené Brown", talk: "The Power of Vulnerability", idea: "Уязвимостта създава доверие.", url: "https://www.ted.com/talks/brene_brown_the_power_of_vulnerability" },
+  { n: 6, speaker: "Elizabeth Gilbert", talk: "Your Elusive Creative Genius", idea: "Творчеството идва, когато му дадеш пространство.", url: "https://www.ted.com/talks/elizabeth_gilbert_your_elusive_creative_genius" },
+  { n: 7, speaker: "Amy Cuddy", talk: "Your Body Language Shapes Who You Are", idea: "Присъствието има значение.", url: "https://www.ted.com/talks/amy_cuddy_your_body_language_may_shape_who_you_are" },
+  { n: 8, speaker: "Shawn Achor", talk: "The Happy Secret to Better Work", idea: "Щастието води до успех.", url: "https://www.ted.com/talks/shawn_achor_the_happy_secret_to_better_work" },
+  { n: 9, speaker: "Barry Schwartz", talk: "The Paradox of Choice", idea: "Повече не значи по-добре.", url: "https://www.ted.com/talks/barry_schwartz_the_paradox_of_choice" },
+  { n: 10, speaker: "Stephen Cave", talk: "The 4 Stories We Tell Ourselves About Death", idea: "", url: "https://www.ted.com/talks/stephen_cave_the_4_stories_we_tell_ourselves_about_death" },
+  { n: 11, speaker: "Susan Cain", talk: "The Power of Introverts", idea: "Тихите гласове също променят света.", url: "https://www.ted.com/talks/susan_cain_the_power_of_introverts" },
+  { n: 12, speaker: "Chimamanda Ngozi Adichie", talk: "The Danger of a Single Story", idea: "Историите оформят реалността.", url: "https://www.ted.com/talks/chimamanda_ngozi_adichie_the_danger_of_a_single_story" },
+  { n: 13, speaker: "Ken Robinson", talk: "Do Schools Kill Creativity?", idea: "Креативността е ресурс.", url: "https://www.ted.com/talks/sir_ken_robinson_do_schools_kill_creativity" },
+  { n: 14, speaker: "BJ Miller", talk: "What Really Matters at the End of Life", idea: "", url: "https://www.ted.com/talks/bj_miller_what_really_matters_at_the_end_of_life" },
+  { n: 15, speaker: "Adam Grant", talk: "Are You a Giver or a Taker?", idea: "Даващите печелят в дългосрочен план.", url: "https://www.ted.com/talks/adam_grant_are_you_a_giver_or_a_taker" },
+  { n: 16, speaker: "Hans Rosling", talk: "The Best Stats You've Ever Seen", idea: "", url: "https://www.ted.com/talks/hans_rosling_the_best_stats_you_ve_ever_seen" },
+  { n: 17, speaker: "Angela Lee Duckworth", talk: "Grit: The Power of Passion and Perseverance", idea: "Постоянството побеждава таланта.", url: "https://www.ted.com/talks/angela_lee_duckworth_grit_the_power_of_passion_and_perseverance" },
+  { n: 18, speaker: "Derek Sivers", talk: "How to Start a Movement", idea: "Първият последовател създава движение.", url: "https://www.ted.com/talks/derek_sivers_how_to_start_a_movement" },
+  { n: 19, speaker: "Emily Levine", talk: "A Theory of Everything", idea: "", url: "https://www.ted.com/talks/emily_levine_a_theory_of_everything" },
+  { n: 20, speaker: "Benjamin Zander", talk: "The Transformative Power of Classical Music", idea: "", url: "https://www.ted.com/talks/benjamin_zander_the_transformative_power_of_classical_music" },
+  { n: 21, speaker: "Rory Sutherland", talk: "Life Lessons from an Ad Man", idea: "Възприятието създава стойност.", url: "https://www.ted.com/talks/rory_sutherland_life_lessons_from_an_ad_man" },
+  { n: 22, speaker: "Daniel Goleman", talk: "Why Aren't We More Compassionate?", idea: "", url: "https://www.ted.com/talks/daniel_goleman_why_aren_t_we_more_compassionate" },
+  { n: 23, speaker: "Matthieu Ricard", talk: "The Habits of Happiness", idea: "", url: "https://www.ted.com/talks/matthieu_ricard_the_habits_of_happiness" },
+  { n: 24, speaker: "Michael Norton", talk: "How to Buy Happiness", idea: "", url: "https://www.ted.com/talks/michael_norton_how_to_buy_happiness" }
+];

@@ -209,7 +209,11 @@ body.poster.s-open .prail{visibility:hidden}
 @media (min-width:900px){
   .sheet{left:auto;right:22px;top:22px;bottom:22px;height:auto;width:min(540px,44vw);border-radius:22px;transform:translateX(112%)}
   .sheet-head::before{display:none}
-  .title{top:calc(var(--sat) + 40px)}.title h1{font-size:clamp(48px,5.4vw,84px)}
+  .title{top:calc(var(--sat) + 100px)}.title h1{font-size:clamp(48px,5.4vw,84px)}
+  .hdr{padding:calc(var(--sat) + 12px) 24px 0 26px}                                  /* MET-1754 D1: шапката 2× на десктоп · телефонът остава и при фокус */
+  .tel{min-height:64px;font-size:27px}.tel span{font-size:21px;margin-right:12px}
+  .menu-btn{min-height:64px;font-size:23px;letter-spacing:.12em;padding:0 30px}
+  body:not(.s-flow) .tel{opacity:1;pointer-events:auto}
   .tag{font-size:21px}
   .menu{align-items:center}.menu ul{min-width:420px}
   .reward{left:0;right:0}
@@ -240,7 +244,7 @@ body.poster.s-open .prail{visibility:hidden}
 
 <header class="hdr">
   <a class="tel" href="tel:+359884265504"><span>За контакт:</span>+359 88 426 55 04</a>
-  <button class="menu-btn" type="button" aria-haspopup="true">Menu</button>
+  <button class="menu-btn" type="button" aria-haspopup="true">Прочети</button>
 </header>
 
 <div class="title">
@@ -251,7 +255,7 @@ body.poster.s-open .prail{visibility:hidden}
 
 <div class="hint" aria-hidden="true"></div>
 <div class="cap"><button class="more" type="button">Повече…</button></div>
-<nav class="bulbs" aria-label="Menu"></nav>
+<nav class="bulbs" aria-label="Прочети"></nav>
 <p class="sr" id="live" aria-live="polite"></p>
 
 <section class="sheet" id="sheet" aria-hidden="true" tabindex="-1">
@@ -274,7 +278,7 @@ body.poster.s-open .prail{visibility:hidden}
   <a class="more" href="tel:+359884265504">За контакт: +359 88 426 55 04</a>
 </aside>
 <!-- REWARD:END -->
-<nav class="menu" id="menu" aria-hidden="true" aria-label="Menu">
+<nav class="menu" id="menu" aria-hidden="true" aria-label="Прочети">
   <ul>
     <li><button type="button" data-go="">Начало</button></li>
   </ul>

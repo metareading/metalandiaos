@@ -1,57 +1,77 @@
-/* MET-1264 · роден от build-config.py · дословно от картите на въртележката · не се пише на ръка */
+/* MET-1754 · „Предстои“ · пише се на ръка от website-Maitapp.docx (страниците Курсове за деца · Курсове за възрастни · Говорилница – Творилница)
+   Само предстоящото: until = датата, след която картата не се зарежда (album.js · prepare) · null = „очаквай скоро“, без дата.
+   context = дословни факти от документа, разделени с „ · “ (листът ги показва като списък). */
 export default {
  "album": {
   "cols": 4
  },
  "cards": [
   {
-   "id": "a-come",
-   "word": "Come along!",
-   "from": "Говорилница – Творилница",
-   "context": "“ComeАlon‘!” идва от комбинация между „ Come alone!“ (Ела сам!) и “Come along!“ (Присъедини се!). Ела при нас и намери приятелска компания за практикуване на езика. Заедно е винаги по-лесно!",
-   "card": "c-talk"
+   "id": "a-return",
+   "word": "The Return",
+   "from": "Курсове за възрастни",
+   "context": "Ниво А2 – от 12ти януари · Сугестопедичен курс за ниво A2 по учебника „The Return“ в 60 уч.ч. · Курсът се провежда 3 пъти седмично - всеки вторник, четвъртък и петък следобед от 13.00ч. до 16.30ч. · Цена: 420 евро (учебник и допълнителни материали на стойност 30 евро се заплащат отделно)",
+   "card": "c-adults",
+   "until": "2027-01-12"
   },
   {
    "id": "a-journey",
    "word": "The Journey",
    "from": "Курсове за възрастни",
-   "context": "Сугестопедичен курс за ниво B1-B2 по учебника „The Journey“ в 60 уч.ч.Курсът се провежда 2 пъти седмично във вторник и четвъртък сутрин.",
-   "card": "c-adults"
+   "context": "Ниво B1-B2- от 20ти януари · 9.00ч. – 12.30ч. (4 уч.ч. на ден) · Сугестопедичен курс за ниво B1-B2 по учебника „The Journey“ в 60 уч.ч. · Курсът се провежда 2 пъти седмично във сряда и четвъртък сутрин от 9ч. до 11.30ч. · Цена: 460 евро (учебник и допълнителни материали на стойност 30 евро се заплащат отделно)",
+   "card": "c-adults",
+   "until": "2027-01-20"
   },
   {
-   "id": "a-cheerful",
-   "word": "cheerful",
-   "from": "За нас",
-   "context": "cheerful and patient teacher; exciting and interesting experience for me",
-   "card": "c-about"
+   "id": "a-kids-a1",
+   "word": "А1.1 · А1.2",
+   "from": "Курсове за деца",
+   "context": "7 юни – 18 юни · А1.1: 9.00ч.- 12.30ч. · А1.2: 14.00-17.30 · Кога: от понеделник до петък- 40 уч.ч. · Цена: 340евро/Цена на учебно помагало и допълнителни материали – 20евро",
+   "card": "c-kids",
+   "until": "2027-06-07"
   },
   {
-   "id": "a-sunny",
-   "word": "a sunny day",
+   "id": "a-kids-a2",
+   "word": "А2.1 · А2.2",
+   "from": "Курсове за деца",
+   "context": "5 юли – 16юли · А2.1: 9.00ч.- 12.30ч. · А2.2: 14.00ч.- 17.30ч. · Кога: от понеделник до петък- 40 уч.ч. · Цена: 340евро/Цена на учебно помагало и допълнителни материали – 20евро",
+   "card": "c-kids",
+   "until": "2027-07-05"
+  },
+  {
+   "id": "a-kids-b1",
+   "word": "B1",
+   "from": "Курсове за деца",
+   "context": "27 юли - 6 август · B1: 9.00ч.- 12.30ч. · Кога: от понеделник до петък- 40 уч.ч. · Цена: 340евро/Цена на учебно помагало и допълнителни материали – 20евро",
+   "card": "c-kids",
+   "until": "2027-07-27"
+  },
+  {
+   "id": "a-come",
+   "word": "Come along!",
    "from": "Говорилница – Творилница",
-   "context": "It was a sunny day. The birds were singing their songs. In the distance an uncommon sound could be heard. There was a small white house behind the trees. Around the plants there were pastel colours. The scent of summer floated in the air. All at once the bell rang. It turned out that an old friend of Mr Floid was in front of the door. He had arrived with his flabbergasting and charming motorbike. Suddenly a compelling desire took hold of Mr Floid and he got on the motorbike and rode away.That was the beginning of a beginning. A pilot was born.",
-   "card": "c-talk"
+   "context": "ComеAlon‘ events · Кога: очаквай скоро! · Къде: ул. Кап. Димитър Списаревски 19, Дружба 1 (до метростанция Дружба) · Продължителност: 2 уч.часа · Ниво: около B1 · Вход: 25 евро. на занятие (с предварително запазване на място)",
+   "card": "c-talk",
+   "until": null,
+   "voucher": true
   },
   {
-   "id": "a-return",
-   "word": "The Return",
-   "from": "Курсове за възрастни",
-   "context": "Сугестопедичен курс за ниво A2 по учебника „The Return“ в 60 уч.ч.Курсът се провежда 2 пъти седмично във вторник и четвъртък следобед.",
-   "card": "c-adults"
-  },
-  {
-   "id": "a-relax",
-   "word": "RELAX",
-   "from": "За нас",
-   "context": "FUNNY- lessons were like you make fun and in the same time you learn so much; RELAX",
-   "card": "c-about"
-  },
-  {
-   "id": "a-travel",
-   "word": "Travel inside",
+   "id": "a-cool",
+   "word": "Cool Theatre Lab",
    "from": "Говорилница – Творилница",
-   "context": "Travel inside – By Emma",
-   "card": "c-talk"
+   "context": "Очаквай скоро! · Заниманията ще се провеждат всеки петък от 13.00 до 16.30ч. (4 уч.ч.) · Ниво: B1- B2 (тинейджъри и възрастни) · Цена: 340 евро · Водещ сугестопед: Галина Спасова",
+   "card": "c-talk",
+   "until": null,
+   "voucher": true
+  },
+  {
+   "id": "a-voucher",
+   "word": "Подаръчен ваучер",
+   "from": "Говорилница – Творилница",
+   "context": "ComeAlong: При закупуване на ваучер от 4 посещения, 5-тото е безплатно · Cool Theatre Lab: Купи подаръчен ваучер",
+   "card": "c-talk",
+   "until": null,
+   "voucher": true
   }
  ]
 };

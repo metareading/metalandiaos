@@ -1,4 +1,4 @@
-/* MET-1264 · „Албум“ · кожата е на английската въртележка: само нейните токени (:root на страницата) */
+/* MET-1264 · „Албум“ → MET-1754 „Предстои“ · кожата е на английската въртележка: само нейните токени (:root на страницата) */
 .album{position:fixed;left:0;right:0;bottom:calc(var(--sab) + 54px);z-index:5;margin:0;padding:0 10px;pointer-events:none;
   transition:opacity .5s,transform .6s cubic-bezier(.2,.7,.2,1)}
 .album::before{content:"";position:absolute;left:0;right:0;top:0;bottom:calc(-54px - var(--sab));       /* листът на албума = бордът, върху който стъпва въртележката */
@@ -44,3 +44,17 @@ body.poster .album{position:sticky;background:var(--night)}
 @media (prefers-reduced-motion:reduce){.pk.in,.pk.pop,.pk.again,.album-n.tick{animation:none}}
 .album-dust{position:fixed;inset:0;width:100%;height:100%;z-index:6;pointer-events:none}
 body.s-open .album-dust,body.menu-on .album-dust,body.reward-on .album-dust,body.poster .album-dust{display:none}
+
+/* MET-1754 · „Предстои“: по-големи джобове · думата се вижда винаги (крем върху тъмно) · брояч няма */
+.album-n{display:none}
+.album-g{max-width:none;gap:8px 6px;padding:16px 0 6px}
+.pk{height:88px;font-size:clamp(13px,3.6vw,18px)}
+.pk b{padding:22px 4px 6px}
+.pk b span{opacity:1;color:var(--cream);text-shadow:0 1px 6px rgba(14,10,28,.95)}
+.pk.in.near::before{border-color:var(--bulb);box-shadow:0 0 22px rgba(255,217,160,.6)}
+@media (min-width:900px){
+  .album-g{max-width:1240px;grid-template-columns:repeat(var(--n,8),minmax(0,150px));justify-content:center;gap:10px}
+  .pk{height:150px;font-size:23px}
+  .pk::after{height:26px}
+  .pk b{padding:30px 6px 8px}
+}

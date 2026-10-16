@@ -47,14 +47,14 @@ function paintCard(c, glow) {
   const maxW = W - 2 * 62; let fs = 100, lines = [];
   for (; fs >= 48; fs -= 4) { x.font = `400 ${fs}px "Yeseva One", Georgia, serif`; lines = wrapLines(x, c.title, maxW); if (lines.length <= 3 && lines.every(l => x.measureText(l).width <= maxW)) break; }
   const lh = fs * 1.1, ty = 318 - (lines.length - 1) * lh / 2 + fs * .34;
-  x.fillStyle = '#fbf0d8'; if (!glow) { x.shadowColor = 'rgba(255,180,90,.55)'; x.shadowBlur = 22; }
-  lines.forEach((l, k) => x.fillText(l, W / 2, ty + k * lh)); x.shadowBlur = 0;
+  x.fillStyle = '#fbf0d8'; if (!glow) { x.shadowColor = 'rgba(255,180,90,.55)'; x.shadowBlur = 8; }
+  if (!glow) lines.forEach((l, k) => x.fillText(l, W / 2, ty + k * lh)); x.shadowBlur = 0;   // MET-1754: текстът е само на чистия слой → нула зрънца прах върху буквите
   // разделител
   const ry = 318 + lines.length * lh / 2 + 34; x.fillStyle = '#e8a33c'; x.fillRect(W / 2 - 92, ry, 70, 3); x.fillRect(W / 2 + 22, ry, 70, 3); star(x, W / 2, ry + 1.5, 13, '#ffd98e');
   // тийзър (дословно от сайта)
   x.font = 'italic 400 37px Lora, Georgia, serif'; x.fillStyle = 'rgba(246,234,208,.92)';
   const tl = wrapLines(x, c.teaser, W - 2 * 64).slice(0, 4), t0 = ry + 70;
-  tl.forEach((l, k) => x.fillText(l, W / 2, t0 + k * 49));
+  if (!glow) tl.forEach((l, k) => x.fillText(l, W / 2, t0 + k * 49));
   // долен орнамент
   star(x, W / 2, H - 74, 11, '#ffd98e'); star(x, W / 2 - 44, H - 74, 7, '#e8a33c'); star(x, W / 2 + 44, H - 74, 7, '#e8a33c');
   return cv;
@@ -64,13 +64,15 @@ function fasciaTex(words, k0) {                        // надпис по бо
   const W = 4096, H = 176, cv = document.createElement('canvas'); cv.width = W; cv.height = H; const x = cv.getContext('2d');
   x.fillStyle = '#ecdcb4'; x.fillRect(0, 0, W, H);
   x.fillStyle = '#b8341f'; x.fillRect(0, 10, W, 6); x.fillRect(0, H - 16, W, 6);
-  x.textBaseline = 'middle'; x.textAlign = 'left'; x.font = '400 104px "Yeseva One", Georgia, serif';
+  x.textBaseline = 'middle'; x.textAlign = 'left';
+  const font = fs => { x.font = `400 ${fs}px "Yeseva One", Georgia, serif`; }, tw = () => words.reduce((a, w) => a + x.measureText(w).width, 0);
+  font(104); const room = W - 60 * words.length * 2 - 64 * words.length, fs = Math.max(40, Math.floor(104 * Math.min(1, room / tw()))); font(fs);   // MET-1754: пропорционално (по-малък шрифт), не сплескано
   const parts = []; words.forEach((w, i) => { parts.push({ t: w, w: x.measureText(w).width, c: (i + k0) % 2 ? '#3a2440' : '#a32d1a' }); parts.push({ star: 1, w: 64 }); });
-  const sum = parts.reduce((a, p) => a + p.w, 0), k = Math.min(1, (W - 60 * parts.length) / sum), gap = (W - sum * k) / parts.length; let cx = gap / 2;
+  const sum = parts.reduce((a, p) => a + p.w, 0), gap = Math.max(0, (W - sum) / parts.length); let cx = gap / 2;
   for (const p of parts) {
-    if (p.star) star(x, cx + 32 * k, H / 2, 30, '#c98a2b');
-    else { x.save(); x.translate(cx, H / 2 + 5); x.scale(k, 1); x.fillStyle = p.c; x.fillText(p.t, 0, 0); x.restore(); }
-    cx += p.w * k + gap;
+    if (p.star) star(x, cx + 32, H / 2, 30, '#c98a2b');
+    else { x.fillStyle = p.c; x.fillText(p.t, cx, H / 2 + 5); }
+    cx += p.w + gap;
   }
   return canvasTex(cv);
 }

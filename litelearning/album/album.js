@@ -21,13 +21,15 @@ const lines = word => { const out = []; let cur = ''; for (const w of word.split
 
 /* ───────── DOM: картите (за двигателя) + албумът (за играча) ───────── */
 export function prepare(config) {
-  G.cards = config.cards; const N = G.cards.length;
+  const today = new Date().toISOString().slice(0, 10);   // MET-1754 „Предстои“: минала дата → картата не се зарежда (преди DOM-а → двигателят вижда само останалите)
+  G.cards = config.cards.filter(c => !c.until || c.until >= today); const N = G.cards.length;
+  const VOUCHER = '<p class="telbig">Купи подаръчен ваучер: <a href="tel:+359884265504">+359 88 426 55 04</a></p>';
   $('.sheet-body').innerHTML = G.cards.map(c =>
-    `<article id="${esc(c.id)}" data-title="${esc(c.word)}" data-teaser="${esc(c.from)}"><h2>${esc(c.word)}</h2><h3>${esc(c.from)}</h3><p class="lead">${esc(c.context)}</p></article>`).join('');
+    `<article id="${esc(c.id)}" data-title="${esc(c.word)}" data-teaser="${esc(c.from)}"><h2>${esc(c.word)}</h2><h3>${esc(c.from)}</h3><ul class="lit">${String(c.context).split(' · ').map(t => `<li>${esc(t)}</li>`).join('')}</ul>${c.voucher ? VOUCHER : ''}</article>`).join('');
   $('#menu ul').insertAdjacentHTML('beforeend', G.cards.map(c => `<li><button type="button" data-go="${esc(c.id)}">${esc(c.word)}</button></li>`).join(''));
   panel = document.createElement('div'); panel.className = 'album'; panel.id = 'album';
-  panel.innerHTML = `<div class="album-g" style="--cols:${+config.album.cols || 4}">` +
-    G.cards.map((c, i) => `<button class="pk" type="button" data-i="${i}" style="--i:${i}" aria-label="${esc(c.word)}"><b>${lines(c.word).map(l => `<span>${esc(l)}</span>`).join('')}</b></button>`).join('') +
+  panel.innerHTML = `<div class="album-g" style="--cols:${+config.album.cols || 4};--n:${N}">` +
+    G.cards.map((c, i) => `<button class="pk in" type="button" data-i="${i}" style="--i:${i}" aria-label="${esc(c.word)}"><b>${lines(c.word).map(l => `<span>${esc(l)}</span>`).join('')}</b></button>`).join('') +
     '<p class="album-n" aria-live="polite"></p></div>';
   countEl = panel.querySelector('.album-n'); $('.cap').before(panel); pockets = [...panel.querySelectorAll('.pk')];
   panel.addEventListener('click', e => { const b = e.target.closest('.pk'); if (b) tapPocket(+b.dataset.i); });
@@ -37,14 +39,11 @@ export function prepare(config) {
 }
 function mark() {
   const next = G.cards.findIndex((_, i) => !G.got.includes(i));
-  pockets.forEach((b, i) => { b.classList.toggle('in', G.got.includes(i)); b.classList.toggle('next', i === next && !G.fly); });
+  pockets.forEach((b, i) => { b.classList.toggle('next', i === next && !G.fly); });   // MET-1754: всеки джоб показва думата си винаги („in“ от раждането)
   countEl.textContent = G.got.length + ' / ' + G.cards.length;
 }
-function tapPocket(i) {                                   // празен джоб → довежда картата си · пълен → листът ѝ
-  const P = window.__proto, poster = document.body.classList.contains('poster');
-  if (G.got.includes(i)) { P.focus(i); P.open(i); return; }
-  if (poster) { collect(i); if (G.got.length === G.cards.length) finale(); return; }   // без движение: картата ляга направо в джоба
-  P.focus(i);
+function tapPocket(i) {                                   // MET-1754: джобът води към предстоящото събитие → листът му (без игра „събери“)
+  const P = window.__proto; P.focus(i); P.open(i);
 }
 function dim(i, v) { const c = G.E && G.E.cards[i]; if (c && c.plane) c.plane.material.color.setScalar(v); }   // взетата карта остава на въртележката като сянка
 function collect(i) {
@@ -163,10 +162,8 @@ function step(F) {
   }
   paint(P);
 }
-function onFocus(i, t) {
-  if (G.done || G.fly || G.pend) return;
-  if (!G.got.includes(i)) G.pend = { i, t: t + .5 };      // камерата сяда, после картата тръгва
-  else { const b = pockets[i]; b.classList.remove('again'); void b.offsetWidth; b.classList.add('again'); }
+function onFocus(i, t) {                                 // MET-1754: фокус на карта → джобът ѝ подскача (събирането е изключено)
+  const b = pockets[i]; if (!b) return; b.classList.remove('again'); void b.offsetWidth; b.classList.add('again');
 }
 function launch(i, t) {
   const c = G.E.cards[i]; if (!c || !c.plane) return;

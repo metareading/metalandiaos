@@ -47,8 +47,9 @@ body.s-open .album-dust,body.menu-on .album-dust,body.reward-on .album-dust,body
 
 /* MET-1754 · „Предстои“: по-големи джобове · думата се вижда винаги (крем върху тъмно) · брояч няма */
 .album-n{display:none}
-.album-g{max-width:none;gap:8px 6px;padding:16px 0 6px}
-.pk{height:88px;font-size:clamp(13px,3.6vw,18px)}
+.album{padding:0 4px}                                                                                    /* MET-1754: по-големи квадрати и на мобилно (документ т.3) */
+.album-g{max-width:none;gap:6px 4px;padding:16px 0 6px}
+.pk{height:108px;font-size:clamp(13px,3.8vw,17px)}
 .pk b{padding:22px 4px 6px}
 .pk b span{opacity:1;color:var(--cream);text-shadow:0 1px 6px rgba(14,10,28,.95)}
 .pk.in.near::before{border-color:var(--bulb);box-shadow:0 0 22px rgba(255,217,160,.6)}

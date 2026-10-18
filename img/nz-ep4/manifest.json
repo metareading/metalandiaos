@@ -48,5 +48,49 @@
     "commons": "File:Frederic Leighton (1830-1896) - Perseus, on Pegasus, Hastening to the Rescue of Andromeda - L.F6.1902.0.0 - Leicester Museum ^ Art Gallery.jpg",
     "credit": "Frederic Leighton · Perseus on Pegasus Hastening to the Rescue of Andromeda · 1895",
     "scene": "Еликсирът"
+  },
+  {
+    "key": "hero",
+    "artist": "John William Waterhouse",
+    "title": "The Soul of the Rose",
+    "year": "1908",
+    "file": "ep4-hero-waterhouse.webp",
+    "commons": "File:John William Waterhouse - The Soul of the Rose, 1903.jpg",
+    "commons_url": "https://commons.wikimedia.org/wiki/File:John_William_Waterhouse_-_The_Soul_of_the_Rose,_1903.jpg",
+    "credit": "John William Waterhouse · The Soul of the Rose · 1908",
+    "scene": "Героинята (hero) · 3:4"
+  },
+  {
+    "key": "monster",
+    "artist": "Михаил Врубел",
+    "title": "Демон (седящ)",
+    "year": "1890",
+    "file": "ep4-monster-vrubel.webp",
+    "commons": "File:Mikhail Vrubel - Демон (сидящий) - Google Art Project.jpg",
+    "commons_url": "https://commons.wikimedia.org/wiki/File:Mikhail_Vrubel_-_%D0%94%D0%B5%D0%BC%D0%BE%D0%BD_(%D1%81%D0%B8%D0%B4%D1%8F%D1%89%D0%B8%D0%B9)_-_Google_Art_Project.jpg",
+    "credit": "Михаил Врубел · Демон (седящ) · 1890",
+    "scene": "Страхът на ума за оцеляването му (лицето на Времетрон) · 3:4"
+  },
+  {
+    "key": "storm",
+    "artist": "J. M. W. Turner",
+    "title": "Snow Storm – Steam-Boat off a Harbour's Mouth",
+    "year": "1842",
+    "file": "ep4-storm-turner.webp",
+    "commons": "File:J.M.W. Turner – Snow Storm - Steam-Boat off a Harbour's Mouth.jpg",
+    "commons_url": "https://commons.wikimedia.org/wiki/File:J.M.W._Turner_%E2%80%93_Snow_Storm_-_Steam-Boat_off_a_Harbour%27s_Mouth.jpg",
+    "credit": "J. M. W. Turner · Snow Storm – Steam-Boat off a Harbour's Mouth · 1842",
+    "scene": "Атентиометър · буря · кръг 1:1"
+  },
+  {
+    "key": "dawn",
+    "artist": "Caspar David Friedrich",
+    "title": "Woman before the Rising Sun",
+    "year": "1818",
+    "file": "ep4-dawn-friedrich.webp",
+    "commons": "File:Caspar David Friedrich - Frau vor untergehender Sonne.jpg",
+    "commons_url": "https://commons.wikimedia.org/wiki/File:Caspar_David_Friedrich_-_Frau_vor_untergehender_Sonne.jpg",
+    "credit": "Caspar David Friedrich · Woman before the Rising Sun · 1818",
+    "scene": "Атентиометър · зора · кръг 1:1"
   }
 ]

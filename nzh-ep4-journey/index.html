@@ -1543,7 +1543,7 @@ JR.card(1, { show: function (row) {
       </div>
     </div></div>
   <div class="jr-k2 jr-k2-under">
-    <p class="jr-k2-lock" id="k2-lock" role="status" hidden>отключва се на <span id="k2-date"></span> · <a id="k2-open" href="#">отвори сега</a></p>
+    <p class="jr-k2-lock" id="k2-lock" role="status" hidden><span id="k2-pre">отключва се на <span id="k2-date"></span> · </span><a id="k2-open" href="#">отвори сега</a></p>
     <p class="jr-err" id="k2-err" role="alert" hidden>Не се записа. Опитайте пак.</p>
   </div>
 </section>
@@ -1628,13 +1628,15 @@ JR.card(1, { show: function (row) {
     var u = Date.parse(row['unlocked_' + part.karta] || ''), now = nowMs();
     if (!isNaN(u) && u <= now) return { open: true };
     if (!isNaN(u)) return { open: false, label: dateLabel(u + 3 * 3600000) };
-    return { open: false, label: JR.dayLabel(-part.ahead, row) };
+    /* планираният ден (събитие − N дни) вече е минал или е днес → без дата (не пишем „отключва се на 18 октомври“ на 20-и) · само „отвори сега“ */
+    var planned = Date.parse(JR.eventYmd(row) + 'T00:00:00+03:00') - part.ahead * 86400000;
+    return { open: false, label: planned > now ? JR.dayLabel(-part.ahead, row) : '' };
   }
 
   JR.card(2, { show: function (row) {
     var $ = JR.$, spinning = true, busy = false;
     function mark(k) { light(k); }
-    function lock(st, part) { $('#k2-date').textContent = st.label; $('#k2-open').setAttribute('href', link(part)); $('#k2-lock').hidden = false; }
+    function lock(st, part) { $('#k2-date').textContent = st.label; $('#k2-pre').hidden = !st.label; $('#k2-open').setAttribute('href', link(part)); $('#k2-lock').hidden = false; }
     function link(part) { return JR.href(part.karta); }
     function pick(k) {
       unhint();                                        /* всеки път към избор (печат · списък · сърце) маха пулса */

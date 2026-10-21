@@ -1184,28 +1184,8 @@ footer .sig{font-family:var(--serif);font-size:1.3rem;color:var(--gold);font-sty
     Array.prototype.forEach.call(document.querySelectorAll('[data-event-hour]'), function (el) { el.textContent = JR.hourLabel(0); });
   }
 
-  /* с личния линк: чакащото от „jr:“ (без tk) влиза в този ред · ✓ Имейл/Календар/Подготовка и К6 преминават в магазина на tk · чакащите избори се виждат веднага и се пращат ПО ЕДИН път със своята Карта (последователно) · провалено остава в „jr:“ за следващото отваряне */
-  function flushLocal(row) {
-    var anon = null;
-    try { anon = JSON.parse(localStorage.getItem('jr:') || 'null'); } catch (e) {}
-    if (!anon || typeof anon !== 'object') return;
-    var own = JR.store.get(), merge = {};
-    ['mail', 'cal', 'prep', 'k6'].forEach(function (k) { if (anon[k] && !own[k]) merge[k] = anon[k]; });
-    try { if (Object.keys(merge).length) localStorage.setItem(JR.store.key, JSON.stringify(Object.assign(own, merge))); } catch (e) {}
-    var pend = anon.pending && typeof anon.pending === 'object' ? anon.pending : {}, todo = [], left = {};
-    Object.keys(pend).forEach(function (f) {
-      if (!/^k[1-8]_/.test(f) || !has(pend[f]) || has(row[f])) return;      /* нещо, което редът вече има, печели */
-      row[f] = pend[f]; todo.push(f);
-    });
-    todo.reduce(function (chain, f) {
-      return chain.then(function () {
-        var b = { tk: tk, karta: Number(f.charAt(1)) }; b[f] = pend[f];
-        return post(b).then(null, function () { left[f] = pend[f]; });
-      });
-    }, Promise.resolve()).then(function () {
-      try { if (Object.keys(left).length) localStorage.setItem('jr:', JSON.stringify({ pending: left })); else localStorage.removeItem('jr:'); } catch (e) {}
-    });
-  }
+  /* MET-1694 · дума на Митрандир 21.10: „✓ само след клик на човека · нов tk = празна карта“ (сменя MET-1658) · с личния линк остатъкът от „jr:“ (без tk · стар тест/преглед в същия браузър) НЕ влиза в реда и не се праща — само се чисти */
+  function flushLocal() { try { localStorage.removeItem('jr:'); } catch (e) {} }
 
   /* вика се веднъж, след последния блок Карта */
   JR.start = function () {

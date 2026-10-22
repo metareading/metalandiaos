@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>10-те AI агента · МетаТийн Еп5 · 22 октомври</title>
+<meta name="description" content="Презентацията от МетаТийн Еп5 и 10-те промпта за копиране — Детето учи трудни неща с лекото: AI го пита, не му преписва.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Inter:wght@300;400;500;600&display=swap&subset=cyrillic" rel="stylesheet">
+<style>
+:root{--bg:#0d0a08;--bg2:#15100c;--bg3:#1d1611;--gold:#E8C77E;--gold2:#c9a25a;--gold3:#8a6a2e;--light:#fff5d6;--ink:#F0EBE0;--ink2:#d9d0bd;--mute:#a99e8a;--em:#6FB59A;--parch:#efe4c9;--parchink:#2a1f16;
+--serif:'Cormorant Garamond',Georgia,serif;--sans:Inter,system-ui,sans-serif}
+*{margin:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img{max-width:100%;display:block}
+a{color:var(--gold)}
+b{color:var(--light);font-weight:600}
+.wrap{max-width:1080px;margin:0 auto;padding:0 16px}
+#top{position:sticky;top:0;z-index:40;background:rgba(13,10,8,.94);backdrop-filter:blur(8px);border-bottom:1px solid rgba(232,199,126,.25)}
+#top .row{max-width:1080px;margin:0 auto;padding:9px 16px;display:flex;align-items:center;gap:10px}
+#top .nm{font-family:var(--serif);font-weight:700;color:var(--gold);font-size:.95rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#top nav{margin-left:auto;display:flex;gap:8px}
+#top nav a{font-size:.8rem;text-decoration:none;color:#2a1908;background:linear-gradient(120deg,#ffe1a0,#e2a458);font-weight:600;padding:6px 13px;border-radius:20px;white-space:nowrap}
+#top nav a.alt{background:transparent;color:var(--gold);border:1px solid var(--gold3)}
+.sect{margin:18px 0 4px;text-align:center}
+.sect h2{font-family:var(--serif);font-size:1.5rem;color:var(--light);line-height:1.1}
+.sect p{color:var(--mute);font-size:.95rem;max-width:560px;margin:6px auto 0}
+
+/* ═══ ДЕК ═══ */
+#deck{position:relative;margin:16px 0;border:1px solid rgba(232,199,126,.3);border-radius:18px;overflow:hidden;background:radial-gradient(120% 90% at 50% 0,#1d1611 0,#0d0a08 70%);box-shadow:0 14px 40px -16px #000;display:flex;flex-direction:column;height:min(calc(100svh - 118px),720px);min-height:420px}
+#deck:focus{outline:none}#deck:focus-visible{box-shadow:0 0 0 2px var(--gold3)}
+#deck:fullscreen,#deck.fs{position:fixed;inset:0;z-index:100;margin:0;border:0;border-radius:0;height:100dvh;width:100vw}
+#deck:-webkit-full-screen{height:100%;width:100%;border:0;border-radius:0}
+.stage{flex:1;min-height:0;position:relative}
+.slide{position:absolute;inset:0;display:flex;flex-direction:column;gap:10px;padding:14px 16px 8px;overflow-y:auto;overscroll-behavior:contain;align-items:center}
+.slide[hidden]{display:none}
+.slide .txt{width:100%;max-width:640px}
+.slide .art{width:100%;max-width:640px;flex:0 1 auto}
+.slide .art img{width:100%;height:clamp(110px,22svh,300px);object-fit:cover;border-radius:14px;border:1px solid rgba(232,199,126,.3)}
+.slide .art figcaption{font-size:.68rem;color:var(--mute);margin-top:4px;text-align:center}
+.kick{letter-spacing:.2em;font-size:10.5px;text-transform:uppercase;color:var(--gold2);font-weight:600}
+.slide h1,.slide h2{font-family:var(--serif);color:var(--light);line-height:1.08;margin:6px 0 8px}
+.slide h1{font-size:clamp(2rem,7vw,3.4rem)}
+.slide h2{font-size:clamp(1.7rem,5.6vw,2.6rem)}
+.slide p{color:var(--ink2);font-size:1rem}
+.slide .big{font-family:var(--serif);font-size:clamp(1.3rem,4.4vw,2rem);color:var(--gold);line-height:1.2;font-style:italic;font-weight:500}
+.slide .when{margin:4px 0 10px}
+.center{text-align:center}
+.twoart{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%;max-width:520px}
+.twoart img{width:100%;height:clamp(110px,24svh,320px);object-fit:cover;object-position:50% 25%;border-radius:12px;border:1px solid rgba(232,199,126,.3)}
+.twoart figure{margin:0}.twoart figcaption{font-size:.66rem;color:var(--mute);text-align:center;margin-top:3px}
+.vt{height:clamp(110px,22svh,230px)!important;width:auto!important;object-fit:contain!important;border:0!important;margin:0 auto;filter:drop-shadow(0 8px 24px rgba(232,199,126,.25))}
+.faces{list-style:none;padding:0;margin:8px 0;display:grid;gap:8px}
+.faces li{background:rgba(255,255,255,.04);border:1px solid rgba(232,199,126,.22);border-radius:12px;padding:10px 13px;font-size:.93rem;color:var(--ink2)}
+.faces b{color:var(--gold)}
+.stat{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0;width:100%}
+.stat div{background:rgba(255,255,255,.04);border:1px solid rgba(232,199,126,.22);border-radius:12px;padding:12px;text-align:center;font-size:.88rem;color:var(--ink2)}
+.stat strong{display:block;font-family:var(--serif);font-size:1.7rem;color:var(--gold);line-height:1.1}
+.stat .bad strong{color:#D4895E}
+.pbox{background:var(--parch);color:var(--parchink);border-radius:14px;padding:13px 14px 12px;position:relative;border:1px solid var(--gold2)}
+.plabel{font-size:.66rem;letter-spacing:.18em;text-transform:uppercase;color:#6b5320;font-weight:600;margin-bottom:4px}
+.ptext{font-size:.97rem;line-height:1.5;color:var(--parchink);white-space:pre-wrap;user-select:all;-webkit-user-select:all}
+button.copy{margin-top:10px;background:linear-gradient(120deg,#ffe1a0,#e2a458);color:#2a1908;border:0;border-radius:22px;font:600 .9rem var(--sans);padding:10px 20px;cursor:pointer;min-height:44px}
+button.copy.ok{background:var(--em);color:#06110d}
+.nav{display:flex;align-items:center;gap:10px;padding:10px 12px;border-top:1px solid rgba(232,199,126,.18);background:rgba(13,10,8,.7)}
+.nav button{background:rgba(232,199,126,.14);border:1px solid var(--gold3);color:var(--gold);border-radius:9px;padding:8px 16px;font-size:20px;line-height:1;cursor:pointer;min-height:44px;min-width:48px}
+.nav button:active{background:rgba(232,199,126,.3)}
+.nav .bar{flex:1;height:6px;background:rgba(255,255,255,.09);border-radius:6px;overflow:hidden}
+.nav .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--em),var(--gold));transition:width .3s}
+.nav .cnt{font-size:.82rem;color:var(--mute);white-space:nowrap;font-variant-numeric:tabular-nums}
+.nav .ttl{display:none;font-size:.8rem;color:var(--mute);max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.nav .fsb{font-size:15px!important}
+@media(min-width:760px){
+  .slide{padding:30px 44px 12px;flex-direction:row;gap:34px;align-items:center;justify-content:center}
+  .slide .art{max-width:380px;flex:0 0 380px}
+  .slide .art img{height:min(54svh,440px)}
+  .vt{height:min(26svh,240px)!important}.twoart img{height:min(30svh,260px)}
+  #deck{height:min(calc(100svh - 170px),720px)}
+  .sect{margin:28px 0 8px}.sect h2{font-size:1.8rem}
+  .slide .txt{max-width:520px}
+  .slide.col{flex-direction:column;gap:12px}
+  .nav .ttl{display:block}
+  .twoart{max-width:640px}
+  .stat{max-width:560px}
+}
+.slide.col .txt{max-width:720px}
+.hintp{display:none}
+@media(max-width:759px){.slide .art figcaption{display:none}.slide .art img{height:clamp(84px,14svh,300px)}.slide .ptext{font-size:.88rem;line-height:1.42}.pbox{padding:10px 12px}button.copy{margin-top:7px;min-height:40px;padding:8px 18px}.slide .when{margin:2px 0 8px;font-size:.9rem}.slide h2{margin:2px 0 4px}.faces li{padding:8px 11px;font-size:.88rem}.slide p{font-size:.95rem}}@media(min-width:760px){.hintp{display:block}}
+.hint{text-align:center;color:var(--mute);font-size:.8rem;margin:2px 0 0}
+
+/* ═══ ПРОМПТОВЕ ═══ */
+.cards{display:grid;gap:14px;margin:16px 0}
+.card{display:grid;grid-template-columns:1fr;background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));border:1px solid rgba(232,199,126,.25);border-radius:18px;overflow:hidden}
+.card>img{width:100%;height:210px;object-fit:cover}
+.card .cb{padding:14px 15px 16px}
+.card h3{font-family:var(--serif);font-size:1.7rem;color:var(--gold);line-height:1.1;margin:2px 0 6px}
+.card .when{font-size:.93rem;color:var(--ink2);margin-bottom:8px}
+.gain{padding-left:18px;color:var(--mute);font-size:.86rem;margin-bottom:10px}
+.card .ptext{background:var(--parch);border:1px solid var(--gold2);border-radius:12px;padding:11px 13px}
+.credit{font-size:.7rem;color:var(--mute);margin-top:10px}
+@media(min-width:760px){.cards{grid-template-columns:1fr 1fr}}
+@media(min-width:1000px){.card{grid-template-columns:260px 1fr}.card>img{height:100%;min-height:100%}.cards{grid-template-columns:1fr}}
+.allbar{text-align:center;margin:12px 0}
+.allbar button.copy{margin:0}
+.foot{text-align:center;color:#7d756a;font-size:.82rem;padding:34px 16px 60px;border-top:1px solid rgba(255,255,255,.06);margin-top:30px}
+.foot b{color:var(--ink2)}
+</style>
+</head>
+<body>
+
+<div id="top"><div class="row">
+  <span class="nm">МетаТийн · Епизод 5 · 22 октомври</span>
+  <nav><a href="#deck">Презентация</a><a class="alt" href="#prompts">10-те промпта</a></nav>
+</div></div>
+
+<div class="wrap">
+
+<div class="sect"><h2>Презентацията</h2><p class="hintp">Стрелки ← → · плъзгане · бутонът ⛶ я разгръща на цял екран.</p></div>
+
+<div id="deck" tabindex="0" aria-label="Презентация: 10-те AI агента">
+  <div class="stage" id="stage">
+
+<section class="slide col center" data-t="Начало">
+  <div class="twoart">
+    <figure><img src="/img/metateen-ep5/mother-klimt-three-ages.webp" alt="Майка с дете · Gustav Klimt, Трите възрасти на жената" width="600" height="600" decoding="async"><figcaption>Gustav Klimt · Трите възрасти на жената</figcaption></figure>
+    <figure><img src="/img/metateen-ep5/teen-millais-autumn-leaves.webp" alt="Тийнейджърка · John Everett Millais, Есенни листа" width="600" height="600" decoding="async"><figcaption>John Everett Millais · Есенни листа</figcaption></figure>
+  </div>
+  <div class="txt">
+    <p class="kick">Сериал МетаТийн · Епизод 5 · четвъртък, 22 октомври · 19:00</p>
+    <h1>10-те AI агента</h1>
+    <p class="big">Детето учи трудни неща с лекото — AI го пита, не му преписва.</p>
+  </div>
+</section>
+
+<section class="slide col center" data-t="Времетрон">
+  <img class="vt" src="/img/metateen-ep5/vremetron.webp" alt="Времетрон — Крадецът на вниманието" width="438" height="620" decoding="async">
+  <div class="txt">
+    <p class="kick">Чудовището на вечерите</p>
+    <h2>Времетрон · Крадецът на вниманието</h2>
+    <ul class="faces">
+      <li><b>Цъкането</b> — екранната зависимост изяжда вниманието.</li>
+      <li><b>Монотонността</b> — монотонното преподаване води до апатия и демотивация.</li>
+      <li><b>Неврозата</b> — контролни и изпити отключват стрес и психосоматични симптоми.</li>
+    </ul>
+    <p>И когато AI се ползва по подразбиране — като GPS — той обяснява, детето кима, нищо не остава.</p>
+  </div>
+</section>
+
+<section class="slide col center" data-t="Идеята">
+  <div class="txt">
+    <p class="kick">Идеята на вечерта</p>
+    <h2>Учите, като произвеждате — не като консумирате</h2>
+    <p>Четене, гледане и „обясни ми“ <b>изглеждат</b> като учене. Паметта обаче се държи на <b>производство</b>: да си припомняте, да предвиждате, да обяснявате и да опитвате в реалния свят.</p>
+  </div>
+  <div class="stat">
+    <div class="bad"><strong>83%</strong>препрочетено 4 пъти, питате след 5 мин. — след седмица спадът е поне 50%</div>
+    <div><strong>71% → 61%</strong>прочетено веднъж и изпитано 3 пъти — след седмица спадът е само 10%</div>
+  </div>
+  <p class="hint">По идея на Nick Saraev</p>
+</section>
+
+<section class="slide col center" data-t="Една роля от десет">
+  <div class="txt">
+    <p class="kick">Къде спира повечето хора</p>
+    <h2>Повечето ползват само <span style="color:var(--gold)">Обясняващия</span></h2>
+    <p>Това е <b>една</b> от около десет роли на AI — и то пасивна: просто четете. Останалите девет са за това <b>вие</b> да произвеждате.</p>
+    <p class="big" style="margin-top:14px">Интервюиращ · Картограф · Обясняващ · Сократик · Изпитващ · Проверяващ · Слушател · Диагностик · Спаринг-партньор · Писар</p>
+  </div>
+</section>
+
+<section class="slide ag" data-t="01 · Интервюиращ" hidden>
+  <figure class="art"><img src="/img/metateen-ep5/agents/01-interviewer.webp" alt="Интервюиращ · Johannes Vermeer · Officer and Laughing Girl · c. 1657" style="object-position:45% 45%" width="800" height="800" decoding="async"><figcaption>Johannes Vermeer · Officer and Laughing Girl · c. 1657 · Wikimedia Commons, public domain</figcaption></figure>
+  <div class="txt">
+    <p class="kick">Агент 01 от 10</p>
+    <h2>Интервюиращ</h2>
+    <p class="when"><b>Кога:</b> Когато детето тръгва от нулата и не е сигурно какво му трябва.</p>
+    <div class="pbox"><div class="plabel">Промпт</div><div class="ptext" id="sp01">Искам да уча [тема]. Преди да ми обясниш каквото и да е: изпитай ме по всичко, което се сетиш по темата, за да разбереш колко вече знам. Питай ме за целта ми, за нивото ми и как ще бъда проверен.</div>
+    <button class="copy" type="button" data-src="sp01">Копирай</button></div>
+  </div>
+</section>
+<section class="slide ag" data-t="02 · Картограф" hidden>
+  <figure class="art"><img src="/img/metateen-ep5/agents/02-cartographer.webp" alt="Картограф · Johannes Vermeer · The Geographer · 1669" style="object-position:55% 40%" width="800" height="800" decoding="async"><figcaption>Johannes Vermeer · The Geographer · 1669 · Wikimedia Commons, public domain</figcaption></figure>
+  <div class="txt">
+    <p class="kick">Агент 02 от 10</p>
+    <h2>Картограф</h2>
+    <p class="when"><b>Кога:</b> Когато детето тъкмо започва нов предмет.</p>
+    <div class="pbox"><div class="plabel">Промпт</div><div class="ptext" id="sp02">Начертай ми карта на [предмет]. Искам основните части, кои неща зависят от други и къде хората обикновено затъват, за да планирам времето си.</div>
+    <button class="copy" type="button" data-src="sp02">Копирай</button></div>
+  </div>
+</section>
+<section class="slide ag" data-t="03 · Обясняващ" hidden>
+  <figure class="art"><img src="/img/metateen-ep5/agents/03-explainer.webp" alt="Обясняващ · Jean-Baptiste-Siméon Chardin · The Young Schoolmistress · c. 1736" style="object-position:55% 40%" width="800" height="800" decoding="async"><figcaption>Jean-Baptiste-Siméon Chardin · The Young Schoolmistress · c. 1736 · Wikimedia Commons, public domain</figcaption></figure>
+  <div class="txt">
+    <p class="kick">Агент 03 от 10</p>
+    <h2>Обясняващ</h2>
+    <p class="when"><b>Кога:</b> Когато остава една неясна част и само нея трябва да се осветли.</p>
+    <div class="pbox"><div class="plabel">Промпт</div><div class="ptext" id="sp03">Опитах да направя [какво] и затънах на [къде]. Обясни само тази част на моето ниво, за да я разбера. След това ще го направя пак сам, без помощ.</div>
+    <button class="copy" type="button" data-src="sp03">Копирай</button></div>
+  </div>
+</section>
+<section class="slide ag" data-t="04 · Сократик" hidden>
+  <figure class="art"><img src="/img/metateen-ep5/agents/04-socratic.webp" alt="Сократик · Franz Caucig · Socrates, a Student and Diotima · c. 1810" style="object-position:42% 45%" width="800" height="800" decoding="async"><figcaption>Franz Caucig · Socrates, a Student and Diotima · c. 1810 · Wikimedia Commons, public domain</figcaption></figure>
+  <div class="txt">
+    <p class="kick">Агент 04 от 10</p>
+    <h2>Сократик</h2>
+    <p class="when"><b>Кога:</b> Когато детето си мисли, че е разбрало темата.</p>
+    <div class="pbox"><div class="plabel">Промпт</div><div class="ptext" id="sp04">Искам да науча [тема]. Не ми давай отговора. Задавай ми въпроси, докато сам открия какво не знам.</div>
+    <button class="copy" type="button" data-src="sp04">Копирай</button></div>
+  </div>
+</section>
+<section class="slide ag" data-t="05 · Изпитващ" hidden>
+  <figure class="art"><img src="/img/metateen-ep5/agents/05-examiner.webp" alt="Изпитващ · Elihu Vedder · The Questioner of the Sphinx · 1863" style="object-position:40% 50%" width="800" height="800" decoding="async"><figcaption>Elihu Vedder · The Questioner of the Sphinx · 1863 · Wikimedia Commons, public domain</figcaption></figure>
+  <div class="txt">
+    <p class="kick">Агент 05 от 10</p>
+    <h2>Изпитващ</h2>
+    <p class="when"><b>Кога:</b> Когато темата е минала докрай.</p>
+    <div class="pbox"><div class="plabel">Промпт</div><div class="ptext" id="sp05">Изпитай ме по [тема]. Задавай по един въпрос наведнъж и го правѝ по-труден, докато не сбъркам.</div>
+    <button class="copy" type="button" data-src="sp05">Копирай</button></div>
+  </div>
+</section>
+<section class="slide ag" data-t="06 · Проверяващ" hidden>
+  <figure class="art"><img src="/img/metateen-ep5/agents/06-checker.webp" alt="Проверяващ · Pieter de Hooch · Woman Weighing Gold · c. 1664" style="object-position:62% 45%" width="800" height="800" decoding="async"><figcaption>Pieter de Hooch · Woman Weighing Gold · c. 1664 · Wikimedia Commons, public domain</figcaption></figure>
+  <div class="txt">
+    <p class="kick">Агент 06 от 10</p>
+    <h2>Проверяващ</h2>
+    <p class="when"><b>Кога:</b> Когато трябва да се види, че знанието наистина дава резултата, който искаме.</p>
+    <div class="pbox"><div class="plabel">Промпт</div><div class="ptext" id="sp06">Ето моята работа по [какво]. Намери какво е грешно или липсва и кажи дали е имало по-лесен или по-бърз път. Не пренаписвай нищо.</div>
+    <button class="copy" type="button" data-src="sp06">Копирай</button></div>
+  </div>
+</section>
+<section class="slide ag" data-t="07 · Слушател" hidden>
+  <figure class="art"><img src="/img/metateen-ep5/agents/07-listener.webp" alt="Слушател · John William Waterhouse · A Tale from the Decameron · 1916" style="object-position:50% 40%" width="800" height="800" decoding="async"><figcaption>John William Waterhouse · A Tale from the Decameron · 1916 · Wikimedia Commons, public domain</figcaption></figure>
+  <div class="txt">
+    <p class="kick">Агент 07 от 10</p>
+    <h2>Слушател</h2>
+    <p class="when"><b>Кога:</b> Когато детето преразказва със свои думи.</p>
+    <div class="pbox"><div class="plabel">Промпт</div><div class="ptext" id="sp07">Искам да обясня тази идея със свои думи. Оцени преразказа спрямо източника и ми кажи точно какво съм пропуснал.</div>
+    <button class="copy" type="button" data-src="sp07">Копирай</button></div>
+  </div>
+</section>
+<section class="slide ag" data-t="08 · Диагностик" hidden>
+  <figure class="art"><img src="/img/metateen-ep5/agents/08-diagnostician.webp" alt="Диагностик · Frans van Mieris · The Doctor&#x27;s Visit · 1667" style="object-position:45% 55%" width="800" height="800" decoding="async"><figcaption>Frans van Mieris · The Doctor&#x27;s Visit · 1667 · Wikimedia Commons, public domain</figcaption></figure>
+  <div class="txt">
+    <p class="kick">Агент 08 от 10</p>
+    <h2>Диагностик</h2>
+    <p class="when"><b>Кога:</b> Когато една и съща грешка се връща в ученето.</p>
+    <div class="pbox"><div class="plabel">Промпт</div><div class="ptext" id="sp08">Ето неща, които продължавам да греша: [списък]. Прочети последните ми 100 разговора и опитай да откриеш причината — каква е общата грешка в разсъжденията ми.</div>
+    <button class="copy" type="button" data-src="sp08">Копирай</button></div>
+  </div>
+</section>
+<section class="slide ag" data-t="09 · Спаринг-партньор" hidden>
+  <figure class="art"><img src="/img/metateen-ep5/agents/09-sparring-partner.webp" alt="Спаринг-партньор · Sofonisba Anguissola · The Chess Game · 1555" style="object-position:42% 40%" width="800" height="800" decoding="async"><figcaption>Sofonisba Anguissola · The Chess Game · 1555 · Wikimedia Commons, public domain</figcaption></figure>
+  <div class="txt">
+    <p class="kick">Агент 09 от 10</p>
+    <h2>Спаринг-партньор</h2>
+    <p class="when"><b>Кога:</b> Когато детето упражнява умение.</p>
+    <div class="pbox"><div class="plabel">Промпт</div><div class="ptext" id="sp09">Влез в ролята на строг ръководител по подбор за [нещо, което се опитвам да постигна]. Не ми отстъпвай — възразявай остро и се увери, че наистина го знам. Искам всеки отговор да е в рамките на 30 секунди.</div>
+    <button class="copy" type="button" data-src="sp09">Копирай</button></div>
+  </div>
+</section>
+<section class="slide ag" data-t="10 · Писар" hidden>
+  <figure class="art"><img src="/img/metateen-ep5/agents/10-scribe.webp" alt="Писар · Hans Holbein the Younger · Erasmus Writing · 1523" style="object-position:50% 45%" width="800" height="800" decoding="async"><figcaption>Hans Holbein the Younger · Erasmus Writing · 1523 · Wikimedia Commons, public domain</figcaption></figure>
+  <div class="txt">
+    <p class="kick">Агент 10 от 10</p>
+    <h2>Писар</h2>
+    <p class="when"><b>Кога:</b> Когато бележките и междинните проверки са хаос.</p>
+    <div class="pbox"><div class="plabel">Промпт</div><div class="ptext" id="sp10">Превърни разхвърляните ми бележки в чист план. Не добавяй нищо, което не съм написал — само направи ясна подредбата на информацията.</div>
+    <button class="copy" type="button" data-src="sp10">Копирай</button></div>
+  </div>
+</section>
+<section class="slide col center" data-t="Затваряне на кръга">
+  <div class="txt">
+    <p class="kick">Най-важната стъпка</p>
+    <h2>Направете го пак — сами</h2>
+    <p>След като агентът Ви е помогнал, върнете се в самото начало и минете целия път <b>без помощ</b>. Това отнема 10–15% от времето за учене — но именно така знанието остава.</p>
+    <p class="big" style="margin-top:14px">Вие и детето Ви — довечера, на живо, в Zoom.</p>
+    <p style="margin-top:10px;color:var(--mute)">Четвъртък, 22 октомври · 19:00–20:00 · безплатно</p>
+  </div>
+</section>
+
+<section class="slide col center" data-t="Промптовете">
+  <div class="txt">
+    <p class="kick">Вземете си ги</p>
+    <h2>Всички 10 промпта са под презентацията</h2>
+    <p>Копирате с един бутон и ги пращате на детето.</p>
+    <p style="margin-top:14px"><a href="#prompts" id="gop" style="display:inline-block;background:linear-gradient(120deg,#ffe1a0,#e2a458);color:#2a1908;font-weight:600;padding:12px 26px;border-radius:30px;text-decoration:none">Към промптовете ↓</a></p>
+    <p style="margin-top:22px;color:var(--mute);font-size:.88rem">Димитър Караманчев · Металандия</p>
+  </div>
+</section>
+
+  </div>
+  <div class="nav">
+    <button type="button" id="prev" aria-label="Назад">‹</button>
+    <div class="bar"><i id="fill"></i></div>
+    <span class="cnt" id="cnt">1 / 1</span>
+    <span class="ttl" id="ttl"></span>
+    <button type="button" id="next" aria-label="Напред">›</button>
+    <button type="button" class="fsb" id="fsb" aria-label="Цял екран" title="Цял екран">⛶</button>
+  </div>
+</div>
+
+<div class="sect" id="prompts"><h2>10-те промпта</h2>
+<p>Подредени по цикъла на учене. Сменете [в скобите] със своята тема и копирайте.</p></div>
+<div class="allbar"><button type="button" class="copy" id="copyall">Копирай всичките 10</button></div>
+<div class="cards">
+<article class="card" id="agent-01">
+  <img src="/img/metateen-ep5/agents/01-interviewer.webp" alt="Интервюиращ · Johannes Vermeer · Officer and Laughing Girl · c. 1657" style="object-position:45% 45%" width="800" height="800" loading="lazy" decoding="async">
+  <div class="cb">
+    <p class="kick">Агент 01</p>
+    <h3>Интервюиращ</h3>
+    <p class="when"><b>Кога:</b> Когато детето тръгва от нулата и не е сигурно какво му трябва.</p>
+    <ul class="gain"><li>Не учи наново онова, което детето вече знае.</li><li>Точност: от „искам да уча“ към ясна цел и ниво.</li><li>Детето само отговаря на въпроси — няма празна страница.</li></ul>
+    <div class="ptext" id="cp01">Искам да уча [тема]. Преди да ми обясниш каквото и да е: изпитай ме по всичко, което се сетиш по темата, за да разбереш колко вече знам. Питай ме за целта ми, за нивото ми и как ще бъда проверен.</div>
+    <button class="copy" type="button" data-src="cp01">Копирай промпта</button>
+    <p class="credit">Johannes Vermeer · Officer and Laughing Girl · c. 1657 · Wikimedia Commons, public domain</p>
+  </div>
+</article>
+<article class="card" id="agent-02">
+  <img src="/img/metateen-ep5/agents/02-cartographer.webp" alt="Картограф · Johannes Vermeer · The Geographer · 1669" style="object-position:55% 40%" width="800" height="800" loading="lazy" decoding="async">
+  <div class="cb">
+    <p class="kick">Агент 02</p>
+    <h3>Картограф</h3>
+    <p class="when"><b>Кога:</b> Когато детето тъкмо започва нов предмет.</p>
+    <ul class="gain"><li>Не се хаби енергия в борба с безформена тема.</li><li>План стъпка по стъпка вместо хаос.</li><li>Голямата тема става малки, достижими стъпки.</li></ul>
+    <div class="ptext" id="cp02">Начертай ми карта на [предмет]. Искам основните части, кои неща зависят от други и къде хората обикновено затъват, за да планирам времето си.</div>
+    <button class="copy" type="button" data-src="cp02">Копирай промпта</button>
+    <p class="credit">Johannes Vermeer · The Geographer · 1669 · Wikimedia Commons, public domain</p>
+  </div>
+</article>
+<article class="card" id="agent-03">
+  <img src="/img/metateen-ep5/agents/03-explainer.webp" alt="Обясняващ · Jean-Baptiste-Siméon Chardin · The Young Schoolmistress · c. 1736" style="object-position:55% 40%" width="800" height="800" loading="lazy" decoding="async">
+  <div class="cb">
+    <p class="kick">Агент 03</p>
+    <h3>Обясняващ</h3>
+    <p class="when"><b>Кога:</b> Когато остава една неясна част и само нея трябва да се осветли.</p>
+    <ul class="gain"><li>Само неясната част, не целия урок.</li><li>Яснота там, където детето е заседнало.</li><li>Отблокира детето, без да му дава готов отговор да преписва.</li></ul>
+    <div class="ptext" id="cp03">Опитах да направя [какво] и затънах на [къде]. Обясни само тази част на моето ниво, за да я разбера. След това ще го направя пак сам, без помощ.</div>
+    <button class="copy" type="button" data-src="cp03">Копирай промпта</button>
+    <p class="credit">Jean-Baptiste-Siméon Chardin · The Young Schoolmistress · c. 1736 · Wikimedia Commons, public domain</p>
+  </div>
+</article>
+<article class="card" id="agent-04">
+  <img src="/img/metateen-ep5/agents/04-socratic.webp" alt="Сократик · Franz Caucig · Socrates, a Student and Diotima · c. 1810" style="object-position:42% 45%" width="800" height="800" loading="lazy" decoding="async">
+  <div class="cb">
+    <p class="kick">Агент 04</p>
+    <h3>Сократик</h3>
+    <p class="when"><b>Кога:</b> Когато детето си мисли, че е разбрало темата.</p>
+    <ul class="gain"><li>Не се чете наново, докато всичко „изглежда познато“.</li><li>Собствено откритие: детето произвежда, не само чете.</li><li>Усещането „сам го разбрах“.</li></ul>
+    <div class="ptext" id="cp04">Искам да науча [тема]. Не ми давай отговора. Задавай ми въпроси, докато сам открия какво не знам.</div>
+    <button class="copy" type="button" data-src="cp04">Копирай промпта</button>
+    <p class="credit">Franz Caucig · Socrates, a Student and Diotima · c. 1810 · Wikimedia Commons, public domain</p>
+  </div>
+</article>
+<article class="card" id="agent-05">
+  <img src="/img/metateen-ep5/agents/05-examiner.webp" alt="Изпитващ · Elihu Vedder · The Questioner of the Sphinx · 1863" style="object-position:40% 50%" width="800" height="800" loading="lazy" decoding="async">
+  <div class="cb">
+    <p class="kick">Агент 05</p>
+    <h3>Изпитващ</h3>
+    <p class="when"><b>Кога:</b> Когато темата е минала докрай.</p>
+    <ul class="gain"><li>Не се чака контролното, за да се види какво не се знае.</li><li>Запомняне за седмици, не за часове.</li><li>Контролното е вече репетирано у дома.</li></ul>
+    <div class="ptext" id="cp05">Изпитай ме по [тема]. Задавай по един въпрос наведнъж и го правѝ по-труден, докато не сбъркам.</div>
+    <button class="copy" type="button" data-src="cp05">Копирай промпта</button>
+    <p class="credit">Elihu Vedder · The Questioner of the Sphinx · 1863 · Wikimedia Commons, public domain</p>
+  </div>
+</article>
+<article class="card" id="agent-06">
+  <img src="/img/metateen-ep5/agents/06-checker.webp" alt="Проверяващ · Pieter de Hooch · Woman Weighing Gold · c. 1664" style="object-position:62% 45%" width="800" height="800" loading="lazy" decoding="async">
+  <div class="cb">
+    <p class="kick">Агент 06</p>
+    <h3>Проверяващ</h3>
+    <p class="when"><b>Кога:</b> Когато трябва да се види, че знанието наистина дава резултата, който искаме.</p>
+    <ul class="gain"><li>Не се чака оценката, за да се види какво липсва.</li><li>Увереност, че знанието наистина дава резултат.</li><li>Грешката се показва спокойно, преди да е станала проблем.</li></ul>
+    <div class="ptext" id="cp06">Ето моята работа по [какво]. Намери какво е грешно или липсва и кажи дали е имало по-лесен или по-бърз път. Не пренаписвай нищо.</div>
+    <button class="copy" type="button" data-src="cp06">Копирай промпта</button>
+    <p class="credit">Pieter de Hooch · Woman Weighing Gold · c. 1664 · Wikimedia Commons, public domain</p>
+  </div>
+</article>
+<article class="card" id="agent-07">
+  <img src="/img/metateen-ep5/agents/07-listener.webp" alt="Слушател · John William Waterhouse · A Tale from the Decameron · 1916" style="object-position:50% 40%" width="800" height="800" loading="lazy" decoding="async">
+  <div class="cb">
+    <p class="kick">Агент 07</p>
+    <h3>Слушател</h3>
+    <p class="when"><b>Кога:</b> Когато детето преразказва със свои думи.</p>
+    <ul class="gain"><li>Не се учи наизуст.</li><li>Точно кое е пропуснато, и то със собствени думи на детето.</li><li>Детето говори свободно, а не рецитира.</li></ul>
+    <div class="ptext" id="cp07">Искам да обясня тази идея със свои думи. Оцени преразказа спрямо източника и ми кажи точно какво съм пропуснал.</div>
+    <button class="copy" type="button" data-src="cp07">Копирай промпта</button>
+    <p class="credit">John William Waterhouse · A Tale from the Decameron · 1916 · Wikimedia Commons, public domain</p>
+  </div>
+</article>
+<article class="card" id="agent-08">
+  <img src="/img/metateen-ep5/agents/08-diagnostician.webp" alt="Диагностик · Frans van Mieris · The Doctor&#x27;s Visit · 1667" style="object-position:45% 55%" width="800" height="800" loading="lazy" decoding="async">
+  <div class="cb">
+    <p class="kick">Агент 08</p>
+    <h3>Диагностик</h3>
+    <p class="when"><b>Кога:</b> Когато една и съща грешка се връща в ученето.</p>
+    <ul class="gain"><li>Не се повтаря една и съща грешка.</li><li>Разбиране на причината, не само на симптома.</li><li>Свършва досадното „пак същото“.</li></ul>
+    <div class="ptext" id="cp08">Ето неща, които продължавам да греша: [списък]. Прочети последните ми 100 разговора и опитай да откриеш причината — каква е общата грешка в разсъжденията ми.</div>
+    <button class="copy" type="button" data-src="cp08">Копирай промпта</button>
+    <p class="credit">Frans van Mieris · The Doctor&#x27;s Visit · 1667 · Wikimedia Commons, public domain</p>
+  </div>
+</article>
+<article class="card" id="agent-09">
+  <img src="/img/metateen-ep5/agents/09-sparring-partner.webp" alt="Спаринг-партньор · Sofonisba Anguissola · The Chess Game · 1555" style="object-position:42% 40%" width="800" height="800" loading="lazy" decoding="async">
+  <div class="cb">
+    <p class="kick">Агент 09</p>
+    <h3>Спаринг-партньор</h3>
+    <p class="when"><b>Кога:</b> Когато детето упражнява умение.</p>
+    <ul class="gain"><li>Страхът от първия път: интервю, изказване, състезание.</li><li>Увереност за реалната ситуация.</li><li>Тренировка като игра на роли.</li></ul>
+    <div class="ptext" id="cp09">Влез в ролята на строг ръководител по подбор за [нещо, което се опитвам да постигна]. Не ми отстъпвай — възразявай остро и се увери, че наистина го знам. Искам всеки отговор да е в рамките на 30 секунди.</div>
+    <button class="copy" type="button" data-src="cp09">Копирай промпта</button>
+    <p class="credit">Sofonisba Anguissola · The Chess Game · 1555 · Wikimedia Commons, public domain</p>
+  </div>
+</article>
+<article class="card" id="agent-10">
+  <img src="/img/metateen-ep5/agents/10-scribe.webp" alt="Писар · Hans Holbein the Younger · Erasmus Writing · 1523" style="object-position:50% 45%" width="800" height="800" loading="lazy" decoding="async">
+  <div class="cb">
+    <p class="kick">Агент 10</p>
+    <h3>Писар</h3>
+    <p class="when"><b>Кога:</b> Когато бележките и междинните проверки са хаос.</p>
+    <ul class="gain"><li>Времето за подреждане на разхвърляни бележки.</li><li>Чист план, готов за повторение.</li><li>Хаосът става спокоен ред.</li></ul>
+    <div class="ptext" id="cp10">Превърни разхвърляните ми бележки в чист план. Не добавяй нищо, което не съм написал — само направи ясна подредбата на информацията.</div>
+    <button class="copy" type="button" data-src="cp10">Копирай промпта</button>
+    <p class="credit">Hans Holbein the Younger · Erasmus Writing · 1523 · Wikimedia Commons, public domain</p>
+  </div>
+</article>
+</div>
+
+</div>
+
+<div class="foot">
+  <p>По идея на <b>Nick Saraev</b> · „How I Learn Complex Skills &amp; Difficult Subjects So Fast with AI“</p>
+  <p style="margin-top:6px">Металандия · Димитър Караманчев · спокойствие · радост · вдъхновение</p>
+</div>
+
+<noscript><style>.slide[hidden]{display:flex}#deck{height:auto}.slide{position:static}.stage{height:auto}.nav{display:none}</style></noscript>
+<script>
+(function(){
+  var deck=document.getElementById('deck'),S=[].slice.call(document.querySelectorAll('#stage .slide')),i=0,
+      fill=document.getElementById('fill'),cnt=document.getElementById('cnt'),ttl=document.getElementById('ttl');
+  function show(n){
+    i=Math.max(0,Math.min(S.length-1,n));
+    S.forEach(function(s,k){s.hidden=(k!==i)});
+    S[i].scrollTop=0;
+    fill.style.width=((i+1)/S.length*100)+'%';
+    cnt.textContent=(i+1)+' / '+S.length;
+    ttl.textContent=S[i].getAttribute('data-t')||'';
+    var im=S[i].querySelector('img[loading=lazy]');if(im)im.loading='eager';
+    var nx=S[i+1];if(nx){var ni=nx.querySelector('img');if(ni)ni.loading='eager'}
+  }
+  function isFs(){return document.fullscreenElement===deck||document.webkitFullscreenElement===deck||deck.classList.contains('fs')}
+  function toggleFs(){
+    if(isFs()){
+      deck.classList.remove('fs');
+      var x=document.exitFullscreen||document.webkitExitFullscreen;
+      if(document.fullscreenElement||document.webkitFullscreenElement){try{x.call(document)}catch(e){}}
+    }else{
+      var r=deck.requestFullscreen||deck.webkitRequestFullscreen;
+      if(r){try{var p=r.call(deck);if(p&&p.catch)p.catch(function(){deck.classList.add('fs')})}catch(e){deck.classList.add('fs')}}
+      else deck.classList.add('fs');
+    }
+  }
+  document.getElementById('prev').onclick=function(){show(i-1)};
+  document.getElementById('next').onclick=function(){show(i+1)};
+  document.getElementById('fsb').onclick=toggleFs;
+  document.getElementById('gop').addEventListener('click',function(){if(isFs())toggleFs()});
+  document.addEventListener('keydown',function(ev){
+    var t=ev.target&&ev.target.tagName;if(t==='INPUT'||t==='TEXTAREA')return;
+    var inDeck=deck.contains(ev.target)||isFs()||document.activeElement===document.body;
+    if(!inDeck)return;
+    if(ev.key==='ArrowRight'||ev.key==='PageDown'||(ev.key===' '&&document.activeElement===deck)){ev.preventDefault();show(i+1)}
+    else if(ev.key==='ArrowLeft'||ev.key==='PageUp'){ev.preventDefault();show(i-1)}
+    else if(ev.key==='Home'){show(0)}else if(ev.key==='End'){show(S.length-1)}
+    else if(ev.key==='f'||ev.key==='F'){toggleFs()}
+    else if(ev.key==='Escape'&&deck.classList.contains('fs')){toggleFs()}
+  });
+  var sx=0,sy=0;
+  deck.addEventListener('touchstart',function(e){sx=e.touches[0].clientX;sy=e.touches[0].clientY},{passive:true});
+  deck.addEventListener('touchend',function(e){
+    var dx=e.changedTouches[0].clientX-sx,dy=e.changedTouches[0].clientY-sy;
+    if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)*1.5){show(dx<0?i+1:i-1)}
+  },{passive:true});
+  show(0);
+
+  function copyText(txt,btn,done){
+    function ok(){var o=btn.textContent;btn.textContent=done||'Копирано ✓';btn.classList.add('ok');setTimeout(function(){btn.textContent=o;btn.classList.remove('ok')},1800)}
+    function fb(){var ta=document.createElement('textarea');ta.value=txt;ta.setAttribute('readonly','');ta.style.cssText='position:fixed;top:0;left:0;opacity:0';document.body.appendChild(ta);ta.select();ta.setSelectionRange(0,ta.value.length);var r=false;try{r=document.execCommand('copy')}catch(e){}document.body.removeChild(ta);if(r)ok();else btn.textContent='Маркирайте текста и копирайте'}
+    if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(txt).then(ok,fb)}else fb();
+  }
+  [].forEach.call(document.querySelectorAll('button.copy[data-src]'),function(b){
+    b.addEventListener('click',function(){copyText(document.getElementById(b.getAttribute('data-src')).textContent,b)});
+  });
+  document.getElementById('copyall').addEventListener('click',function(){
+    var out=[].map.call(document.querySelectorAll('.card'),function(c,k){
+      return (k+1)+'. '+c.querySelector('h3').textContent+' — '+c.querySelector('.when').textContent.replace(/^Кога:\s*/,'Кога: ')+'\n'+c.querySelector('.ptext').textContent;
+    }).join('\n\n');
+    copyText(out,this,'Копирани и 10 ✓');
+  });
+})();
+</script>
+</body>
+</html>

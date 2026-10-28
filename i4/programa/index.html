@@ -1,0 +1,1721 @@
+<!DOCTYPE html>
+<html lang="bg"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><link rel="icon" href="data:,">
+<title>И4 · подробната програма</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Inter:wght@300;400;500;600&display=swap&subset=cyrillic" rel="stylesheet">
+<script type="importmap">{"imports":{"three":"../../vendor/three.module.js"}}</script>
+<style>
+:root{--bg:#0d0a08;--bg2:#15100c;--bg3:#1d1611;--gold:#E8C77E;--gold2:#c9a25a;--light:#fff5d6;--ink:#F0EBE0;--ink2:#d9d0bd;--mute:#a99e8a;--line:rgba(233,180,92,.35);--serif:'Cormorant Garamond',Georgia,'Times New Roman',serif;--sans:Inter,-apple-system,'Segoe UI',Roboto,sans-serif}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:90px;overflow-x:clip}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 var(--sans);-webkit-font-smoothing:antialiased;overflow-x:clip}
+a{color:var(--gold)}
+#direct-banner[hidden]{display:none}
+#direct-banner a{display:block;padding:13px 16px;text-align:center;background:linear-gradient(100deg,#fdd896,#e5a95a);color:#2a1c0a;font:600 15px/1.3 var(--sans);text-decoration:none}
+#bar{position:sticky;top:0;z-index:50;background:rgba(13,10,8,.9);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid rgba(232,199,126,.22);padding:8px 14px;display:grid;grid-template-columns:1fr auto;gap:6px 10px;align-items:center}
+#bar .brand{font:600 12px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--gold)}
+#cards{margin:0;font:600 12px/1 var(--sans);color:var(--light);padding:7px 12px;border:1px solid rgba(232,199,126,.45);border-radius:30px;background:rgba(21,16,12,.9);white-space:nowrap}
+#cards.pop{animation:pop .6s ease}
+@keyframes pop{40%{transform:scale(1.12);box-shadow:0 0 18px rgba(232,199,126,.6)}}
+#stagenav{grid-column:1/-1;display:flex;gap:6px;justify-content:space-between}
+#stagenav a{flex:1;max-width:44px;height:28px;display:grid;place-items:center;border-radius:14px;border:1px solid rgba(232,199,126,.3);color:var(--ink2);font:600 12px var(--sans);text-decoration:none}
+#stagenav a[aria-current=true]{background:var(--gold);color:#2a1c0a;border-color:var(--gold)}
+.phero{position:relative;min-height:min(80svh,660px);display:flex;align-items:flex-end;overflow:hidden}
+.phero>figure.art{position:absolute;inset:0;height:100%}
+.phero>figure.art::after{background:linear-gradient(180deg,rgba(13,10,8,.15) 0,rgba(13,10,8,.35) 40%,var(--bg) 100%)}
+.phero>figure.art>figcaption.cr{top:10px;bottom:auto;left:12px;right:auto;text-align:left}
+.phero .wrapc{position:relative;z-index:3;padding:0 16px 34px;max-width:760px}
+.kick{margin:0 0 8px;font:600 11px/1.3 var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--gold)}
+h1,h2{font-family:var(--serif);font-weight:600;color:var(--light);margin:0;text-shadow:0 2px 14px #000,0 0 3px #000}
+h1{font-size:2.5rem;line-height:1.04}
+h2{font-size:2rem;line-height:1.1}
+.lead,.sub{margin:10px 0 0;color:var(--ink);font-size:1.05rem;text-shadow:0 1px 8px #000,0 0 2px #000}
+.actor-line{margin:14px 0 0;padding:10px 14px;border-left:2px solid var(--gold);background:rgba(13,10,8,.55);color:var(--ink2);font-size:.95rem}
+.actor-line b{color:var(--gold)}
+.chap{position:relative;display:grid;border-top:1px solid rgba(232,199,126,.14);padding-bottom:44px;--barh:80px}
+/* MET-1925 · US7 · „62% образ“: картината на главата е залепена под лентата през цялата глава (на екрана е винаги), текстът и лентата на тримата минават върху нея през тъмен воал ≤ .86 */
+.chap figure.plate{grid-area:1/1;position:sticky;top:var(--barh);align-self:start;z-index:0;height:calc(100svh - var(--barh));width:100%;margin:0}
+.chap figure.plate::after{background:linear-gradient(180deg,rgba(13,10,8,.06) 0,rgba(13,10,8,.1) 36%,rgba(13,10,8,.7) 64%,rgba(13,10,8,.82) 100%)}
+.chap figure.plate>figcaption.cr{top:10px;bottom:auto;left:12px;right:auto;text-align:left}
+.chap .wrapc{grid-area:1/1;position:relative;z-index:3;margin-top:0;padding:calc(100svh - var(--barh) - 300px) 16px 0}
+.strip{display:grid;gap:10px;margin-top:20px}
+.fr{display:grid;grid-template-columns:44px 1fr 24px;gap:12px;align-items:center;width:100%;min-height:68px;padding:10px 14px;text-align:left;color:var(--ink);background:linear-gradient(160deg,rgba(29,22,17,.95),rgba(13,10,8,.95));border:1px solid rgba(232,199,126,.35);border-radius:16px;font:inherit;cursor:pointer}
+.fr .ic{width:44px;height:44px;border-radius:50%;border:1px solid var(--gold);display:grid;place-items:center;color:var(--gold)}
+.fr small{display:block;font:600 11px/1.2 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--mute)}
+.fr b{display:block;font:600 1.2rem/1.2 var(--serif);color:var(--light)}
+.fr .pl{font-size:24px;line-height:1;color:var(--gold);transition:transform .2s}
+.fr[aria-expanded=true] .pl{transform:rotate(45deg)}
+.fr[aria-expanded=true]{border-color:var(--gold);box-shadow:0 10px 30px -14px rgba(232,199,126,.4)}
+.fr.seen .ic{background:var(--gold);color:#2a1c0a}
+.fr.scene{border-style:dashed}
+.fp{margin:-6px 8px 0;padding:14px;border:1px solid rgba(232,199,126,.22);border-top:0;border-radius:0 0 14px 14px;background:rgba(13,10,8,.86)}
+.fp[hidden]{display:none}
+.fp p{margin:0 0 10px;color:var(--ink2);font-size:.98rem}
+.fp p.who{font:600 11px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+a.vid{display:inline-flex;align-items:center;min-height:44px;padding:0 16px;border:1px solid var(--gold);border-radius:30px;color:var(--gold);text-decoration:none;font:600 .92rem var(--sans)}
+.clap{border:2px solid var(--light);border-radius:6px;background:#0a0807;overflow:hidden}
+.clap .stripe{height:22px;background:repeating-linear-gradient(115deg,#f4e6bf 0 16px,#141008 16px 32px)}
+.clap dl{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;margin:0;padding:12px 14px}
+.clap dt{font:600 11px/1.6 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
+.clap dd{margin:0;font-family:var(--serif);font-size:1.15rem;color:var(--light)}
+.clap dd.actor{display:flex;align-items:center;gap:10px}
+.clap .ai{width:30px;height:30px;border-radius:50%;border:1px solid var(--gold);display:grid;place-items:center;color:var(--gold);font:16px/1 var(--sans)}
+.clap .rn{color:var(--gold)}
+.clap dd.act-line{font-size:1.05rem;line-height:1.35}
+.cnt{margin:0;font:12px/1.4 var(--sans);color:var(--mute)}
+.cnt .seen-n{color:var(--gold);font-weight:700}
+.slots{display:flex;gap:10px}
+.gift{margin-top:22px;padding:16px;border:1px solid rgba(232,199,126,.35);border-radius:16px;background:rgba(13,10,8,.78)}
+.gift h3{margin:0 0 6px;font:600 1.3rem/1.2 var(--serif);color:var(--light)}
+.gift h3+.gl{margin:0 0 8px;color:var(--ink2);font-size:.92rem}
+.gift .gp{display:grid;grid-template-columns:minmax(0,170px) 1fr;gap:12px;align-items:center;margin:0 0 16px}
+.gift #gift-radar svg{width:100%;height:auto;display:block}
+.gift #gift-answers{list-style:none;margin:0;padding:0;display:grid;gap:4px;font-size:.9rem}
+.gift #gift-answers li{display:flex;justify-content:space-between;gap:8px;border-bottom:1px solid rgba(232,199,126,.18);padding-bottom:3px}
+.gift #gift-answers i{font-style:normal;color:var(--ink2)}.gift #gift-answers b{color:var(--gold)}
+.gift ol{list-style:none;margin:8px 0 0;padding:0;display:grid;gap:8px}
+.gift ol li{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.gift ol a{display:grid;gap:2px;min-height:44px;color:var(--light);text-decoration:none}
+.gift ol .rt{font:600 1.02rem/1.25 var(--serif)}.gift ol .rm{font-size:.8rem;color:var(--mute)}
+.gift ol em{font-style:normal;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);white-space:nowrap}
+.cd{flex:1 1 0;max-width:176px;position:relative;margin:0;aspect-ratio:3/4;border-radius:12px;overflow:hidden;border:1px solid rgba(232,199,126,.3);background:#0d0a08}
+.cd img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:grayscale(1) brightness(.34);transition:filter .9s}
+.cd::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(13,10,8,.55) 0,rgba(13,10,8,0) 30%,rgba(13,10,8,.88) 100%)}
+.cd .no{position:absolute;z-index:2;left:9px;top:8px;font:600 11px/1 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--light)}
+.cd b{position:absolute;z-index:2;left:9px;right:9px;bottom:30px;font:600 1.05rem/1.1 var(--serif);color:var(--light)}
+.cd .lk{position:absolute;z-index:2;left:9px;right:9px;top:26px;font:11px/1.25 var(--sans);color:var(--mute)}
+.cd figcaption{position:absolute;z-index:2;left:8px;right:8px;bottom:6px;font:italic 9.5px/1.2 var(--serif);color:rgba(244,230,191,.88)}
+figure.art>figcaption.cr{transition:opacity 1.2s}
+figure.art[data-phase="dust"]>figcaption.cr{opacity:0}
+.cd[data-state=taken]{border-color:var(--gold);box-shadow:0 0 24px -6px rgba(232,199,126,.7)}
+.cd[data-state=taken] img{filter:none}
+.cd[data-state=taken] .lk{display:none}
+.cd.drop{animation:drop .9s ease}
+@keyframes drop{0%{transform:scale(.9) rotate(-3deg)}50%{transform:scale(1.06) rotate(1.5deg);box-shadow:0 0 40px rgba(232,199,126,.9)}100%{transform:none}}
+#toast{position:fixed;left:50%;bottom:18px;transform:translate(-50%,30px);opacity:0;z-index:80;padding:10px 18px;border-radius:30px;background:rgba(21,16,12,.96);border:1px solid var(--gold);color:var(--light);font:600 .9rem var(--sans);pointer-events:none;transition:.35s;max-width:90vw;text-align:center;line-height:1.3}
+#toast.on{opacity:1;transform:translate(-50%,0)}
+.pend{position:relative;text-align:center;padding:0 16px 60px}
+.pend figure.art{height:min(46svh,360px);margin:0 -16px 0}
+.pend figure.art::after{background:linear-gradient(180deg,var(--bg) 0,rgba(13,10,8,.1) 40%,var(--bg) 100%)}
+.pend figure.art>figcaption.cr{top:10px;bottom:auto;left:12px;right:auto;text-align:left}
+.pend p{margin:6px 0;color:var(--ink2)}
+.pend .big{font:600 1.5rem/1.2 var(--serif);color:var(--light)}
+.pend .cred{font:italic 12px/1.4 var(--serif);color:var(--mute);max-width:620px;margin:14px auto 0}
+@media(min-width:900px){
+ #bar{grid-template-columns:auto 1fr auto;padding:10px 28px}
+ #bar .brand{grid-column:1;grid-row:1} #stagenav{grid-column:2;grid-row:1;justify-content:center;gap:10px} #cards{grid-column:3;grid-row:1}
+ .phero{min-height:min(78vh,700px)}
+ .phero .wrapc{padding:0 48px 56px;max-width:860px}
+ h1{font-size:4rem}h2{font-size:2.7rem}
+ .chap{--barh:50px;grid-template-columns:minmax(0,1fr) minmax(0,1fr);min-height:92vh;padding-bottom:0}
+ .chap figure.plate{grid-area:1/1/2/3;height:calc(100vh - 50px)}
+ .chap figure.plate::after{background:linear-gradient(90deg,rgba(13,10,8,0) 0,rgba(13,10,8,.04) 38%,rgba(13,10,8,.74) 58%,rgba(13,10,8,.84) 100%)}
+ .chap.alt figure.plate::after{background:linear-gradient(270deg,rgba(13,10,8,0) 0,rgba(13,10,8,.04) 38%,rgba(13,10,8,.74) 58%,rgba(13,10,8,.84) 100%)}
+ .chap .wrapc{grid-area:1/2;margin-top:0;padding:64px 48px;align-self:center;max-width:640px}
+ .chap.alt .wrapc{grid-area:1/1;justify-self:end}
+ .pend figure.art{margin:0 auto;max-width:900px}
+}
+@media (prefers-reduced-motion:reduce){.cd,.cd img,#toast,.fr .pl{transition:none!important;animation:none!important}}
+/* MET-1935 · Скоростомер-четец: лентата долу (вариант c от MET-1903) · страничен инструмент, не контрол на глава · появява се след 3 екрана скрол */
+#reader{position:fixed;left:50%;bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:60;width:min(calc(100vw - 24px),560px);height:58px;box-sizing:border-box;padding:0 7px;display:flex;align-items:center;gap:10px;border-radius:29px;background:rgba(21,16,12,.94);border:1px solid rgba(232,199,126,.4);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);box-shadow:0 10px 30px -8px #000;color:var(--ink);transform:translate(-50%,150%);visibility:hidden;transition:transform .6s cubic-bezier(.3,.7,.2,1),visibility 0s .6s}
+#reader.docked{transform:translate(-50%,0);visibility:visible;transition:transform .6s cubic-bezier(.3,.7,.2,1),visibility 0s}
+#reader .pbtn{width:44px;height:44px;flex:none;display:grid;place-items:center;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ffe1a0,#d89a4a);color:#2a1908;box-shadow:0 6px 20px -6px rgba(226,164,88,.9);border:0;cursor:pointer}
+#reader .pbtn svg{width:46%;height:46%;fill:currentColor}
+#reader .pbtn .pause{display:none}#reader.playing .pbtn .play{display:none}#reader.playing .pbtn .pause{display:block}
+#reader .rib{position:relative;flex:1;min-width:0;height:44px;display:flex;flex-direction:column;justify-content:center;gap:6px}
+#reader .lbl{font:600 11px/1 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--mute);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#reader.started .lbl{color:var(--gold)}
+#reader .rtrack{position:relative;height:12px}
+#reader .rline{position:absolute;left:0;right:0;top:4px;height:4px;border-radius:2px;background:rgba(232,199,126,.2)}
+#reader .rgrow{position:absolute;left:0;top:0;height:12px;width:12px;border-radius:6px;background:linear-gradient(90deg,#8a6a2e,var(--gold));box-shadow:0 0 12px rgba(232,199,126,.6);transition:width .5s}
+#reader .chips{display:flex;gap:3px;flex:none}
+#reader .chip{min-width:40px;height:40px;padding:0 6px;border-radius:20px;border:0;background:none;cursor:pointer;font:500 14px/1 var(--sans);color:var(--mute);display:grid;place-items:center}
+#reader .chip.cur{background:var(--gold);color:#2a1908}
+#reader button:focus-visible{outline:2px solid var(--light);outline-offset:2px}
+.w{transition:opacity .3s,color .3s,box-shadow .3s}
+.w.on{color:var(--light);box-shadow:0 2px 0 0 var(--gold)}   /* подчертаване с box-shadow на кутия, чиято интервал е вътре: непрекъснато през целия ред (text-decoration чупи по думи) */
+body.reading .w:not(.on){opacity:.48}
+body.reader-docked #toast{bottom:84px}
+body.reader-docked{padding-bottom:calc(96px + env(safe-area-inset-bottom,0px))}   /* лентата (58) + отстъп (12) + въздух: краят на страницата никога не е под нея */
+html:has(body.reader-docked){scroll-padding-bottom:96px}
+@media (prefers-reduced-motion:reduce){#reader,#reader.docked,#reader .rgrow,.w{transition:none!important}}
+
+/* MET-1936 · ПТ портал: чашата събира картите на метачетене · разказвача · сугестопедия (единственият контрол на секцията е чашата) */
+.portal{position:relative;border-top:1px solid rgba(232,199,126,.14);padding:46px 16px 40px;overflow:hidden;background:radial-gradient(90% 46% at 50% 66%,rgba(52,38,20,.55),rgba(13,10,8,0) 72%),var(--bg)}
+.portal .pwrap{position:relative;z-index:2;max-width:1100px;margin:0 auto;display:grid;gap:18px}
+.portal>figure.art.plate{position:absolute;inset:0;height:100%;width:100%;margin:0;z-index:0}
+.portal>figure.art.plate::after{background:linear-gradient(180deg,rgba(13,10,8,.72) 0,rgba(13,10,8,.5) 45%,rgba(13,10,8,.35) 70%,rgba(13,10,8,.7) 100%)}
+.portal>figure.art.plate>figcaption.cr{top:10px;bottom:auto;left:12px;right:auto;text-align:left}
+.portal .big{margin:0;font:600 clamp(1.75rem,7.4vw,2.7rem)/1.1 var(--serif);color:var(--light);text-shadow:0 2px 14px #000,0 0 3px #000}
+.portal .sub{margin:12px 0 0;color:var(--ink);font-size:1.02rem;text-shadow:0 1px 8px #000}
+.pt-tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:20px 0 0;padding:0;list-style:none}
+.pt-tile{position:relative;margin:0;aspect-ratio:3/4;border-radius:12px;overflow:hidden;border:1px solid rgba(232,199,126,.3);background:#0d0a08;transition:border-color .6s,box-shadow .6s}
+.pt-tile img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:grayscale(1) brightness(.34);transition:filter .9s}
+.pt-tile::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(13,10,8,.55) 0,rgba(13,10,8,0) 30%,rgba(13,10,8,.88) 100%)}
+.pt-tile .no{position:absolute;z-index:2;left:8px;top:7px;font:600 10px/1 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--light)}
+.pt-tile b{position:absolute;z-index:2;left:8px;right:8px;bottom:26px;font:600 .98rem/1.08 var(--serif);color:var(--light)}
+.pt-tile .lk{position:absolute;z-index:2;left:8px;right:8px;top:22px;font:10.5px/1.25 var(--sans);color:var(--mute)}
+.pt-tile figcaption{position:absolute;z-index:2;left:7px;right:7px;bottom:5px;font:italic 9px/1.15 var(--serif);color:rgba(244,230,191,.88)}
+.pt-tile[data-state=taken],.pt-tile[data-state=poured]{border-color:var(--gold);box-shadow:0 0 22px -6px rgba(232,199,126,.7)}
+.pt-tile[data-state=taken] img,.pt-tile[data-state=poured] img{filter:none}
+.pt-tile[data-state=poured]{box-shadow:0 0 30px -4px rgba(232,199,126,.9)}
+.pt-tile[data-state=poured] img{filter:brightness(.8) saturate(.9)}
+.pt-tile[data-state=taken] .lk,.pt-tile[data-state=poured] .lk{color:var(--gold)}
+.portal .cnt{margin:14px 0 0;font:13px/1.45 var(--sans);color:var(--mute)}
+.portal .cnt #pt-n{color:var(--gold);font-weight:700;font-size:1.05rem}
+.portal .cnt #pt-hint{display:block;margin-top:2px;color:var(--ink2)}
+.pt-stage{position:relative;width:min(100%,520px);height:clamp(320px,88vw,600px);margin:0 auto}
+.pt-arch{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none}
+.pt-arch .dots{stroke-dasharray:0 2.6;stroke-width:1.1;opacity:.85}
+.pt-arch .d2{stroke-width:.8;opacity:.5}.pt-arch .d3{stroke-width:.6;opacity:.3}.pt-arch .base{opacity:.6}
+.pt-arch .d1{animation:pt-dots 30s linear infinite}.pt-arch .d2{animation:pt-dots 38s linear infinite reverse}
+@keyframes pt-dots{to{stroke-dashoffset:-52}}
+.pt-cup{position:absolute;left:50%;bottom:0;transform:translateX(-50%);width:88%;height:90%;display:block;padding:0;margin:0;border:0;background:none;color:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.pt-cup .still{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.pt-cup[data-gl="on"] .still .gold,.pt-cup[data-gl="on"] .still .surf,.pt-cup[data-gl="on"] .still .spill,.pt-cup[data-gl="on"] .still ellipse:not(.wall){display:none}   /* с WebGL облакът пълни чашата, а точковият контур остава: празната чаша се чете */
+.pt-cup[data-gl="on"] .still .wall{opacity:.5}
+.pt-cup canvas{-webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 12%);mask-image:linear-gradient(to bottom,transparent 0,#000 12%)}
+.pt-cup .spill{opacity:0;transition:opacity 1.2s}
+.pt-cup[data-phase=overflow] .spill{opacity:1}
+.pt-cup.shine .still{animation:pt-shine .9s ease}
+@keyframes pt-shine{40%{filter:brightness(1.7) drop-shadow(0 0 18px rgba(232,199,126,.9))}}
+.pt-cup:focus-visible{outline:2px solid var(--light);outline-offset:3px;border-radius:26px}
+.pt-ghost{position:fixed;left:0;top:0;z-index:90;margin:0;border-radius:10px;border:1px solid var(--gold);background-size:cover;pointer-events:none;box-shadow:0 0 26px rgba(232,199,126,.9);will-change:transform,opacity}
+@media(min-width:900px){
+ .portal{padding:72px 48px 64px;min-height:92vh;display:grid;align-items:center}
+ .portal .pwrap{grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:center;gap:56px}
+ .portal .big{font-size:2.7rem}
+ .pt-stage{height:min(80vh,640px);width:min(100%,560px)}
+ .pt-tiles{max-width:520px}
+}
+@media (prefers-reduced-motion:reduce){.pt-tile,.pt-tile img,.pt-cup .spill{transition:none!important}.pt-arch .d1,.pt-arch .d2{animation:none!important}}
+/* MET-1931 · .art = картина + прах · data-phase: dust → assembling → moving (still при reduced motion) */
+    figure.art{position:relative;margin:0;overflow:hidden;background:#0d0a08;isolation:isolate}
+    figure.art>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;transition:opacity 2.2s ease,filter 2.2s ease}
+    figure.art[data-phase="dust"]>img{opacity:.0;filter:blur(7px) brightness(.55)}
+    figure.art[data-phase="assembling"]>img{opacity:1;filter:none}
+    figure.art[data-phase="moving"]>img{opacity:1;filter:none;animation:artdrift 26s ease-in-out infinite alternate}
+    figure.art[data-phase="still"]>img{opacity:1;filter:none;transition:none}
+    figure.art>canvas.dust{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;mix-blend-mode:screen;z-index:2}
+    figure.art[data-phase="still"]>canvas.dust{display:none}
+    figure.art::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(180deg,rgba(13,10,8,0) 58%,rgba(13,10,8,.62))}
+    figure.art>figcaption.cr{position:absolute;left:8px;right:8px;bottom:5px;z-index:3;font:italic 10px/1.2 var(--serif);letter-spacing:.02em;color:rgba(244,230,191,.82);text-shadow:0 1px 4px #000,0 0 2px #000;pointer-events:none}
+    @keyframes artdrift{from{transform:scale(1.02) translate3d(0,0,0)}to{transform:scale(1.07) translate3d(-1.2%,.8%,0)}}
+    @media (prefers-reduced-motion:reduce){figure.art>img{animation:none!important;transition:none!important}}
+    figure.art.wall{position:sticky;top:0;height:100vh;height:100svh;margin:0 0 -100vh;margin-bottom:-100svh;z-index:0;pointer-events:none;background:transparent}
+    figure.art.wall>img{filter:brightness(.42) saturate(1.1)}
+    figure.art.wall[data-phase="dust"]>img{filter:blur(7px) brightness(.25)}
+    figure.art.wall[data-phase="assembling"]>img,figure.art.wall[data-phase="moving"]>img,figure.art.wall[data-phase="still"]>img{filter:brightness(.42) saturate(1.1)}
+    figure.art.wall::after{background:radial-gradient(120% 90% at 50% 45%,rgba(13,10,8,0) 40%,rgba(13,10,8,.78))}
+    figure.art.wall.dustonly{background:radial-gradient(90% 60% at 50% 40%,rgba(48,36,20,.5),rgba(13,10,8,0))}
+    figure.art.wall>figcaption.cr{left:auto;right:3px;top:auto;bottom:112px;writing-mode:vertical-rl;font-size:9px;opacity:.8}
+    .wallbox::before,#i4-fold .fold-in::before{content:"";position:absolute;left:0;right:0;top:0;height:200px;z-index:1;pointer-events:none;background:linear-gradient(var(--bg,#0d0a08),rgba(13,10,8,0))}
+    .wallbox::after,#i4-fold .fold-in::after{content:"";position:absolute;left:0;right:0;bottom:0;height:160px;z-index:1;pointer-events:none;background:linear-gradient(rgba(13,10,8,0),var(--bg,#0d0a08))}
+    .hero-text{position:relative}
+    .hero-text>*:not(figure.art){position:relative;z-index:2}
+    figure.art.panel{position:absolute;inset:0;z-index:0;border-radius:0;pointer-events:none;background:#0d0a08}
+    figure.art.panel>img{filter:none}
+    figure.art.panel>figcaption.cr{left:0;right:0;top:auto;bottom:4px;text-align:center}
+    #hero .hero-text{padding-bottom:22px!important}
+    figure.art.panel::after{background:linear-gradient(180deg,rgba(13,10,8,.7) 0,rgba(13,10,8,.8) 45%,rgba(13,10,8,.86) 100%)}
+    .wallbox{position:relative}
+    .wallbox>.wide,.wallbox>.wrap{position:relative;z-index:2}
+    #i4-fold .fold-in{position:relative}
+    #i4-fold .fold-in>section,#i4-fold .fold-in>p{position:relative;z-index:2}
+    #i4-fold .scale,#i4-fold #meter{background:transparent}
+    #i4-questionnaire .q.art-bg{background:linear-gradient(180deg,rgba(13,10,8,.5) 0,rgba(13,10,8,.8) 26%,rgba(13,10,8,.86) 100%),var(--pic) center/cover;border-color:rgba(233,180,92,.34);text-shadow:0 1px 6px rgba(0,0,0,.85),0 0 2px rgba(0,0,0,.8)}
+    #i4-questionnaire .q.art-bg .an button{background:rgba(13,10,8,.72)}
+    #fcr{position:relative;z-index:2}
+    </style></head><body>
+<aside id="direct-banner" role="note"><a href="../#i4-fold">Попълнете формата, за да получите своя AI design профил</a></aside>
+<header id="bar"><span class="brand">И4 · подробна програма</span><p id="cards" role="status" aria-live="polite">0 от 21 карти</p>
+<nav id="stagenav" aria-label="Осемте глави"><a href="#ch-1" aria-current="false" aria-label="Глава 1 · Сфера">1</a><a href="#ch-2" aria-current="false" aria-label="Глава 2 · Чудовище">2</a><a href="#ch-3" aria-current="false" aria-label="Глава 3 · Ментор">3</a><a href="#ch-4" aria-current="false" aria-label="Глава 4 · План">4</a><a href="#ch-5" aria-current="false" aria-label="Глава 5 · Игра">5</a><a href="#ch-6" aria-current="false" aria-label="Глава 6 · Залог">6</a><a href="#ch-7" aria-current="false" aria-label="Глава 7 · Съкровище">7</a><a href="#ch-8" aria-current="false" aria-label="Глава 8 · Еликсир">8</a></nav></header>
+<main data-slot="programme">
+<section class="phero" id="top">
+  <figure class="art hero" data-art="top" data-dust="light" data-d="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"><img src="https://maitapp.com/img/i4/wanderer-above-the-sea-of-fog.webp" alt="Фридрих · Странник над морето от мъгла · 1818" data-cr="Фридрих · Странник над морето от мъгла · 1818" style="object-position:50% 40%" loading="lazy" decoding="async"><canvas class="dust" aria-hidden="true"></canvas><figcaption class="cr">Фридрих · Странник над морето от мъгла · 1818</figcaption></figure>
+  <div class="wrapc"><p class="kick">Изкуствен интелект с игри и изкуство · <span style="white-space:nowrap">4–8 ноември</span> · София</p><h1>Подробната програма</h1>
+  <p class="lead">Осем глави по Пътя. Във всяка Мат, Ник и Нейт: умение, система и инструмент. Картите продължават от 9.</p>
+  <p class="actor-line" id="actor-line">Вие сте актьорът на снимачната площадка: във всяка от петте програми ролята ви излиза на сцената.</p></div>
+</section>
+<section class="chap" id="ch-1" data-stage="sphere" data-n="1">
+  <figure class="art plate" data-art="ch-1" data-dust="gold" data-d="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"><img src="https://maitapp.com/img/i4/ninth-wave.webp" alt="Айвазовски · Деветата вълна · 1850" data-cr="Айвазовски · Деветата вълна · 1850" style="object-position:50% 50%" loading="lazy" decoding="async"><canvas class="dust" aria-hidden="true"></canvas><figcaption class="cr">Айвазовски · Деветата вълна · 1850</figcaption></figure>
+  <div class="wrapc">
+    <header class="chead"><p class="kick">Глава 1 · Сфера</p><h2>Имате мисия, по-голяма от денонощието.</h2><p class="sub">Агентите ще вършат останалото, докато спите.</p></header>
+    <div class="strip" role="group" aria-label="Мат, Ник и Нейт · Сфера" data-stage="sphere" data-stage-card="ch-1">
+      <button type="button" class="fr" data-who="mat" aria-expanded="false" aria-controls="fp-1-mat"><span class="ic"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l2.2 6.8L21 12l-6.8 2.2L12 21l-2.2-6.8L3 12l6.8-2.2z"/></svg></span><span class="ft"><small>Мат · умение</small><b>/teach</b></span><span class="pl" aria-hidden="true">+</span></button><div class="fp" id="fp-1-mat" hidden><p class="who">Мат · Matt Pocock</p><p>ИИ като учител: учите всичко в зоната на близкото развитие.</p><a class="vid" href="https://www.youtube.com/watch?v=s5T5oQJcJ6U" target="_blank" rel="noopener" title="Learn anything with the /teach skill · Matt Pocock">Видео · 13 мин<span aria-hidden="true"> ↗</span></a></div>
+      <button type="button" class="fr" data-who="nik" aria-expanded="false" aria-controls="fp-1-nik"><span class="ic"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/></svg></span><span class="ft"><small>Ник · система</small><b>Пътна карта за ИИ</b></span><span class="pl" aria-hidden="true">+</span></button><div class="fp" id="fp-1-nik" hidden><p class="who">Ник · Nick Saraev</p><p>Откъде тръгвате: пълната карта за учене на ИИ, от нулата нагоре.</p><a class="vid" href="https://www.youtube.com/watch?v=KjKlBvX9G7w&t=3s" target="_blank" rel="noopener" title="The Last AI Roadmap Video You’ll Ever Watch · Nick Saraev">Видео · 36 мин<span aria-hidden="true"> ↗</span></a></div>
+      <button type="button" class="fr" data-who="nate" aria-expanded="false" aria-controls="fp-1-nate"><span class="ic"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 5.5a4 4 0 0 0-5 5L4 16l4 4 5.5-5.5a4 4 0 0 0 5-5l-2.5 2.5-2.5-.5-.5-2.5z"/></svg></span><span class="ft"><small>Нейт · инструмент</small><b>Седемте инструмента</b></span><span class="pl" aria-hidden="true">+</span></button><div class="fp" id="fp-1-nate" hidden><p class="who">Нейт · Nate Herk</p><p>Първият набор: най-добрите 7 ИИ инструмента от стотина пробвани.</p><a class="vid" href="https://www.youtube.com/watch?v=hgLI491ajG0" target="_blank" rel="noopener" title="I Tried 100+ AI Tools. These 7 Are the Best · Nate Herk">Видео · 10 мин<span aria-hidden="true"> ↗</span></a></div>
+      <p class="cnt" aria-live="polite"><span class="seen-n">0</span> от 3 отворени · третият отключва картата на главата</p>
+      <div class="slots"><figure class="cd" data-card="ch-1" data-n="9" data-state="locked"><img src="https://maitapp.com/img/i4/ninth-wave.webp" alt="Айвазовски · Деветата вълна · 1850" data-cr="Айвазовски · Деветата вълна · 1850" style="object-position:50% 50%" loading="lazy" decoding="async"><span class="no">Карта 9</span><b>Сфера</b><span class="lk">ваша, когато я отключите</span><figcaption class="cr">Айвазовски · Деветата вълна · 1850</figcaption></figure></div>
+    </div>
+  </div>
+</section>
+<section class="chap alt" id="ch-2" data-stage="monster" data-n="2">
+  <figure class="art plate" data-art="ch-2" data-dust="red" data-d="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"><img src="https://maitapp.com/img/i4/m-procrastination.webp" alt="Фюсли · Кошмарът · 1781" data-cr="Фюсли · Кошмарът · 1781" style="object-position:50% 14%" loading="lazy" decoding="async"><canvas class="dust" aria-hidden="true"></canvas><figcaption class="cr">Фюсли · Кошмарът · 1781</figcaption></figure>
+  <div class="wrapc">
+    <header class="chead"><p class="kick">Глава 2 · Чудовище</p><h2>Проблемът е вниманието.</h2><p class="sub">Повечето ще хващат все по-малко.</p></header>
+    <div class="strip" role="group" aria-label="Мат, Ник и Нейт · Чудовище" data-stage="monster" data-stage-card="ch-2" data-scene-card="scene-monster">
+      <button type="button" class="fr" data-who="mat" aria-expanded="false" aria-controls="fp-2-mat"><span class="ic"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l2.2 6.8L21 12l-6.8 2.2L12 21l-2.2-6.8L3 12l6.8-2.2z"/></svg></span><span class="ft"><small>Мат · умение</small><b>Никога не вярвайте на LLM</b></span><span class="pl" aria-hidden="true">+</span></button><div class="fp" id="fp-2-mat" hidden><p class="who">Мат · Matt Pocock</p><p>Проверено, не правдоподобно: как да хванете грешката, преди да ви е хванала.</p><a class="vid" href="https://www.youtube.com/watch?v=9VNG0h4pLh0" target="_blank" rel="noopener" title="Never Trust An LLM · Matt Pocock">Видео · 14 мин<span aria-hidden="true"> ↗</span></a></div>
+      <button type="button" class="fr" data-who="nik" aria-expanded="false" aria-controls="fp-2-nik"><span class="ic"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/></svg></span><span class="ft"><small>Ник · система</small><b>Оцеляване две години</b></span><span class="pl" aria-hidden="true">+</span></button><div class="fp" id="fp-2-nik" hidden><p class="who">Ник · Nick Saraev</p><p>Нагласата срещу чудовището: как да оцелеете в следващите две години на ИИ.</p><a class="vid" href="https://www.youtube.com/watch?v=X1ObmRAgp5A" target="_blank" rel="noopener" title="How to Survive the Next 2 Years of AI · Nick Saraev">Видео · 13 мин<span aria-hidden="true"> ↗</span></a></div>
+      <button type="button" class="fr" data-who="nate" aria-expanded="false" aria-controls="fp-2-nate"><span class="ic"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 5.5a4 4 0 0 0-5 5L4 16l4 4 5.5-5.5a4 4 0 0 0 5-5l-2.5 2.5-2.5-.5-.5-2.5z"/></svg></span><span class="ft"><small>Нейт · инструмент</small><b>5000 часа за 17 минути</b></span><span class="pl" aria-hidden="true">+</span></button><div class="fp" id="fp-2-nate" hidden><p class="who">Нейт · Nate Herk</p><p>Уроците от 5000 часа строене с ИИ, събрани в 17 минути.</p><a class="vid" href="https://www.youtube.com/watch?v=7WZ6XldxX0U&t=2s" target="_blank" rel="noopener" title="5000 Hours of Building AI in Just 17 Minutes · Nate Herk">Видео · 15 мин<span aria-hidden="true"> ↗</span></a></div>
+      <button type="button" class="fr scene" data-who="scene" aria-expanded="false" aria-controls="fp-2-scene"><span class="ic"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9h16v10H4zM4 9l2.5-4.5M9.5 9L12 4.5M15 9l2.5-4.5"/></svg></span><span class="ft"><small>Снимачна площадка · 5T</small><b>Сцена: Метаписане</b></span><span class="pl" aria-hidden="true">+</span></button><div class="fp" id="fp-2-scene" hidden><div class="clap"><div class="stripe"></div><dl><dt>Сцена</dt><dd>Метаписане</dd><dt>В ролята</dt><dd class="actor" data-line="пишат историята си и държат чудовището за антагонист: колкото по-добре е направен, толкова по-силна е историята."><span class="ai" aria-hidden="true"></span><b class="rn">Вие</b></dd><dt>Играе</dt><dd class="act-line"></dd></dl></div></div>
+      <p class="cnt" aria-live="polite"><span class="seen-n">0</span> от 3 отворени · третият отключва картата на главата</p>
+      <div class="slots"><figure class="cd" data-card="ch-2" data-n="10" data-state="locked"><img src="https://maitapp.com/img/i4/m-procrastination.webp" alt="Фюсли · Кошмарът · 1781" data-cr="Фюсли · Кошмарът · 1781" style="object-position:50% 14%" loading="lazy" decoding="async"><span class="no">Карта 10</span><b>Чудовище</b><span class="lk">ваша, когато я отключите</span><figcaption class="cr">Фюсли · Кошмарът · 1781</figcaption></figure><figure class="cd" data-card="scene-monster" data-n="11" data-state="locked"><img src="https://maitapp.com/img/i4/b-erasmus.webp" alt="Холбайн · Еразъм пише · 1523" data-cr="Холбайн · Еразъм пише · 1523" style="object-position:50% 30%" loading="lazy" decoding="async"><span class="no">Карта 11</span><b>Метаписане</b><span class="lk">ваша, когато я отключите</span><figcaption class="cr">Холбайн · Еразъм пише · 1523</figcaption></figure></div>
+    </div>
+  </div>
+</section>
+<section class="chap" id="ch-3" data-stage="mentor" data-n="3">
+  <figure class="art plate" data-art="ch-3" data-dust="light" data-d="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"><img src="https://maitapp.com/img/i4/b-vedder.webp" alt="Ведър · Питащият Сфинкса · 1863" data-cr="Ведър · Питащият Сфинкса · 1863" style="object-position:50% 55%" loading="lazy" decoding="async"><canvas class="dust" aria-hidden="true"></canvas><figcaption class="cr">Ведър · Питащият Сфинкса · 1863</figcaption></figure>
+  <div class="wrapc">
+    <header class="chead"><p class="kick">Глава 3 · Ментор</p><h2>Води ви Димитър Караманчев.</h2><p class="sub">Стотици часа на месец с ИИ агенти; Металандия върви с осем от тях.</p></header>
+    <div class="strip" role="group" aria-label="Мат, Ник и Нейт · Ментор" data-stage="mentor" data-stage-card="ch-3" data-scene-card="scene-mentor">
+      <button type="button" class="fr" data-who="mat" aria-expanded="false" aria-controls="fp-3-mat"><span class="ic"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l2.2 6.8L21 12l-6.8 2.2L12 21l-2.2-6.8L3 12l6.8-2.2z"/></svg></span><span class="ft"><small>Мат · умение</small><b>/grill-*</b></span><span class="pl" aria-hidden="true">+</span></button><div class="fp" id="fp-3-mat" hidden><p class="who">Мат · Matt Pocock</p><p>Менторът ви разпитва: 9 грешки, които хората правят, и как целта се изяснява преди спека.</p><a class="vid" href="https://www.youtube.com/watch?v=UzMNBN6xLLA" target="_blank" rel="noopener" title="9 Things People Get Wrong With My /grill-* skills · Matt Pocock">Видео · 13 мин<span aria-hidden="true"> ↗</span></a></div>
+      <button type="button" class="fr" data-who="nik" aria-expanded="false" aria-controls="fp-3-nik"><span class="ic"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/></svg></span><span class="ft"><small>Ник · система</small><b>Учене с ИИ в 10 роли</b></span><span class="pl" aria-hidden="true">+</span></button><div class="fp" id="fp-3-nik" hidden><p class="who">Ник · Nick Saraev</p><p>ИИ като ментор: произвеждайте, не консумирайте.</p><a class="vid" href="https://www.youtube.com/watch?v=FSXHk4hMrY8&t=1443s" target="_blank" rel="noopener" title="How I Learn Complex Skills &amp; Difficult Subjects So Fast with AI · Nick Saraev">Видео · 29 мин<span aria-hidden="true"> ↗</span></a></div>
+      <button type="button" class="fr" data-who="nate" aria-expanded="false" aria-controls="fp-3-nate"><span class="ic"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 5.5a4 4 0 0 0-5 5L4 16l4 4 5.5-5.5a4 4 0 0 0 5-5l-2.5 2.5-2.5-.5-.5-2.5z"/></svg></span><span class="ft"><small>Нейт · инструмент</small><b>Най-ценното умение</b></span><span class="pl" aria-hidden="true">+</span></button><div class="fp" id="fp-3-nate" hidden><p class="who">Нейт · Nate Herk</p><p>Мат Покок пред Нейт: точно да опишете работата, която искате свършена.</p><a class="vid" href="https://www.youtube.com/watch?v=Z8lf5oWKfj0" target="_blank" rel="noopener" title="Matt Pocock: The Most Valuable Skill to Learn in the Age of AI · Nate Herk">Видео · 44 мин<span aria-hidden="true"> ↗</span></a></div>
+      <button type="button" class="fr scene" data-who="scene" aria-expanded="false" aria-controls="fp-3-scene"><span class="ic"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9h16v10H4zM4 9l2.5-4.5M9.5 9L12 4.5M15 9l2.5-4.5"/></svg></span><span class="ft"><small>Снимачна площадка · 5T</small><b>Сцена: Метачетене</b></span><span class="pl" aria-hidden="true">+</span></button><div class="fp" id="fp-3-scene" hidden><div class="clap"><div class="stripe"></div><dl><dt>Сцена</dt><dd>Метачетене</dd><dt>В ролята</dt><dd class="actor" data-line="четат книгата като ролева игра: книгите са ментори и предизвикателства, има пещери и накрая се отключва съкровище."><span class="ai" aria-hidden="true"></span><b class="rn">Вие</b></dd><dt>Играе</dt><dd class="act-line"></dd></dl></div></div>
+      <p class="cnt" aria-live="polite"><span class="seen-n">0</span> от 3 отворени · третият отключва картата на главата</p>
+      <div class="slots"><figure class="cd" data-card="ch-3" data-n="12" data-state="locked"><img src="https://maitapp.com/img/i4/b-vedder.webp" alt="Ведър · Питащият Сфинкса · 1863" data-cr="Ведър · Питащият Сфинкса · 1863" style="object-position:50% 55%" loading="lazy" decoding="async"><span class="no">Карта 12</span><b>Ментор</b><span class="lk">ваша, когато я отключите</span><figcaption class="cr">Ведър · Питащият Сфинкса · 1863</figcaption></figure><figure class="cd" data-card="scene-mentor" data-n="13" data-state="locked"><img src="https://maitapp.com/img/i4/b-vermeer.webp" alt="Вермеер · Географът · 1669" data-cr="Вермеер · Географът · 1669" style="object-position:50% 38%" loading="lazy" decoding="async"><span class="no">Карта 13</span><b>Метачетене</b><span class="lk">ваша, когато я отключите</span><figcaption class="cr">Вермеер · Географът · 1669</figcaption></figure></div>
+    </div>
+  </div>
+</section>
+<section class="chap alt" id="ch-4" data-stage="plan" data-n="4">
+  <figure class="art plate" data-art="ch-4" data-dust="gold" data-d="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"><img src="https://maitapp.com/img/i4/f-chess.webp" alt="Ангвисола · Партия шах · 1555" data-cr="Ангвисола · Партия шах · 1555" style="object-position:50% 50%" loading="lazy" decoding="async"><canvas class="dust" aria-hidden="true"></canvas><figcaption class="cr">Ангвисола · Партия шах · 1555</figcaption></figure>
+  <div class="wrapc">
+    <header class="chead"><p class="kick">Глава 4 · План</p><h2>Пет дни по четири часа, от подножието до върха.</h2><p class="sub">В подножието имате асистент. На върха имате своя фабрИИка.</p></header>
+    <div class="strip" role="group" aria-label="Мат, Ник и Нейт · План" data-stage="plan" data-stage-card="ch-4" data-scene-card="scene-plan">
+      <button type="button" class="fr" data-who="mat" aria-expanded="false" aria-controls="fp-4-mat"><span class="ic"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l2.2 6.8L21 12l-6.8 2.2L12 21l-2.2-6.8L3 12l6.8-2.2z"/></svg></span><span class="ft"><small>Мат · умение</small><b>/wayfinder</b></span><span class="pl" aria-hidden="true">+</span></button><div class="fp" id="fp-4-mat" hidden><p class="who">Мат · Matt Pocock</p><p>План за голяма работа през много сесии: нищо не е твърде голямо за планиране.</p><a class="vid" href="https://www.youtube.com/watch?v=F3lL98Pj90o&t=5s" target="_blank" rel="noopener" title="/wayfinder: Nothing is too big to plan anymore · Matt Pocock">Видео · 15 мин<span aria-hidden="true"> ↗</span></a></div>
+      <button type="button" class="fr" data-who="nik" aria-expanded="false" aria-controls="fp-4-nik"><span class="ic"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/></svg></span><span class="ft"><small>Ник · система</small><b>Общ борд за човек и агент</b></span><span class="pl" aria-hidden="true">+</span></button><div class="fp" id="fp-4-nik" hidden><p class="who">Ник · Nick Saraev</p><p>Работен поток за фирмите: един общ списък за хора и агенти, пет най-важни задачи.</p><a class="vid" href="https://www.youtube.com/watch?v=8rVQuZlRaqo&t=7s" target="_blank" rel="noopener" title="A Practical AI Agent Workflow For Companies In 2027 (Guide) · Nick Saraev">Видео · 19 мин<span aria-hidden="true"> ↗</span></a></div>
+      <button type="button" class="fr" data-who="nate" aria-expanded="false" aria-controls="fp-4-nate"><span class="ic"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 5.5a4 4 0 0 0-5 5L4 16l4 4 5.5-5.5a4 4 0 0 0 5-5l-2.5 2.5-2.5-.5-.5-2.5z"/></svg></span><span class="ft"><small>Нейт · инструмент</small><b>Какво да строите вместо агенти</b></span><span class="pl" aria-hidden="true">+</span></button><div class="fp" id="fp-4-nate" hidden><p class="who">Нейт · Nate Herk</p><p>Работни потоци, описани точно, вместо агент за всичко.</p><a class="vid" href="https://www.youtube.com/watch?v=HIRDzMtuWFk" target="_blank" rel="noopener" title="Anthropic Engineer Explains: What to Build Instead of AI Agents · Nate Herk">Видео · 9 мин<span aria-hidden="true"> ↗</span></a></div>
+      <button type="button" class="fr scene" data-who="scene" aria-expanded="false" aria-controls="fp-4-scene"><span class="ic"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9h16v10H4zM4 9l2.5-4.5M9.5 9L12 4.5M15 9l2.5-4.5"/></svg></span><span class="ft"><small>Снимачна площадка · 5T</small><b>Сцена: ИИ фабриката</b></span><span class="pl" aria-hidden="true">+</span></button><div class="fp" id="fp-4-scene" hidden><div class="clap"><div class="stripe"></div><dl><dt>Сцена</dt><dd>ИИ фабриката</dd><dt>В ролята</dt><dd class="actor" data-line="са продуцентите: агентите са екипът и вършат останалото, докато спите."><span class="ai" aria-hidden="true"></span><b class="rn">Вие</b></dd><dt>Играе</dt><dd class="act-line"></dd></dl></div></div>
+      <p class="cnt" aria-live="polite"><span class="seen-n">0</span> от 3 отворени · третият отключва картата на главата</p>
+      <div class="slots"><figure class="cd" data-card="ch-4" data-n="14" data-state="locked"><img src="https://maitapp.com/img/i4/f-chess.webp" alt="Ангвисола · Партия шах · 1555" data-cr="Ангвисола · Партия шах · 1555" style="object-position:50% 50%" loading="lazy" decoding="async"><span class="no">Карта 14</span><b>План</b><span class="lk">ваша, когато я отключите</span><figcaption class="cr">Ангвисола · Партия шах · 1555</figcaption></figure><figure class="cd" data-card="scene-plan" data-n="15" data-state="locked"><img src="https://maitapp.com/img/i4/b-moonlit.webp" alt="Куинджи · Лунна нощ над Днепър · 1880" data-cr="Куинджи · Лунна нощ над Днепър · 1880" style="object-position:50% 55%" loading="lazy" decoding="async"><span class="no">Карта 15</span><b>ИИ фабриката</b><span class="lk">ваша, когато я отключите</span><figcaption class="cr">Куинджи · Лунна нощ над Днепър · 1880</figcaption></figure></div>
+    </div>
+  </div>
+</section>
+<section class="chap" id="ch-5" data-stage="game" data-n="5">
+  <figure class="art plate" data-art="ch-5" data-dust="light" data-d="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"><img src="https://maitapp.com/img/i4/b-ermine.webp" alt="Леонардо · Дамата с хермелина · ок. 1490" data-cr="Леонардо · Дамата с хермелина · ок. 1490" style="object-position:50% 24%" loading="lazy" decoding="async"><canvas class="dust" aria-hidden="true"></canvas><figcaption class="cr">Леонардо · Дамата с хермелина · ок. 1490</figcaption></figure>
+  <div class="wrapc">
+    <header class="chead"><p class="kick">Глава 5 · Игра</p><h2>Искате ли да играете сега?</h2><p class="sub">Окото хваща повече, паметта държи повече, когато е игра.</p></header>
+    <div class="strip" role="group" aria-label="Мат, Ник и Нейт · Игра" data-stage="game" data-stage-card="ch-5" data-scene-card="scene-game">
+      <button type="button" class="fr" data-who="mat" aria-expanded="false" aria-controls="fp-5-mat"><span class="ic"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l2.2 6.8L21 12l-6.8 2.2L12 21l-2.2-6.8L3 12l6.8-2.2z"/></svg></span><span class="ft"><small>Мат · умение</small><b>/prototype</b></span><span class="pl" aria-hidden="true">+</span></button><div class="fp" id="fp-5-mat" hidden><p class="who">Мат · Matt Pocock</p><p>Не губете време в дълъг спек: играйте с прототип.</p><a class="vid" href="https://www.youtube.com/watch?v=n0VhIVtviC0" target="_blank" rel="noopener" title="Don&#x27;t waste time on specs: /prototype instead · Matt Pocock">Видео · 10 мин<span aria-hidden="true"> ↗</span></a></div>
+      <button type="button" class="fr" data-who="nik" aria-expanded="false" aria-controls="fp-5-nik"><span class="ic"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/></svg></span><span class="ft"><small>Ник · система</small><b>1000 часа Claude Code</b></span><span class="pl" aria-hidden="true">+</span></button><div class="fp" id="fp-5-nik" hidden><p class="who">Ник · Nick Saraev</p><p>Уроците от над 1000 часа работа с Claude Code.</p><a class="vid" href="https://www.youtube.com/watch?v=45K3zHckCnQ" target="_blank" rel="noopener" title="I spent $31,141 and 1000+ hrs on Claude Code to Learn This · Nick Saraev">Видео · 25 мин<span aria-hidden="true"> ↗</span></a></div>
+      <button type="button" class="fr" data-who="nate" aria-expanded="false" aria-controls="fp-5-nate"><span class="ic"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 5.5a4 4 0 0 0-5 5L4 16l4 4 5.5-5.5a4 4 0 0 0 5-5l-2.5 2.5-2.5-.5-.5-2.5z"/></svg></span><span class="ft"><small>Нейт · инструмент</small><b>Агентски цикли</b></span><span class="pl" aria-hidden="true">+</span></button><div class="fp" id="fp-5-nate" hidden><p class="who">Нейт · Nate Herk</p><p>Цикълът, в който агентът играе сам, ясно обяснен.</p><a class="vid" href="https://www.youtube.com/watch?v=EuzYhzB0vbI&t=2s" target="_blank" rel="noopener" title="Finally. Agent Loops Clearly Explained. · Nate Herk">Видео · 14 мин<span aria-hidden="true"> ↗</span></a></div>
+      <button type="button" class="fr scene" data-who="scene" aria-expanded="false" aria-controls="fp-5-scene"><span class="ic"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9h16v10H4zM4 9l2.5-4.5M9.5 9L12 4.5M15 9l2.5-4.5"/></svg></span><span class="ft"><small>Снимачна площадка · 5T</small><b>Сцена: Сугестопедия</b></span><span class="pl" aria-hidden="true">+</span></button><div class="fp" id="fp-5-scene" hidden><div class="clap"><div class="stripe"></div><dl><dt>Сцена</dt><dd>Сугестопедия</dd><dt>В ролята</dt><dd class="actor" data-line="минават кастинг и играят нов образ на сцената: режисьор е Димитър Караманчев, а няма сугестопедия без приказност."><span class="ai" aria-hidden="true"></span><b class="rn">Вие</b></dd><dt>Играе</dt><dd class="act-line"></dd></dl></div></div>
+      <p class="cnt" aria-live="polite"><span class="seen-n">0</span> от 3 отворени · третият отключва картата на главата</p>
+      <div class="slots"><figure class="cd" data-card="ch-5" data-n="16" data-state="locked"><img src="https://maitapp.com/img/i4/b-ermine.webp" alt="Леонардо · Дамата с хермелина · ок. 1490" data-cr="Леонардо · Дамата с хермелина · ок. 1490" style="object-position:50% 24%" loading="lazy" decoding="async"><span class="no">Карта 16</span><b>Игра</b><span class="lk">ваша, когато я отключите</span><figcaption class="cr">Леонардо · Дамата с хермелина · ок. 1490</figcaption></figure><figure class="cd" data-card="scene-game" data-n="17" data-state="locked"><img src="https://maitapp.com/img/i4/f-orpheus.webp" alt="Моро · Орфей · 1865" data-cr="Моро · Орфей · 1865" style="object-position:50% 40%" loading="lazy" decoding="async"><span class="no">Карта 17</span><b>Сугестопедия</b><span class="lk">ваша, когато я отключите</span><figcaption class="cr">Моро · Орфей · 1865</figcaption></figure></div>
+    </div>
+  </div>
+</section>
+<section class="chap alt" id="ch-6" data-stage="pledge" data-n="6">
+  <figure class="art plate" data-art="ch-6" data-dust="gold" data-d="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"><img src="https://maitapp.com/img/i4/b-weighing.webp" alt="де Хох · Жена мери злато · ок. 1664" data-cr="де Хох · Жена мери злато · ок. 1664" style="object-position:62% 38%" loading="lazy" decoding="async"><canvas class="dust" aria-hidden="true"></canvas><figcaption class="cr">де Хох · Жена мери злато · ок. 1664</figcaption></figure>
+  <div class="wrapc">
+    <header class="chead"><p class="kick">Глава 6 · Залог</p><h2>Какво залагате?</h2><p class="sub">Залогът е ваш. Тримата показват как да го направите малък.</p></header>
+    <div class="strip" role="group" aria-label="Мат, Ник и Нейт · Залог" data-stage="pledge" data-stage-card="ch-6">
+      <button type="button" class="fr" data-who="mat" aria-expanded="false" aria-controls="fp-6-mat"><span class="ic"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l2.2 6.8L21 12l-6.8 2.2L12 21l-2.2-6.8L3 12l6.8-2.2z"/></svg></span><span class="ft"><small>Мат · умение</small><b>/to-spec и /to-tickets</b></span><span class="pl" aria-hidden="true">+</span></button><div class="fp" id="fp-6-mat" hidden><p class="who">Мат · Matt Pocock</p><p>Залогът става малки задачи: от цел до спецификация и билети.</p><a class="vid" href="https://www.youtube.com/watch?v=A8mokin_YOs&t=263s" target="_blank" rel="noopener" title="New Skills! v1.1 brings /wayfinder, /research, /implement, /to-spec, /to-tickets · Matt Pocock">Видео · 15 мин<span aria-hidden="true"> ↗</span></a></div>
+      <button type="button" class="fr" data-who="nik" aria-expanded="false" aria-controls="fp-6-nik"><span class="ic"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/></svg></span><span class="ft"><small>Ник · система</small><b>Стойност × вероятност</b></span><span class="pl" aria-hidden="true">+</span></button><div class="fp" id="fp-6-nik" hidden><p class="who">Ник · Nick Saraev</p><p>Какво залагате: стойност, вероятност и алтернативна цена, от петчасовия курс за ясно мислене.</p><a class="vid" href="https://www.youtube.com/watch?v=QLLuZbuTIRc" target="_blank" rel="noopener" title="The most important video you&#x27;ll ever watch in the age of AI · Nick Saraev">Видео · 5 ч 2 мин<span aria-hidden="true"> ↗</span></a></div>
+      <button type="button" class="fr" data-who="nate" aria-expanded="false" aria-controls="fp-6-nate"><span class="ic"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 5.5a4 4 0 0 0-5 5L4 16l4 4 5.5-5.5a4 4 0 0 0 5-5l-2.5 2.5-2.5-.5-.5-2.5z"/></svg></span><span class="ft"><small>Нейт · инструмент</small><b>Цената на автоматизацията</b></span><span class="pl" aria-hidden="true">+</span></button><div class="fp" id="fp-6-nate" hidden><p class="who">Нейт · Nate Herk</p><p>18 месеца ценообразуване на ИИ автоматизации: как се мери стойността.</p><a class="vid" href="https://www.youtube.com/watch?v=Lg5TYWPSg6M&t=589s" target="_blank" rel="noopener" title="18 Months of Pricing AI Automations in 21 Mins · Nate Herk">Видео · 21 мин<span aria-hidden="true"> ↗</span></a></div>
+      <p class="cnt" aria-live="polite"><span class="seen-n">0</span> от 3 отворени · третият отключва картата на главата</p>
+      <div class="slots"><figure class="cd" data-card="ch-6" data-n="18" data-state="locked"><img src="https://maitapp.com/img/i4/b-weighing.webp" alt="де Хох · Жена мери злато · ок. 1664" data-cr="де Хох · Жена мери злато · ок. 1664" style="object-position:62% 38%" loading="lazy" decoding="async"><span class="no">Карта 18</span><b>Залог</b><span class="lk">ваша, когато я отключите</span><figcaption class="cr">де Хох · Жена мери злато · ок. 1664</figcaption></figure></div>
+    </div>
+  </div>
+</section>
+<section class="chap" id="ch-7" data-stage="treasure" data-n="7">
+  <figure class="art plate" data-art="ch-7" data-dust="gold" data-d="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"><img src="https://maitapp.com/img/i4/f-hesperides.webp" alt="Лейтън · Градината на Хесперидите · ок. 1892" data-cr="Лейтън · Градината на Хесперидите · ок. 1892" style="object-position:50% 40%" loading="lazy" decoding="async"><canvas class="dust" aria-hidden="true"></canvas><figcaption class="cr">Лейтън · Градината на Хесперидите · ок. 1892</figcaption></figure>
+  <div class="wrapc">
+    <header class="chead"><p class="kick">Глава 7 · Съкровище</p><h2>На върха ви чака вашето изречение.</h2><p class="sub">Вече имате време за него: агентите работят, докато спите.</p></header>
+    <div class="strip" role="group" aria-label="Мат, Ник и Нейт · Съкровище" data-stage="treasure" data-stage-card="ch-7">
+      <button type="button" class="fr" data-who="mat" aria-expanded="false" aria-controls="fp-7-mat"><span class="ic"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l2.2 6.8L21 12l-6.8 2.2L12 21l-2.2-6.8L3 12l6.8-2.2z"/></svg></span><span class="ft"><small>Мат · умение</small><b>/pr и /retro</b></span><span class="pl" aria-hidden="true">+</span></button><div class="fp" id="fp-7-mat" hidden><p class="who">Мат · Matt Pocock</p><p>Ревю и ретро: съкровището е проверено, не само направено.</p><a class="vid" href="https://www.youtube.com/watch?v=BsJGo1wFTvQ&t=1s" target="_blank" rel="noopener" title="New Skills! v1.3 brings /pr, /implement-spec, and /retro · Matt Pocock">Видео · 14 мин<span aria-hidden="true"> ↗</span></a></div>
+      <button type="button" class="fr" data-who="nik" aria-expanded="false" aria-controls="fp-7-nik"><span class="ic"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/></svg></span><span class="ft"><small>Ник · система</small><b>Фирма, която се автоматизира с Claude</b></span><span class="pl" aria-hidden="true">+</span></button><div class="fp" id="fp-7-nik" hidden><p class="who">Ник · Nick Saraev</p><p>Как реално да автоматизирате фирмата си с Claude.</p><a class="vid" href="https://www.youtube.com/watch?v=rvkjS3YoVio&t=2s" target="_blank" rel="noopener" title="How to Actually Automate Your Company w/ Claude (Seriously) · Nick Saraev">Видео · 7 мин<span aria-hidden="true"> ↗</span></a></div>
+      <button type="button" class="fr" data-who="nate" aria-expanded="false" aria-controls="fp-7-nate"><span class="ic"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 5.5a4 4 0 0 0-5 5L4 16l4 4 5.5-5.5a4 4 0 0 0 5-5l-2.5 2.5-2.5-.5-.5-2.5z"/></svg></span><span class="ft"><small>Нейт · инструмент</small><b>AI OS</b></span><span class="pl" aria-hidden="true">+</span></button><div class="fp" id="fp-7-nate" hidden><p class="who">Нейт · Nate Herk</p><p>Операционна система за ИИ: база знания, която агентът чете.</p><a class="vid" href="https://www.youtube.com/watch?v=Ek1NBfnnTH0" target="_blank" rel="noopener" title="Steal My Exact AI OS Setup (5 simple tips) · Nate Herk">Видео · 25 мин<span aria-hidden="true"> ↗</span></a></div>
+      <p class="cnt" aria-live="polite"><span class="seen-n">0</span> от 3 отворени · третият отключва картата на главата</p>
+      <div class="slots"><figure class="cd" data-card="ch-7" data-n="19" data-state="locked"><img src="https://maitapp.com/img/i4/f-hesperides.webp" alt="Лейтън · Градината на Хесперидите · ок. 1892" data-cr="Лейтън · Градината на Хесперидите · ок. 1892" style="object-position:50% 40%" loading="lazy" decoding="async"><span class="no">Карта 19</span><b>Съкровище</b><span class="lk">ваша, когато я отключите</span><figcaption class="cr">Лейтън · Градината на Хесперидите · ок. 1892</figcaption></figure></div>
+    </div>
+  </div>
+</section>
+<section class="chap alt" id="ch-8" data-stage="elixir" data-n="8">
+  <figure class="art plate" data-art="ch-8" data-dust="light" data-d="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"><img src="https://maitapp.com/img/i4/rising-sun.webp" alt="Фридрих · Жена пред изгряващото слънце · 1818" data-cr="Фридрих · Жена пред изгряващото слънце · 1818" style="object-position:50% 55%" loading="lazy" decoding="async"><canvas class="dust" aria-hidden="true"></canvas><figcaption class="cr">Фридрих · Жена пред изгряващото слънце · 1818</figcaption></figure>
+  <div class="wrapc">
+    <header class="chead"><p class="kick">Глава 8 · Еликсир</p><h2>Връщате се у дома с дар.</h2><p class="sub">Вашата фабрИИка освобождава време и за хората около вас.</p></header>
+    <div class="strip" role="group" aria-label="Мат, Ник и Нейт · Еликсир" data-stage="elixir" data-stage-card="ch-8" data-scene-card="scene-elixir">
+      <button type="button" class="fr" data-who="mat" aria-expanded="false" aria-controls="fp-8-mat"><span class="ic"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l2.2 6.8L21 12l-6.8 2.2L12 21l-2.2-6.8L3 12l6.8-2.2z"/></svg></span><span class="ft"><small>Мат · умение</small><b>/handoff</b></span><span class="pl" aria-hidden="true">+</span></button><div class="fp" id="fp-8-mat" hidden><p class="who">Мат · Matt Pocock</p><p>Работата между сесиите без загуба на контекст: еликсирът се носи у дома.</p><a class="vid" href="https://www.youtube.com/watch?v=dtAJ2dOd3ko" target="_blank" rel="noopener" title="/handoff is my new favourite skill · Matt Pocock">Видео · 12 мин<span aria-hidden="true"> ↗</span></a></div>
+      <button type="button" class="fr" data-who="nik" aria-expanded="false" aria-controls="fp-8-nik"><span class="ic"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/></svg></span><span class="ft"><small>Ник · система</small><b>AI harness</b></span><span class="pl" aria-hidden="true">+</span></button><div class="fp" id="fp-8-nik" hidden><p class="who">Ник · Nick Saraev</p><p>Правила, умения и памет около модела: какво остава след вас.</p><a class="vid" href="https://www.youtube.com/watch?v=lNum1UFDYn0" target="_blank" rel="noopener" title="AI HARNESS: An In-Depth Explanation · Nick Saraev">Видео · 24 мин<span aria-hidden="true"> ↗</span></a></div>
+      <button type="button" class="fr" data-who="nate" aria-expanded="false" aria-controls="fp-8-nate"><span class="ic"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 5.5a4 4 0 0 0-5 5L4 16l4 4 5.5-5.5a4 4 0 0 0 5-5l-2.5 2.5-2.5-.5-.5-2.5z"/></svg></span><span class="ft"><small>Нейт · инструмент</small><b>Шестте ИИ умения</b></span><span class="pl" aria-hidden="true">+</span></button><div class="fp" id="fp-8-nate" hidden><p class="who">Нейт · Nate Herk</p><p>Шестте умения, които да научите сега, преди всички останали.</p><a class="vid" href="https://www.youtube.com/watch?v=3XIGcM7VICc" target="_blank" rel="noopener" title="Learn These 6 AI Skills Now (Before Everyone Else Does) · Nate Herk">Видео · 20 мин<span aria-hidden="true"> ↗</span></a></div>
+      <button type="button" class="fr scene" data-who="scene" aria-expanded="false" aria-controls="fp-8-scene"><span class="ic"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9h16v10H4zM4 9l2.5-4.5M9.5 9L12 4.5M15 9l2.5-4.5"/></svg></span><span class="ft"><small>Снимачна площадка · 5T</small><b>Сцена: Разказвача</b></span><span class="pl" aria-hidden="true">+</span></button><div class="fp" id="fp-8-scene" hidden><div class="clap"><div class="stripe"></div><dl><dt>Сцена</dt><dd>Разказвача</dd><dt>В ролята</dt><dd class="actor" data-line="излизат на сцената и разказват историята си до края."><span class="ai" aria-hidden="true"></span><b class="rn">Вие</b></dd><dt>Играе</dt><dd class="act-line"></dd></dl></div></div>
+      <p class="cnt" aria-live="polite"><span class="seen-n">0</span> от 3 отворени · третият отключва картата на главата</p>
+      <div class="slots"><figure class="cd" data-card="ch-8" data-n="20" data-state="locked"><img src="https://maitapp.com/img/i4/rising-sun.webp" alt="Фридрих · Жена пред изгряващото слънце · 1818" data-cr="Фридрих · Жена пред изгряващото слънце · 1818" style="object-position:50% 55%" loading="lazy" decoding="async"><span class="no">Карта 20</span><b>Еликсир</b><span class="lk">ваша, когато я отключите</span><figcaption class="cr">Фридрих · Жена пред изгряващото слънце · 1818</figcaption></figure><figure class="cd" data-card="scene-elixir" data-n="21" data-state="locked"><img src="https://maitapp.com/img/i4/b-decameron.webp" alt="Уотърхаус · Приказка от Декамерон · 1916" data-cr="Уотърхаус · Приказка от Декамерон · 1916" style="object-position:50% 45%" loading="lazy" decoding="async"><span class="no">Карта 21</span><b>Разказвача</b><span class="lk">ваша, когато я отключите</span><figcaption class="cr">Уотърхаус · Приказка от Декамерон · 1916</figcaption></figure></div>
+      <div class="gift" id="elixir-gift">
+        <h3>Вашият AI design профил</h3>
+        <p class="gl" id="gift-role">Профилът се рисува от шестте отговора във формата на ландинга.</p>
+        <div class="gp"><div id="gift-radar" aria-hidden="true"></div><ul id="gift-answers"><li><i>ИИличност</i><b>–</b></li><li><i>Цели</i><b>–</b></li><li><i>Срокове</i><b>–</b></li><li><i>Спек</i><b>–</b></li><li><i>Изпълнение</i><b>–</b></li><li><i>Ревю</i><b>–</b></li></ul></div>
+        <h3>Вашите 3 ресурса</h3>
+        <ol id="gift-res"><li><a href="https://www.youtube.com/watch?v=FSXHk4hMrY8&amp;t=1443s" target="_blank" rel="noopener noreferrer"><span class="rt">Как да учите с ИИ в 10 роли</span><span class="rm">Nick Saraev · от 24-тата минута · 30 мин</span></a><em>от екипа</em></li><li><a href="https://www.youtube.com/watch?v=M6mYodf0dJM&amp;t=21s" target="_blank" rel="noopener noreferrer"><span class="rt">Целият поток: интервю, спецификация, малки задачи</span><span class="rm">Matt Pocock · 17 мин</span></a><em>от екипа</em></li><li><a href="https://www.youtube.com/watch?v=EuzYhzB0vbI&amp;t=2s" target="_blank" rel="noopener noreferrer"><span class="rt">Агенти, които тръгват сами</span><span class="rm">Nate Herk · 15 мин</span></a><em>от екипа</em></li></ol>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="portal" id="pt-portal" data-slot="pt-portal" aria-label="ПТ портал">
+  <figure class="art plate" data-art="portal" data-dust="gold" data-d="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"><img src="https://maitapp.com/img/i4/b-moonlit.webp" alt="Куинджи · Лунна нощ над Днепър · 1880" data-cr="Куинджи · Лунна нощ над Днепър · 1880" style="object-position:50% 55%" loading="lazy" decoding="async"><canvas class="dust" aria-hidden="true"></canvas><figcaption class="cr">Куинджи · Лунна нощ над Днепър · 1880</figcaption></figure>
+  <div class="pwrap">
+    <div class="ptext">
+      <p class="kick">ПТ портал</p>
+      <p class="big" role="heading" aria-level="2">Тук се срещат метачетене, разказвача и сугестопедия.</p>
+      <p class="sub">Картите на трите програми падат в чашата, докато преля.</p>
+      <ul class="pt-tiles"><li><figure class="pt-tile" data-pt="scene-mentor" data-n="13" data-ch="3" data-state="locked"><img src="https://maitapp.com/img/i4/b-vermeer.webp" alt="Вермеер · Географът · 1669" data-cr="Вермеер · Географът · 1669" style="object-position:50% 38%" loading="lazy" decoding="async"><span class="no">Карта 13</span><b>Метачетене</b><span class="lk">ваша, когато отворите сцената в глава 3</span><figcaption class="cr">Вермеер · Географът · 1669</figcaption></figure></li><li><figure class="pt-tile" data-pt="scene-elixir" data-n="21" data-ch="8" data-state="locked"><img src="https://maitapp.com/img/i4/b-decameron.webp" alt="Уотърхаус · Приказка от Декамерон · 1916" data-cr="Уотърхаус · Приказка от Декамерон · 1916" style="object-position:50% 45%" loading="lazy" decoding="async"><span class="no">Карта 21</span><b>Разказвача</b><span class="lk">ваша, когато отворите сцената в глава 8</span><figcaption class="cr">Уотърхаус · Приказка от Декамерон · 1916</figcaption></figure></li><li><figure class="pt-tile" data-pt="scene-game" data-n="17" data-ch="5" data-state="locked"><img src="https://maitapp.com/img/i4/f-orpheus.webp" alt="Моро · Орфей · 1865" data-cr="Моро · Орфей · 1865" style="object-position:50% 40%" loading="lazy" decoding="async"><span class="no">Карта 17</span><b>Сугестопедия</b><span class="lk">ваша, когато отворите сцената в глава 5</span><figcaption class="cr">Моро · Орфей · 1865</figcaption></figure></li></ul>
+      <p class="cnt" id="pt-count" aria-live="polite"><span id="pt-n">0</span> от 3 карти в чашата<span id="pt-hint"></span></p>
+    </div>
+    <div class="pt-stage">
+      <svg class="pt-arch" viewBox="0 0 100 130" preserveAspectRatio="xMidYMax meet" aria-hidden="true"><defs><radialGradient id="pt-glow" cx="50%" cy="55%" r="55%"><stop offset="0" stop-color="#e8c77e" stop-opacity=".16"/><stop offset="1" stop-color="#e8c77e" stop-opacity="0"/></radialGradient></defs><path d="M6,128 L6,56 A44,44 0 0 1 94,56 L94,128 Z" fill="url(#pt-glow)"/><path class="dots d1" d="M6.000,128.000 L6.000,56.000 L6.167,52.165 L6.668,48.359 L7.499,44.612 L8.654,40.951 L10.122,37.405 L11.895,34.000 L13.957,30.763 L16.294,27.717 L18.887,24.887 L21.717,22.294 L24.763,19.957 L28.000,17.895 L31.405,16.122 L34.951,14.654 L38.612,13.499 L42.359,12.668 L46.165,12.167 L50.000,12.000 L53.835,12.167 L57.641,12.668 L61.388,13.499 L65.049,14.654 L68.595,16.122 L72.000,17.895 L75.237,19.957 L78.283,22.294 L81.113,24.887 L83.706,27.717 L86.043,30.763 L88.105,34.000 L89.878,37.405 L91.346,40.951 L92.501,44.612 L93.332,48.359 L93.833,52.165 L94.000,56.000 L94.000,128.000" fill="none" stroke="#e8c77e" stroke-linecap="round"/><path class="dots d2" d="M15.000,128.000 L15.000,58.000 L15.133,54.950 L15.532,51.922 L16.193,48.941 L17.111,46.029 L18.279,43.208 L19.689,40.500 L21.330,37.925 L23.188,35.502 L25.251,33.251 L27.502,31.188 L29.925,29.330 L32.500,27.689 L35.208,26.279 L38.029,25.111 L40.941,24.193 L43.922,23.532 L46.950,23.133 L50.000,23.000 L53.050,23.133 L56.078,23.532 L59.059,24.193 L61.971,25.111 L64.792,26.279 L67.500,27.689 L70.075,29.330 L72.498,31.188 L74.749,33.251 L76.812,35.502 L78.670,37.925 L80.311,40.500 L81.721,43.208 L82.889,46.029 L83.807,48.941 L84.468,51.922 L84.867,54.950 L85.000,58.000 L85.000,128.000" fill="none" stroke="#e8c77e" stroke-linecap="round"/><path class="dots d3" d="M24.000,128.000 L24.000,60.000 L24.099,57.734 L24.395,55.485 L24.886,53.271 L25.568,51.107 L26.436,49.012 L27.483,47.000 L28.702,45.087 L30.083,43.288 L31.615,41.615 L33.288,40.083 L35.087,38.702 L37.000,37.483 L39.012,36.436 L41.107,35.568 L43.271,34.886 L45.485,34.395 L47.734,34.099 L50.000,34.000 L52.266,34.099 L54.515,34.395 L56.729,34.886 L58.893,35.568 L60.988,36.436 L63.000,37.483 L64.913,38.702 L66.712,40.083 L68.385,41.615 L69.917,43.288 L71.298,45.087 L72.517,47.000 L73.564,49.012 L74.432,51.107 L75.114,53.271 L75.605,55.485 L75.901,57.734 L76.000,60.000 L76.000,128.000" fill="none" stroke="#e8c77e" stroke-linecap="round"/><path class="dots base" d="M-4,128.5 L104,128.5" fill="none" stroke="#e8c77e" stroke-linecap="round"/></svg>
+      <button type="button" class="pt-cup" id="pt-chalice" data-eidolon="chalice" data-fill="0" data-phase="empty" aria-label="Чашата: празна. Докоснете, за да стигнете до сцената, която липсва"><svg class="still" viewBox="-1.18 -3.1 2.36 3.26" preserveAspectRatio="xMidYMax meet" aria-hidden="true"><defs><pattern id="pt-gd" width=".055" height=".055" patternUnits="userSpaceOnUse"><circle cx=".0275" cy=".0275" r=".017" fill="#f6d79a"/></pattern><radialGradient id="pt-halo"><stop offset="0" stop-color="#e8c77e" stop-opacity=".22"/><stop offset="1" stop-color="#e8c77e" stop-opacity="0"/></radialGradient><clipPath id="pt-bowl"><path d="M-0.109,-0.900 L-0.188,-0.958 L-0.266,-1.015 L-0.340,-1.073 L-0.413,-1.130 L-0.486,-1.188 L-0.545,-1.245 L-0.586,-1.302 L-0.626,-1.360 L-0.666,-1.417 L-0.706,-1.475 L-0.729,-1.532 L-0.750,-1.590 L-0.771,-1.647 L-0.792,-1.705 L-0.813,-1.762 L-0.826,-1.820 L-0.835,-1.877 L-0.845,-1.935 L-0.855,-1.993 L-0.864,-2.050 L-0.869,-2.107 L-0.873,-2.165 L-0.877,-2.223 L-0.881,-2.280 L0.881,-2.280 L0.877,-2.223 L0.873,-2.165 L0.869,-2.107 L0.864,-2.050 L0.855,-1.993 L0.845,-1.935 L0.835,-1.877 L0.826,-1.820 L0.813,-1.762 L0.792,-1.705 L0.771,-1.647 L0.750,-1.590 L0.729,-1.532 L0.706,-1.475 L0.666,-1.417 L0.626,-1.360 L0.586,-1.302 L0.545,-1.245 L0.486,-1.188 L0.413,-1.130 L0.340,-1.073 L0.266,-1.015 L0.188,-0.958 L0.109,-0.900 Z"/></clipPath></defs><ellipse cx="0" cy="-1.5" rx="1.5" ry="1.4" fill="url(#pt-halo)"/><g clip-path="url(#pt-bowl)"><rect class="gold" x="-1" y="-0.9" width="2" height="0" fill="#e8c77e" opacity=".24"/><rect class="gold" x="-1" y="-0.9" width="2" height="0" fill="url(#pt-gd)"/></g><ellipse class="surf" cx="0" cy="-0.9" rx="0" ry="0" fill="none" stroke="#f6d79a" stroke-width=".022" stroke-linecap="round" stroke-dasharray="0 .045"/><path class="wall" d="M-0.970,-2.300 L-0.950,-2.050 L-0.900,-1.780 L-0.780,-1.480 L-0.580,-1.220 L-0.300,-1.020 L-0.090,-0.880 L-0.085,-0.600 L-0.100,-0.300 L-0.160,-0.160 L-0.580,-0.100 L-0.620,-0.060 L-0.600,-0.000 L-0.020,-0.000 L0.020,-0.000 L0.600,-0.000 L0.620,-0.060 L0.580,-0.100 L0.160,-0.160 L0.100,-0.300 L0.085,-0.600 L0.090,-0.880 L0.300,-1.020 L0.580,-1.220 L0.780,-1.480 L0.900,-1.780 L0.950,-2.050 L0.970,-2.300" fill="none" stroke="#efe7d3" stroke-width=".026" stroke-linecap="round" stroke-dasharray="0 .05" opacity=".8"/><ellipse class="wall" cx="0" cy="-2.3" rx=".97" ry=".11" fill="none" stroke="#e8c77e" stroke-width=".026" stroke-linecap="round" stroke-dasharray="0 .05"/><g class="spill"><path d="M-0.921,-2.300 L-0.917,-2.246 L-0.913,-2.193 L-0.909,-2.139 L-0.905,-2.086 L-0.899,-2.032 L-0.890,-1.979 L-0.881,-1.925 L-0.871,-1.871 L-0.862,-1.818 L-0.850,-1.764 L-0.830,-1.711 L-0.810,-1.657 L-0.790,-1.604 L-0.770,-1.550" fill="none" stroke="#f6d79a" stroke-width="0.05" stroke-linecap="round" stroke-dasharray="0 .042" opacity=".9"/>
+      <path d="M-0.614,-2.300 L-0.610,-2.220 L-0.606,-2.140 L-0.602,-2.060 L-0.593,-1.980 L-0.584,-1.900 L-0.575,-1.820 L-0.560,-1.740 L-0.541,-1.660 L-0.521,-1.580 L-0.501,-1.500 L-0.467,-1.420 L-0.429,-1.340 L-0.391,-1.260 L-0.337,-1.180" fill="none" stroke="#f6d79a" stroke-width="0.05" stroke-linecap="round" stroke-dasharray="0 .042" opacity=".9"/>
+      <path d="M-0.277,-2.300 L-0.275,-2.209 L-0.273,-2.117 L-0.270,-2.026 L-0.266,-1.934 L-0.261,-1.843 L-0.254,-1.751 L-0.244,-1.660 L-0.234,-1.569 L-0.223,-1.477 L-0.204,-1.386 L-0.184,-1.294 L-0.161,-1.203 L-0.125,-1.111 L-0.090,-1.020" fill="none" stroke="#f6d79a" stroke-width="0.05" stroke-linecap="round" stroke-dasharray="0 .042" opacity=".9"/>
+      <path d="M0.000,-2.300 L0.000,-2.150 L0.000,-2.000 L0.000,-1.850 L0.000,-1.700 L0.000,-1.550 L0.000,-1.400 L0.000,-1.250 L0.000,-1.100 L0.000,-0.950 L0.000,-0.800 L0.000,-0.650 L0.000,-0.500 L0.000,-0.350 L0.000,-0.200" fill="none" stroke="#f6d79a" stroke-width="0.04" stroke-linecap="round" stroke-dasharray="0 .042" opacity=".9"/>
+      <path d="M0.297,-2.300 L0.295,-2.229 L0.294,-2.157 L0.292,-2.086 L0.289,-2.014 L0.285,-1.943 L0.281,-1.871 L0.277,-1.800 L0.270,-1.729 L0.261,-1.657 L0.253,-1.586 L0.244,-1.514 L0.231,-1.443 L0.215,-1.371 L0.198,-1.300" fill="none" stroke="#f6d79a" stroke-width="0.05" stroke-linecap="round" stroke-dasharray="0 .042" opacity=".9"/>
+      <path d="M0.634,-2.300 L0.629,-2.216 L0.625,-2.131 L0.620,-2.047 L0.610,-1.963 L0.600,-1.879 L0.590,-1.794 L0.571,-1.710 L0.549,-1.626 L0.528,-1.541 L0.501,-1.457 L0.459,-1.373 L0.418,-1.289 L0.370,-1.204 L0.294,-1.120" fill="none" stroke="#f6d79a" stroke-width="0.05" stroke-linecap="round" stroke-dasharray="0 .042" opacity=".9"/>
+      <path d="M0.931,-2.300 L0.927,-2.250 L0.923,-2.200 L0.919,-2.150 L0.916,-2.100 L0.912,-2.050 L0.903,-2.000 L0.894,-1.950 L0.886,-1.900 L0.877,-1.850 L0.868,-1.800 L0.854,-1.750 L0.835,-1.700 L0.816,-1.650 L0.797,-1.600" fill="none" stroke="#f6d79a" stroke-width="0.05" stroke-linecap="round" stroke-dasharray="0 .042" opacity=".9"/><ellipse cx="0" cy="-0.14" rx=".46" ry=".05" fill="url(#pt-gd)" opacity=".95"/></g></svg></button>
+    </div>
+  </div>
+</section>
+<section class="pend" id="end">
+  <figure class="art plate" data-art="end" data-dust="gold" data-d="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"><img src="https://maitapp.com/img/i4/f-autumn.webp" alt="Миле · Есенни листа · 1856" data-cr="Миле · Есенни листа · 1856" style="object-position:50% 50%" loading="lazy" decoding="async"><canvas class="dust" aria-hidden="true"></canvas><figcaption class="cr">Миле · Есенни листа · 1856</figcaption></figure>
+  <p class="big">Пет дни по четири часа, от подножието до върха.</p>
+  <p>Димитър Караманчев и Металандци</p>
+  <p class="cred">Картини: общо достояние (Уикимедия Комънс). Видеата са на техните автори; връзките водят към YouTube.</p>
+</section>
+</main>
+<div id="toast" role="status" aria-live="polite"></div>
+<div id="reader" role="group" aria-label="Скоростомер-четец"></div>
+<script>/* MET-1934 · програмата: осемте глави · лентата на тримата (ЕДИН контрол на глава) · картите продължават от 9 · ролята от героя е актьорът на всяка сцена */
+(function(){
+const D={"roles": [{"id": "man", "name": "Собственици на бизнес", "icon": "♔"}, {"id": "director", "name": "Ръководители на екипи", "icon": "⚑"}, {"id": "writer", "name": "Юристи", "icon": "⚖"}, {"id": "reader", "name": "Счетоводители", "icon": "∑"}, {"id": "woman", "name": "Финансисти", "icon": "◈"}, {"id": "storyteller", "name": "Маркетолози", "icon": "✎"}, {"id": "mother", "name": "Експерти", "icon": "✧"}, {"id": "teen", "name": "Развиващи се личности", "icon": "☾"}], "total": 21, "first": 9}, K={game:'i4-v2-game',role:'i4-v2-role',sent:'i4-v2-sent',prog:'i4-v2-programme'};
+const rd=k=>{ try{ return JSON.parse(localStorage.getItem(k)||'null') }catch(e){ return null } };
+const g=rd(K.game), landing=g&&g.карти?Math.min(8,Object.keys(g.карти).length):0;
+let prog=rd(K.prog)||{}; prog.cards=prog.cards||{}; prog.seen=prog.seen||{};
+const save=()=>{ try{ localStorage.setItem(K.prog,JSON.stringify(prog)) }catch(e){} };
+const role=(()=>{ const s=rd(K.role); return s&&D.roles.find(r=>r.id===s.id)||null })();
+const hudEl=document.getElementById('cards'), toast=document.getElementById('toast');
+function hud(bump){ hudEl.textContent=(landing+Object.keys(prog.cards).length)+' от '+D.total+' карти'; if(bump){ hudEl.classList.remove('pop'); void hudEl.offsetWidth; hudEl.classList.add('pop') } }
+let tt=0; function say(t){ toast.textContent=t; toast.classList.add('on'); clearTimeout(tt); tt=setTimeout(()=>toast.classList.remove('on'),2000) }
+const cardEl=id=>document.querySelector('.cd[data-card="'+id+'"]');
+function mark(id,fx){ const c=cardEl(id); if(!c) return; c.dataset.state='taken'; if(fx){ c.classList.remove('drop'); void c.offsetWidth; c.classList.add('drop') } }
+function take(id){ if(prog.cards[id]) return; prog.cards[id]=1; save(); mark(id,true); hud(true); const c=cardEl(id); say('Карта '+c.dataset.n+' · '+c.querySelector('b').textContent+(id.indexOf('scene-')===0?' · В ролята: '+(role?role.name:'Вие'):'')) ; window.dispatchEvent(new CustomEvent('i4prog:take',{detail:{id:id}})) }
+const banner=document.getElementById('direct-banner'); if(banner&&rd(K.sent)) banner.hidden=true;
+// ролята = актьорът на всяка сцена (всяка програма я играе по свой начин: редът data-line е на програмата)
+document.querySelectorAll('.clap dd.actor').forEach(a=>{ const nm=role?role.name:'Вие', line=a.dataset.line; a.querySelector('.rn').textContent=nm; a.querySelector('.ai').textContent=role?role.icon:'✦';
+  a.closest('dl').querySelector('.act-line').textContent=role?nm+' '+line:'Ролята ви излиза тук, щом я изберете в героя на ландинга.' });
+const al=document.getElementById('actor-line'); if(al) al.innerHTML=role?'Вашата роля на снимачната площадка: <b>'+role.name+'</b>. Тя излиза на сцената във всяка от петте програми.':'Вие сте актьорът на снимачната площадка: във всяка от петте програми ролята ви излиза на сцената.';
+document.querySelectorAll('.strip').forEach(st=>{
+  const stage=st.dataset.stage, s=(prog.seen[stage]=prog.seen[stage]||{}), n=st.querySelector('.seen-n');
+  const count=()=>{ n.textContent=['mat','nik','nate'].filter(w=>s[w]).length };
+  st.querySelectorAll('button.fr').forEach(b=>{ if(s[b.dataset.who]) b.classList.add('seen');
+    b.addEventListener('click',()=>{ const p=document.getElementById(b.getAttribute('aria-controls')), open=b.getAttribute('aria-expanded')==='true';
+      b.setAttribute('aria-expanded',open?'false':'true'); p.hidden=open; if(open) return;
+      b.classList.add('seen'); s[b.dataset.who]=1; save(); count();
+      if(b.dataset.who==='scene') take(st.dataset.sceneCard); else if(['mat','nik','nate'].every(w=>s[w])) take(st.dataset.stageCard) }) });
+  count() });
+Object.keys(prog.cards).forEach(id=>mark(id,false)); hud(false);
+// MET-1925 · глава 8 · AI design профилът от ландинга (`i4-v2-profile`: шестте отговора 1…10) → радар (точков шестоъгълник) + шестте стойности · ролята и Метта от героя и сърцето
+(function(){ const box=document.getElementById('gift-radar'); if(!box) return; const pr=rd('i4-v2-profile'), a=pr&&pr.answers&&pr.answers.length===6?pr.answers.map(Number):null, NS='http://www.w3.org/2000/svg';
+  const R=84, pt=(i,r)=>[(Math.cos((-90+60*i)*Math.PI/180)*r).toFixed(1),(Math.sin((-90+60*i)*Math.PI/180)*r).toFixed(1)];
+  let s='<svg viewBox="-104 -100 208 200" xmlns="'+NS+'" role="img" aria-label="Радар на профила">';
+  [.25,.5,.75,1].forEach(f=>{ s+='<polygon points="'+[0,1,2,3,4,5].map(i=>pt(i,R*f).join(',')).join(' ')+'" fill="none" stroke="#e8c77e" stroke-opacity="'+(f===1?.55:.22)+'" stroke-width="1" stroke-dasharray="1 3" stroke-linecap="round"/>' });
+  [0,1,2,3,4,5].forEach(i=>{ const p=pt(i,R); s+='<line x1="0" y1="0" x2="'+p[0]+'" y2="'+p[1]+'" stroke="#e8c77e" stroke-opacity=".2"/>' });
+  if(a) s+='<polygon points="'+a.map((v,i)=>pt(i,R*Math.max(0,Math.min(10,v))/10).join(',')).join(' ')+'" fill="rgba(232,199,126,.28)" stroke="#e8c77e" stroke-width="1.6"/>'+a.map((v,i)=>{ const p=pt(i,R*Math.max(0,Math.min(10,v))/10); return '<circle cx="'+p[0]+'" cy="'+p[1]+'" r="2.6" fill="#fff5d6"/>' }).join('');
+  box.innerHTML=s+'</svg>';
+  const bs=document.querySelectorAll('#gift-answers li b'); if(a) a.forEach((v,i)=>{ if(bs[i]) bs[i].textContent=v });
+  const gr=document.getElementById('gift-role'), h=rd('i4-v2-heart'); if(a&&gr) gr.textContent='Профилът на вашия ИИ герой'+(role?' · роля: '+role.name:'')+(h&&h.name?' · Метта: '+h.name:'');
+  window.__i4gift={answers:a,role:role&&role.name||null,heart:h&&h.name||null} })();
+const links=[].slice.call(document.querySelectorAll('#stagenav a'));
+const io=new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting) links.forEach(a=>a.setAttribute('aria-current',a.getAttribute('href')==='#'+e.target.id?'true':'false')) }),{rootMargin:'-45% 0px -50% 0px'});
+document.querySelectorAll('section.chap').forEach(c=>io.observe(c));
+window.__i4prog={landing:landing,total:D.total,role:role&&role.id,taken:()=>Object.keys(prog.cards)};
+})();
+</script>
+<script type="module">/* MET-1877 · Eidolon адаптер · ~/metalandiaos/app.js @f7b8b1d (генераторите + шейдърите дословно) · three се зарежда само при WebGL и движение */
+const RM=matchMedia('(prefers-reduced-motion: reduce)').matches||/[?&]reduced=1/.test(location.search), NOGL=/[?&]nogl=1/.test(location.search);
+function canGL(){try{const c=document.createElement('canvas'); return !!(c.getContext('webgl2')||c.getContext('webgl'))}catch(e){return false}}
+let ENG=null;
+function engine(){return ENG||(ENG=import('three').then(THREE=>{
+const TAU = Math.PI * 2;
+/* ── canonical palette (8 scenes of the metalanguage) ────────── */
+const PALETTE_HEX = ['#E8C77E', '#D4895E', '#4A7FA8', '#6FB59A', '#E89556', '#8B5E3C', '#E8C77E', '#7B5EA8'];
+const PALETTE = PALETTE_HEX.map(h => new THREE.Color(h));
+const BONE = new THREE.Color('#efe7d3');
+
+/* ── deterministic rng (same exhibit → same cloud on every load) */
+function mulberry32(a) {
+  return function () {
+    a |= 0; a = (a + 0x6D2B79F5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+/* ── shared generator helpers ────────────────────────────────── */
+/* Sample a 2D lathe profile [[r,y],...] uniformly BY ARC LENGTH (not by t). */
+function sampleProfileArc(profile, n, rand) {
+  const segs = [];
+  let total = 0;
+  for (let i = 0; i < profile.length - 1; i++) {
+    const [r0, y0] = profile[i], [r1, y1] = profile[i + 1];
+    // weight by arc length × mean radius → uniform SURFACE density after the θ sweep
+    const len = Math.hypot(r1 - r0, y1 - y0) * Math.max(0.05, (r0 + r1) / 2);
+    segs.push({ r0, y0, r1, y1, len, acc: total });
+    total += len;
+  }
+  const out = [];
+  for (let k = 0; k < n; k++) {
+    const d = rand() * total;
+    let s = segs[0];
+    for (let i = 0; i < segs.length; i++) { if (segs[i].acc <= d) s = segs[i]; else break; }
+    const f = s.len > 0 ? (d - s.acc) / s.len : 0;
+    out.push({ r: s.r0 + (s.r1 - s.r0) * f, y: s.y0 + (s.y1 - s.y0) * f, t: d / total });
+  }
+  return out;
+}
+/* ═══ EXHIBIT GENERATORS ══════════════════════════════════════
+   gen(home, cls, data, N, rand) fills all N points.
+   cls = -1 parks a point in dust. data = per-point aux 0..1.      */
+
+/* Exhibit I · Чашата, още неналята със злато
+   classes: 0 wall · 1 water · 2 hero mote · 3 vector              */
+function cupProfile() {
+  return [
+    [0.02, 0.00], [0.60, 0.00], [0.62, 0.06], [0.58, 0.10], [0.16, 0.16],
+    [0.10, 0.30], [0.085, 0.60], [0.09, 0.88], [0.30, 1.02], [0.58, 1.22],
+    [0.78, 1.48], [0.90, 1.78], [0.95, 2.05], [0.97, 2.30],
+  ];
+}
+const CUP_Y0 = 1.15;               // vertical centering shift
+const CUP_WATER_Y = 2.02 - CUP_Y0; // water surface height (cloud-local)
+const CUP_WATER_R = 0.86;
+const CUP_HERO = [0.97 * Math.cos(1.05), 2.30 - CUP_Y0, 0.97 * Math.sin(1.05)];
+
+function genCup(home, cls, data, N, rand) {
+  const nWall = Math.floor(N * 0.815), nWater = Math.floor(N * 0.165);
+  const nHero = Math.floor(N * 0.003), nVec = N - nWall - nWater - nHero;
+  const prof = sampleProfileArc(cupProfile(), nWall, rand);
+  let i = 0;
+  for (let k = 0; k < nWall; k++, i++) {
+    const p = prof[k], th = rand() * TAU;
+    const j = (rand() - 0.5) * 0.012; // jitter along the normal → wall thickness
+    const r = p.r + j;
+    home[i * 3] = r * Math.cos(th);
+    home[i * 3 + 1] = p.y - CUP_Y0 + (rand() - 0.5) * 0.008;
+    home[i * 3 + 2] = r * Math.sin(th);
+    cls[i] = 0;
+    data[i] = Math.max(0, Math.min(1, (p.y - 0.9) / 1.4)); // rim proximity → amber rim-glow
+  }
+  for (let k = 0; k < nWater; k++, i++) { // dense disc, uniform: r·√rand
+    const r = CUP_WATER_R * Math.sqrt(rand()), th = rand() * TAU;
+    home[i * 3] = r * Math.cos(th);
+    home[i * 3 + 1] = CUP_WATER_Y + (rand() - 0.5) * 0.035;
+    home[i * 3 + 2] = r * Math.sin(th);
+    cls[i] = 1;
+    data[i] = r / CUP_WATER_R;
+  }
+  for (let k = 0; k < nHero; k++, i++) { // one bright mote = tight cluster
+    home[i * 3] = CUP_HERO[0] + (rand() - 0.5) * 0.05;
+    home[i * 3 + 1] = CUP_HERO[1] + (rand() - 0.5) * 0.05;
+    home[i * 3 + 2] = CUP_HERO[2] + (rand() - 0.5) * 0.05;
+    cls[i] = 2;
+    data[i] = rand();
+  }
+  for (let k = 0; k < nVec; k++, i++) { // vector: hero → water centre (2-3px, glowing)
+    const t = rand();
+    home[i * 3] = CUP_HERO[0] * (1 - t) + (rand() - 0.5) * 0.016;
+    home[i * 3 + 1] = CUP_HERO[1] * (1 - t) + CUP_WATER_Y * t + (rand() - 0.5) * 0.016;
+    home[i * 3 + 2] = CUP_HERO[2] * (1 - t) + (rand() - 0.5) * 0.016;
+    cls[i] = 3;
+    data[i] = t;
+  }
+}
+
+/* Exhibit II · Сърцето, което тиктака
+   classes: 0 envelope · 1 ring1(fastest) · 2 ring2 · 3 ring3(slowest) · 4 arrow
+   data[]: envelope → curve t · rings → r/R0 · arrow → radius fraction */
+const HEART_SCALE = 0.0760633694313386;
+const HEART_YOFF = 0.19307728033275595;
+
+function heartRaw(t) {
+  const x = 16 * Math.pow(Math.sin(t), 3);
+  const y = 13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t);
+  return [x, y];
+}
+function heartTangent(t) {
+  const dx = 48 * Math.sin(t) * Math.sin(t) * Math.cos(t);
+  const dy = -13 * Math.sin(t) + 10 * Math.sin(2 * t) + 6 * Math.sin(3 * t) + 4 * Math.sin(4 * t);
+  return [dx, dy];
+}
+function heartArcTable(M) {
+  const pts = [];
+  let total = 0;
+  let prev = heartRaw(0);
+  for (let i = 0; i <= M; i++) {
+    const t = (i / M) * TAU;
+    const [x, y] = heartRaw(t);
+    const len = i === 0 ? 0 : Math.hypot(x - prev[0], y - prev[1]);
+    total += len;
+    pts.push({ t, acc: total });
+    prev = [x, y];
+  }
+  return { pts, total };
+}
+function arcLookup(pts, d) { // binary search: first entry with acc >= d
+  let lo = 0, hi = pts.length - 1;
+  while (lo < hi) { const mid = (lo + hi) >> 1; if (pts[mid].acc < d) lo = mid + 1; else hi = mid; }
+  return pts[lo];
+}
+
+function genHeart(home, cls, data, N, rand) {
+  const nEnvelope = Math.floor(N * 0.68);
+  const nRing1 = Math.floor(N * 0.11);
+  const nRing2 = Math.floor(N * 0.10);
+  const nRing3 = Math.floor(N * 0.09);
+  const nArrow = N - nEnvelope - nRing1 - nRing2 - nRing3;
+
+  const table = heartArcTable(500);
+  const WALL_JITTER = 0.028;
+  const Z_DEPTH = 0.22;
+
+  let i = 0;
+  for (let k = 0; k < nEnvelope; k++, i++) {
+    const d = rand() * table.total;
+    const seg = arcLookup(table.pts, d);
+    const t = seg.t;
+    const [x0, y0] = heartRaw(t);
+    const [tx, ty] = heartTangent(t);
+    const tl = Math.hypot(tx, ty) || 1;
+    const nx = -ty / tl, ny = tx / tl;
+    // volumetric body: two shell contours + inward-biased fill toward the gear core (richest form in the museum)
+    const shell = (rand() - 0.5) * (WALL_JITTER * 4.0 / HEART_SCALE);
+    const inward = -Math.pow(rand(), 2.1) * (0.52 / HEART_SCALE);
+    const j = shell + (rand() < 0.55 ? inward : 0);
+    const x = x0 + nx * j, y = y0 + ny * j;
+    home[i * 3] = x * HEART_SCALE;
+    home[i * 3 + 1] = y * HEART_SCALE + HEART_YOFF;
+    // two z-contours (front/back shells) + light fill between — PRD "2 контура + запълване"
+    const zu = rand();
+    home[i * 3 + 2] = zu < 0.72
+      ? (rand() < 0.5 ? -1 : 1) * Z_DEPTH * (0.30 + 0.20 * rand())
+      : (rand() - 0.5) * Z_DEPTH;
+    cls[i] = 0;
+    data[i] = t / TAU;
+  }
+
+  function fillRing(n, clsVal, R0, teeth, k) {
+    for (let m = 0; m < n; m++, i++) {
+      const phi = rand() * TAU;
+      const r = R0 * (1 - k * Math.abs(Math.sin(phi * teeth))) + (rand() - 0.5) * 0.03;
+      home[i * 3] = r * Math.cos(phi);
+      home[i * 3 + 1] = r * Math.sin(phi);
+      home[i * 3 + 2] = (rand() - 0.5) * 0.03;
+      cls[i] = clsVal;
+      data[i] = r / R0;
+    }
+  }
+  fillRing(nRing1, 1, 0.40, 9, 0.22); // innermost, fastest (shader speed 1.6)
+  fillRing(nRing2, 2, 0.58, 7, 0.16); // mid (0.85)
+  fillRing(nRing3, 3, 0.74, 5, 0.12); // outermost, slowest (0.42)
+
+  const R_ARROW_MIN = 0.05, R_ARROW_MAX = 1.02;
+  for (let k = 0; k < nArrow; k++, i++) {
+    const u = rand();
+    const r = R_ARROW_MIN + (R_ARROW_MAX - R_ARROW_MIN) * u;
+    home[i * 3] = r; // static +x spoke; shader rotates by uTime·ω
+    home[i * 3 + 1] = (rand() - 0.5) * 0.010;
+    home[i * 3 + 2] = (rand() - 0.5) * 0.010;
+    cls[i] = 4;
+    data[i] = u;
+  }
+}
+
+/* Exhibit III · Осемте, които посяват
+   classes: 0 node(8) · 1 field dust(pre-aligned) · 2 arc-line · 3 grain
+   data[]: node → k/7 · field → alignment blend · line → t · grain → loop phase */
+const GOLD_HALF_SPAN = Math.PI * 35 / 180;
+const GOLD_R = 2.004;
+function nodePos(k) {
+  const frac = (k * 137.5 / 360.0) % 1.0; // golden-angle low-discrepancy placement
+  const ang = -GOLD_HALF_SPAN + 2 * GOLD_HALF_SPAN * frac;
+  const x = GOLD_R * Math.sin(ang);
+  const y = GOLD_R * (Math.cos(ang) - Math.cos(GOLD_HALF_SPAN)) + 0.05;
+  const z = 0.10 * Math.sin(ang * 2.0 + k);
+  return [x, y, z];
+}
+
+function genConstellation(home, cls, data, N, rand) {
+  const NODES = [];
+  for (let k = 0; k < 8; k++) NODES.push(nodePos(k));
+
+  const nNodes = 8;
+  const nLines = Math.floor(N * 0.09);
+  const nGrains = Math.floor(N * 0.055); // редки зърна — sparse by design
+  const nField = N - nNodes - nLines - nGrains;
+
+  let i = 0;
+  for (let k = 0; k < nNodes; k++, i++) {
+    home[i * 3] = NODES[k][0];
+    home[i * 3 + 1] = NODES[k][1];
+    home[i * 3 + 2] = NODES[k][2];
+    cls[i] = 0;
+    data[i] = k / 7;
+  }
+
+  const perSeg = Math.floor(nLines / 7);
+  let linesPlaced = 0;
+  for (let s = 0; s < 7; s++) {
+    const na = NODES[s], nb = NODES[s + 1];
+    const dx = nb[0] - na[0], dy = nb[1] - na[1], dz = nb[2] - na[2];
+    let ux = dx, uy = dy, uz = dz;
+    const segLen = Math.hypot(ux, uy, uz) || 1;
+    ux /= segLen; uy /= segLen; uz /= segLen;
+    let px = -uy, py = ux, pz = 0;
+    let pl = Math.hypot(px, py, pz);
+    if (pl < 1e-4) { px = 0; py = -uz; pz = uy; pl = Math.hypot(px, py, pz); }
+    px /= pl; py /= pl; pz /= pl;
+    const qx = uy * pz - uz * py, qy = uz * px - ux * pz, qz = ux * py - uy * px;
+    const count = (s === 6) ? (nLines - linesPlaced) : perSeg;
+    for (let m = 0; m < count; m++, i++) {
+      const t = rand();
+      const rr = (rand() - 0.5) * 0.020;
+      const th = rand() * TAU;
+      home[i * 3] = na[0] + dx * t + (Math.cos(th) * px + Math.sin(th) * qx) * rr;
+      home[i * 3 + 1] = na[1] + dy * t + (Math.cos(th) * py + Math.sin(th) * qy) * rr;
+      home[i * 3 + 2] = na[2] + dz * t + (Math.cos(th) * pz + Math.sin(th) * qz) * rr;
+      cls[i] = 2;
+      data[i] = t;
+    }
+    linesPlaced += count;
+  }
+
+  for (let k = 0; k < nGrains; k++, i++) {
+    const n = NODES[Math.floor(rand() * 8) % 8];
+    home[i * 3] = n[0];
+    home[i * 3 + 1] = n[1];
+    home[i * 3 + 2] = n[2];
+    cls[i] = 3;
+    data[i] = rand();
+  }
+
+  // field dust baked ONCE toward the 1/d-weighted centroid of the 3 nearest nodes —
+  // allocation-free top-3 selection (no per-point arrays/sort → no scroll-in GC hitch)
+  const BOUND = { x0: -1.30, x1: 1.30, y0: -1.00, y1: 0.60, z0: -0.32, z1: 0.32 };
+  for (let k = 0; k < nField; k++, i++) {
+    const p0x = BOUND.x0 + rand() * (BOUND.x1 - BOUND.x0);
+    const p0y = BOUND.y0 + rand() * (BOUND.y1 - BOUND.y0);
+    const p0z = BOUND.z0 + rand() * (BOUND.z1 - BOUND.z0);
+    let b1 = 0, b2 = 0, b3 = 0, d1 = 1e9, d2 = 1e9, d3 = 1e9;
+    for (let n = 0; n < 8; n++) {
+      const dx = NODES[n][0] - p0x, dy = NODES[n][1] - p0y, dz = NODES[n][2] - p0z;
+      const d = Math.hypot(dx, dy, dz);
+      if (d < d1) { d3 = d2; b3 = b2; d2 = d1; b2 = b1; d1 = d; b1 = n; }
+      else if (d < d2) { d3 = d2; b3 = b2; d2 = d; b2 = n; }
+      else if (d < d3) { d3 = d; b3 = n; }
+    }
+    const w1 = 1 / (d1 + 0.06), w2 = 1 / (d2 + 0.06), w3 = 1 / (d3 + 0.06);
+    const wsum = w1 + w2 + w3;
+    const wx = (NODES[b1][0] * w1 + NODES[b2][0] * w2 + NODES[b3][0] * w3) / wsum;
+    const wy = (NODES[b1][1] * w1 + NODES[b2][1] * w2 + NODES[b3][1] * w3) / wsum;
+    const wz = (NODES[b1][2] * w1 + NODES[b2][2] * w2 + NODES[b3][2] * w3) / wsum;
+    const blend = Math.pow(rand(), 0.65);
+    home[i * 3] = p0x + (wx - p0x) * blend;
+    home[i * 3 + 1] = p0y + (wy - p0y) * blend;
+    home[i * 3 + 2] = p0z + (wz - p0z) * blend;
+    cls[i] = 1;
+    data[i] = blend;
+  }
+}
+
+/* Exhibit IV · Осемте стъпала
+   classes: 0 plate · 1 axis · data[] = normalized height hNorm for both */
+const STAIR_A = 0.34, STAIR_B = 0.3064, STAIR_DPHI = Math.PI / 4, STAIR_DH = 0.44;
+const STAIR_THETA0 = -2.4; // phase the spiral so the ascent sweeps across the view instead of hiding behind the axis
+const STAIR_TILT = -0.38;  // pitch toward the viewer so the 8 plates read as plates, not edge-on lines
+const STAIR_HALF_TOTAL = (7 * STAIR_DH) / 2;
+const PLATE_A = 0.42, PLATE_B = 0.28, PLATE_N = 4.0, PLATE_THICK = 0.035;
+
+function plateCenter(k) {
+  const growth = k * STAIR_DPHI;                 // golden growth per step
+  const theta = STAIR_THETA0 + growth;
+  const r = STAIR_A * Math.exp(STAIR_B * growth);
+  return { x: r * Math.cos(theta), y: k * STAIR_DH - STAIR_HALF_TOTAL, z: r * Math.sin(theta), theta };
+}
+
+function genStairs(home, cls, data, N, rand) {
+  const nAxis = Math.floor(N * 0.06);
+  const nPlate = N - nAxis;
+  const perPlate = Math.floor(nPlate / 8);
+  const ct0 = Math.cos(STAIR_TILT), st0 = Math.sin(STAIR_TILT);
+  const tilt = (idx) => { // rotate the finished point around X
+    const y = home[idx * 3 + 1], z = home[idx * 3 + 2];
+    home[idx * 3 + 1] = y * ct0 - z * st0;
+    home[idx * 3 + 2] = y * st0 + z * ct0;
+  };
+
+  let i = 0;
+  for (let k = 0; k < 8; k++) {
+    const c = plateCenter(k);
+    const count = (k === 7) ? (nPlate - perPlate * 7) : perPlate;
+    for (let m = 0; m < count; m++, i++) {
+      const ang = rand() * TAU;
+      const s = Math.sqrt(rand()); // uniform-in-area elliptical plate — one clean countable blob per level
+      const cx = Math.cos(ang), sn = Math.sin(ang);
+      const xl = PLATE_A * cx * s;
+      const zl = PLATE_B * sn * s;
+      const ct = Math.cos(c.theta), st = Math.sin(c.theta);
+      home[i * 3] = c.x + xl * ct - zl * st;
+      home[i * 3 + 1] = c.y + (rand() - 0.5) * PLATE_THICK * 2;
+      home[i * 3 + 2] = c.z + xl * st + zl * ct;
+      cls[i] = 0;
+      data[i] = (c.y + STAIR_HALF_TOTAL) / (2 * STAIR_HALF_TOTAL);
+      tilt(i);
+    }
+  }
+
+  for (let m = 0; m < nAxis; m++, i++) {
+    const t = rand();
+    const y = -STAIR_HALF_TOTAL + t * (2 * STAIR_HALF_TOTAL);
+    const rr = rand() * 0.014, th = rand() * TAU;
+    home[i * 3] = Math.cos(th) * rr;
+    home[i * 3 + 1] = y;
+    home[i * 3 + 2] = Math.sin(th) * rr;
+    cls[i] = 1;
+    data[i] = t;
+    tilt(i);
+  }
+}
+
+/* Exhibit V · Прагът, преминат само в една посока
+   classes: 0 frame · 1 membrane · 2 stream · 3 demo-hero
+   data[]: 0 → height/arc t · 1 → shimmer phase · 2 → speed variance · 3 → comet stagger */
+const PORTAL_ARCH_R = 0.86;
+const PORTAL_COL_BASE_Y = -1.30;
+const PORTAL_COL_TOP_Y = 0.24;
+const PORTAL_COL_R = 0.05;
+const PORTAL_ARCH_TUBE_R = 0.05;
+const PORTAL_MEMB_CY = (PORTAL_COL_BASE_Y + PORTAL_COL_TOP_Y + PORTAL_ARCH_R) * 0.5; // -0.10 · must match EX5_GLSL literal
+
+function gaussian01(rand) { // Box-Muller fed only by the deterministic rand()
+  const u1 = Math.max(1e-6, rand()), u2 = rand();
+  return Math.sqrt(-2 * Math.log(u1)) * Math.cos(TAU * u2);
+}
+
+function genPortal(home, cls, data, N, rand) {
+  const nDemo = Math.max(8, Math.floor(N * 0.0025));
+  const rem = N - nDemo;
+  const nFrame = Math.floor(rem * 0.17);
+  const nMembrane = Math.floor(rem * 0.17);
+  const nStream = rem - nFrame - nMembrane;
+  const nCol = Math.floor(nFrame * 0.62);
+  const nArch = nFrame - nCol;
+
+  let i = 0;
+  for (let k = 0; k < nCol; k++, i++) {
+    const side = (k % 2 === 0) ? -1 : 1;
+    const y = PORTAL_COL_BASE_Y + rand() * (PORTAL_COL_TOP_Y - PORTAL_COL_BASE_Y);
+    const phi = rand() * TAU;
+    const r = PORTAL_COL_R * (0.7 + rand() * 0.35);
+    home[i * 3] = side * PORTAL_ARCH_R + r * Math.cos(phi);
+    home[i * 3 + 1] = y;
+    home[i * 3 + 2] = r * Math.sin(phi);
+    cls[i] = 0;
+    data[i] = Math.max(0, Math.min(1, (y - PORTAL_COL_BASE_Y) / (PORTAL_COL_TOP_Y - PORTAL_COL_BASE_Y)));
+  }
+  for (let k = 0; k < nArch; k++, i++) { // half-torus vault
+    const th = rand() * Math.PI;
+    const phi = rand() * TAU;
+    const R = PORTAL_ARCH_R + PORTAL_ARCH_TUBE_R * Math.cos(phi);
+    home[i * 3] = R * Math.cos(th);
+    home[i * 3 + 1] = PORTAL_COL_TOP_Y + R * Math.sin(th);
+    home[i * 3 + 2] = PORTAL_ARCH_TUBE_R * Math.sin(phi);
+    cls[i] = 0;
+    data[i] = Math.sin(th); // glow peaks at the apex
+  }
+  for (let k = 0; k < nMembrane; k++, i++) { // curtain filling the opening
+    const x = (rand() * 2 - 1) * PORTAL_ARCH_R * 0.94;
+    const yLo = PORTAL_COL_BASE_Y + 0.06;
+    const yHi = Math.abs(x) <= PORTAL_ARCH_R
+      ? PORTAL_COL_TOP_Y + Math.sqrt(Math.max(0, PORTAL_ARCH_R * PORTAL_ARCH_R - x * x)) - 0.06
+      : PORTAL_COL_TOP_Y;
+    const y = yLo + rand() * Math.max(0.05, yHi - yLo);
+    home[i * 3] = x;
+    home[i * 3 + 1] = y;
+    home[i * 3 + 2] = 0.006 * Math.sin(x * 6.0 + y * 5.0) * (0.7 + rand() * 0.6);
+    cls[i] = 1;
+    data[i] = rand();
+  }
+  for (let k = 0; k < nStream; k++, i++) { // stream: z animated in-shader from seed+uTime
+    home[i * 3] = gaussian01(rand) * PORTAL_ARCH_R * 0.30;
+    home[i * 3 + 1] = PORTAL_MEMB_CY + gaussian01(rand) * PORTAL_ARCH_R * 0.30;
+    home[i * 3 + 2] = 0.0;
+    cls[i] = 2;
+    data[i] = 0.72 + rand() * 0.56;
+  }
+  for (let k = 0; k < nDemo; k++, i++) { // the ONE auto-demo crossing (comet + tail)
+    home[i * 3] = (rand() - 0.5) * 0.03;
+    home[i * 3 + 1] = PORTAL_MEMB_CY + (rand() - 0.5) * 0.03;
+    home[i * 3 + 2] = 0.0;
+    cls[i] = 3;
+    data[i] = k / nDemo;
+  }
+}
+
+/* Exhibit VI · Пашкулът и крилете — two buffers, JS swaps them in the dissolve trough */
+function cocoonProfile() {
+  return [
+    [0.00, -0.92], [0.09, -0.86], [0.22, -0.70], [0.33, -0.46], [0.38, -0.16],
+    [0.37, 0.16], [0.30, 0.46], [0.19, 0.70], [0.08, 0.88], [0.00, 0.98],
+  ];
+}
+
+function genCocoon(home, cls, data, N, rand) {
+  const prof = sampleProfileArc(cocoonProfile(), N, rand);
+  for (let i = 0; i < N; i++) {
+    const p = prof[i], th = rand() * TAU;
+    const r = p.r + (rand() - 0.5) * 0.010;
+    home[i * 3] = r * Math.cos(th);
+    home[i * 3 + 1] = p.y;
+    home[i * 3 + 2] = r * Math.sin(th);
+    cls[i] = 0;
+    data[i] = p.t;
+  }
+}
+
+function wingSample(side, rand) {
+  const u = rand(), v = rand();
+  const span = 1.05, sweepY = 0.40, lobes = 6.0;
+  const envelope = Math.sin(Math.min(1, u) * Math.PI * 0.92);
+  const scallop = 0.86 + 0.14 * Math.sin(u * lobes * Math.PI + v * 1.4);
+  const chord = 0.78 * envelope * scallop;
+  const x = side * (0.08 + u * span);
+  const y = sweepY * (1.0 - u * 0.55) - v * chord;
+  const z = (v - 0.42) * 0.10 * (1.0 - 0.6 * u) + (rand() - 0.5) * 0.008;
+  return [x, y, z, u];
+}
+function bodySample(rand) {
+  const L0 = -0.85, L1 = 0.60;
+  const t = rand();
+  const y = L0 + t * (L1 - L0);
+  const rad = 0.095 * (0.55 + 0.45 * Math.sin(Math.PI * Math.min(1, t * 1.05)));
+  const th = rand() * TAU;
+  const hairy = rand() < 0.22 ? (1.0 + rand() * 1.8) : 1.0;
+  const r = rad * hairy;
+  return [r * Math.cos(th), y, r * Math.sin(th), t];
+}
+function proboscisSample(rand) {
+  const turns = 2.8, k = 0.32, r0 = 0.20;
+  const t = rand();
+  const theta = t * turns * TAU;
+  const r = r0 * Math.exp(-k * theta / TAU);
+  const x = r * Math.cos(theta) + (rand() - 0.5) * 0.006;
+  const y = 0.58 - t * 0.34 + r * Math.sin(theta) * 0.4 + (rand() - 0.5) * 0.006;
+  const z = 0.10 + r * Math.sin(theta) * 0.6 + (rand() - 0.5) * 0.006;
+  return [x, y, z, t];
+}
+
+function genWings(home, cls, data, N, rand) {
+  const nProb = Math.floor(N * 0.07);
+  const nBody = Math.floor(N * 0.21);
+  const nWingEach = Math.floor((N - nProb - nBody) / 2);
+  let i = 0;
+  for (let side = -1; side <= 1; side += 2) {
+    for (let k = 0; k < nWingEach; k++, i++) {
+      const [x, y, z, u] = wingSample(side, rand);
+      home[i * 3] = x; home[i * 3 + 1] = y; home[i * 3 + 2] = z;
+      cls[i] = 1; data[i] = u;
+    }
+  }
+  for (let k = 0; k < nBody; k++, i++) {
+    const [x, y, z, t] = bodySample(rand);
+    home[i * 3] = x; home[i * 3 + 1] = y; home[i * 3 + 2] = z;
+    cls[i] = 2; data[i] = t;
+  }
+  const nRest = N - i;
+  for (let k = 0; k < nRest; k++, i++) {
+    const [x, y, z, t] = proboscisSample(rand);
+    home[i * 3] = x; home[i * 3 + 1] = y; home[i * 3 + 2] = z;
+    cls[i] = 3; data[i] = t;
+  }
+}
+
+/* Exhibit VII · Чашата, преляла — THE RHYME with Exhibit I: same lathe profile, gold instead of water
+   classes: 0 wall (identical sampling) · 1 gold volume (baked fill height) · 2 overflow drop */
+const CUP_GOLD_Y0 = 0.90;                 // bowl floor (raw profile-y)
+const CUP_GOLD_Y1 = 2.28;                 // just under the rim
+const CUP_GOLD_RFAC = 0.91;               // inward clearance vs the wall radius
+const CUP_RIM_R = 0.97, CUP_RIM_Y = 2.30; // rim lip — identical terminal point of cupProfile()
+
+function cupBowlRadius(yRaw, prof) { // interior wall radius at a raw y (bowl is single-valued in y here)
+  for (let i = 0; i < prof.length - 1; i++) {
+    const [r0, y0] = prof[i], [r1, y1] = prof[i + 1];
+    if (yRaw <= y1 || i === prof.length - 2) {
+      const f = y1 > y0 ? Math.max(0, Math.min(1, (yRaw - y0) / (y1 - y0))) : 0;
+      return r0 + (r1 - r0) * f;
+    }
+  }
+  return prof[prof.length - 1][0];
+}
+
+function genGoldCup(home, cls, data, N, rand) {
+  const nWall = Math.floor(N * 0.772), nGold = Math.floor(N * 0.21);
+  const nDrop = N - nWall - nGold;
+  const prof = cupProfile();
+  const wallSamples = sampleProfileArc(prof, nWall, rand);
+
+  let i = 0;
+  for (let k = 0; k < nWall; k++, i++) { // wall: IDENTICAL sampling to genCup — zero geometry drift, the rhyme
+    const p = wallSamples[k], th = rand() * TAU;
+    const r = p.r + (rand() - 0.5) * 0.012;
+    home[i * 3] = r * Math.cos(th);
+    home[i * 3 + 1] = p.y - CUP_Y0 + (rand() - 0.5) * 0.008;
+    home[i * 3 + 2] = r * Math.sin(th);
+    cls[i] = 0;
+    data[i] = Math.max(0, Math.min(1, (p.y - 0.9) / 1.4)); // same rim-proximity encoding as Exhibit I
+  }
+  for (let k = 0; k < nGold; k++, i++) { // gold: uniform VOLUMETRIC fill r·cbrt(rand) (PRD formula), floor→rim
+    const yRaw = CUP_GOLD_Y0 + rand() * (CUP_GOLD_Y1 - CUP_GOLD_Y0);
+    const Rlocal = cupBowlRadius(yRaw, prof) * CUP_GOLD_RFAC;
+    const r = Rlocal * Math.cbrt(rand());
+    const th = rand() * TAU;
+    home[i * 3] = r * Math.cos(th);
+    home[i * 3 + 1] = yRaw - CUP_Y0;
+    home[i * 3 + 2] = r * Math.sin(th);
+    cls[i] = 1;
+    data[i] = (yRaw - CUP_GOLD_Y0) / (CUP_GOLD_Y1 - CUP_GOLD_Y0); // baked fill height — gated vs the level uniform
+  }
+  for (let k = 0; k < nDrop; k++, i++) { // overflow drops parked at the rim lip; shader launches them
+    const th = rand() * TAU;
+    const rr = CUP_RIM_R * CUP_GOLD_RFAC;
+    home[i * 3] = rr * Math.cos(th);
+    home[i * 3 + 1] = CUP_RIM_Y - CUP_Y0;
+    home[i * 3 + 2] = rr * Math.sin(th);
+    cls[i] = 2;
+    data[i] = rand();
+  }
+}
+
+/* Exhibit VIII · Сърцето, върнато у дома — THE RHYME with Exhibit II: same curve, NO gears, NO arrow
+   classes: 0 envelope (identical recipe) · 1 inner warm core */
+function genHomeHeart(home, cls, data, N, rand) {
+  const nEnvelope = Math.floor(N * 0.90);
+  const nCore = N - nEnvelope;
+
+  const table = heartArcTable(500);
+  const WALL_JITTER = 0.028;
+  const Z_DEPTH = 0.22;
+
+  let i = 0;
+  for (let k = 0; k < nEnvelope; k++, i++) { // identical envelope recipe to genHeart
+    const d = rand() * table.total;
+    const seg = arcLookup(table.pts, d);
+    const t = seg.t;
+    const [x0, y0] = heartRaw(t);
+    const [tx, ty] = heartTangent(t);
+    const tl = Math.hypot(tx, ty) || 1;
+    const nx = -ty / tl, ny = tx / tl;
+    const shell = (rand() - 0.5) * (WALL_JITTER * 4.0 / HEART_SCALE);
+    const inward = -Math.pow(rand(), 2.1) * (0.52 / HEART_SCALE);
+    const j = shell + (rand() < 0.55 ? inward : 0);
+    const x = x0 + nx * j, y = y0 + ny * j;
+    home[i * 3] = x * HEART_SCALE;
+    home[i * 3 + 1] = y * HEART_SCALE + HEART_YOFF;
+    const zu = rand();
+    home[i * 3 + 2] = zu < 0.72
+      ? (rand() < 0.5 ? -1 : 1) * Z_DEPTH * (0.30 + 0.20 * rand())
+      : (rand() - 0.5) * Z_DEPTH;
+    cls[i] = 0;
+    data[i] = t / TAU;
+  }
+  for (let k = 0; k < nCore; k++, i++) { // warm inner core: same curve, deeper inward reach
+    const d = rand() * table.total;
+    const seg = arcLookup(table.pts, d);
+    const t = seg.t;
+    const [x0, y0] = heartRaw(t);
+    const [tx, ty] = heartTangent(t);
+    const tl = Math.hypot(tx, ty) || 1;
+    const nx = -ty / tl, ny = tx / tl;
+    const inward = -Math.pow(rand(), 1.4) * (0.90 / HEART_SCALE);
+    const x = x0 + nx * inward, y = y0 + ny * inward;
+    home[i * 3] = x * HEART_SCALE;
+    home[i * 3 + 1] = y * HEART_SCALE + HEART_YOFF;
+    home[i * 3 + 2] = (rand() - 0.5) * Z_DEPTH * 0.5;
+    cls[i] = 1;
+    data[i] = t / TAU;
+  }
+}
+
+const GENERATORS = [genCup, genHeart, genConstellation, genStairs, genPortal, genCocoon, genGoldCup, genHomeHeart];
+/* ═══ SHADERS ═════════════════════════════════════════════════
+   Exhibit blocks live in EX_BLOCKS[i]; each block reads
+   (seedv, clsv, datv, uniforms) and writes hp / a / col / sizeF / alphaF. */
+
+const EX1_GLSL = /* glsl */`
+  // cls: 0 wall · 1 water · 2 hero · 3 vector
+  float delay = (clsv > 0.5 && clsv < 1.5) ? 0.45 : 0.0;   // water pours LAST
+  a = asm2(uAssembly, seedv, delay);
+  if (clsv < 0.5) {            // wall: bone with amber rim-glow (emission capped)
+    col = mix(uBone, uPal[0], datv * 0.55);
+    alphaF = 0.85;
+  } else if (clsv < 1.5) {     // water: saturated amber body, alive tremble
+    float tremble = (1.0 - uFocus) * (1.0 - uReduced);
+    hp.y += tremble * 0.020 * sin(uTime * 2.1 + seedv * 41.0 + datv * 9.0);
+    hp.x += tremble * 0.006 * sin(uTime * 1.7 + seedv * 23.0);
+    col = uPal[0] * (1.15 + 0.25 * uFocus);   // focus → mirror brightens
+    sizeF = 1.15;
+  } else if (clsv < 2.5) {     // the Hero mote
+    col = uPal[0] * 1.8;
+    sizeF = 3.0;
+  } else {                     // vector Hero→meta: thickened + amber glow
+    col = uPal[0] * 1.35;
+    sizeF = 1.7;
+    alphaF = 0.9;
+  }
+`;
+
+const EX2_GLSL = /* glsl */`
+  // cls: 0 envelope · 1 ring1(fastest) · 2 ring2 · 3 ring3(slowest) · 4 arrow
+  float breathe = 1.0 + 0.028 * sin(uTime * 0.55);   // whole heart breathes as ONE body
+  if (clsv < 0.5) {
+    a = asm2(uAssembly, seedv, 0.0);
+    float thetaP = atan(hp.y, hp.x);
+    float omega = mix(1.0, 2.5, uFocus);              // hard-capped 2.5x under focus
+    float thetaArrow = uTime * omega;                 // same formula as the arrow class → wave tracks the hand
+    float dAng = thetaP - thetaArrow;
+    dAng = atan(sin(dAng), cos(dAng));                // wrap-aware angular distance
+    float sigma = mix(0.35, 0.9, uFocus);
+    float gauss = exp(-(dAng * dAng) / (2.0 * sigma * sigma));
+    float gearAmp = 1.0 - 0.22 * abs(sin(thetaP * 9.0 - uTime * 1.6));
+    float waveAmp = gauss * gearAmp * 0.42;
+    waveAmp = min(waveAmp, 0.22 * max(length(hp.xy), 1e-4)); // cap vs LOCAL radius — the notch never fills
+    waveAmp *= (1.0 - uReduced);                              // reduced motion: clean undistorted heart
+    vec2 dir = hp.xy / max(length(hp.xy), 1e-4);
+    hp.xy += dir * waveAmp;                            // stateless outward bulge — returns as the arrow passes
+    hp *= breathe;
+    col = mix(uPal[1] * 0.60, uPal[1] * 1.05, datv * 0.5 + waveAmp * 1.1);
+    col = mix(col, uPal[1] * 1.55, smoothstep(0.05, 0.30, waveAmp));
+    alphaF = 0.85;
+    sizeF = 1.0 + waveAmp * 0.6;
+  } else if (clsv < 1.5) {
+    a = asm2(uAssembly, seedv, 0.05);
+    float ang = uTime * 1.6;
+    float c = cos(ang), s = sin(ang);
+    hp.xy = mat2(c, s, -s, c) * hp.xy;
+    hp *= breathe;
+    col = uPal[1] * mix(0.55, 0.85, datv);
+    sizeF = 1.05;
+    alphaF = 0.9;
+  } else if (clsv < 2.5) {
+    a = asm2(uAssembly, seedv, 0.09);
+    float ang = uTime * 0.85;
+    float c = cos(ang), s = sin(ang);
+    hp.xy = mat2(c, s, -s, c) * hp.xy;
+    hp *= breathe;
+    col = uPal[1] * mix(0.38, 0.60, datv);
+    sizeF = 1.0;
+    alphaF = 0.9;
+  } else if (clsv < 3.5) {
+    a = asm2(uAssembly, seedv, 0.13);
+    float ang = uTime * 0.42;
+    float c = cos(ang), s = sin(ang);
+    hp.xy = mat2(c, s, -s, c) * hp.xy;
+    hp *= breathe;
+    col = uPal[1] * mix(0.24, 0.40, datv);
+    sizeF = 0.95;
+    alphaF = 0.9;
+  } else {
+    a = asm2(uAssembly, seedv, 0.18);
+    float omega = mix(1.0, 2.5, uFocus);
+    float ang = uTime * omega;
+    float c = cos(ang), s = sin(ang);
+    hp.xy = mat2(c, s, -s, c) * hp.xy;
+    hp *= breathe;
+    col = uPal[1] * mix(1.25, 1.55, datv);
+    sizeF = mix(1.8, 2.6, datv);
+    alphaF = 1.0;
+  }
+`;
+
+const EX3_GLSL = /* glsl */`
+  // cls: 0 node · 1 field dust(pre-aligned) · 2 arc-line · 3 grain
+  if (clsv < 0.5) {
+    a = asm2(uAssembly, seedv, 0.0);
+    vec2 toPtr = hp.xy - uPointer.xy;
+    float near = exp(-dot(toPtr, toPtr) * 3.2) * ptrAct;
+    col = mix(uPal[2] * 1.1, uPal[2] * 1.6, near);
+    sizeF = mix(2.4, 3.2, datv) * (1.0 + near * 1.0);
+    alphaF = 1.0;
+  } else if (clsv < 1.5) {
+    a = asm2(uAssembly, seedv, 0.10 + datv * 0.10);
+    col = mix(uPal[2] * 0.55, uPal[2] * 1.05, datv);
+    alphaF = mix(0.35, 0.85, datv);
+    sizeF = mix(0.85, 1.15, datv);
+  } else if (clsv < 2.5) {
+    a = asm2(uAssembly, seedv, 0.05);
+    vec2 toPtr = hp.xy - uPointer.xy;
+    float near = exp(-dot(toPtr, toPtr) * 2.4) * ptrAct;
+    float shimmer = 0.55 + 0.45 * sin(uTime * 2.0 - datv * 9.0);
+    col = uPal[2] * mix(0.7, 1.5, near * shimmer);
+    alphaF = 0.8;
+    sizeF = 1.0 + near * 0.6;
+  } else {
+    a = asm2(uAssembly, seedv, 0.14);
+    float period = 4.2;
+    float ttG = mod(uTime * 0.6 + datv * period, period);
+    float vx = sin(seedv * 12.9) * 0.34;
+    float vy0 = 0.55 + 0.30 * cos(seedv * 7.3);
+    float gG = 0.85;
+    float ground = -0.85 + 0.14 * sin(seedv * 31.7);     // varied landing height — no neat rows
+    float disc = vy0 * vy0 - 2.0 * gG * ground;
+    float tLand = (vy0 + sqrt(max(disc, 0.0))) / gG;
+    float te = min(ttG, tLand);                   // analytic landing — x&y freeze together, stateless
+    hp.x += vx * te;
+    hp.y += vy0 * te - 0.5 * gG * te * te;
+    float logi = 1.0 / (1.0 + exp(-(uTime * 0.05 + seedv * 9.0 - 4.5)));
+    vec2 toPtr = hp.xy - uPointer.xy;
+    float near = exp(-dot(toPtr, toPtr) * 3.0) * uFocus; // germination boost = max(timer, cursor-under-hold)
+    float germ = max(logi, near);
+    col = mix(uPal[2] * 0.9, uPal[0] * 1.35, germ);      // germinated grains turn gold — knowledge leads to the meta
+    sizeF = mix(1.1, 1.6, germ);
+    alphaF = mix(0.5, 0.85, germ);
+  }
+`;
+
+const EX4_GLSL = /* glsl */`
+  // cls: 0 plate · 1 axis · datv = normalized height hNorm
+  float hNorm = datv;
+  if (clsv < 0.5) {
+    a = asm2(uAssembly, seedv, hNorm * 0.5);           // bottom-up stagger — works even with uProgress==0
+    float frontGlow = smoothstep(hNorm - 0.16, hNorm + 0.02, uProgress);
+    float pulsePos = fract(uTime * 0.12);
+    float dHP = hNorm - pulsePos;
+    float pulse = exp(-dHP * dHP * 90.0) * (1.0 - uReduced); // Зовът climbs; reduced: clean static steps
+    float flareTarget = clamp(uProgress + 1.0 / 7.0, 0.0, 1.0);
+    float dFl = hNorm - flareTarget;
+    float flare = uFocus * exp(-dFl * dFl * 220.0);    // hold: the next unlit plate flares
+    col = mix(uPal[3] * 0.55, uPal[3] * 1.05, frontGlow);
+    col = mix(col, uPal[0] * 1.45, clamp(pulse + flare, 0.0, 1.0));
+    alphaF = 0.85;
+    sizeF = 1.0 + pulse * 0.5 + flare * 0.8;
+  } else {
+    a = asm2(uAssembly, seedv, hNorm * 0.30);
+    float pulsePos = fract(uTime * 0.12);
+    float dHP = hNorm - pulsePos;
+    float pulse = exp(-dHP * dHP * 70.0) * (1.0 - uReduced);
+    col = mix(uPal[3] * 0.40, uPal[0] * 1.30, pulse);
+    alphaF = 0.6;
+    sizeF = 1.0 + pulse * 0.4;
+  }
+`;
+
+const EX5_GLSL = /* glsl */`
+  // cls: 0 frame · 1 membrane · 2 stream · 3 demo-hero
+  if (clsv < 0.5) {                                     // frame: warm glow builds toward the apex
+    a = asm2(uAssembly, seedv, 0.0);
+    col = mix(uBone, uPal[4], 0.45 + 0.45 * datv);
+    alphaF = 0.85;
+    sizeF = 1.05;
+  } else if (clsv < 1.5) {                              // membrane: pale curtain, opens wider under focus
+    float shimmer = 0.5 + 0.5 * sin(uTime * 1.3 + datv * 20.0 + hp.x * 4.0);
+    a = asm2(uAssembly, seedv, 0.18);
+    vec2 openCentre = vec2(0.0, -0.10);
+    hp.xy = openCentre + (hp.xy - openCentre) * mix(1.0, 1.09, uFocus * (1.0 - uReduced));
+    hp.z += 0.018 * shimmer * (1.0 - uReduced);
+    col = mix(uBone, uPal[4], 0.20 + 0.18 * shimmer);
+    alphaF = 0.55 + 0.30 * uFocus;
+    sizeF = 0.95;
+  } else if (clsv < 2.5) {                              // stream: one-way, brightest exactly at the threshold
+    a = asm2(uAssembly, seedv, 0.38);
+    float density = 0.55 + 0.85 * uFocus;
+    float speed = (0.085 + 0.055 * datv) * density;
+    float z = -9.0 + fract(seedv + uTime * speed) * 17.5; // corridor -9..+8.5: wrap point BEHIND the camera (z=7.2)
+    float nearFade = 1.0 - smoothstep(5.0, 6.8, z);        // grains die out before the teleport — no visible wink
+    float order = smoothstep(-0.30, 0.30, z);              // chaos before the plane, calm order beyond
+    vec2 chaos = (1.0 - order) * 0.30 * vec2(
+      sin(uTime * 0.8 + seedv * 23.0), sin(uTime * 0.65 + seedv * 17.0));
+    hp.xy = position.xy + chaos;
+    hp.y += order * 0.02 * sin(z * 2.0 + seedv * 9.0);
+    hp.z = z;
+    vec2 toCentre = hp.xy - vec2(0.0, -0.10);              // -0.10 = PORTAL_MEMB_CY (baked, must match JS)
+    float gate = exp(-dot(toCentre, toCentre) * 2.0);
+    float flare = exp(-z * z * 8.0);                       // decision-flare peaks exactly at z=0
+    vec2 toPointer = hp.xy - uPointer.xy;
+    float pointerBoost = exp(-dot(toPointer, toPointer) * 1.6) * order * ptrAct;
+    col = mix(uBone * 0.75, uPal[4] * 1.35, order) + uPal[4] * (flare * 0.55 + pointerBoost * 0.5);
+    alphaF = gate * nearFade * (0.35 + 0.55 * order + 0.6 * flare + 0.3 * pointerBoost) * mix(1.0, order, uReduced);
+    sizeF = (0.85 + 0.9 * flare + 0.4 * pointerBoost) * nearFade;
+  } else {                                               // demo-hero: ONE scripted crossing (uDemo pulses 1→0)
+    a = asm2(uAssembly, seedv, 0.0);
+    float dz = mix(-2.4, 2.4, 1.0 - uDemo);
+    hp.z = dz - datv * 0.35;                             // comet tail
+    float dFlare = exp(-dz * dz * 6.0);
+    col = uPal[4] * (1.3 + 1.8 * dFlare);
+    sizeF = 1.6 + 2.2 * dFlare;
+    alphaF = 0.9 * smoothstep(0.02, 0.12, uDemo);        // hidden before AND after the pulse — never a parked blob
+  }
+`;
+
+const EX6_GLSL = /* glsl */`
+  // cls buffer A: 0 cocoon · buffer B: 1 wing · 2 hairy body · 3 proboscis (JS swaps buffers in the trough)
+  float pEff = clamp(uProgress + uFocus * 0.32 * (1.0 - uReduced), 0.0, 1.0); // hold ACCELERATES, never reverses
+  float stagger = (seedv - 0.5) * 0.10;
+  float aUp = 1.0 - smoothstep(0.30 + stagger, 0.44 + stagger, pEff);   // edges tuned so the trough
+  float aDown = smoothstep(0.56 + stagger, 0.70 + stagger, pEff);       // is FULLY dissolved for every seed at p=0.5
+  float triA = (uReduced > 0.5) ? 1.0 : clamp(max(aUp, aDown), 0.0, 1.0);
+  float dissolve = 1.0 - triA;
+  float distToMid = abs(pEff - 0.5);
+  float spark = exp(-distToMid * distToMid * 160.0) * (1.0 - uReduced); // brief warm flash at the transition
+
+  a = asm2(uAssembly, seedv, 0.0);
+
+  vec3 swirlOff = dissolve * 0.62 * vec3(               // dense VISIBLE vortex — never a black gap
+    cos(uTime * 1.7 + seedv * 18.0 + dissolve * 3.0),
+    sin(uTime * 1.35 + seedv * 23.0) * 0.85,
+    sin(uTime * 2.05 + seedv * 11.0));
+  hp = position + swirlOff;
+
+  vec3 earthC = uPal[5];
+  vec3 amberC = uPal[0];
+
+  if (clsv < 0.5) {                                      // cocoon shell
+    col = mix(earthC * 0.85, earthC * 1.15, datv) + amberC * spark * 0.6;
+    sizeF = mix(1.0, 1.35, dissolve);
+    alphaF = mix(0.85, 1.0, dissolve);
+  } else if (clsv < 1.5) {                               // wings: amber grows toward the scalloped tip (predicts VII)
+    col = mix(earthC, amberC, 0.25 + 0.35 * datv) + amberC * spark * 0.7;
+    sizeF = mix(1.05, 1.4, dissolve);
+    alphaF = mix(0.75, 0.95, dissolve);
+  } else if (clsv < 2.5) {                               // hairy body
+    col = earthC * 0.9 + amberC * spark * 0.5;
+    sizeF = mix(1.0, 1.3, dissolve);
+    alphaF = 0.8;
+  } else {                                                // decaying-spiral proboscis
+    col = mix(earthC * 0.7, amberC * 0.9, datv) + amberC * spark * 0.5;
+    sizeF = mix(0.9, 1.2, dissolve) * 1.1;
+    alphaF = 0.85;
+  }
+`;
+
+const EX7_GLSL = /* glsl */`
+  // cls: 0 wall (same profile as Exhibit I) · 1 gold (level rises with uProgress) · 2 overflow drop
+  float level = mix(0.35, 1.0, uProgress);
+  if (clsv < 0.5) {                            // wall: STILL — the payoff of Exhibit I's tremble
+    a = asm2(uAssembly, seedv, 0.0);
+    col = mix(uBone, uPal[0], 0.30 + datv * 0.55);
+    alphaF = 0.85;
+  } else if (clsv < 1.5) {                     // gold: lights only below the level (stateless)
+    float lit = 1.0 - smoothstep(level - 0.06, level + 0.06, datv);
+    a = asm2(uAssembly, seedv, 0.0) * mix(0.12, 1.0, lit);
+    float ds = (datv - level) * 10.0;
+    float surface = exp(-ds * ds);              // near-surface band (никога pow(neg,2) — NaN на ANGLE/mobile)
+    vec2 toPtr = hp.xy - uPointer.xy;
+    float gp = exp(-dot(toPtr, toPtr) * 2.5) * ptrAct;
+    hp.y += surface * gp * 0.05 * sin(uTime * 3.0 + seedv * 20.0) * (1.0 - uReduced); // ripples on the gold surface only
+    float glow = mix(1.0, 1.5, uFocus);         // hold → full radiance, hue-capped
+    col = uPal[0] * glow * mix(0.85, 1.15, lit);
+    sizeF = mix(1.0, 1.3, lit);
+    alphaF = 0.9;
+  } else {                                     // overflow drops: same parabola family as the III grains, capped
+    float overflowGate = clamp(smoothstep(0.55, 0.85, uProgress) + uFocus * 0.30, 0.0, 1.0);
+    float rare = smoothstep(0.90, 0.94, datv);  // only the top seeds ever launch — rare drops, not a pour
+    float period = 6.5;
+    float ttG = mod(uTime * 0.35 + datv * period, period);
+    float vOut = 0.10 + 0.08 * fract(seedv * 41.0);
+    float vy0 = -0.02 - 0.05 * fract(seedv * 17.0);
+    float gG = 0.9, tFlight = 1.4;
+    float te = min(ttG, tFlight);
+    vec2 dirOut = normalize(hp.xy + vec2(1e-4));
+    hp.xy += dirOut * vOut * te;
+    hp.y += vy0 * te - 0.5 * gG * te * te;
+    float life = 1.0 - smoothstep(0.0, tFlight, te); // dissolves into a glint near the base
+    a = asm2(uAssembly, seedv, 0.30) * overflowGate;
+    col = uPal[0] * (1.3 + 0.4 * life);
+    sizeF = mix(0.6, 1.3, life) * rare;
+    alphaF = life * rare * overflowGate * 0.9;
+  }
+`;
+
+const EX8_GLSL = /* glsl */`
+  // cls: 0 envelope · 1 inner core — same heart curve as II, no gears, no arrow
+  // 3 beats over uProgress: <0.22 ЗАВРЪЩАНЕ · 0.22-0.44 ВЪЗКРЕСВАНЕ · >0.44 ДАРЪТ
+  // (compressed vs v2: the band is ~135svh with only the footer after it, so max
+  //  reachable progress is ~0.74 — the exhale must complete by then)
+  float aBase = asm2(uAssembly, seedv, 0.0);
+
+  if (uProgress < 0.22) {                                // ЗАВРЪЩАНЕ · slow calm breathe, whole body
+    float breathe = 1.0 + 0.05 * sin(uTime * 0.30 + seedv * 2.1);
+    a = aBase;
+    hp *= breathe;
+    if (clsv < 0.5) { col = mix(uPal[7] * 0.55, uPal[7] * 1.05, datv); alphaF = 0.85; sizeF = 1.0; }
+    else            { col = mix(uPal[7] * 0.80, uPal[0] * 1.10, 0.45); alphaF = 0.9; sizeF = 1.1; }
+
+  } else if (uProgress < 0.44) {                         // ВЪЗКРЕСВАНЕ · bounded implosion + short 8-color flash
+    float p2 = clamp((uProgress - 0.22) / 0.22, 0.0, 1.0);
+    float implodeFactor = 0.55 * sin(p2 * 3.14159265) * (1.0 - uReduced); // reduced: still heart, no collapse
+    a = aBase;
+    hp = mix(hp, vec3(0.0), implodeFactor);
+    float fp = (p2 - 0.5) * 6.0;
+    float flashWin = exp(-fp * fp) * (1.0 - uReduced);   // short window around the peak; skipped under reduced motion
+    // GLSL ES 1.0: no dynamic indexing of uniform arrays — constant-count loop fakes it
+    vec3 flashCol = uPal[0];
+    float idxF = floor(seedv * 8.0);                     // STATIC per-point index (PRD: floor(aSeed·8) · не диско)
+    for (int c8 = 0; c8 < 8; c8++) { if (abs(float(c8) - idxF) < 0.5) flashCol = uPal[c8]; }
+    vec3 base = (clsv < 0.5) ? mix(uPal[7] * 0.55, uPal[7] * 1.05, datv) : mix(uPal[7] * 0.80, uPal[0] * 1.10, 0.45);
+    col = mix(base, flashCol * 1.15, flashWin * 0.75); // 8 hues must survive additive stacking — never blow to white
+    alphaF = 0.9;
+    sizeF = 1.0 + implodeFactor * 0.4;
+
+  } else {                                                // ДАРЪТ · exhale — the ring closes into the opening dust
+    float p3 = clamp((uProgress - 0.44) / 0.22, 0.0, 1.0); // completes by uProgress≈0.66 (reachable at page end)
+    float stagger = seedv * 0.6;
+    float aDown = smoothstep(stagger, stagger + 0.4, p3);
+    a = aBase * (1.0 - aDown);
+    vec2 toPtr = hp.xy - uPointer.xy;
+    float g = exp(-dot(toPtr, toPtr) * 1.5) * ptrAct;
+    hp.xy -= toPtr * g * 0.35;                             // soft mirror parallax — attraction, no scatter, only for a live pointer
+    vec2 dirOut = normalize(hp.xy + vec2(1e-4));
+    hp.xy += dirOut * uFocus * 0.5 * (1.0 - uReduced);     // hold DISPERSES (the inverse gesture of every hall)
+    col = (clsv < 0.5) ? mix(uPal[7] * 0.45, uPal[7] * 0.85, datv) : uPal[7] * 0.70 + uPal[0] * 0.25;
+    alphaF = 0.8 * (0.3 + 0.7 * a);
+    sizeF = 1.0;
+  }
+`;
+
+const EX_BLOCKS = [EX1_GLSL, EX2_GLSL, EX3_GLSL, EX4_GLSL, EX5_GLSL, EX6_GLSL, EX7_GLSL, EX8_GLSL];
+
+function buildVertexShader() {
+  const chain = EX_BLOCKS.map((body, i) =>
+    `${i ? 'else ' : ''}if (uExhibit < ${i}.5) {\n${body}\n}`).join('\n    ');
+  return /* glsl */`
+  attribute vec3 aDust;
+  attribute float aSeed;
+  attribute float aClass;
+  attribute float aData;
+  uniform float uTime, uAssembly, uProgress, uFocus, uSwirl, uExhibit, uReduced, uFlash, uDemo, uSizeBase, uPx, uScale;
+  uniform vec3 uOffset, uPointer, uBone;
+  uniform vec3 uPal[8];
+  varying vec3 vColor;
+  varying float vAlpha;
+
+  float asm2(float u, float s, float d) {
+    return smoothstep(0.0, 1.0, u * (1.35 + d) - (s * 0.35 + d));
+  }
+
+  void main() {
+    float seedv = aSeed, clsv = aClass, datv = aData;
+
+    // pseudo-curl dust drift: 3 layered sin terms per axis (free on GPU)
+    vec3 dp = aDust;
+    float tt = uTime * (1.0 - uReduced * 0.94);
+    dp.x += 0.55 * sin(tt * 0.11 + aDust.y * 0.70 + seedv * 6.28)
+          + 0.20 * sin(tt * 0.23 + aDust.z * 1.30 + seedv * 12.6)
+          + 0.09 * sin(tt * 0.37 + aDust.x * 2.10 + seedv * 3.3);
+    dp.y += 0.42 * sin(tt * 0.13 + aDust.z * 0.80 + seedv * 4.71)
+          + 0.16 * sin(tt * 0.19 + aDust.x * 1.10 + seedv * 8.1)
+          + 0.08 * sin(tt * 0.31 + aDust.y * 1.90 + seedv * 5.7);
+    dp.z += 0.50 * sin(tt * 0.09 + aDust.x * 0.60 + seedv * 9.42)
+          + 0.18 * sin(tt * 0.21 + aDust.y * 1.20 + seedv * 7.3)
+          + 0.08 * sin(tt * 0.33 + aDust.z * 2.00 + seedv * 11.1);
+
+    vec3 hp = position;
+    float a = 0.0;
+    vec3 col = uBone;
+    float sizeF = 1.0, alphaF = 1.0;
+    // pointer effects only while the pointer is actually alive (swirl decays at rest; focus = deliberate hold)
+    // — an idle uPointer at (0,0,0) must never act like a phantom cursor (the template's sentinel lesson)
+    float ptrAct = clamp(uSwirl * 2.0 + uFocus, 0.0, 1.0);
+
+    if (clsv < -0.5) { a = 0.0; } // parked points stay dust in EVERY exhibit
+    else ${chain}
+
+    vec3 p = mix(dp, hp, a);
+
+    // cursor swirl: Gaussian falloff, tangential push (strong on dust, subtle when assembled)
+    vec2 toP = p.xy - uPointer.xy;
+    float d2 = dot(toP, toP);
+    float g = exp(-d2 * 0.9) * uSwirl;
+    vec2 tang = normalize(vec2(-toP.y, toP.x) + vec2(1e-4));
+    p.xy += tang * g * mix(0.9, 0.14, a);
+    sizeF *= 1.0 + g * 1.4;
+
+    p = p * uScale + uOffset; // mobile: shortened amplitudes — the whole cloud scales into the clean top band
+    vec4 mv = modelViewMatrix * vec4(p, 1.0);
+    float ps = uSizeBase * mix(0.55, 1.35, seedv) * sizeF * mix(0.55, 1.15, a) * (uPx * 16.0 / max(1.0, -mv.z));
+    gl_PointSize = clamp(ps, 0.75, 6.5);
+    gl_Position = projectionMatrix * mv;
+
+    vColor = min(col, vec3(1.6));           // cap additive emission
+    // museum dust is sparse: most idle grains near-invisible, a few glimmer
+    float dustA = 0.05 + 0.30 * smoothstep(0.72, 1.0, seedv);
+    vAlpha = alphaF * mix(dustA, 0.20, a); // assembled grains stay translucent — form = accumulation, not solid fill
+  }`;
+}
+
+const FRAG = /* glsl */`
+  varying vec3 vColor;
+  varying float vAlpha;
+  void main() {
+    vec2 uv = gl_PointCoord - 0.5;
+    float m = smoothstep(0.5, 0.10, length(uv));
+    if (m < 0.01) discard;
+    gl_FragColor = vec4(vColor, vAlpha * m);
+  }`;
+const EX_I4_CHALICE="\n  // MET-1877 \u00b7 \u04184 \u0447\u0430\u0448\u0430 \u0441 \u043a\u0430\u043f\u043a\u0438 (\u0433\u0435\u043e\u043c\u0435\u0442\u0440\u0438\u044f\u0442\u0430 \u043d\u0430 genGoldCup): cls 0 \u0441\u0442\u0435\u043d\u0430 \u00b7 1 \u0437\u043b\u0430\u0442\u043e (datv = \u0432\u0438\u0441\u043e\u0447\u0438\u043d\u0430 \u043d\u0430 \u043f\u044a\u043b\u043d\u0435\u043d\u0435) \u00b7 2 \u043f\u0440\u0430\u0445\n  // uProgress = \u043d\u0438\u0432\u043e\u0442\u043e \u043d\u0430 \u0437\u043b\u0430\u0442\u043e\u0442\u043e \u00b7 uLevel0 = \u043d\u0438\u0432\u043e\u0442\u043e \u043f\u0440\u0435\u0434\u0438 \u0442\u0435\u043a\u0443\u0449\u043e\u0442\u043e \u043d\u0430\u043b\u0438\u0432\u0430\u043d\u0435 \u00b7 uPour 0\u21921 = \u0441\u0442\u0440\u0443\u044f\u0442\u0430 \u043e\u0442 \u0447\u0443\u0447\u0443\u0440\u0430 \u043d\u0430\u0434 \u0440\u044a\u0431\u0430 (\u0434\u044a\u043d\u043e\u0442\u043e \u043f\u044a\u0440\u0432\u043e)\n  dp *= 0.55;\n  if (clsv < 0.5) {\n    a = asm2(uAssembly, seedv, 0.0);\n    col = mix(uBone, uPal[0], 0.15 + datv * 0.35) * 0.8;   // \u043f\u0440\u0430\u0437\u043d\u0430\u0442\u0430 \u0447\u0430\u0448\u0430 = \u0441\u0442\u044a\u043a\u043b\u043e \u043e\u0442 \u043a\u043e\u0441\u0442; \u0437\u043b\u0430\u0442\u043e\u0442\u043e \u0435 \u0435\u0434\u0438\u043d\u0441\u0442\u0432\u0435\u043d\u043e\u0442\u043e \u043d\u0430\u0441\u0438\u0442\u0435\u043d\u043e\n    alphaF = 0.55;\n  } else if (clsv < 1.5) {\n    float lit = 1.0 - step(uProgress, datv);\n    float fresh = lit * step(uLevel0, datv);\n    float k = clamp((datv - uLevel0) / max(uProgress - uLevel0, 0.001), 0.0, 1.0);\n    float t = clamp((uPour - (k * 0.42 + fract(seedv * 13.7) * 0.22)) / 0.36, 0.0, 1.0);\n    vec3 spout = vec3((fract(seedv * 7.3) - 0.5) * 0.06, 1.80, (fract(seedv * 3.1) - 0.5) * 0.06);\n    float sp = smoothstep(0.55, 1.0, t);\n    hp = mix(hp, vec3(mix(spout.x, hp.x, sp), mix(spout.y, hp.y, t * t), mix(spout.z, hp.z, sp)), fresh);\n    float ds = (datv - uProgress) * 12.0;\n    hp.y += exp(-ds * ds) * 0.022 * sin(uTime * 3.0 + seedv * 20.0) * lit * (1.0 - uReduced);\n    a = asm2(uAssembly, seedv, 0.0) * lit;\n    col = mix(uPal[0], uPal[4], 0.4) * (1.25 + 0.3 * sin(uPour * 3.14159)) * mix(1.0, 1.15, fresh * (1.0 - t));   // \u0442\u043e\u043f\u043b\u043e \u0437\u043b\u0430\u0442\u043e: \u043d\u0430\u0441\u0438\u0442\u0435\u043d\u043e\u0442\u043e \u043d\u0435 \u0438\u0437\u0431\u0435\u043b\u044f\u0432\u0430\n    sizeF = mix(1.9, 2.3, fresh * (1.0 - t));\n    alphaF = mix(1.0, step(0.001, t), fresh);\n  } else {\n    a = 0.0;\n  }\n";
+EX_BLOCKS.push(EX_I4_CHALICE); GENERATORS.push(genGoldCup);   // exhibit 8 = И4 чашата с капки
+const VS=buildVertexShader().replace('uniform float uTime,','uniform float uLevel0, uPour, uTime,');
+if(VS.indexOf('uLevel0')<0) throw new Error('eidolon: uniforms');
+return {THREE,GENERATORS,mulberry32,PALETTE,BONE,VS,FRAG};
+}))}
+const HV=2*7.2*Math.tan(25*Math.PI/180);   // видимата височина при z=0 (камерата на app.js: fov 50 · z 7.2)
+async function mount(fig,o){
+  o=o||{};
+  if(!fig||RM||NOGL||!canGL()) return null;
+  let E; try{E=await engine()}catch(e){return null}
+  const T=E.THREE, mob=matchMedia('(max-width: 899px)').matches, low=(navigator.hardwareConcurrency||8)<=4||(navigator.deviceMemory||8)<=2;
+  const N=o.count||(mob?(low?12000:20000):(low?18000:30000)), DPR=Math.min(devicePixelRatio||1,mob?2:1.5);
+  const cv=document.createElement('canvas'); cv.setAttribute('aria-hidden','true');
+  let R; try{R=new T.WebGLRenderer({canvas:cv,antialias:false,alpha:true,powerPreference:'high-performance'})}catch(e){return null}
+  R.setPixelRatio(DPR); R.setClearColor(0x000000,0);
+  const home=new Float32Array(N*3), dust=new Float32Array(N*3), seed=new Float32Array(N), cls=new Float32Array(N), data=new Float32Array(N);
+  {const r=E.mulberry32(20260712); for(let i=0;i<N;i++){const rad=2.6+r()*4.2, th=r()*Math.PI*2, ph=Math.acos(2*r()-1);   // прахът на app.js (редове 67–77) за N точки
+    dust[i*3]=rad*Math.sin(ph)*Math.cos(th); dust[i*3+1]=rad*Math.sin(ph)*Math.sin(th)*0.72; dust[i*3+2]=rad*Math.cos(ph)*0.8; seed[i]=r()}}
+  const S=new T.Scene(), C=new T.PerspectiveCamera(50,1,0.1,60); C.position.set(0,0,7.2); C.lookAt(0,0,0);
+  const G=new T.BufferGeometry();
+  [['position',home,3],['aDust',dust,3],['aSeed',seed,1],['aClass',cls,1],['aData',data,1]].forEach(([k,a,n])=>G.setAttribute(k,new T.BufferAttribute(a,n)));
+  const V3=c=>new T.Vector3(c.r,c.g,c.b);
+  const U={uTime:{value:0},uAssembly:{value:0},uProgress:{value:0},uFocus:{value:0},uSwirl:{value:0},uExhibit:{value:0},uReduced:{value:0},uFlash:{value:0},uDemo:{value:0},
+    uSizeBase:{value:mob?0.85:0.95},uPx:{value:DPR},uScale:{value:1},uOffset:{value:new T.Vector3()},uPointer:{value:new T.Vector3()},
+    uBone:{value:V3(E.BONE)},uPal:{value:E.PALETTE.map(V3)},uLevel0:{value:0},uPour:{value:1}};
+  const P=new T.Points(G,new T.ShaderMaterial({vertexShader:E.VS,fragmentShader:E.FRAG,uniforms:U,transparent:true,depthWrite:false,blending:T.AdditiveBlending}));
+  P.frustumCulled=false; S.add(P);
+  const fit=Object.assign({y0:-1.15,y1:1.15,b:0.08,t:0.92},o.fit||{});
+  let xr=1;
+  function size(){const r=fig.getBoundingClientRect(), w=Math.max(1,Math.round(r.width)), h=Math.max(1,Math.round(r.height));
+    R.setSize(w,h,false); C.aspect=w/h; C.updateProjectionMatrix();
+    let s=(fit.t-fit.b)*HV/(fit.y1-fit.y0); const half=HV/2*C.aspect*0.92; if(xr*s>half) s=half/xr;
+    U.uScale.value=s; U.uOffset.value.set(0,-HV/2+fit.b*HV-fit.y0*s,0); kick()}
+  function load(idx,gen){U.uExhibit.value=idx; (gen||E.GENERATORS[idx])(home,cls,data,N,E.mulberry32(1000+idx*7919));
+    let m=0; for(let i=0;i<N;i++) if(cls[i]>=0) m=Math.max(m,Math.abs(home[i*3])); xr=m||1;
+    ['position','aClass','aData'].forEach(k=>G.attributes[k].needsUpdate=true); size()}
+  const st={vis:false,asm:0,asmT:0,time:0,raf:0,last:0};
+  function frame(now){st.raf=0; const dt=st.last?Math.min(0.05,(now-st.last)/1000):0; st.last=now; st.time+=dt;
+    st.asm+=(st.asmT-st.asm)*(1-Math.pow(0.12,dt)); if(U.uPour.value<1) U.uPour.value=Math.min(1,U.uPour.value+dt/(o.pourSec||1.9));
+    U.uTime.value=st.time; U.uAssembly.value=st.asm; R.render(S,C);
+    if(fig.dataset.gl!=='on') fig.dataset.gl='on';   // still-ът се скрива чак след първия истински кадър
+    if(st.vis||U.uPour.value<1) st.raf=requestAnimationFrame(frame); else st.last=0}
+  function kick(){if(!st.raf) st.raf=requestAnimationFrame(frame)}
+  cv.style.cssText='position:absolute;inset:0;width:100%;height:100%;display:block'; fig.appendChild(cv);
+  load(o.exhibit==null?0:o.exhibit,o.gen);
+  new IntersectionObserver(es=>{for(const e of es){st.vis=e.isIntersecting; if(st.vis){st.asmT=1; kick()}}},{threshold:0.02}).observe(fig);
+  if('ResizeObserver' in window) new ResizeObserver(size).observe(fig);
+  cv.addEventListener('webglcontextlost',e=>{e.preventDefault(); delete fig.dataset.gl; cv.remove()});
+  return {fig,canvas:cv,uniforms:U,state:st,THREE:T,load,
+    set(p){if(p&&p.level!=null){U.uLevel0.value=U.uProgress.value=p.level; U.uPour.value=1} kick()},
+    pour(level){if(U.uPour.value>=1) U.uLevel0.value=U.uProgress.value; U.uProgress.value=level; U.uPour.value=0; kick()}};
+}
+window.__eidolon={mount,canGL,reduced:RM};
+// етап 1 · картите „За кого“ наливат злато в чашата
+const D=window.__i4drops;
+if(D) mount(document.getElementById('chalice'),{exhibit:8,fit:{y0:-1.15,y1:1.85,b:0.14,t:0.97}}).then(c=>{if(!c) return; c.set({level:D.level()}); D.on(d=>c.pour(D.level(d.count)))});
+</script>
+<script>/* MET-1936 · ПТ портал: чашата събира картите-сцени на метачетене · разказвача · сугестопедия · Eidolon exhibit 8 (същият двигател и същата преляла чаша като етап 7 на v1) · постер при reduced motion / без WebGL */
+(function(){
+'use strict';
+const cup=document.getElementById('pt-chalice'); if(!cup) return;
+const RM=matchMedia('(prefers-reduced-motion: reduce)').matches||/[?&]reduced=1/.test(location.search);
+const tiles=[].slice.call(document.querySelectorAll('.pt-tile')), IDS=tiles.map(t=>t.dataset.pt);
+const nEl=document.getElementById('pt-n'), hint=document.getElementById('pt-hint'), toast=document.getElementById('toast');
+const LV=[0,0.26,0.52,0.999];   // нивото на златото: празна · 1/3 · 2/3 · преля (uProgress на exhibit 8: тялото е до 0.70, куполът и струйките над него)
+var PROF=[[0.02, 0.0], [0.6, 0.0], [0.62, 0.06], [0.58, 0.1], [0.16, 0.16], [0.1, 0.3], [0.085, 0.6], [0.09, 0.88], [0.3, 1.02], [0.58, 1.22], [0.78, 1.48], [0.9, 1.78], [0.95, 2.05], [0.97, 2.3]], TAU=Math.PI*2, Y0=1.15;
+function bowl(y){for(var i=0;i<PROF.length-1;i++){var a=PROF[i],b=PROF[i+1]; if(y<=b[1]||i===PROF.length-2){var f=b[1]>a[1]?Math.max(0,Math.min(1,(y-a[1])/(b[1]-a[1]))):0; return a[0]+(b[0]-a[0])*f}} return PROF[PROF.length-1][0]}
+function prof(y0,y1){return PROF.filter(function(q){return q[1]>=y0&&q[1]<=y1})}
+// геометрията: cls 0 стена · cls 1 злато (data = височина на пълнене; ≥ 0.72 = струйки и локвичка, които идват чак при преливането) · exhibit 8 = шейдърът на MET-1877
+function gen(home,cls,data,N,rand){
+  var segs=[],tot=0,i=0,k,q,s;
+  for(q=0;q<PROF.length-1;q++){var a=PROF[q],b=PROF[q+1],len=Math.hypot(b[0]-a[0],b[1]-a[1])*Math.max(0.05,(a[0]+b[0])/2); segs.push({a:a,b:b,len:len,acc:tot}); tot+=len}
+  var nW=Math.floor(N*0.40), nG=Math.floor(N*0.20), nD=Math.floor(N*0.06), nR=Math.floor(N*0.10), nS=Math.floor(N*0.09), nP=Math.floor(N*0.08), nT=Math.floor(N*0.08);
+  for(k=0;k<nW;k++,i++){ var d=rand()*tot; s=segs[0]; for(q=0;q<segs.length;q++){ if(segs[q].acc<=d) s=segs[q]; else break }
+    var f=s.len>0?(d-s.acc)/s.len:0, r=s.a[0]+(s.b[0]-s.a[0])*f+(rand()-0.5)*0.012, y=s.a[1]+(s.b[1]-s.a[1])*f, th=rand()*TAU;
+    home[i*3]=r*Math.cos(th); home[i*3+1]=y-Y0+(rand()-0.5)*0.008; home[i*3+2]=r*Math.sin(th); cls[i]=0; data[i]=Math.max(0,Math.min(1,(y-0.9)/1.4)) }
+  for(k=0;k<nG;k++,i++){ var yy=0.90+rand()*1.38, rr=bowl(yy)*0.91*Math.cbrt(rand()), t2=rand()*TAU;
+    home[i*3]=rr*Math.cos(t2); home[i*3+1]=yy-Y0; home[i*3+2]=rr*Math.sin(t2); cls[i]=1; data[i]=Math.min(0.7,(yy-0.9)/1.38*0.7) }
+  // куполът: златото стои над ръба (чашата е пълна до преливане)
+  for(k=0;k<nD;k++,i++){ var rd=0.9*Math.sqrt(rand()), t4=rand()*TAU, f4=1-(rd/0.9)*(rd/0.9);
+    home[i*3]=rd*Math.cos(t4); home[i*3+1]=2.28+0.19*f4+rand()*0.012-Y0; home[i*3+2]=rd*Math.sin(t4); cls[i]=1; data[i]=0.93+0.06*rand() }
+  // струйки по външната стена на купата (по краищата се виждат на тъмно)
+  var path=PROF.slice(8).reverse(), pl=[],pt=0; for(q=0;q<path.length-1;q++){var l2=Math.hypot(path[q+1][0]-path[q][0],path[q+1][1]-path[q][1]); pl.push(l2); pt+=l2}
+  for(k=0;k<nR;k++,i++){ var th2=(rand()<0.5?0:Math.PI)+(rand()-0.5)*1.5, u=Math.pow(rand(),1.2)*(0.35+0.65*((k%7)/6)), d2=u*pt, c=0; for(q=0;q<pl.length-1;q++){ if(c+pl[q]>=d2) break; c+=pl[q] }
+    var g=pl[q]>0?Math.min(1,(d2-c)/pl[q]):0, p0=path[q], p1=path[q+1]||path[q], r2=p0[0]+(p1[0]-p0[0])*g+0.02+0.05*(1-u);
+    home[i*3]=r2*Math.cos(th2); home[i*3+1]=p0[1]+(p1[1]-p0[1])*g-Y0; home[i*3+2]=r2*Math.sin(th2); cls[i]=1; data[i]=0.74+0.24*(1-u) }
+  // стъблото: златото се е стекло по него (тънък плътен стълб на тъмния фон)
+  for(k=0;k<nS;k++,i++){ var ys=0.17+rand()*0.78, rs=0.075*Math.cbrt(rand()), t5=rand()*TAU;
+    home[i*3]=rs*Math.cos(t5); home[i*3+1]=ys-Y0; home[i*3+2]=rs*Math.sin(t5); cls[i]=1; data[i]=0.8+0.15*(ys-0.17)/0.78 }
+  // локвичката на ходилото
+  for(k=0;k<nP;k++,i++){ var rho=0.5*Math.sqrt(rand()), t3=rand()*TAU, yp=(rho>0.16?0.16-(rho-0.16)*0.143:0.16)+0.012+rand()*0.05;
+    home[i*3]=rho*Math.cos(t3); home[i*3+1]=yp-Y0; home[i*3+2]=rho*Math.sin(t3); cls[i]=1; data[i]=0.72+0.05*rand() }
+  // капките: висят отвън от ръба и падат във въздуха (виждат се на тъмно) · по една светла топчица накрая
+  for(k=0;k<nT;k++,i++){ var dr=k%8, side=dr%2?1:-1, len=0.35+0.55*((dr*3%8)/7), bead=rand()<0.12, yd=bead?2.28-len:2.28-Math.pow(rand(),0.8)*len;
+    home[i*3]=side*(0.99+0.004*dr+(bead?0.012:0.004)*rand()); home[i*3+1]=yd-Y0; home[i*3+2]=(rand()-0.5)*(bead?0.035:0.014); cls[i]=1; data[i]=0.8+0.18*rand() }
+  for(;i<N;i++){ home[i*3]=home[i*3+1]=home[i*3+2]=0; cls[i]=-1; data[i]=0 }
+}
+
+const S={fill:0,history:[],flights:0,gl:false,busy:false,inView:false,level:0};
+let inst=null, mounted=false, still=null;
+const taken=()=>(window.__i4prog?window.__i4prog.taken():[]);
+const name=t=>t.querySelector('b').textContent;
+function label(){ const k=S.fill, miss=tiles.filter(t=>t.dataset.state==='locked'), msg=k>=3?'Чашата: пълна и преля.':'Чашата: '+k+' от 3 карти.'+(miss.length?' Докоснете, за да стигнете до сцената „'+name(miss[0])+'“.':'');
+  cup.setAttribute('aria-label',msg); cup.dataset.fill=k; cup.dataset.phase=k>=3?'overflow':k?'pouring':'empty'; nEl.textContent=k;
+  hint.textContent=k>=3?'Чашата преля.':miss.length?'Липсва: '+name(miss[0])+' · глава '+miss[0].dataset.ch+'. Докоснете чашата.':'' }
+// ── неподвижната чаша (SVG) · златото се вдига до нивото ──
+const YB0=0.90, YB1=2.28, sv=cup.querySelector('svg.still');
+function paintStill(l){ if(!sv) return; const y=YB0+Math.min(l,0.7)/0.7*(YB1-YB0), R=l>0?bowl(y)*0.91:0;
+  sv.querySelectorAll('.gold').forEach(r=>{ r.setAttribute('y',(-y).toFixed(3)); r.setAttribute('height',Math.max(0,y-YB0).toFixed(3)) });
+  const e=sv.querySelector('.surf'); if(e){ e.setAttribute('cy',(-y).toFixed(3)); e.setAttribute('rx',R.toFixed(3)); e.setAttribute('ry',(R*0.12).toFixed(3)) } }
+function setLevel(l,instant){ S.level=l;
+  if(inst){ if(instant) inst.set({level:l}); else inst.pour(l) }
+  if(!inst||instant||RM){ if(still) cancelAnimationFrame(still); const a=cupLevel, t0=performance.now(), dur=(RM||instant)?0:1100;
+    const step=now=>{ const f=dur?Math.min(1,(now-t0)/dur):1; cupLevel=a+(l-a)*(1-Math.pow(1-f,2)); paintStill(cupLevel); if(f<1) still=requestAnimationFrame(step) }; step(t0) } }
+let cupLevel=0; paintStill(0);
+function arrive(k){ S.fill=Math.max(S.fill,k); S.history.push(S.fill); setLevel(LV[S.fill],false); label() }
+// ── карта → чаша: призрак от плочката до ръба · после нивото расте ──
+function fly(tile){ return new Promise(res=>{
+  const img=tile.querySelector('img'), a=img.getBoundingClientRect(), b=cup.getBoundingClientRect(); if(RM||!a.width||!b.width){ res(); return }
+  const g=document.createElement('div'), mx=b.left+b.width/2, my=b.top+b.height*0.26;
+  g.className='pt-ghost'; g.style.cssText='width:'+a.width+'px;height:'+a.height+'px;background-image:url("'+(img.currentSrc||img.src)+'");background-position:'+getComputedStyle(img).objectPosition;
+  document.body.appendChild(g); S.flights++;
+  const dx=mx-a.left-a.width/2, dy=my-a.top-a.height/2, T=(x,y,s,r)=>'translate('+(a.left+x)+'px,'+(a.top+y)+'px) scale('+s+') rotate('+r+'deg)';
+  const an=g.animate([{transform:T(0,0,1,0),opacity:1},{transform:T(dx*.55,dy*.35-60,.62,-9),opacity:1,offset:.5},{transform:T(dx,dy,.18,14),opacity:.95,offset:.88},{transform:T(dx,dy+10,.05,20),opacity:0}],{duration:1050,easing:'cubic-bezier(.45,.05,.35,1)',fill:'forwards'});
+  an.onfinish=an.oncancel=()=>{ g.remove(); res() } }) }
+let chain=Promise.resolve();
+function pourPending(){ if(!S.inView) return;
+  tiles.filter(t=>t.dataset.state==='taken').forEach(t=>{ t.dataset.state='poured'; t.querySelector('.lk').textContent='в чашата';
+    chain=chain.then(()=>fly(t)).then(()=>{ arrive(tiles.filter(x=>x.dataset.state==='poured').indexOf(t)+1); return new Promise(r=>setTimeout(r,RM?0:1250)) }) }) }
+function mark(id){ const t=tiles.filter(x=>x.dataset.pt===id)[0]; if(!t||t.dataset.state!=='locked') return; t.dataset.state='taken'; t.querySelector('.lk').textContent='взета · чака чашата'; label(); pourPending() }
+IDS.forEach(id=>{ if(taken().indexOf(id)>=0){ const t=tiles.filter(x=>x.dataset.pt===id)[0]; t.dataset.state='taken'; t.querySelector('.lk').textContent='взета · чака чашата' } });
+window.addEventListener('i4prog:take',e=>mark(e.detail.id));
+label();
+// ── докосване: липсва сцена → към нея · иначе чашата блести ──
+cup.addEventListener('click',()=>{ const miss=tiles.filter(t=>t.dataset.state==='locked')[0];
+  if(miss){ const b=document.querySelector('.strip[data-scene-card="'+miss.dataset.pt+'"] button.fr.scene'); if(b) b.scrollIntoView({block:'center',behavior:RM?'instant':'smooth'}); return }
+  if(inst&&!RM){ inst.uniforms.uFlash.value=1; const t0=performance.now(), f=n=>{ const k=Math.max(0,1-(n-t0)/900); inst.uniforms.uFlash.value=k; if(k>0) requestAnimationFrame(f) }; requestAnimationFrame(f) }
+  else { cup.classList.remove('shine'); void cup.offsetWidth; cup.classList.add('shine') } });
+// ── виждане: наливане на взетите · Eidolon чашата се закача чак когато се приближи ──
+new IntersectionObserver(es=>es.forEach(e=>{ S.inView=e.isIntersecting; if(S.inView) pourPending() }),{threshold:0.5}).observe(cup);
+function init(){ const E=window.__eidolon; if(!E||RM) return;
+  new IntersectionObserver((es,ob)=>es.forEach(e=>{ if(!e.isIntersecting||mounted) return; mounted=true; ob.disconnect();
+    E.mount(cup,{exhibit:8,gen:gen,pourSec:1.5,fit:{y0:-1.15,y1:1.85,b:0.05,t:0.97}}).then(c=>{ if(!c) return; inst=c; S.gl=true; c.set({level:LV[S.fill]}); S.level=LV[S.fill]; if(S.fill) cupLevel=LV[S.fill] }).catch(()=>{}) }),{rootMargin:'900px 0px'}).observe(cup) }
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init); else init();
+window.__i4chalice={ids:IDS,state:()=>({fill:S.fill,history:S.history.slice(),flights:S.flights,gl:S.gl,level:S.level,shown:inst?inst.uniforms.uProgress.value:cupLevel,phase:cup.dataset.phase,taken:tiles.filter(t=>t.dataset.state!=='locked').map(t=>t.dataset.pt),poured:tiles.filter(t=>t.dataset.state==='poured').map(t=>t.dataset.pt)})};
+})();
+</script>
+<script>/* MET-1935 · Скоростомер-четец: страничен инструмент; след 3 екрана скрол се закотвя долу · ▶ светва и напредва текущата единица · ред → абзац → страница на живо · текстът остава цял и избираем (само се обгръщат думите в span, нищо не се скрива и не се подменя) */
+(function(){
+const rd=document.getElementById('reader'); if(!rd) return;
+const LV=['ред','абзац','страница'], WPM=[220,380,620], SHORT=['ред','абз.','стр.'];
+const RM=matchMedia('(prefers-reduced-motion:reduce)');
+const SEL='.phero .kick,.phero h1,.phero .lead,.phero .actor-line,.chead .kick,.chead h2,.chead .sub,.fr .ft,.fp p,.clap dd,.portal .kick,.portal .big,.portal .sub,.pend .big,.pend p:not(.cred)';
+const PLAY='<svg class="play" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4l14 8-14 8z"/></svg><svg class="pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg>';
+rd.innerHTML='<button class="pbtn" type="button" aria-label="Чети">'+PLAY+'</button><div class="rib"><span class="lbl" aria-live="off">Скоростомер</span><div class="rtrack"><div class="rline"></div><div class="rgrow"></div></div></div><div class="chips" role="group" aria-label="Единица на четене">'+LV.map((l,i)=>'<button class="chip" type="button" data-i="'+i+'" aria-label="'+l+'" aria-pressed="false">'+SHORT[i]+'</button>').join('')+'</div>';
+const btn=rd.querySelector('.pbtn'), lbl=rd.querySelector('.lbl'), grow=rd.querySelector('.rgrow'), rtrack=rd.querySelector('.rtrack'), chips=[].slice.call(rd.querySelectorAll('.chip'));
+const S={level:0,w:-1,playing:false,started:false,timer:0};
+let P=null, U=[[],[],[]], UI=[{},{},{}], VW=[], POS={}, prev=[];
+function wrap(el){ const tw=document.createTreeWalker(el,NodeFilter.SHOW_TEXT,{acceptNode:n=>(n.nodeValue.trim()&&!n.parentElement.closest('.ai,a,svg'))?NodeFilter.FILTER_ACCEPT:NodeFilter.FILTER_REJECT}), ns=[]; while(tw.nextNode()) ns.push(tw.currentNode);
+  ns.forEach(n=>{ const f=document.createDocumentFragment(); (n.nodeValue.match(/^\s+|\S+\s*/g)||[]).forEach(t=>{ if(/^\s+$/.test(t)) f.append(t); else { const sp=document.createElement('span'); sp.className='w'; sp.textContent=t; f.append(sp) } }); n.replaceWith(f) }) }
+function init(){ if(P) return; let i=0; P=[]; document.querySelectorAll(SEL).forEach(b=>{ wrap(b); const ws=[].slice.call(b.querySelectorAll('.w')); ws.forEach(w=>{ w._i=i++; w._sec=b.closest('section')||b }); if(ws.length) P.push(ws) }) }
+function build(){
+  init(); const vis=w=>w.getClientRects().length>0; U=[[],[],[]]; UI=[{},{},{}]; VW=[]; POS={};
+  P.forEach(pw=>{ const v=pw.filter(vis); if(!v.length) return; U[1].push(v);
+    let top=null, cur; v.forEach(w=>{ const t=w.getBoundingClientRect().top+scrollY; if(top===null||Math.abs(t-top)>6){ top=t; cur=[]; U[0].push(cur) } cur.push(w) }) });
+  const bySec=new Map(); U[1].forEach(u=>{ const s=u[0]._sec; if(!bySec.has(s)) bySec.set(s,[]); bySec.get(s).push.apply(bySec.get(s),u) }); bySec.forEach(u=>U[2].push(u));
+  U.forEach((list,l)=>list.forEach((u,k)=>u.forEach(w=>UI[l][w._i]=k))); U[1].forEach(u=>u.forEach(w=>{ POS[w._i]=VW.length; VW.push(w) }));
+  if(S.w>=0&&UI[S.level][S.w]==null){ const nx=VW.find(w=>w._i>S.w)||VW[0]; S.w=nx?nx._i:-1 }
+}
+const cur=()=>S.w<0?[]:(U[S.level][UI[S.level][S.w]]||[]);
+const barB=()=>{ const b=document.getElementById('bar'); return b?b.getBoundingClientRect().bottom:0 };
+function reveal(u){ if(!u.length) return; const a=u[0].getBoundingClientRect(), b=u[u.length-1].getBoundingClientRect(), lo=barB()+16, hi=rd.getBoundingClientRect().top-16, h=b.bottom-a.top, beh=RM.matches?'instant':'smooth';
+  if(h>hi-lo){ if(Math.abs(a.top-lo)>40) scrollBy({top:a.top-lo,behavior:beh}) } else if(a.top<lo||b.bottom>hi) scrollBy({top:a.top-(lo+(hi-lo-h)*.35),behavior:beh}) }
+function paint(){
+  prev.forEach(w=>w.classList.remove('on')); const u=cur(); prev=S.started?u:[]; prev.forEach(w=>w.classList.add('on'));
+  document.body.classList.toggle('reading',S.started); rd.classList.toggle('started',S.started); rd.classList.toggle('playing',S.playing);
+  btn.setAttribute('aria-label',S.playing?'Пауза':'Чети'); chips.forEach(c=>{ const on=+c.dataset.i===S.level; c.classList.toggle('cur',on); c.setAttribute('aria-pressed',on?'true':'false') });
+  const pos=S.w<0?0:(POS[S.w]||0)+1, f=VW.length?pos/VW.length:0; grow.style.width=Math.max(12,f*rtrack.clientWidth)+'px';
+  const k=UI[S.level][S.w]; lbl.textContent=S.started&&k!=null?LV[S.level]+' '+(k+1)+' от '+U[S.level].length:'Скоростомер';
+  rd.dataset.unit=S.started&&u.length?u.map(w=>w.textContent.trim()).join(' '):''; rd.dataset.level=LV[S.level];
+}
+function show(scroll){ paint(); if(scroll) reveal(cur()) }
+const secs=()=>Math.max(.9,cur().length*60/WPM[S.level]);
+function tick(){ clearTimeout(S.timer); if(!S.playing) return;
+  S.timer=setTimeout(()=>{ build(); const list=U[S.level], k=(UI[S.level][S.w]||0)+1;
+    if(k>=list.length){ S.playing=false; paint(); return }
+    S.w=list[k][0]._i; show(true); tick() },secs()*1000) }
+function fromHere(){ const lo=barB()+8, hi=rd.getBoundingClientRect().top-8, vis=w=>{ const r=w.getBoundingClientRect(); return r.top>=lo&&r.bottom<=hi };
+  if(S.started&&cur().some(vis)) return; const f=VW.find(vis); if(f) S.w=f._i; else if(S.w<0&&VW[0]) S.w=VW[0]._i }
+function play(){ build(); if(!S.playing) fromHere(); S.started=true; S.playing=!S.playing; show(true); tick() }
+function setLevel(l){ build(); S.level=l; if(S.w<0) fromHere(); S.started=true; show(true); tick() }
+btn.addEventListener('click',play); chips.forEach(c=>c.addEventListener('click',()=>setLevel(+c.dataset.i)));
+// закотвяне: след 3 екрана скрол · остава до края; пред началото се прибира само ако не се чете
+let docked=false;
+function place(){ const y=scrollY, vh=innerHeight, want=docked?(y>=vh||S.started):y>=3*vh;
+  if(want!==docked){ docked=want; rd.classList.toggle('docked',docked); document.body.classList.toggle('reader-docked',docked); rd.dataset.docked=docked?'1':'0' } }
+rd.dataset.docked='0';
+addEventListener('scroll',place,{passive:true}); addEventListener('resize',()=>{ if(P){ build(); paint() } place() }); place();
+(document.fonts?document.fonts.ready:Promise.resolve()).then(()=>{ if(P){ build(); paint() } });
+window.__i4reader={play:play,setLevel:setLevel,state:()=>({level:S.level,playing:S.playing,started:S.started,docked:docked})};
+})();
+</script>
+<script>/* MET-1931 · прах под всяка картина · 2D платно (Метамер на „Нова Жена“: злато и светлина, нула WebGL) · първо се сглобява от прах в картината, после се движи · reduced motion: неподвижна картина */
+(function(){
+const RM=matchMedia('(prefers-reduced-motion: reduce)').matches||/[?&]reduced=1/.test(location.search);
+const NOGL=(()=>{ try{ const c=document.createElement('canvas'); return !(c.getContext('webgl2')||c.getContext('webgl')) }catch(e){ return true } })()||/[?&]nogl=1/.test(location.search);   // без WebGL страницата е плакат (билет: „still poster under reduced motion and without WebGL“) · и 2D прахът стои
+const STILL=RM||NOGL;
+const COL={gold:[232,199,126],light:[255,245,214],red:[224,84,64]};
+const reg=[]; let live=0, raf=0;
+function bytes(b64){ const t=atob(b64), a=new Uint8Array(t.length); for(let i=0;i<t.length;i++) a[i]=t.charCodeAt(i); return a }
+function ease(t){ t=Math.max(0,Math.min(1,t)); return 1-Math.pow(1-t,3) }
+function fit(S){   // размерите на платното · точките на дома: яркостта на картината (object-fit:cover · object-position) или ∞ (стена без картина)
+  const cv=S.cv, d=Math.min(window.devicePixelRatio||1,2), w=cv.clientWidth, h=cv.clientHeight; if(!w||!h) return false;
+  if(S.w!==w||S.h!==h){ S.w=w; S.h=h; cv.width=Math.round(w*d); cv.height=Math.round(h*d); S.ctx.setTransform(d,0,0,d,0,0); S.P=null }
+  if(S.P) return true;
+  const N=Math.max(220,Math.min(760,Math.round(w*h/320))), P=[], img=S.img, H=S.H;
+  let iw=0,ih=0,sc=1,ox=0,oy=0;
+  if(img&&H){ iw=img.naturalWidth; ih=img.naturalHeight; if(!iw) return false; const pos=(img.style.objectPosition||'50% 50%').split(' ').map(x=>parseFloat(x)/100); sc=Math.max(w/iw,h/ih); ox=(w-iw*sc)*pos[0]; oy=(h-ih*sc)*pos[1] }
+  for(let i=0;i<N;i++){
+    let hx,hy;
+    if(H){ const j=(i%(H.length/2))*2; hx=ox+H[j]/255*iw*sc; hy=oy+H[j+1]/255*ih*sc; if(hx<0||hx>w||hy<0||hy>h){ hx=Math.random()*w; hy=Math.random()*h } }
+    else { const t=i/N*Math.PI*2, k=1/(1+Math.sin(t)*Math.sin(t)); hx=w/2+Math.cos(t)*k*w*0.46+(Math.random()-.5)*14; hy=h*0.5+Math.sin(t)*Math.cos(t)*k*h*0.3+(Math.random()-.5)*14 }
+    P.push({hx:hx,hy:hy,x:Math.random()*w,y:Math.random()*h,sx:0,sy:0,dl:Math.random()*0.35,ph:Math.random()*6.283,sp:0.5+Math.random()*0.9,a:3+Math.random()*7,b:0.5+Math.random()*0.5,z:Math.random()<0.2?2.4:1.5}) }
+  P.forEach(p=>{ p.sx=p.x; p.sy=p.y }); S.P=P; return true
+}
+function spread(S){ if(!S.P||!S.P.length) return null; let t=0; S.P.forEach(p=>{ t+=Math.hypot(p.x-p.hx,p.y-p.hy) }); return Math.round(t/S.P.length/Math.hypot(S.w,S.h)*1000)/1000 }
+function setPhase(S,ph){ S.phase=ph; S.fig.dataset.phase=ph }
+function draw(S,now){
+  const ctx=S.ctx, P=S.P; if(!P) return; ctx.clearRect(0,0,S.w,S.h); ctx.globalCompositeOperation='lighter';
+  const c=S.col, tm=now/1000;
+  if(S.phase==='assembling'){ S.k=Math.min(1,(now-S.t0)/2600) }
+  for(let i=0;i<P.length;i++){ const p=P[i]; let al=p.b;
+    if(S.phase==='assembling'){ const e=ease((S.k-p.dl)/(1-0.35)); const sw=Math.sin(e*Math.PI)*(24+p.a*3);
+      p.x=p.sx+(p.hx-p.sx)*e+Math.cos(p.ph)*sw; p.y=p.sy+(p.hy-p.sy)*e+Math.sin(p.ph)*sw; al=p.b*(0.45+0.55*e) }
+    else if(S.phase==='moving'){ const u=tm*p.sp;   // потокът: всяко зрънце кръжи около дома си по полето на токовете · блещука
+      p.x=p.hx+Math.sin(u+p.ph+p.hy*0.011)*p.a+Math.cos(tm*0.35+p.hy*0.004)*5; p.y=p.hy+Math.cos(u*0.8+p.ph+p.hx*0.011)*p.a-((tm*6*p.sp+p.ph*9)%14)+7; al=p.b*(0.6+0.4*Math.sin(u*2.1+p.ph)) }
+    else { p.x+=Math.sin(tm*p.sp+p.ph)*0.22; p.y+=Math.cos(tm*p.sp*0.8+p.ph)*0.22; al=p.b*0.45 }
+    ctx.fillStyle='rgba('+c[0]+','+c[1]+','+c[2]+','+Math.min(1,al).toFixed(2)+')'; ctx.fillRect(p.x,p.y,p.z,p.z) }
+  if(S.phase==='assembling'&&S.k>=1) setPhase(S,'moving')
+}
+function loop(now){ raf=0; let n=0; reg.forEach(S=>{ if(S.on&&S.P){ draw(S,now); n++ } }); if(n) raf=requestAnimationFrame(loop) }
+function kick(){ if(!raf&&!STILL) raf=requestAnimationFrame(loop) }
+function begin(S){ if(S.phase!=='dust'||!S.ready) return; if(!fit(S)) return; S.t0=performance.now(); S.k=0; setPhase(S,'assembling'); kick() }
+document.querySelectorAll('figure.art[data-dust]').forEach(fig=>{
+  const cv=fig.querySelector('canvas.dust'); if(!cv) return;
+  const S={id:fig.dataset.art, fig:fig, cv:cv, ctx:cv.getContext('2d'), img:fig.querySelector('img'), H:fig.dataset.d?bytes(fig.dataset.d):null, col:COL[fig.dataset.dust]||COL.gold, phase:'dust', k:0, on:false, ready:false, P:null, w:0, h:0, t0:0};
+  reg.push(S);
+  if(STILL){ setPhase(S,'still'); S.ready=false; return }
+  fig.dataset.phase='dust';
+  const arm=()=>{ S.ready=true; if(S.vis>=0.3) begin(S) };
+  if(!S.img||S.img.complete&&S.img.naturalWidth) arm(); else { S.img.addEventListener('load',arm,{once:true}); S.img.addEventListener('error',arm,{once:true}) }
+  new IntersectionObserver(es=>es.forEach(e=>{ S.on=e.isIntersecting; S.vis=e.intersectionRatio; if(S.on){ if(S.phase==='dust'&&S.ready&&e.intersectionRatio>=0.3) begin(S); else if(S.P||fit(S)) { if(!S.P) fit(S); } kick() } }),{threshold:[0,0.15,0.3,0.6]}).observe(fig);
+  window.addEventListener('resize',()=>{ S.P=null; if(S.phase!=='dust') fit(S) },{passive:true})
+});
+window.__i4dust={figs:()=>reg.map(S=>({id:S.id, phase:S.phase, k:Math.round(S.k*100)/100, n:S.P?S.P.length:0, spread:spread(S), on:S.on, pos:S.P?S.P.slice(0,40).map(p=>[Math.round(p.x*10)/10,Math.round(p.y*10)/10]):[], w:S.w, h:S.h, still:STILL})), running:()=>raf?1:0, reduced:RM, nogl:NOGL};
+})();
+</script>
+</body></html>

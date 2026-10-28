@@ -1,0 +1,90 @@
+/* Филмова въртележка · кожата на DOM-а · 1:1 от _proto/film-carousel/index.html <style> (MET-1276) · внася се САМО от FilmCarousel.tsx (MET-1456 · ADR 0130)
+   Притежава html/body (височина 100% · overflow hidden · 18px) → страницата е цял екран · изтичане при клиентска навигация = известно ограничение (паспорт controls/carousel). */
+:root{
+  --bg:#0d0a08; --bg2:#15100c; --ink:#F0EBE0; --ink2:#d9d0bd; --mute:#a99e8a;
+  --gold:#E8C77E; --gold3:#8a6a2e; --light:#fff5d6; --parch:#efe4c9; --parchink:#2a1f16;
+  --serif:'Cormorant Garamond',Georgia,'Times New Roman',serif; --sans:Inter,-apple-system,'Segoe UI',Roboto,sans-serif;
+  --accent:var(--gold);
+  --head:#f7f1e3;   /* НЖ h1/h2 (new-woman/retreat/sep2026/index.html:97) */
+}
+*{box-sizing:border-box;margin:0}
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:18px;line-height:1.4;-webkit-tap-highlight-color:transparent}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+button:focus-visible{outline:2px solid var(--light);outline-offset:3px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+[hidden]{display:none!important}
+
+#stage{position:fixed;inset:0;touch-action:none;user-select:none;-webkit-user-select:none}
+#gl{display:block;width:100%;height:100%;opacity:0;transition:opacity 1.2s ease}
+.ready #gl{opacity:1}
+/* уют · приказност (дума 09.10): топла светлина „като от огнище“ отдолу + мека виньетка върху сцената · само кожа, двигателят и декорът непипнати */
+#stage::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(75% 45% at 50% 80%,rgba(255,214,150,.22),transparent 72%),radial-gradient(130% 95% at 50% 46%,transparent 50%,rgba(13,10,8,.62) 100%)}
+#gl{filter:saturate(.9) brightness(1.05) contrast(.96)}
+.poster-art{display:none;position:absolute;inset:0;width:100%;height:100%}
+.poster #gl{display:none}
+.poster .poster-art{display:block}
+
+/* площадките: 4 знака горе (екранен четец + клавиатура) */
+.bulbs{position:fixed;top:max(14px,env(safe-area-inset-top));left:0;right:0;display:flex;justify-content:center;align-items:center;gap:4px;z-index:3;transition:opacity .5s}
+.bulbs i{display:none}
+.bulbs button{width:44px;height:44px;display:grid;place-items:center}
+.bulbs button::before{content:"";width:22px;height:3px;border-radius:2px;background:var(--mute);opacity:.55;transition:all .4s}
+.bulbs button.cur::before{width:30px;background:var(--accent);opacity:1;box-shadow:0 0 12px var(--accent)}
+body[data-hero] .bulbs{opacity:0;pointer-events:none}
+
+/* назад: от фокус → към течащата въртележка · от избран герой → към площадката */
+.back{position:fixed;top:max(14px,env(safe-area-inset-top));left:10px;z-index:6;width:48px;height:48px;border-radius:50%;font:500 30px/1 var(--serif);color:var(--light);
+  background:color-mix(in srgb,var(--bg2) 70%,transparent);border:1px solid rgba(232,199,126,.35);opacity:0;pointer-events:none;transition:opacity .4s}
+.s-focus .back,.s-open .back{opacity:1;pointer-events:auto}
+#veil{position:fixed;inset:0;z-index:4;display:none}
+.s-open #veil{display:block}
+
+/* двамата Метагерои на площадката във фокус: истински бутони (тап · клавиатура · четец) */
+#pick{position:fixed;left:0;right:0;bottom:max(26px,env(safe-area-inset-bottom));z-index:5;display:flex;justify-content:center;opacity:0;pointer-events:none;transform:translateY(10px);transition:opacity .5s,transform .5s}
+.s-focus #pick,.s-open #pick{opacity:1;pointer-events:auto;transform:none}
+body[data-hero] #pick{opacity:0;pointer-events:none}
+#pick div{display:flex;gap:12px;padding:0 14px;width:min(100%,440px)}
+#pick button{flex:1 1 0;min-width:0;min-height:76px;padding:10px 6px;border-radius:22px;background:color-mix(in srgb,var(--bg2) 78%,transparent);border:1px solid rgba(232,199,126,.35);   /* НЖ .toggle button (parent.html:154) */
+  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+#pick b{font:600 26px/1.1 var(--serif);color:var(--head)}
+#pick span{font:400 17px/1.2 var(--sans);color:var(--ink2)}
+
+/* избраният Метагерой пълни екрана: прахът е в сцената · тук са името и продукцията */
+#hero{position:fixed;inset:0;z-index:5;display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-end;padding:0 max(18px,calc((100vw - 740px)/2)) max(64px,env(safe-area-inset-bottom));text-align:left;pointer-events:none;opacity:0;transition:opacity .7s .25s;
+  background:linear-gradient(to top,color-mix(in srgb,var(--bg) 88%,transparent),transparent 34%)}
+body[data-hero] #hero{opacity:1}
+#hero h1{font:600 34px/1.06 var(--serif);color:var(--head);text-shadow:0 2px 24px rgba(0,0,0,.6);text-wrap:balance}   /* НЖ .hero h1 (parent.html:184) */
+#hero h1 em{display:block;font-style:italic;font-weight:500;color:var(--gold);font-size:.92em;margin-bottom:4px}   /* НЖ .hero h1 em (parent.html:185) */
+#hero p{margin-top:8px;font:300 17px/1.55 var(--sans);color:var(--ink2)}   /* НЖ .leadbox p (parent.html:187) */
+.hero-art{display:none}
+.poster .hero-art{display:block;flex:1 1 auto;min-height:0;width:100%;margin:96px 0 18px}
+.hero-art canvas{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 0 22px color-mix(in srgb,var(--accent) 55%,transparent))}
+.poster[data-hero] #hero{background:color-mix(in srgb,var(--bg) 94%,transparent)}
+@media (min-width:900px){
+  .s-open #hero,.s-open #pick{left:auto;right:0;width:min(540px,44vw)}
+  #hero{justify-content:center;padding-bottom:0;background:none}
+  #hero h1{font-size:56px}
+}
+
+/* постер (намалено движение / без WebGL): площадките са карти в ред · изборът работи */
+.prail{position:fixed;left:0;right:0;bottom:calc(max(26px,env(safe-area-inset-bottom)) + 96px);z-index:3;display:flex;gap:12px;padding:0 9vw;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none}
+.prail::-webkit-scrollbar{display:none}
+.pcard{flex:0 0 82vw;max-width:360px;min-height:132px;scroll-snap-align:center;padding:20px 14px;border-radius:16px;background:color-mix(in srgb,var(--bg2) 86%,transparent);border:1px solid var(--gold3);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px}
+.pcard b{font:600 28px/1.1 var(--serif);color:var(--light)}
+.pcard span{font:500 17px/1.3 var(--sans);color:var(--gold)}
+.pcard em{display:none}
+.poster.s-open .prail{visibility:hidden}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* MET-1456 · добавките на website: поканата в покой · бутонът „Скрийнинг“ в режим игра · заглавието (думите идват от config.ui) */
+#invite{position:fixed;left:0;right:0;bottom:max(26px,env(safe-area-inset-bottom));z-index:3;padding:0 max(18px,calc((100vw - 740px)/2));text-align:left;font:500 22px/1.25 var(--serif);color:var(--light);text-shadow:0 2px 12px rgba(0,0,0,.7);pointer-events:none;transition:opacity .5s}
+.s-drag #invite,.s-focus #invite,.s-open #invite,body[data-hero] #invite{opacity:0;visibility:hidden}
+#hero #next-step{pointer-events:auto;margin-top:22px;display:inline-flex;align-items:center;gap:8px;padding:14px 26px;border-radius:32px;background:linear-gradient(120deg,#ffe1a0,#e2a458);color:#2a1908;font:600 17px/1.2 var(--sans);text-decoration:none;box-shadow:0 12px 34px -12px rgba(226,164,88,.85)}   /* НЖ .cta (sep2026:201 · computed 09.10 Р0: text-transform none · letter-spacing normal · 17px = гейт MINFONT≥17) · същият за всички площадки */
+#hero #next-step:empty{display:none}
+/* заглавието върху изображението (дума 09.10): покой · под площадките · пада при фокус/избор като поканата */
+#masthead{position:fixed;left:0;right:0;top:calc(max(14px,env(safe-area-inset-top)) + 52px);z-index:3;padding:0 max(18px,calc((100vw - 740px)/2));text-align:left;pointer-events:none;transition:opacity .5s}
+#title{margin:0;max-width:640px;font:600 31px/1.06 var(--serif);color:var(--head);text-shadow:0 2px 24px rgba(0,0,0,.6);text-wrap:balance}   /* НЖ .hero h1 (parent.html:184) */
+#title em{display:block;font-style:italic;font-weight:500;color:var(--gold);font-size:.92em;margin-top:4px}   /* НЖ .hero h1 em (parent.html:185) */
+#subtitle{margin:12px 0 0;max-width:560px;font:300 17px/1.55 var(--sans);color:var(--ink2);text-shadow:0 1px 6px var(--bg),0 0 16px var(--bg);text-wrap:balance}   /* НЖ p.lead (sep2026:101) */
+.s-drag #masthead,.s-focus #masthead,.s-open #masthead,body[data-hero] #masthead{opacity:0;visibility:hidden}
+@media (min-width:900px){#title{font-size:44px}#subtitle{font-size:20px}}

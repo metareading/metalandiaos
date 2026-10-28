@@ -1,0 +1,62 @@
+<!doctype html>
+<!-- MET-1928 · рамката на въртележката · engine.js · mount-film-carousel.js · film-carousel.css = байт-копия от film-carousel @08ff926b · decor-film.js = същият файл с една поправка · говори със страницата през postMessage -->
+<html lang="bg"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Филмова въртележка · 8 роли</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Inter:wght@300;400;500;600&display=swap&subset=cyrillic" data-film-fonts>
+<link rel="stylesheet" href="film-carousel.css">
+<style>
+/* думите на страницата са в нея; тук остават площадките, ролите и „Роля: …“ */
+#masthead,#invite,#hero #next-step{display:none!important}
+#pick{bottom:max(18px,env(safe-area-inset-bottom))}
+#pick span{display:none}
+#pick button{min-height:64px}
+#pick b{font-size:20px}
+#hero{padding-bottom:max(22px,env(safe-area-inset-bottom))}
+#hero h1{font-size:26px}
+#hero p{font-size:15px;line-height:1.35;margin-top:5px}
+body[data-hero] #hero{background:linear-gradient(to top,color-mix(in srgb,var(--bg) 94%,transparent),transparent 58%)}
+@media (min-width:900px){#hero{padding-bottom:30px}#hero h1{font-size:38px}#hero p{font-size:18px}#pick b{font-size:24px}}
+</style>
+<script type="importmap">{"imports":{"three":"../../vendor/three.module.js"}}</script>
+</head><body class="s-flow">
+<div id="film-carousel">
+<div id="stage" role="img"><canvas id="gl" aria-hidden="true"></canvas>
+<svg class="poster-art" viewBox="0 0 375 812" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="375" height="812" fill="#0d0a08"/><ellipse cx="187" cy="470" rx="168" ry="34" fill="#15100c" stroke="#E8C77E" stroke-width="1.5"/></svg></div>
+<nav class="bulbs"></nav>
+<button class="back" type="button">‹</button>
+<div id="veil"></div>
+<nav id="pick"></nav>
+<section id="hero" aria-live="polite"><div class="hero-art"></div><h1></h1><p></p><a id="next-step" class="cta"></a></section>
+<header id="masthead"><p id="title"></p><p id="subtitle"></p></header>
+<p id="invite"></p>
+<p id="live" class="sr" aria-live="polite"></p>
+<section class="sheet" id="sheet" aria-hidden="true" hidden><div class="sheet-head"><button class="prev" type="button"></button><div class="sheet-dots"></div><button class="next" type="button"></button><button class="x" type="button"></button></div><div class="sheet-body"></div></section>
+<button class="more" type="button" hidden></button><button class="menu-btn" type="button" hidden></button><nav id="menu" hidden></nav><aside id="reward" hidden></aside>
+</div>
+<script type="module">
+import { mountFilmCarousel } from './mount-film-carousel.js';
+import decor from './decor-film.js';
+import config from './config-i4.js';
+const link = document.querySelector('link[data-film-fonts]');
+if (link && !link.sheet) await Promise.race([new Promise(r => link.addEventListener('load', r, { once: true })), new Promise(r => setTimeout(r, 1500))]);
+mountFilmCarousel(document.getElementById('film-carousel'), { decor, config });
+const byId = Object.fromEntries(config.sets.flatMap(s => s.heroes.map(h => [h.id, { ...h, set: s.id }])));
+addEventListener('metahero', e => parent.postMessage({ type: 'metahero', hero: e.detail.hero, set: e.detail.set, name: byId[e.detail.hero].name }, '*'));
+const whenReady = () => new Promise(r => { const t = setInterval(() => { if (document.body.classList.contains('ready') || document.body.dataset.poster) { clearInterval(t); r(); } }, 100); });
+addEventListener('message', async e => {                       // от страницата: { type:'choose', hero } · { type:'back' }
+  const m = e.data || {}, P = window.__proto;
+  if (m.type === 'back') document.querySelector('.back').click();
+  if (m.type === 'choose' && byId[m.hero]) {
+    await whenReady();
+    if (document.body.dataset.hero === m.hero) return;
+    const i = config.sets.findIndex(s => s.id === byId[m.hero].set);
+    if (document.body.dataset.hero) document.querySelector('.back').click();
+    P.focus(i); setTimeout(() => document.querySelector(`#pick [data-hero="${m.hero}"]`)?.click(), 320);
+  }
+});
+let lastSet = -2;                                              // коя площадка е на преден план → страницата светва двете роли в списъка си
+setInterval(() => { const P = window.__proto, s = P && P.state(); if (!s) return; const i = s.mode === 'flow' || s.mode === 'drag' ? s.near : s.idx; if (i !== lastSet && i >= 0) { lastSet = i; parent.postMessage({ type: 'set', idx: i }, '*'); } }, 250);
+parent.postMessage({ type: 'ready' }, '*');
+</script>
+</body></html>

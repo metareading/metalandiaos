@@ -80,7 +80,7 @@ function paintCard(c, glow) {
     x.fillRect(W / 2 - 1, 598, 2, 96);
     if (glow) return;                                    // думите остават чисти на листа · прахът е от визьора и клапата
     x.textAlign = 'center'; x.textBaseline = 'alphabetic';
-    c.heroes.forEach((h, j) => { const cx = W * (.27 + .46 * j), maxW = W * .44 - 20;
+    c.heroes.forEach((h, j) => { const cx = W * (c.heroes.length > 1 ? .27 + .46 * j : .5), maxW = W * .44 - 20;
       x.fillStyle = T.light; x.shadowColor = rgba(h.accent || c.accent, .5); x.shadowBlur = 18; wrapText(x, h.name, 600, 72, 40, T.serif, maxW, cx, 640, 3); x.shadowBlur = 0; });   // MET-1928 · ролите на И4 са дълги (до „Развиващи се личности“): картата рисува само името, на до 3 реда и по-едро; редът на ролята е в „За вас“ след избора
   });
 }
@@ -179,7 +179,7 @@ function riders() {
       const geo = new THREE.BufferGeometry();
       geo.setAttribute('position', new THREE.BufferAttribute(pos, 3)); geo.setAttribute('aDust', new THREE.BufferAttribute(dust, 3));
       geo.setAttribute('aSeed', new THREE.BufferAttribute(seed, 4)); geo.setAttribute('aCol', new THREE.BufferAttribute(col, 3));
-      const g = new THREE.Group(), home = new THREE.Vector3((j - .5) * .74, .22, .07); g.position.copy(home); c.g.add(g);
+      const g = new THREE.Group(), home = new THREE.Vector3((c.heroes.length > 1 ? j - .5 : 0) * .74, .22, .07); g.position.copy(home); c.g.add(g);
       const mat = config.grains(1.5), pts = new THREE.Points(geo, mat); pts.frustumCulled = false; g.add(pts);
       set.heroes.push({ id: h.id, j, g, mat, home, A: 0, k: 0 });
     });

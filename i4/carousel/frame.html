@@ -2,7 +2,7 @@
 <!-- MET-1928 · рамката на въртележката · engine.js · mount-film-carousel.js · film-carousel.css = байт-копия от film-carousel @08ff926b · decor-film.js = същият файл с една поправка · говори със страницата през postMessage -->
 <html lang="bg"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Филмова въртележка · 8 роли</title>
+<title>Филмова въртележка · 9 роли</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Inter:wght@300;400;500;600&display=swap&subset=cyrillic" data-film-fonts>
 <link rel="stylesheet" href="film-carousel.css">
 <style>
@@ -34,7 +34,12 @@ body[data-hero] #hero{background:linear-gradient(to top,color-mix(in srgb,var(--
 <section class="sheet" id="sheet" aria-hidden="true" hidden><div class="sheet-head"><button class="prev" type="button"></button><div class="sheet-dots"></div><button class="next" type="button"></button><button class="x" type="button"></button></div><div class="sheet-body"></div></section>
 <button class="more" type="button" hidden></button><button class="menu-btn" type="button" hidden></button><nav id="menu" hidden></nav><aside id="reward" hidden></aside>
 </div>
+<script>function i4Flick(){ let burst=0, bt=0, counted=false, marks=[];
+  function mark(){ const n=performance.now(); marks=marks.filter(t=>n-t<1600); marks.push(n); if(marks.length>=2){ marks=[]; return true } return false }
+  return { wheel(dy){ const n=performance.now(); if(n-bt>140){ burst=0; counted=false } bt=n; burst+=Math.abs(dy); if(burst>=240&&!counted){ counted=true; return mark() } return false },
+           touch(dist,ms){ return Math.abs(dist)>=90&&Math.abs(dist)/Math.max(1,ms)>=.9 ? mark() : false } } }</script>
 <script type="module">
+import * as THREE from 'three';
 import { mountFilmCarousel } from './mount-film-carousel.js';
 import decor from './decor-film.js';
 import config from './config-i4.js';
@@ -44,6 +49,22 @@ mountFilmCarousel(document.getElementById('film-carousel'), { decor, config });
 const byId = Object.fromEntries(config.sets.flatMap(s => s.heroes.map(h => [h.id, { ...h, set: s.id }])));
 addEventListener('metahero', e => parent.postMessage({ type: 'metahero', hero: e.detail.hero, set: e.detail.set, name: byId[e.detail.hero].name }, '*'));
 const whenReady = () => new Promise(r => { const t = setInterval(() => { if (document.body.classList.contains('ready') || document.body.dataset.poster) { clearInterval(t); r(); } }, 100); });
+/* MET-1925 · M3: тап ВЪРХУ картата на въртележката избира ролята направо (лява половина = първата, дясна = втората; площадка с една роля = нея) — от поток и от фокус на друга карта; тапът върху вече фокусираната карта си остава на двигателя */
+const RAY = new THREE.Raycaster(), RV = new THREE.Vector2(); let tapDown = null;
+const cardPlanes = () => { const o = []; window.__proto.dbg().scene.traverse(m => { if (m.isMesh && m.userData && Number.isInteger(m.userData.i) && m.geometry && m.geometry.type === 'PlaneGeometry') o.push(m); }); return o; };
+function heroAt(x, y) { RV.set(x / innerWidth * 2 - 1, -(y / innerHeight) * 2 + 1); RAY.setFromCamera(RV, window.__proto.dbg().camera); const h = RAY.intersectObjects(cardPlanes(), false)[0]; if (!h) return null; const set = config.sets[h.object.userData.i]; return { i: h.object.userData.i, hero: set.heroes[h.uv.x < .5 ? 0 : 1] || set.heroes[0] }; }
+window.__i4cardAt = (i, u) => { const m = cardPlanes().find(p => p.userData.i === i); if (!m) return null; const v = m.position.clone(); v.set((u - .5) * m.geometry.parameters.width, 0, 0); m.localToWorld(v); v.project(window.__proto.dbg().camera); return { x: (v.x + 1) / 2 * innerWidth, y: (1 - v.y) / 2 * innerHeight }; };   // гейт-кука: къде на екрана е точка u по ширината на картата i
+window.__i4heroAt = heroAt;   // гейт-кука: коя роля е под точка от екрана (картите със гръб към камерата не се хващат)
+addEventListener('pointerdown', e => { tapDown = { x: e.clientX, y: e.clientY }; }, true);
+addEventListener('pointerup', e => {
+  const d = tapDown; tapDown = null; if (!d || Math.hypot(e.clientX - d.x, e.clientY - d.y) > 9 || !e.target.closest('#stage') || !window.__proto) return;
+  const st = window.__proto.state(); if (st.mode !== 'flow' && st.mode !== 'focus') return;
+  const hit = heroAt(e.clientX, e.clientY); if (!hit || (st.mode === 'focus' && hit.i === st.idx)) return;
+  setTimeout(() => { if (window.__proto.state().idx === hit.i) document.querySelector(`#pick [data-hero="${hit.hero.id}"]`)?.click(); }, 80);
+}, true);
+let held = false; const fl = i4Flick();                        // MET-1925 · Р2: страницата държи → колелото над въртележката я върти (не и двигателят сам), „резък скрол“ ×2 пуска
+addEventListener('message', e => { const m = e.data || {}; if (m.type === 'hold') held = !!m.on; else if (m.type === 'focus' && Number.isInteger(m.idx)) whenReady().then(() => window.__proto.focus(m.idx)); });
+addEventListener('wheel', e => { const esc = fl.wheel(e.deltaY); parent.postMessage({ type: 'wheel', dy: e.deltaY, esc }, '*'); if (held && !esc) { e.preventDefault(); e.stopImmediatePropagation(); } else if (esc) held = false; }, { passive: false, capture: true });
 addEventListener('message', async e => {                       // от страницата: { type:'choose', hero } · { type:'back' }
   const m = e.data || {}, P = window.__proto;
   if (m.type === 'back') document.querySelector('.back').click();

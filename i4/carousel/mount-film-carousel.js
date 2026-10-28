@@ -35,7 +35,7 @@ function sync() {
   const hero = set && body.dataset.hero && set.heroes.find(h => h.id === body.dataset.hero);
   root.style.setProperty('--accent', hero ? hero.accent : set ? set.accent : 'var(--gold)');
   groups.forEach(g => { g.hidden = !set || g.dataset.set !== set.id; });
-  if (st.mode === 'open' && !wasOpen && tap && tap.i === st.idx && performance.now() - tap.t < 500) choose(set, set.heroes[tap.side]);
+  if (st.mode === 'open' && !wasOpen && tap && tap.i === st.idx && performance.now() - tap.t < 500) choose(set, set.heroes[tap.side] || set.heroes[0]);
   if (st.mode === 'open' && !wasOpen) openedAt = performance.now();
   wasOpen = st.mode === 'open'; tap = null;
 }

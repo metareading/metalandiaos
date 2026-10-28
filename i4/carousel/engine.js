@@ -25,7 +25,7 @@ CARDS.forEach(c => { c.a = c.i * STEP; c.A = 0; c.ph = c.i * 1.7; });
 
 /* ───────── състояние: flow (поток) → focus (фокус) → open (картата) ───────── */
 const S = { mode: 'flow', idx: 0, rot: 0.42, vel: 0, target: 0, fK: 0, oK: 0, drag: null, stir: 0, px: 0, seen: new Set(), near: -1, boost: 0, shots: 0, done: false, off: -1, tIdle: 0 };
-const W_FLOW = -Math.PI * 2 / 50;                       // една обиколка ≈ 50 s · картите идват отдясно
+const W_FLOW = -Math.PI * 2 / 17;                       // една обиколка ≈ 50 s · картите идват отдясно
 const nearest = (rot = S.rot) => ((Math.round(-rot / STEP) % N) + N) % N;
 const targetFor = (i, rot = S.rot) => -CARDS[i].a + Math.PI * 2 * Math.round((rot + CARDS[i].a) / (Math.PI * 2));
 

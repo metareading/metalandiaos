@@ -1,0 +1,389 @@
+<!doctype html>
+<html lang="bg">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>И4 · Скъпи Въ · 4–8 ноември · София</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Inter:wght@300;400;500;600&display=swap&subset=cyrillic" rel="stylesheet">
+<style>
+:root{
+  --bg:#0d0a08; --bg2:#15100c; --bg3:#1d1611;
+  --ink:#F0EBE0; --ink2:#d9d0bd; --mute:#a99e8a;
+  --gold:#E8C77E; --gold2:#c9a25a; --gold3:#8a6a2e;
+  --light:#fff5d6; --light2:#ffe9b8;
+  --em:#6FB59A; --fire:#D4895E;
+  --serif:'Cormorant Garamond',Georgia,'Times New Roman',serif;
+  --sans:Inter,-apple-system,'Segoe UI',Roboto,sans-serif;
+  --r:18px; --bar:50px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;background:var(--bg)}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img{display:block;max-width:100%}
+em{font-family:var(--serif);font-style:italic;color:var(--gold)}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+.kicker{letter-spacing:.22em;font-size:10.5px;text-transform:uppercase;color:var(--fire);font-weight:600}
+h1,h2,h3{font-family:var(--serif);font-weight:500;line-height:1.08}
+h2{font-size:clamp(2rem,5.2vw,3.4rem);margin:8px 0 10px}
+.lead{color:var(--ink2);font-size:1.02rem;max-width:34em}
+.cta{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(120deg,#ffe1a0,#e2a458);color:#2a1908;font-weight:600;padding:14px 26px;border-radius:32px;text-decoration:none;border:0;cursor:pointer;box-shadow:0 12px 34px -12px rgba(226,164,88,.85);transition:transform .2s,box-shadow .2s;font-size:.95rem;font-family:var(--sans)}
+.cta:hover{transform:translateY(-2px)}
+.cta.big{padding:18px 34px;font-size:1.05rem}
+
+/* HUD */
+#bar{position:sticky;top:0;z-index:60;background:rgba(13,10,8,.86);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid rgba(232,199,126,.22);height:var(--bar)}
+#bar .in{height:100%;max-width:1120px;margin:0 auto;padding:0 14px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.pill{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(232,199,126,.35);border-radius:30px;padding:6px 14px;font-size:12px;letter-spacing:.06em;color:var(--ink2);background:rgba(13,10,8,.5);white-space:nowrap}
+.pill b{font-family:var(--serif);font-size:1.15rem;font-weight:600;color:var(--light)}
+.pill.g b{color:var(--gold)}
+.brand{text-align:center;line-height:1.15}
+.brand b{font-family:var(--serif);font-size:1.35rem;color:var(--gold);text-decoration:underline;text-underline-offset:3px;font-weight:600}
+.brand span{display:block;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
+.prog{position:absolute;left:0;bottom:-1px;height:2px;background:var(--gold);width:0%;transition:width .3s}
+
+/* Hero */
+.hero{position:relative;min-height:calc(100svh - var(--bar));display:grid;align-items:end;overflow:hidden}
+.hero .bg{position:absolute;inset:0}
+.hero .bg img{width:100%;height:100%;object-fit:cover;object-position:60% 30%;filter:saturate(.8) brightness(.6)}
+.hero .bg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(13,10,8,.2) 0%,rgba(13,10,8,.35) 38%,rgba(13,10,8,.94) 100%)}
+.hero .txt{position:relative;padding:32px 20px 38px;max-width:1120px;margin:0 auto;width:100%}
+.hero h1{font-size:clamp(2.5rem,8vw,5rem);margin:10px 0 12px}
+.hero .sub{font-family:var(--serif);font-size:clamp(1.15rem,3vw,1.6rem);color:var(--ink2);max-width:26em;margin-bottom:20px}
+.hero .sub em{font-weight:600}
+.stars{position:absolute;inset:0;pointer-events:none;background-image:radial-gradient(1px 1px at 20% 30%,#fff8 50%,transparent 51%),radial-gradient(1px 1px at 70% 20%,#fff6 50%,transparent 51%),radial-gradient(1.5px 1.5px at 40% 60%,#ffe9b8aa 50%,transparent 51%),radial-gradient(1px 1px at 85% 55%,#fff7 50%,transparent 51%),radial-gradient(1px 1px at 10% 75%,#fff6 50%,transparent 51%);animation:tw 6s ease-in-out infinite alternate}
+@keyframes tw{from{opacity:.5}to{opacity:1}}
+
+section{padding:64px 0}
+section.alt{background:linear-gradient(180deg,var(--bg2),var(--bg))}
+
+/* Goal cards (HMM3 · big image, little text) */
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:26px}
+.card{position:relative;border-radius:var(--r);overflow:hidden;border:1px solid rgba(232,199,126,.22);background:var(--bg3);min-height:420px;display:flex;align-items:flex-end;cursor:pointer;transition:transform .25s,border-color .25s;-webkit-tap-highlight-color:transparent}
+.card:hover{transform:translateY(-4px);border-color:rgba(232,199,126,.6)}
+.card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.72) saturate(.9);transition:filter .3s,transform .6s}
+.card:hover img,.card.on img{filter:brightness(.95) saturate(1.05);transform:scale(1.04)}
+.card::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(13,10,8,.92) 100%)}
+.card .c{position:relative;z-index:2;padding:20px}
+.card .n{font-family:var(--serif);font-size:3rem;color:var(--gold);line-height:1}
+.card h3{font-size:1.6rem;margin:2px 0 4px}
+.card p{font-size:.88rem;color:var(--ink2);max-height:0;overflow:hidden;opacity:0;transition:max-height .4s,opacity .4s}
+.card.on p{max-height:140px;opacity:1}
+.card .tap{position:absolute;top:14px;right:14px;z-index:2;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--light2);border:1px solid rgba(255,233,184,.4);border-radius:20px;padding:3px 10px;background:rgba(13,10,8,.4)}
+.card.on .tap{background:var(--gold);color:#2a1908;border-color:var(--gold)}
+
+/* Profile · sliders + radar */
+.prof{display:grid;grid-template-columns:1.05fr .95fr;gap:36px;align-items:start;margin-top:28px}
+.radar{position:sticky;top:calc(var(--bar) + 16px)}
+.radar svg{width:100%;height:auto;display:block}
+.radar .lab{font-family:var(--sans);font-size:11px;letter-spacing:.1em;text-transform:uppercase;fill:rgba(255,245,214,.7)}
+.radar .val{font-family:var(--serif);font-size:15px;fill:var(--gold);font-weight:600}
+.sl{padding:16px 0;border-bottom:1px solid rgba(232,199,126,.14)}
+.sl .top{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.sl h3{font-size:1.45rem}
+.sl .v{font-family:var(--serif);font-size:2rem;color:var(--gold);min-width:1.4em;text-align:right}
+.sl .q{font-size:.86rem;color:var(--mute);margin:2px 0 6px}
+.sl .said{font-family:var(--serif);font-style:italic;font-size:1.02rem;color:var(--light2);margin-top:6px;min-height:1.4em}
+input[type=range]{-webkit-appearance:none;appearance:none;display:block;width:100%;height:34px;margin:2px 0 0;background:transparent;cursor:pointer;accent-color:#e8c77e}
+input[type=range]::-webkit-slider-runnable-track{height:4px;border-radius:4px;background:linear-gradient(90deg,var(--gold3),var(--gold))}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:26px;height:26px;margin-top:-11px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff5d6,#e2a458);box-shadow:0 0 0 4px rgba(232,199,126,.2),0 4px 14px rgba(0,0,0,.5)}
+input[type=range]::-moz-range-track{height:4px;border-radius:4px;background:linear-gradient(90deg,var(--gold3),var(--gold))}
+input[type=range]::-moz-range-thumb{width:24px;height:24px;border:0;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff5d6,#e2a458)}
+.ends{display:flex;justify-content:space-between;font-size:10.5px;letter-spacing:.06em;color:var(--mute)}
+.legend{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px;font-size:12px;color:var(--ink2)}
+.legend i{display:inline-block;width:11px;height:11px;border-radius:50%;vertical-align:-1px;margin-right:5px}
+.strong{margin-top:26px;border:1px solid rgba(111,181,154,.5);border-radius:var(--r);padding:16px 18px;background:rgba(111,181,154,.07)}
+.strong .kicker{color:var(--em)}
+.strong p{font-family:var(--serif);font-size:1.25rem;margin-top:4px}
+
+/* Anti-agent */
+.anti{display:grid;grid-template-columns:.9fr 1.1fr;gap:0;border-radius:var(--r);overflow:hidden;border:1px solid rgba(212,137,94,.4);background:var(--bg3)}
+.anti .im{position:relative;min-height:380px}
+.anti .im img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.85)}
+.anti .tx{padding:28px 26px}
+.anti .quote{font-family:var(--serif);font-style:italic;font-size:1.7rem;color:var(--light);margin:10px 0}
+.anti .row{display:flex;gap:12px;align-items:center;margin-top:18px;padding-top:14px;border-top:1px solid rgba(232,199,126,.16)}
+.anti .row img{width:54px;height:54px;border-radius:50%;object-fit:cover;border:1px solid var(--gold2)}
+.anti .row b{font-family:var(--serif);font-size:1.15rem;color:var(--gold)}
+.anti .row span{display:block;font-size:.85rem;color:var(--ink2)}
+
+/* Trail */
+.trail{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:28px}
+.stop{position:relative;border-radius:var(--r);overflow:hidden;border:1px solid rgba(232,199,126,.22);min-height:440px;display:flex;align-items:flex-end;background:var(--bg3);cursor:pointer;transition:transform .25s,border-color .25s}
+.stop:hover{transform:translateY(-4px)}
+.stop img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.62)}
+.stop.on{border-color:var(--gold)}
+.stop.on img{filter:brightness(.9)}
+.stop::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 30%,rgba(13,10,8,.94) 100%)}
+.stop .c{position:relative;z-index:2;padding:16px}
+.stop .d{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--fire);font-weight:600}
+.stop h3{font-size:1.45rem;margin:2px 0 6px}
+.stop .do{font-size:.86rem;color:var(--ink2)}
+.stop .go{margin-top:8px;font-family:var(--serif);color:var(--gold);font-size:1.02rem;display:none}
+.stop.on .go{display:block}
+.pre{margin-top:14px;display:flex;gap:14px;align-items:center;border:1px dashed rgba(232,199,126,.4);border-radius:var(--r);padding:14px 18px;font-size:.95rem;color:var(--ink2)}
+.pre b{font-family:var(--serif);font-size:1.3rem;color:var(--gold);white-space:nowrap}
+
+/* Deposit */
+.dep{position:relative;border-radius:calc(var(--r) + 6px);overflow:hidden;border:1px solid rgba(232,199,126,.5);background:var(--bg3)}
+.dep .bgi{position:absolute;inset:0}
+.dep .bgi img{width:100%;height:100%;object-fit:cover;object-position:center 40%;filter:brightness(.4) saturate(.9)}
+.dep .bgi::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(13,10,8,.94) 10%,rgba(13,10,8,.55) 100%)}
+.dep .in{position:relative;padding:40px 32px;display:grid;grid-template-columns:1.1fr .9fr;gap:32px;align-items:center}
+.price{display:flex;align-items:baseline;gap:16px;margin:10px 0 4px}
+.price .old{font-family:var(--serif);font-size:2rem;color:var(--mute);text-decoration:line-through;text-decoration-thickness:2px}
+.price .new{font-family:var(--serif);font-size:clamp(3.6rem,10vw,5.6rem);color:var(--gold);font-weight:600;line-height:1}
+.price .cur{font-family:var(--serif);font-size:1.6rem;color:var(--gold)}
+.list{list-style:none;margin:14px 0 0}
+.list li{padding:5px 0 5px 24px;position:relative;color:var(--ink2);font-size:.95rem}
+.list li::before{content:"◆";position:absolute;left:0;color:var(--gold);font-size:.7rem;top:9px}
+.box{background:rgba(13,10,8,.72);border:1px solid rgba(232,199,126,.3);border-radius:var(--r);padding:22px}
+.cd{display:flex;gap:10px;margin:8px 0 16px}
+.cd div{flex:1;text-align:center;border:1px solid rgba(232,199,126,.3);border-radius:12px;padding:8px 0;background:rgba(0,0,0,.25)}
+.cd b{display:block;font-family:var(--serif);font-size:2.1rem;color:var(--light);line-height:1}
+.cd span{font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
+.dep .box .cta{width:100%;justify-content:center}
+.fine{font-size:.78rem;color:var(--mute);margin-top:10px}
+.ph{display:inline-block;background:rgba(212,137,94,.18);border:1px dashed var(--fire);color:var(--fire);border-radius:6px;padding:0 6px;font-size:.85em;font-weight:600}
+.ok{display:none;margin-top:14px;border:1px solid var(--em);border-radius:12px;padding:12px 14px;color:var(--em);background:rgba(111,181,154,.08);font-size:.92rem}
+.ok.show{display:block}
+footer{padding:36px 0 120px;text-align:center;color:var(--mute);font-size:.8rem}
+footer .credit{margin-top:6px;font-size:.72rem}
+.proto{position:fixed;left:12px;bottom:12px;z-index:70;background:#2a1908;color:var(--gold);border:1px solid var(--gold3);border-radius:20px;padding:4px 12px;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase}
+.mbar{position:fixed;left:0;right:0;bottom:0;z-index:65;display:none;padding:10px 14px calc(10px + env(safe-area-inset-bottom));background:rgba(13,10,8,.92);backdrop-filter:blur(10px);border-top:1px solid rgba(232,199,126,.25);align-items:center;justify-content:space-between;gap:10px}
+.mbar .p{font-family:var(--serif);color:var(--gold);font-size:1.5rem;line-height:1}
+.mbar .p s{font-size:1rem;color:var(--mute);margin-right:6px}
+.mbar .cta{padding:11px 20px;font-size:.88rem}
+
+@media (max-width:900px){
+  section{padding:48px 0}
+  .cards,.trail{grid-template-columns:1fr}
+  .card,.stop{min-height:300px}
+  .prof{grid-template-columns:1fr}
+  .radar{position:static;max-width:380px;margin:0 auto}
+  .anti{grid-template-columns:1fr}
+  .anti .im{min-height:260px}
+  .dep .in{grid-template-columns:1fr;padding:28px 20px}
+  .pill{padding:5px 10px;font-size:10.5px}
+  .brand b{font-size:1.2rem}
+  .mbar{display:flex}
+  .mbar.show{transform:none}
+  .proto{bottom:12px;transition:bottom .3s}
+  .proto.up{bottom:76px}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+
+<div id="bar"><div class="in">
+  <span class="pill"><span style="color:var(--light)">✧</span> Внимание <b id="att">0</b></span>
+  <div class="brand"><b>И4</b><span>4–8 ноември · София</span></div>
+  <span class="pill g"><span style="color:var(--gold)">◆</span> Въображение <b id="img">0</b></span>
+</div><div class="prog" id="prog"></div></div>
+
+<!-- 1 · HERO -->
+<header class="hero" data-sec>
+  <div class="bg"><img src="img/wanderer-above-the-sea-of-fog.webp" alt="Фридрих · Странник над морето от мъгла · 1818"></div>
+  <div class="stars"></div>
+  <div class="txt">
+    <div class="kicker">Профил на ИИ героя · И4 · Изкуствен интелект с игри и изкуство</div>
+    <h1>Скъпи Въ, <em>вашият</em> път<br>до спокойствието</h1>
+    <p class="sub">Собственик на бизнес. Търсите <em>по-високи приходи от доволни клиенти</em> и живот, в който работите от различни места, без постоянния стрес.</p>
+    <a class="cta big" href="#deposit">Запазете мястото си до неделя →</a>
+  </div>
+</header>
+
+<!-- 2 · ЦЕЛТА -->
+<section data-sec>
+  <div class="wrap">
+    <div class="kicker">Вашата цел · с ваши думи</div>
+    <h2>Три неща, които <em>казахте</em> сами</h2>
+    <p class="lead">Докоснете картата. Това са вашите мерки, не нашите.</p>
+    <div class="cards">
+      <div class="card" data-tap>
+        <img src="img/ninth-wave.webp" alt="Айвазовски · Деветият вал · 1850" loading="lazy">
+        <span class="tap">Докоснете</span>
+        <div class="c"><div class="n">+13%</div><h3>Приходи на месец</h3><p>Минимум първите 3 месеца. „Може да сложим 13, защото е число на Фибоначи.“</p></div>
+      </div>
+      <div class="card" data-tap>
+        <img src="img/rising-sun.webp" alt="Фридрих · Жена пред изгряващото слънце · 1818" loading="lazy">
+        <span class="tap">Докоснете</span>
+        <div class="c"><div class="n">1 клиент</div><h3>Най-трудната комуникация</h3><p>Мярката: вземаме клиента, с когото е най-зле. Ако с него стане добре, значи навсякъде е добре.</p></div>
+      </div>
+      <div class="card" data-tap>
+        <img src="img/mona-lisa.webp" alt="Леонардо · Мона Лиза · ок. 1503" loading="lazy">
+        <span class="tap">Докоснете</span>
+        <div class="c"><div class="n">Спокойно</div><h3>Работа отвсякъде</h3><p>Вдъхновяваща работа без постоянния стрес, който сам си причинявате. Повече свободно време.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 3 · ПРОФИЛЪТ -->
+<section class="alt" data-sec id="profile">
+  <div class="wrap">
+    <div class="kicker">Профил на ИИличността · къде сте днес</div>
+    <h2>Вашите <em>шест</em> области</h2>
+    <p class="lead">Попълнено от разговора ни. Не е оценка, а карта: къде сте уверен и откъде тръгваме. Плъзнете, ако не сте съгласен.</p>
+    <div class="prof">
+      <div id="sliders"></div>
+      <div class="radar">
+        <svg viewBox="0 0 400 400" id="radar" role="img" aria-label="Радар на шестте области"></svg>
+        <div class="legend"><span><i style="background:var(--gold)"></i>Днес</span><span><i style="background:transparent;border:1px dashed var(--em)"></i>Посока след И4 (предложение)</span></div>
+        <div class="strong"><div class="kicker">Силна карта</div><p>Знаете, че ИИ е угодник и не му вярвате сляпо: <em>8 от 10</em>. Това е основата на ревюто.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 4 · АНТИАГЕНТЪТ -->
+<section data-sec>
+  <div class="wrap">
+    <div class="kicker">Антиагентът ви</div>
+    <h2>Кой ви <em>спира</em>?</h2>
+    <div class="anti" id="anti">
+      <div class="im"><img src="img/m-procrastination.webp" alt="Чудовището Отлагане" loading="lazy"></div>
+      <div class="tx">
+        <div class="kicker">Област Изпълнение · 1 от 10</div>
+        <div class="quote">„Все още.“</div>
+        <p class="lead">Казахте го ясно: има съпротива да дадете на ИИ всичко, особено данните на клиентите. И това е разумно. Затова започваме локално и с неща, които не са чувствителни.</p>
+        <div class="row"><img src="img/p-kurajku.webp" alt="Куражку"><div><b>Куражку</b><span>Характер и призвание. Води ви през първата стъпка, без да давате нищо, което не искате.</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 5 · ПЛАНЪТ -->
+<section class="alt" data-sec id="plan">
+  <div class="wrap">
+    <div class="kicker">План на действие · 5 дни × 4 часа</div>
+    <h2>Пътечка към <em>вашия</em> резултат</h2>
+    <p class="lead">Всеки ден носи едно действие, вързано за вашата цел. Докоснете спирка.</p>
+    <div class="pre"><b>Преди 4 ноември</b><span>Изберете клиента с най-трудната комуникация и запишете едно изречение: какво би било „добре“ с него.</span></div>
+    <div class="trail" id="trail"></div>
+  </div>
+</section>
+
+<!-- 6 · МЯСТОТО -->
+<section data-sec id="deposit">
+  <div class="wrap">
+    <div class="kicker">Мястото ви</div>
+    <h2>Запазено до <em>неделя</em></h2>
+    <div class="dep">
+      <div class="bgi"><img src="img/heart-card.webp" alt=""></div>
+      <div class="in">
+        <div>
+          <div class="kicker">Първата група</div>
+          <div class="price"><span class="old">987 €</span><span class="new">789</span><span class="cur">€</span></div>
+          <p class="lead" style="margin-bottom:6px">Вместо 987 €, само за първата група.</p>
+          <ul class="list">
+            <li>5 дни × 4 часа, от сряда 4 до неделя 8 ноември, София</li>
+            <li>Сто часа самостоятелна работа, събрани в двайсет</li>
+            <li>Клубни срещи след курса, за да продължим да се чуваме и да споделяме какво е проработило</li>
+            <li>Три видеа от стоте, подбрани за вашия профил</li>
+          </ul>
+        </div>
+        <div class="box">
+          <div class="kicker">Мястото е ваше до</div>
+          <div class="kicker" style="color:var(--gold);margin-top:2px">неделя, 1 ноември · 23:59</div>
+          <div class="cd" id="cd"><div><b id="d">0</b><span>дни</span></div><div><b id="h">0</b><span>часа</span></div><div><b id="m">0</b><span>мин</span></div></div>
+          <button class="cta big" id="pay">Запазвам мястото с 144 €</button>
+          <div class="ok" id="ok">Благодаря! Димитър ще ви изпрати данните за капарото от 144 €.</div>
+          <p class="fine">Капаро: <b style="color:var(--gold)">144 €</b> · остатъкът <b style="color:var(--gold)">645 €</b> <span class="ph">срок, да потвърди Митрандир</span></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer><div class="wrap">Димитър Караманчев · Металандия · И4<div class="credit">Картини: Фридрих · Айвазовски · Леонардо да Винчи (общо достояние) · агентите: илюстрации на Металандия</div></div></footer>
+
+<div class="mbar"><div class="p"><s>987</s>789 €</div><a class="cta" href="#deposit">Запазете до неделя</a></div>
+
+<script>
+(function(){
+  var att=0, img=0;
+  var elAtt=document.getElementById('att'), elImg=document.getElementById('img'), prog=document.getElementById('prog');
+  function setAtt(){elAtt.textContent=att}
+  function setImg(){elImg.textContent=img}
+
+  // ✧ Внимание: секции, които са били на екрана
+  var secs=[].slice.call(document.querySelectorAll('[data-sec]'));
+  var seen=new Set();
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting&&!seen.has(e.target)){seen.add(e.target);att=seen.size;setAtt()}})},{threshold:.35});
+  secs.forEach(function(s){io.observe(s)});
+  addEventListener('scroll',function(){var h=document.documentElement;var mb=document.querySelector('.mbar'),pr=document.querySelector('.proto'),dp=document.getElementById('deposit').getBoundingClientRect().top<innerHeight*.6,on=scrollY>innerHeight*.7&&!dp;mb.classList.toggle('show',on);pr.classList.toggle('up',on);prog.style.width=Math.min(100,100*scrollY/(h.scrollHeight-innerHeight))+'%'},{passive:true});
+
+  // ◆ Въображение: докосвания на карти и плъзгачи
+  [].forEach.call(document.querySelectorAll('.card[data-tap]'),function(c){
+    c.addEventListener('click',function(){if(!c.classList.contains('on')){c.classList.add('on');img++;setImg()}else c.classList.remove('on')})
+  });
+
+  // Профил: шестте области (отговорите му от 21-те въпроса)
+  var AREAS=[
+    {k:'ИИличност',q:'Доколко ИИ е постоянен партньор във вашия ден?',v:2,t:4,said:'„Има съпротива и нежелание… още.“',lo:'почти не ползвам ИИ',hi:'вплетен в целия ми ден'},
+    {k:'Цели',q:'Ползвате ли ИИ, за да формулирате цел с критерий и резултат?',v:4,t:6,said:'Питате за идеи за цели, но без пълно интервю.',lo:'никога',hi:'всяка цел минава през ИИ-интервю'},
+    {k:'Срокове',q:'Превръща ли ИИ целта ви в стъпки със срокове и рискове?',v:3,t:5,said:'„Не го ползвам за планиране.“',lo:'никога',hi:'стъпки, срокове, рискове'},
+    {k:'Спецификации',q:'Разбивате ли работата на малки задачи със ясни критерии?',v:1,t:4,said:'Разбирате, че тясното място е описанието на работата.',lo:'никога',hi:'спецификация и тикети'},
+    {k:'Изпълнение',q:'Върши ли ИИ части от работата, докато вие правите друго?',v:1,t:3,said:'„Все още.“ Данните на клиентите ви тревожат.',lo:'правя всичко сам',hi:'агентът работи, докато спя'},
+    {k:'Ревю',q:'Минава ли резултатът на ИИ през проверка и поправка в инструкциите?',v:2,t:4,said:'Знаете, че ИИ угодничи (8), но още не го проверявате системно.',lo:'вярвам му',hi:'независимо ревю и ретроспекция'}
+  ];
+  var N=AREAS.length, vals=AREAS.map(function(a){return a.v});
+  var wrap=document.getElementById('sliders');
+  AREAS.forEach(function(a,i){
+    var d=document.createElement('div');d.className='sl';
+    d.innerHTML='<div class="top"><h3>'+a.k+'</h3><div class="v" id="v'+i+'">'+a.v+'</div></div><div class="q">'+a.q+'</div>'
+      +'<input type="range" min="1" max="10" step="1" value="'+a.v+'" id="r'+i+'" aria-label="'+a.k+'"><div class="ends"><span>1 · '+a.lo+'</span><span>10 · '+a.hi+'</span></div><div class="said">'+a.said+'</div>';
+    wrap.appendChild(d);
+    var r=d.querySelector('input'),touched=false;
+    r.addEventListener('input',function(){vals[i]=+r.value;d.querySelector('.v').textContent=r.value;draw();if(!touched){touched=true;img++;setImg()}});
+  });
+  var svg=document.getElementById('radar'),NS='http://www.w3.org/2000/svg',C=200,R=125;
+  function pt(i,v){var a=-Math.PI/2+i*2*Math.PI/N,r=R*v/10;return [C+r*Math.cos(a),C+r*Math.sin(a)]}
+  function poly(arr,attrs){var p=document.createElementNS(NS,'polygon');p.setAttribute('points',arr.map(function(v,i){return pt(i,v).join(',')}).join(' '));for(var k in attrs)p.setAttribute(k,attrs[k]);return p}
+  function draw(){
+    svg.innerHTML='';
+    [2,4,6,8,10].forEach(function(l){svg.appendChild(poly(AREAS.map(function(){return l}),{fill:'none',stroke:'rgba(232,199,126,.16)','stroke-width':1}))});
+    AREAS.forEach(function(a,i){var p=pt(i,10),l=document.createElementNS(NS,'line');l.setAttribute('x1',C);l.setAttribute('y1',C);l.setAttribute('x2',p[0]);l.setAttribute('y2',p[1]);l.setAttribute('stroke','rgba(232,199,126,.16)');svg.appendChild(l)});
+    svg.appendChild(poly(AREAS.map(function(a){return a.t}),{fill:'rgba(111,181,154,.07)',stroke:'#6FB59A','stroke-width':1.5,'stroke-dasharray':'5 5'}));
+    svg.appendChild(poly(vals,{fill:'rgba(232,199,126,.28)',stroke:'#E8C77E','stroke-width':2.4,'stroke-linejoin':'round'}));
+    AREAS.forEach(function(a,i){
+      var p=pt(i,vals[i]),c=document.createElementNS(NS,'circle');c.setAttribute('cx',p[0]);c.setAttribute('cy',p[1]);c.setAttribute('r',4.5);c.setAttribute('fill','#fff5d6');svg.appendChild(c);
+      var q=pt(i,11.7),t=document.createElementNS(NS,'text');t.setAttribute('x',q[0]);t.setAttribute('y',q[1]);t.setAttribute('class','lab');t.setAttribute('text-anchor',Math.abs(q[0]-C)<8?'middle':(q[0]>C?'start':'end'));t.setAttribute('dominant-baseline','central');t.textContent=a.k;svg.appendChild(t);
+    });
+  }
+  draw();
+
+  // План: пет спирки
+  var STOPS=[
+    {d:'Ден 1 · сряда',h:'Подножието',do:'От асистент към агент: един ваш ден с ИИ като партньор, само с неща, които не са чувствителни.',go:'ИИличност 2 → 4',im:'ep4-01.webp'},
+    {d:'Ден 2',h:'Умения',do:'Грил за вашата цел: +13% на месец, с критерий и с клиента, с когото е най-трудно.',go:'Цели 4 → 6',im:'ep4-02.webp'},
+    {d:'Ден 3',h:'Контекст',do:'ИИ да знае вашия бизнес. Контекст, който остава при вас: данните на клиентите не излизат.',go:'Срокове 3 → 5',im:'ep4-03.webp'},
+    {d:'Ден 4',h:'Сандвичи',do:'Една задача, описана така добре, че да се свърши без вас: спецификация, критерии, проверка.',go:'Спецификации 1 → 4',im:'ep4-04.webp'},
+    {d:'Ден 5 · неделя',h:'Върхът',do:'Вашата ИИ фабрика: една рутина работи нощем, а сутрин вие само я преглеждате.',go:'Изпълнение 1 → 3 · Ревю 2 → 4',im:'ep4-05.webp'}
+  ];
+  var tr=document.getElementById('trail');
+  STOPS.forEach(function(s){
+    var d=document.createElement('div');d.className='stop';
+    d.innerHTML='<img src="img/'+s.im+'" alt="" loading="lazy"><div class="c"><div class="d">'+s.d+'</div><h3>'+s.h+'</h3><div class="do">'+s.do+'</div><div class="go">'+s.go+'</div></div>';
+    d.addEventListener('click',function(){var on=d.classList.toggle('on');if(on){img++;setImg()}});
+    tr.appendChild(d);
+  });
+
+  // Обратно броене до неделя 1 ноември 23:59 (локално време)
+  var end=new Date(2026,10,1,23,59,0).getTime();
+  function tick(){var s=Math.max(0,Math.floor((end-Date.now())/1000));
+    document.getElementById('d').textContent=Math.floor(s/86400);
+    document.getElementById('h').textContent=Math.floor(s%86400/3600);
+    document.getElementById('m').textContent=Math.floor(s%3600/60)}
+  tick();setInterval(tick,30000);
+
+  // Капаро: заглушка, нищо не се праща
+  document.getElementById('pay').addEventListener('click',function(){document.getElementById('ok').classList.add('show');img++;setImg()});
+})();
+</script>
+</body>
+</html>

@@ -151,7 +151,6 @@ input[type=range]::-moz-range-thumb{width:24px;height:24px;border:0;border-radiu
 .ok.show{display:block}
 footer{padding:36px 0 120px;text-align:center;color:var(--mute);font-size:.8rem}
 footer .credit{margin-top:6px;font-size:.72rem}
-.proto{position:fixed;left:12px;bottom:12px;z-index:70;background:#2a1908;color:var(--gold);border:1px solid var(--gold3);border-radius:20px;padding:4px 12px;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase}
 .mbar{position:fixed;left:0;right:0;bottom:0;z-index:65;display:none;padding:10px 14px calc(10px + env(safe-area-inset-bottom));background:rgba(13,10,8,.92);backdrop-filter:blur(10px);border-top:1px solid rgba(232,199,126,.25);align-items:center;justify-content:space-between;gap:10px}
 .mbar .p{font-family:var(--serif);color:var(--gold);font-size:1.5rem;line-height:1}
 .mbar .p s{font-size:1rem;color:var(--mute);margin-right:6px}
@@ -170,8 +169,6 @@ footer .credit{margin-top:6px;font-size:.72rem}
   .brand b{font-size:1.2rem}
   .mbar{display:flex}
   .mbar.show{transform:none}
-  .proto{bottom:12px;transition:bottom .3s}
-  .proto.up{bottom:76px}
 }
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 </style>
@@ -315,7 +312,7 @@ footer .credit{margin-top:6px;font-size:.72rem}
   var seen=new Set();
   var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting&&!seen.has(e.target)){seen.add(e.target);att=seen.size;setAtt()}})},{threshold:.35});
   secs.forEach(function(s){io.observe(s)});
-  addEventListener('scroll',function(){var h=document.documentElement;var mb=document.querySelector('.mbar'),pr=document.querySelector('.proto'),dp=document.getElementById('deposit').getBoundingClientRect().top<innerHeight*.6,on=scrollY>innerHeight*.7&&!dp;mb.classList.toggle('show',on);pr.classList.toggle('up',on);prog.style.width=Math.min(100,100*scrollY/(h.scrollHeight-innerHeight))+'%'},{passive:true});
+  addEventListener('scroll',function(){var h=document.documentElement;var mb=document.querySelector('.mbar'),dp=document.getElementById('deposit').getBoundingClientRect().top<innerHeight*.6,on=scrollY>innerHeight*.7&&!dp;mb.classList.toggle('show',on);prog.style.width=Math.min(100,100*scrollY/(h.scrollHeight-innerHeight))+'%'},{passive:true});
 
   // ◆ Въображение: докосвания на карти и плъзгачи
   [].forEach.call(document.querySelectorAll('.card[data-tap]'),function(c){

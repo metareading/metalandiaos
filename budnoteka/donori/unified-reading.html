@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="bg">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="icon" href="data:,">
+<title>Обединено четене</title>
+<!-- three r160 локален · нула CDN · за Skillplate custom-code се сменя само пътят: https://maitapp.com/vendor/three.module.js (ADR 0099) -->
+<script type="importmap">{"imports":{"three":"../../vendor/three.module.js"}}</script>
+<link rel="stylesheet" href="control.css">
+</head>
+<body>
+<main id="control-unified-reading"></main>
+<script type="module">
+import { mount } from './control.js';
+import config from './config.js';
+window.__контрол = mount(document.getElementById('control-unified-reading'), config);
+</script>
+</body>
+</html>

@@ -66,7 +66,7 @@ function role() { var c = nCards(), m = nMean(), g = nGive();
   if (c >= wins.length) return ['цялото', 'Събра всичките 24 карти. Цялото е у теб: сега го дай нататък.'];
   if (g) return ['дарител', 'Даваш нататък. Събери всичките 24 карти и цялото е у теб.'];
   if (m) return ['търсач', 'Събираш смисъл. Дай една карта нататък и ставаш дарител.'];
-  return ['гост', 'Отвори прозорче и изчакай метаидеята да се събере: първата карта е твоя.']; }
+  return ['гост', 'Отвори прозорче и изчакай идеята да се събере: първата карта е твоя.']; }
 var QUEST = { 'гост': 'отвори прозорче · събери карта', 'търсач': 'дай карта нататък · стани дарител', 'дарител': 'събери всичките 24 карти', 'цялото': 'цялото е у теб · ела на 28.11' }, ROLES = ['гост', 'търсач', 'дарител', 'цялото'], roleWas = null;
 function hud() { var r = role()[0]; $('#gCards').textContent = nCards(); $('#gMean').textContent = nMean(); $('#gGive').textContent = nGive(); $('#gRole').textContent = r; $('#quest').textContent = QUEST[r];
   if (roleWas !== null && roleWas !== r && ROLES.indexOf(r) > ROLES.indexOf(roleWas)) { var e = $('#gRole'); if (e.animate) e.animate([{ transform: 'scale(1)' }, { transform: 'scale(1.618)', color: '#fff' }, { transform: 'scale(1)' }], { duration: 1000, easing: 'ease-out' });
@@ -83,7 +83,8 @@ function fly(from, img) { if (!from || !document.body.animate) return; var a = f
   e.style.left = (a.left + a.width / 2 - 21) + 'px'; e.style.top = (a.top + a.height / 2 - 34) + 'px'; document.body.appendChild(e);
   var dx = z.left + z.width / 2 - (a.left + a.width / 2), dy = z.top + z.height / 2 - (a.top + a.height / 2);
   e.animate([{ transform: 'translate(0,0) scale(.4) rotate(-8deg)', opacity: 0 }, { transform: 'translate(' + dx * .15 + 'px,-26px) scale(1.618) rotate(4deg)', opacity: 1, offset: .382 }, { transform: 'translate(' + dx + 'px,' + dy + 'px) scale(.3) rotate(0deg)', opacity: .9 }], { duration: 1000, easing: 'cubic-bezier(.4,0,.2,1)' }).onfinish = function () { e.remove(); }; }
-function markWin(i) { var b = $('.win[data-i="' + i + '"]'), w = wins[i]; if (b) { if (G.c[key(w)]) b.classList.add('got'); if (w.p && G.g[w.p.id]) b.classList.add('gvn'); } }
+function sealIn(b, fresh) { if (b.querySelector('.seal')) return; var e = document.createElement('i'); e.className = 'seal' + (fresh ? ' new' : ''); e.setAttribute('aria-hidden', 'true'); (b.querySelector('.ph') || b).appendChild(e); }
+function markWin(i) { var b = $('.win[data-i="' + i + '"]'), w = wins[i]; if (b) { if (G.c[key(w)]) { b.classList.add('got'); sealIn(b, true); } if (w.p && G.g[w.p.id]) b.classList.add('gvn'); } }
 function collect(i, from) { var w = wins[i], k = key(w); if (G.c[k]) return false; G.c[k] = 1; saveG(); markWin(i); hud();
   if (w.p) { fly(from, 'assets/img/t-' + w.p.id + '.jpg'); plus('gCards'); plus('gMean'); toast('+1 смисъл · картата „' + w.p.topic + '“ е твоя'); } else { plus('gCards'); }
   if (nCards() === wins.length) setTimeout(function () { toast('24 от 24 · събра цялото'); }, 2800);
@@ -97,28 +98,30 @@ function give(i, btn) { var p = wins[i].p, url = location.href.split('#')[0].spl
 
 $('#grid').innerHTML = wins.map(function (w, i) {
   var got = (G.c[key(w)] ? ' got' : '') + (w.p && G.g[w.p.id] ? ' gvn' : '');
-  if (w.door) { var inner = '<span class="n">' + (i + 1) + '</span><span class="ic"><svg viewBox="0 0 48 48">' + ICON[w.door.k] + '</svg><span class="dl">' + w.door.n + '</span></span>', cls = 'win door' + (w.door.k === 't' ? ' tix' : '') + got;
+  if (w.door) { var inner = (G.c[key(w)] ? '<i class="seal" aria-hidden="true"></i>' : '') + '<span class="n">' + (i + 1) + '</span><span class="ic"><svg viewBox="0 0 48 48">' + ICON[w.door.k] + '</svg><span class="dl">' + w.door.n + '</span></span>', cls = 'win door' + (w.door.k === 't' ? ' tix' : '') + got;
     return w.door.u ? '<a class="' + cls + '" style="--i:' + i + '" data-i="' + i + '" href="' + href(w.door.u) + '">' + inner + '</a>' : '<button class="' + cls + '" style="--i:' + i + '" type="button" data-i="' + i + '">' + inner + '</button>'; }
   var p = w.p; if (!p) return '';
-  return '<button class="win' + got + '" style="--i:' + i + '" type="button" data-i="' + i + '" aria-label="Прозорец ' + (i + 1) + ': ' + esc(p.name) + '"><span class="ph"><img src="assets/img/t-' + p.id + '.jpg" alt="" decoding="async"></span><span class="n">' + (i + 1) + '</span><span class="nm">' + esc(p.name) + '<small>' + esc(p.topic) + '</small></span></button>';
+  return '<button class="win' + got + '" style="--i:' + i + '" type="button" data-i="' + i + '" aria-label="Прозорец ' + (i + 1) + ': ' + esc(p.name) + '"><span class="ph"><img src="assets/img/t-' + p.id + '.jpg" alt="" decoding="async">' + (G.c[key(w)] ? '<i class="seal" aria-hidden="true"></i>' : '') + '</span><span class="n">' + (i + 1) + '</span><span class="nm">' + esc(p.name) + '<small>' + esc(p.topic) + '</small></span></button>';
 }).join('');
 hud();
 
 /* ── the metaidea: one canvas, one cloud; it lives on the hero stage or in the open card ── */
 var IDEA = window.AW_IDEA, cv = null, ok = false, slot = null, cur = null, last = 0, heroOn = true, heroK = 0, PXS = Math.min(window.devicePixelRatio || 1, 2), asmNow = 0;
-var FORM = 2.6, FADE = 1.0, HOLD = (FORM + FADE) / 0.382;   /* seconds: dust → the whole image · the whole image → dust · one hero form (the image stands whole for 61.8 % of it) */
+var last2 = 0, FORM = 2.6, FADE = 1.0, HOLD = (FORM + FADE) / 0.382;   /* seconds: dust → the whole image · the whole image → dust · one hero form (the image stands whole for 61.8 % of it) */
 try { if (IDEA && window.THREE) { cv = document.createElement('canvas'); cv.setAttribute('aria-hidden', 'true'); IDEA.init(cv); ok = true; } } catch (e) { ok = false; }
 function place(s) { if (!ok || !s) return; if (cv.parentNode !== s) s.appendChild(cv); slot = s; fit(); }
 function fit() { if (!slot) return; var r = slot.getBoundingClientRect(), w = Math.max(2, Math.round(r.width)), h = Math.max(2, Math.round(r.height)); if (w !== fit.w || h !== fit.h) { fit.w = w; fit.h = h; IDEA.resize(w, h, PXS); } }
 function show(id, hold, card, delay) { cur = { id: id, t0: performance.now() / 1000 + (delay || 0), hold: hold, card: card }; asmNow = 0; }
 var ease = function (x) { x = Math.min(1, Math.max(0, x)); return x * x * (3 - 2 * x); };
 function loop(now) {
-  requestAnimationFrame(loop); if (!ok || !slot || !cur || document.hidden) return;
+  requestAnimationFrame(loop); if (!ok || document.hidden) return;
+  var tt = now / 1000, ddt = Math.min(0.05, last2 ? tt - last2 : 0.016); last2 = tt; if (CF.length) formFrames(performance.now() / 1000, ddt);
+  if (!slot || !cur) return;
   var t = now / 1000, dt = Math.min(0.05, last ? t - last : 0.016); last = t; fit();
   var w = fit.w, h = fit.h, age = Math.max(0, t - cur.t0), asm = ease(age / FORM), pres = ease(age / 0.5);
   if (cur.hold) { var left = cur.hold - age; if (left < FADE) asm = Math.min(asm, ease(left / FADE)); if (left <= 0) { nextHero(); return; } }
   asmNow = asm;
-  if (cur.card !== undefined && asm >= 0.999 && !cur.done) { cur.done = true; var gm = $('#gotMark'); if (collect(cur.card, slot) && gm) gm.textContent = '· карта +1'; if (gm) gm.classList.add('on'); pips(); }
+  if (cur.card !== undefined && asm >= 0.999 && !cur.done) { cur.done = true; var gm = $('#gotMark'); if (collect(cur.card, slot) && gm) $('em', gm).textContent = 'нова карта'; if (gm) gm.classList.add('on'); pips(); }
   var r = Math.min(w, h) * 0.42, cx = w / 2, cy = h * 0.5;
   IDEA.frame({ id: cur.id, cx: cx, cy: cy, r: r, dcx: cx, dcy: cy, dw: w * 0.36, dh: h * 0.36, hr: 0, asm: asm, pres: pres, thr: 0, tx: cx, ty: cy, A: age, T: age }, dt);
 }
@@ -132,6 +135,20 @@ function heroCheck() { var want = ok && heroOn && !over.classList.contains('on')
 if ('IntersectionObserver' in window) new IntersectionObserver(function (e) { heroOn = e[0].isIntersecting; heroCheck(); }, { threshold: 0.1 }).observe(hero);
 hero.addEventListener('click', function () { openW(SPK[heroK % SPK.length]); });
 
+/* ── the answer cards under the name: each one forms its own Eidolon from dust when it comes into view (own canvas, fewer grains; made when the card opens, freed when it closes) ── */
+var QFORM = { 2: 'tree', 3: 'door', 4: 'bridge', 5: 'gift', 7: 'wand' }, QALT = ['ripples', 'wings', 'galaxy'], CFORM = 2.2, CF = [], cfIO = null, PT = { x: 0, y: 0 };
+addEventListener('pointermove', function (e) { PT.x = e.clientX; PT.y = e.clientY; }, { passive: true });
+function ef(q, k) { return ok ? '<span class="ef" data-f="' + (QFORM[q] || QALT[k % QALT.length]) + '"><span class="efl"></span></span>' : ''; }
+function killForms() { if (cfIO) { cfIO.disconnect(); cfIO = null; } CF.forEach(function (f) { f.L.dispose(); f.cv.remove(); }); CF = []; }
+function cardForms() { killForms(); if (!ok || !IDEA.make || !('IntersectionObserver' in window)) return; var map = new Map();
+  cfIO = new IntersectionObserver(function (es) { es.forEach(function (e) { var f = map.get(e.target); if (!f) return; if (e.isIntersecting && !f.on) f.t0 = performance.now() / 1000 + f.delay; f.on = e.isIntersecting; }); }, { root: card, threshold: 0.35 });
+  card.querySelectorAll('.ef').forEach(function (el, k) { try { var cv = document.createElement('canvas'), L = IDEA.make(); cv.setAttribute('aria-hidden', 'true'); L.init(cv); el.appendChild(cv);
+    var f = { el: el, cv: cv, L: L, form: el.dataset.f, on: false, t0: 0, delay: 0.15 * k, w: 0, h: 0 }; map.set(el, f); CF.push(f); cfIO.observe(el); } catch (e) {} }); }
+function formFrames(t, dt) { CF.forEach(function (f) { if (!f.on) return; var r = f.el.getBoundingClientRect(), w = Math.max(2, Math.round(r.width)), h = Math.max(2, Math.round(r.height));
+  if (w !== f.w || h !== f.h) { f.w = w; f.h = h; f.L.resize(w, h, Math.min(PXS, 1.5)); }
+  var age = Math.max(0, t - f.t0), asm = ease(age / CFORM), pres = ease(age / 0.4), R = Math.min(w * 0.4, h * 0.42), cx = w / 2, cy = h / 2;
+  f.L.frame({ id: f.form, cx: cx, cy: cy, r: R, dcx: cx, dcy: cy, dw: w * 0.4, dh: h * 0.36, hr: 0, asm: asm, pres: pres, thr: 0, tx: cx, ty: cy, A: age, T: age, px: PT.x - r.left, py: PT.y - r.top }, dt); }); }
+
 /* ── the card (the part): the question, the metaidea above, the person, the words below, never on the image; the 24 pips keep the whole in sight ── */
 var back = null, openI = -1, HEART = '<svg viewBox="0 0 24 24"><path d="M12 21s-8-5.2-8-11a4.6 4.6 0 0 1 8-3 4.6 4.6 0 0 1 8 3c0 5.8-8 11-8 11z"/></svg>';
 function pipsHTML(i) { return '<div class="pips" id="pips" aria-label="прозорец ' + (i + 1) + ' от 24">' + wins.map(function (w, k) { return '<i class="' + (w.door ? 'd ' : '') + (k === i ? 'c' : G.c[key(w)] ? 'g' : '') + '"></i>'; }).join('') + '</div>'; }
@@ -142,22 +159,22 @@ function openW(i, noHash) {
   if (w.door) { collect(i); if (w.door.card !== 'about') { location.href = href(w.door.u); return; }
     card.className = 'card about-card';
     card.innerHTML = topBar(i) + '<div class="cbody"><h2 id="cardH" class="q" style="justify-content:flex-start">какво е TEDx?</h2><p style="font-family:var(--serif);font-style:italic;font-size:var(--f4);line-height:1.25">' + ABOUT_H + '</p>' + ABOUT.map(function (t) { return '<p>' + t + '</p>'; }).join('') + '<p><a class="btn s" href="' + L + '/kakvo-e-ted-tedx.html">Научи повече</a></p></div>';
-    slot = null; cur = null;
+    slot = null; cur = null; killForms();
   } else {
     var p = w.p, pos = SPK.indexOf(i), pv = SPK[(pos + SPK.length - 1) % SPK.length], nx = SPK[(pos + 1) % SPK.length], gl = p.arts.filter(function (a) { return a.q === 5; })[0], had = G.c[p.id];
     card.className = 'card';
     card.innerHTML = topBar(i) +
       '<div class="cbody"><p class="q">' + esc(p.ql) + '</p>' +
-      (ok ? '<figure class="idea"><div class="slot" id="cardSlot"></div><figcaption>метаидея · <b>' + esc(p.topic) + '</b><span class="got' + (had ? ' on' : '') + '" id="gotMark">' + (had ? '· в колодата' : '') + '</span></figcaption></figure>' : '') +
+      (ok ? '<figure class="idea"><div class="slot" id="cardSlot"></div><figcaption>идея · <b>' + esc(p.topic) + '</b><span class="got' + (had ? ' on' : '') + '" id="gotMark"><i class="seal"></i><em>' + (had ? 'в колекцията' : '') + '</em></span></figcaption></figure>' : '') +
       '<figure class="photo"><img src="assets/img/' + p.id + '.jpg" alt="' + esc(p.name) + '">' + (p.credit ? '<figcaption>снимка: ' + esc(p.credit) + '</figcaption>' : '') + '</figure>' +
       '<p class="say">' + esc(p.shown) + '</p>' +
       '<div class="who"><h2 id="cardH">' + esc(p.name) + '</h2><span class="badge">карта ' + (i + 1) + ' · ' + esc(p.topic) + '</span></div>' +
-      '<div class="give">' + (gl ? '<div><span class="ql">' + esc(gl.ql) + '</span><p>' + esc(gl.t) + '</p></div>' : '<div><span class="ql">Смисълът да даваш…</span><p>е и това: дай тази карта на някого.</p></div>') +
+      '<div class="give' + (ok ? ' ac' : '') + '">' + ef(5, 0) + (gl ? '<div><span class="ql">' + esc(gl.ql) + '</span><p>' + esc(gl.t) + '</p></div>' : '<div><span class="ql">Смисълът да даваш…</span><p>е и това: дай тази карта на някого.</p></div>') +
       '<button class="btn gv' + (G.g[p.id] ? ' done' : '') + '" type="button" id="giveBtn">' + HEART + '<span>' + (G.g[p.id] ? 'Дадена · дай я пак' : 'Дай картата нататък') + '</span></button></div>' +
-      '<ul class="more">' + p.arts.filter(function (a) { return a.q !== 5; }).map(function (a) { return '<li><span class="ql">' + esc(a.ql) + '</span><p>' + esc(a.t) + '</p></li>'; }).join('') + '</ul>' +
+      '<ul class="more">' + p.arts.filter(function (a) { return a.q !== 5; }).map(function (a, k) { return '<li' + (ok ? ' class="ac"' : '') + '>' + ef(a.q, k + 1) + '<span class="ql">' + esc(a.ql) + '</span><p>' + esc(a.t) + '</p></li>'; }).join('') + '</ul>' +
       '<div class="pn"><button type="button" data-go="' + pv + '">← ' + esc(wins[pv].p.name) + '</button><button type="button" data-go="' + nx + '">' + esc(wins[nx].p.name) + ' →</button></div></div>';
     $('#giveBtn').onclick = function () { give(i, this); };
-    if (ok) { place($('#cardSlot')); show(p.id, 0, i, 0.25); } else collect(i);
+    if (ok) { place($('#cardSlot')); show(p.id, 0, i, 0.25); cardForms(); } else collect(i);
   }
   openI = i; over.classList.add('on'); document.documentElement.style.overflow = 'hidden'; card.scrollTop = 0; wire();
   if (!noHash) history.replaceState(null, '', '#w' + (i + 1));
@@ -168,16 +185,16 @@ function profile() { if (!over.classList.contains('on')) back = document.activeE
   card.className = 'card prof';
   card.innerHTML = topBar(-1, 'твоят профил') + '<div class="cbody"><p class="q" id="cardH">Кой си ти?</p><ol class="ladder">' + ROLES.map(function (x, k) { var at = ROLES.indexOf(r[0]); return '<li class="' + (k === at ? 'on' : k < at ? 'was' : '') + '">' + x + '</li>'; }).join('') + '</ol><p class="role-h">' + r[0] + '</p><p class="role-p">' + r[1] + '</p>' +
     '<div class="stats"><div><b>' + nCards() + '<small> / 24</small></b><i>карти</i></div><div><b>' + nMean() + '</b><i>смисъл</i></div><div class="gv"><b>' + nGive() + '</b><i>даване</i></div></div>' +
-    '<ul class="rules"><li><b>смисъл +1</b> · когато метаидеята на лектор се събере пред теб.</li><li><b>даване +1</b> · когато дадеш карта нататък.</li></ul>' +
+    '<ul class="rules"><li><b>смисъл +1</b> · когато идеята на лектор се събере пред теб.</li><li><b>даване +1</b> · когато дадеш карта нататък.</li></ul>' +
     '<div class="badges">' + wins.map(function (w, k) { var g = G.c[key(w)]; return '<button type="button" data-go="' + k + '"' + (g ? ' class="g' + (w.p && G.g[w.p.id] ? ' gv' : '') + '"' : '') + '>' + (g ? esc(w.p ? w.p.topic : w.door.n) : k + 1) + '</button>'; }).join('') + '</div>' +
     '<div class="next"><p>Следващото ниво е залата.<small>28.11.2026 · Дом на киното · София</small></p><a class="btn p" href="https://epaygo.bg/3488443569">Билети</a></div>' +
     '<button class="reset" type="button" id="resetG">започни играта отначало</button></div>';
-  slot = null; cur = null; openI = -1; over.classList.add('on'); document.documentElement.style.overflow = 'hidden'; card.scrollTop = 0; wire();
+  slot = null; cur = null; killForms(); openI = -1; over.classList.add('on'); document.documentElement.style.overflow = 'hidden'; card.scrollTop = 0; wire();
   $('#resetG').onclick = function () { G = { c: {}, g: {} }; saveG(); document.querySelectorAll('.win.got').forEach(function (b) { b.classList.remove('got', 'gvn'); }); hud(); profile(); };
 }
 $('#dock').addEventListener('click', profile);
 $('#wall').addEventListener('click', function (e) { var b = e.target.closest('button'); if (b) openW(+b.dataset.go); });
-function closeW() { if (!over.classList.contains('on')) return; over.classList.remove('on'); document.documentElement.style.overflow = ''; openI = -1; slot = null; cur = null;
+function closeW() { if (!over.classList.contains('on')) return; over.classList.remove('on'); document.documentElement.style.overflow = ''; openI = -1; slot = null; cur = null; killForms();
   history.replaceState(null, '', location.pathname + location.search); heroCheck(); if (back && back.focus) back.focus({ preventScroll: true }); }
 $('#grid').addEventListener('click', function (e) { var b = e.target.closest('.win'); if (!b) return; if (b.tagName === 'A') { collect(+b.dataset.i); return; } openW(+b.dataset.i); });
 over.addEventListener('click', function (e) { if (e.target === over) closeW(); });
@@ -189,12 +206,12 @@ addEventListener('keydown', function (e) { if (!over.classList.contains('on')) r
 function fromHash() { var m = /^#w(\d+)$/.exec(location.hash); if (m && wins[+m[1] - 1]) openW(+m[1] - 1, true); }
 addEventListener('hashchange', fromHash);
 
-/* ── the film: plays in the page ── */
+/* ── the video (the 3-minute intro): plays in the page ── */
 var fv = $('#filmV'), fb = $('#filmBox');
 $('#filmPlay').addEventListener('click', function () { var r = fv.play(); if (r && r.catch) r.catch(function () {}); });
 fv.addEventListener('play', function () { fb.classList.add('playing'); });
 fv.addEventListener('loadedmetadata', function () { var d = Math.round(fv.duration); if (d > 0) $('#filmLen').textContent = Math.floor(d / 60) + ':' + String(d % 60).padStart(2, '0'); });
-fv.addEventListener('error', function () { $('#filmMeta').insertAdjacentHTML('beforeend', '<span>филмът не е до тази папка: assets/advent-film.mp4</span>'); });
+fv.addEventListener('error', function () { $('#filmMeta').insertAdjacentHTML('beforeend', '<span>видеото не е до тази папка: assets/advent-film.mp4</span>'); });
 
 /* ── the opening and the space: beads rush out of black space from the stage, slow down, then float in depth for the rest of the visit ── */
 var INTRO = document.body.classList.contains('pre'), wasIntro = INTRO, introT0 = performance.now(), RUSH = 1.618;   /* seconds of rush */

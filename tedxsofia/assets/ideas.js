@@ -145,21 +145,23 @@ var FORMS = {
 var MAP = { b08: 'sprout', a06: 'finger', a08: 'balloon', a10: 'iceberg', a04: 'heart', a03: 'wand', b09: 'galaxy', a07: 'atom', a05: 'bow', a01: 'scales', b06: 'plane', b01: 'peak',
   b03: 'gift', b10: 'hand', b02: 'bridge', b04: 'door', a09: 'amphora', a02: 'ripples', b07: 'tree', b05: 'wings' };
 
-var MOBILE = Math.min(screen.width || 9999, innerWidth) < 700 || (navigator.maxTouchPoints > 0 && innerWidth < 900), MAXN = MOBILE ? 18000 : 34000, CLOUD = {};
-function cloud(id) {
-  if (CLOUD[id]) return CLOUD[id]; var F = FORMS[MAP[id]](), rn = rng(31 + id.charCodeAt(0) * 131 + id.charCodeAt(2) * 17), tw = 0, pos = new Float32Array(MAXN * 3), col = new Float32Array(MAXN), k = 0, i;
+var MOBILE = Math.min(screen.width || 9999, innerWidth) < 700 || (navigator.maxTouchPoints > 0 && innerWidth < 900), MAXN = MOBILE ? 18000 : 34000, CLOUD = {};   /* CLOUD[n][id]: one cache per grain count (the card forms use fewer grains) */
+function cloud(id, MAXN) {
+  var CL = CLOUD[MAXN] || (CLOUD[MAXN] = {}); if (CL[id]) return CL[id]; var F = FORMS[MAP[id] || id](), rn = rng(31 + id.charCodeAt(0) * 131 + id.charCodeAt(2) * 17), tw = 0, pos = new Float32Array(MAXN * 3), col = new Float32Array(MAXN), k = 0, i;
   F.parts.forEach(function (p) { tw += p[0]; });
   F.parts.forEach(function (p, pi) { var m = pi === F.parts.length - 1 ? MAXN - k : Math.round(MAXN * p[0] / tw);
     for (i = 0; i < m && k < MAXN; i++, k++) { var q = p[1](rn), c = p[2], red = c === 'r' ? rn() < 0.86 : c === 'm' ? rn() < 0.34 : c === 'W' ? false : rn() < 0.1;
       pos[k * 3] = q[0]; pos[k * 3 + 1] = q[1]; pos[k * 3 + 2] = q[2]; col[k] = red ? (rn() < 0.55 ? 0 : rn() < 0.5 ? 1 : 4) : (c === 'W' ? 3 : rn() < 0.7 ? 2 : 5); } });
   var x0 = 1e9, x1 = -1e9, y0 = 1e9, y1 = -1e9; for (i = 0; i < k; i++) { x0 = Math.min(x0, pos[i * 3]); x1 = Math.max(x1, pos[i * 3]); y0 = Math.min(y0, pos[i * 3 + 1]); y1 = Math.max(y1, pos[i * 3 + 1]); }
   var s = 1 / Math.max((x1 - x0) / 2, (y1 - y0) / 2), cx = (x0 + x1) / 2, cy = (y0 + y1) / 2; for (i = 0; i < k; i++) { pos[i * 3] = (pos[i * 3] - cx) * s; pos[i * 3 + 1] = (pos[i * 3 + 1] - cy) * s; pos[i * 3 + 2] *= s; }
-  CLOUD[id] = { pos: pos, col: col, n: k, sway: F.sway || 0.2, beat: F.beat || 0, spin: F.spin || 0 }; return CLOUD[id];
+  CL[id] = { pos: pos, col: col, n: k, sway: F.sway || 0.2, beat: F.beat || 0, spin: F.spin || 0 }; return CL[id];
 }
 
-/* ── the one buffer ── */
-var renderer, scene, camera, geo, mat, points, aHome, aDust, aCol, seed, aOrd, loaded = null, W = 1, H = 1, WPP = 1, CAMZ = 10, FOV = 30;
-var ptr = { x: 0, y: 0, swirl: 0, lx: 0, ly: 0, has: false };   /* no sentinel position: strength 0 until the pointer really moves */
+/* ── the pointer: one for all layers; strength 0 until it really moves ── */
+var ptr = { x: 0, y: 0, swirl: 0, lx: 0, ly: 0, has: false };
+var mvp = function (x, y) { if (ptr.has) { var v = Math.hypot(x - ptr.lx, y - ptr.ly); ptr.swirl = Math.min(1, ptr.swirl + v * 0.012); } ptr.has = true; ptr.lx = ptr.x = x; ptr.ly = ptr.y = y; };
+addEventListener('pointermove', function (e) { mvp(e.clientX, e.clientY); }, { passive: true }); addEventListener('pointerdown', function (e) { mvp(e.clientX, e.clientY); ptr.swirl = Math.min(1, ptr.swirl + 0.5); }, { passive: true });
+var CAMZ = 10, FOV = 30;
 var VS = [
   'attribute vec3 aHome; attribute vec3 aDust; attribute float aSeed; attribute float aCol; attribute float aOrd;',
   'uniform float uAssembly,uPres,uThr,uT,uPx,uScale,uBeat,uYaw; uniform vec3 uCenter,uTarget,uPtr,uDustC,uHole; uniform vec2 uDustS; uniform vec3 uPal[6];',
@@ -182,6 +184,9 @@ var VS = [
   ' vCol=uPal[int(aCol+.5)];vA=al;vec4 mv=modelViewMatrix*vec4(p,1.);gl_Position=projectionMatrix*mv;gl_PointSize=max(1.5,sz*uPx*3.4*(10./-mv.z));}'].join('\n');
 var FS = 'varying vec3 vCol; varying float vA; void main(){vec2 c=gl_PointCoord*2.-1.;float r2=dot(c,c);float i=exp(-r2*9.)+exp(-r2*2.6)*.3;float I=i*max(vA,0.);gl_FragColor=vec4(vCol*I,min(1.,I*.85));}';
 
+/* ── one layer = one canvas, one renderer, one buffer of grains. The main stage uses MAXN grains, the card forms fewer. ── */
+function Layer(MAXN, small) {
+var renderer, scene, camera, geo, mat, points, aHome, aDust, aCol, seed, aOrd, loaded = null, W = 1, H = 1, WPP = 1;
 function init(canvas) {
   renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: false, premultipliedAlpha: true, powerPreference: 'high-performance' }); renderer.setClearColor(0x000000, 0);
   scene = new THREE.Scene(); camera = new THREE.PerspectiveCamera(FOV, 1, 0.1, 100); camera.position.set(0, 0, CAMZ);
@@ -195,13 +200,11 @@ function init(canvas) {
     uniforms: { uAssembly: { value: 0 }, uPres: { value: 0 }, uThr: { value: 0 }, uT: { value: 0 }, uPx: { value: 1 }, uScale: { value: 1 }, uBeat: { value: 0 }, uYaw: { value: 0 }, uCenter: { value: new THREE.Vector3() }, uTarget: { value: new THREE.Vector3() },
       uPtr: { value: new THREE.Vector3() }, uDustC: { value: new THREE.Vector3() }, uHole: { value: new THREE.Vector3() }, uDustS: { value: new THREE.Vector2(1, 1) }, uPal: { value: pal } } });
   points = new THREE.Points(geo, mat); points.frustumCulled = false; scene.add(points);   /* real positions live in the shader, so the auto bounding sphere is wrong */
-  var mv = function (x, y) { if (ptr.has) { var v = Math.hypot(x - ptr.lx, y - ptr.ly); ptr.swirl = Math.min(1, ptr.swirl + v * 0.012); } ptr.has = true; ptr.lx = ptr.x = x; ptr.ly = ptr.y = y; };
-  addEventListener('pointermove', function (e) { mv(e.clientX, e.clientY); }, { passive: true }); addEventListener('pointerdown', function (e) { mv(e.clientX, e.clientY); ptr.swirl = Math.min(1, ptr.swirl + 0.5); }, { passive: true });
 }
 function resize(w, h, pxs) { W = w; H = h; renderer.setPixelRatio(pxs); renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); WPP = 2 * CAMZ * Math.tan(FOV * Math.PI / 360) / h; mat.uniforms.uPx.value = pxs; }
 function world(x, y, v) { return v.set((x - W / 2) * WPP, -(y - H / 2) * WPP, 0); }
 function loadHome(id) {   /* swap the homes in place and flag the one attribute for upload */
-  var c = cloud(id); aHome.set(c.pos.subarray(0, c.n * 3)); for (var i = c.n; i < MAXN; i++) { aHome[i * 3] = aDust[i * 3]; aHome[i * 3 + 1] = aDust[i * 3 + 1]; aHome[i * 3 + 2] = aDust[i * 3 + 2]; }
+  var c = cloud(id, MAXN); aHome.set(c.pos.subarray(0, c.n * 3)); for (var i = c.n; i < MAXN; i++) { aHome[i * 3] = aDust[i * 3]; aHome[i * 3 + 1] = aDust[i * 3 + 1]; aHome[i * 3 + 2] = aDust[i * 3 + 2]; }
   /* the start order: half the seed, half the way from the heart of the image to its rim, then ranked so the starts stay even in time (no crowd, no spike) */
   if (!c.ord) { var key = new Float32Array(MAXN), ix = new Uint32Array(MAXN), j; for (j = 0; j < MAXN; j++) { key[j] = 0.5 * seed[j] + 0.5 * Math.min(1, Math.hypot(aHome[j * 3], aHome[j * 3 + 1])); ix[j] = j; }
     ix.sort(function (p, q) { return key[p] - key[q]; }); c.ord = new Float32Array(MAXN); for (j = 0; j < MAXN; j++) c.ord[ix[j]] = j / (MAXN - 1); }
@@ -211,14 +214,14 @@ function loadHome(id) {   /* swap the homes in place and flag the one attribute 
 var blank = true;
 /* st: { id, cx, cy, r (px: half size of the image), dcx, dcy (px: the centre of the dust field), dw, dh (px: its half size; the loose shell reaches 1.3 x that), hx, hy, hr (px: the face, kept clear of loose dust), asm 0..1, pres 0..1, thr 0..1.3, tx, ty (px: the next window), A (ambient seconds), T (line seconds, for the slow turn) } */
 function frame(st, dt) {
-  ptr.swirl *= Math.pow(0.05, dt || 0.016);
-  if (!st || !st.id || !MAP[st.id] || st.pres <= 0.002) { if (!blank) { renderer.clear(); blank = true; } return; }
-  var c = loaded === st.id ? CLOUD[st.id] : loadHome(st.id), u = mat.uniforms; blank = false;
+  if (!small) ptr.swirl *= Math.pow(0.05, dt || 0.016);   /* the main layer ticks the stir down once per frame */
+  if (!st || !st.id || !(MAP[st.id] || FORMS[st.id]) || st.pres <= 0.002) { if (!blank) { renderer.clear(); blank = true; } return; }
+  var c = loaded === st.id ? cloud(st.id, MAXN) : loadHome(st.id), u = mat.uniforms; blank = false;
   u.uAssembly.value = st.asm; u.uPres.value = st.pres; u.uThr.value = st.thr; u.uT.value = st.A; u.uScale.value = st.r * WPP; world(st.cx, st.cy, u.uCenter.value); world(st.tx, st.ty, u.uTarget.value);
   world(st.dcx === undefined ? st.cx : st.dcx, st.dcy === undefined ? st.cy : st.dcy, u.uDustC.value); if (st.hr) { world(st.hx, st.hy, u.uHole.value); u.uHole.value.z = st.hr * WPP; } else u.uHole.value.set(0, 0, 0);
   u.uDustS.value.set(st.dw * WPP, st.dh * WPP); u.uYaw.value = c.spin ? 0.5 * Math.sin(st.A * 0.35) + st.T * 0.1 : c.sway * Math.sin(st.A * 0.55 + 1);
   var hb = st.A * 1.25 % 1; u.uBeat.value = (c.beat ? 0.055 * (Math.exp(-hb * 9) + 0.6 * Math.exp(-Math.pow((hb - 0.22) * 9, 2))) : 0.012 * Math.sin(st.A * 1.5)) * st.asm;
-  world(ptr.x, ptr.y, u.uPtr.value); u.uPtr.value.z = ptr.has ? ptr.swirl : 0;
+  world(st.px === undefined ? ptr.x : st.px, st.py === undefined ? ptr.y : st.py, u.uPtr.value); u.uPtr.value.z = ptr.has ? ptr.swirl : 0;   /* st.px, st.py: the pointer in this canvas' own px (the card forms) */
   renderer.render(scene, camera);
 }
 /* probe: the same path as the vertex shader (forming part: no cursor, no throw), on the CPU, for a few grains → screen px. Measurement only. */
@@ -232,5 +235,9 @@ function probe(idx) { var u = mat.uniforms, out = [], S = u.uScale.value, C = u.
     var p = [home[0] + ox * (1 - a), home[1] + oy * (1 - a), home[2] + o[2] * (1 - a)], c3 = curlJ(p[0] * .9 / S + s * 3, p[1] * .9 / S + s * 3, p[2] * .9 / S + s * 3, T * .5);
     p = [p[0] + c3[0] * S * .22 * fl, p[1] + c3[1] * S * .22 * fl, p[2] + c3[2] * S * .22 * fl]; var k = CAMZ / (CAMZ - p[2]);
     out.push([W / 2 + p[0] * k / WPP, H / 2 - p[1] * k / WPP, a]); }); return out; }
-window.AW_IDEA = { probe: probe, init: init, resize: resize, frame: frame, has: function (id) { return !!MAP[id]; }, form: function (id) { return MAP[id]; }, n: MAXN, mobile: MOBILE, forms: Object.keys(FORMS) };
+function dispose() { try { geo.dispose(); mat.dispose(); renderer.dispose(); renderer.forceContextLoss(); } catch (e) {} }
+return { probe: probe, init: init, resize: resize, frame: frame, dispose: dispose };
+}
+var MAIN = Layer(MAXN, false);
+window.AW_IDEA = { probe: MAIN.probe, init: MAIN.init, resize: MAIN.resize, frame: MAIN.frame, make: function (n) { return Layer(n || (MOBILE ? 7000 : 12000), true); }, has: function (id) { return !!(MAP[id] || FORMS[id]); }, form: function (id) { return MAP[id]; }, n: MAXN, mobile: MOBILE, forms: Object.keys(FORMS) };
 })();

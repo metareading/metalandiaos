@@ -11,8 +11,8 @@
   Rounds 4–6 (Fable 5.2): black space leads, red marks what matters; the page opens like a title sequence (beads out of black space, light, the Eidolon forms);
   a role-play game (24 cards, смисъл and даване); whole → part → whole; layout, type and spacing on 1 : 1.618.
   Static folder. Nothing loads from the web: every http(s) link here is one a person clicks.
-  Speakers: assets/speakers.js + assets/img (from advent-speakers-v2 by tools/build.py). Metaidea: assets/ideas.js (Eidolon, three.js r160, local).
-  Film: assets/advent-film.mp4 (web copy, 1080p).
+  Speakers: assets/speakers.js + assets/img (from advent-speakers-v2 by tools/build.py). The Eidolon layer: assets/ideas.js (Eidolon, three.js r160, local).
+  Video: assets/advent-film.mp4 (web copy, 1080p).
 -->
 <style>
 /* the golden section: type 11 · 13 · 17 · 21 · 27.5 · 35 · 44.5 · 56.6 · 72 (17 × φ^n, half steps √φ) · space 6 · 10 · 16 · 26 · 42 · 68 · 110 (× φ) · splits 38.2 : 61.8 */
@@ -131,8 +131,6 @@ h1 em{display:block;font-style:italic;color:var(--ink);font-size:var(--f5);line-
 .win.got .ph img{filter:none}
 .win .ph::after{content:"";position:absolute;inset:0;background:radial-gradient(120% 90% at 50% 30%,transparent 55%,rgba(6,6,6,.6));pointer-events:none}
 .win .n{position:absolute;z-index:2;left:7px;top:7px;min-width:26px;height:26px;padding:0 6px;border-radius:999px;display:grid;place-items:center;background:rgba(6,6,6,.62);color:#fff;font:600 var(--f1)/1 var(--serif);font-variant-numeric:lining-nums;box-shadow:inset 0 0 0 1px var(--line2)}
-.win.got .n{background:var(--red);box-shadow:none}
-.win.got .n::after{content:"✓";font-size:10px;margin-left:3px;font-family:var(--sans)}
 .win.gvn .ph::before{content:"";position:absolute;z-index:2;right:9px;top:9px;width:16px;height:16px;border-radius:50%;background:var(--red);box-shadow:0 0 0 2px rgba(6,6,6,.7)}
 .win .nm{display:flex;flex-direction:column;justify-content:center;flex:1;min-height:0;padding:0 9px;font-family:var(--serif);font-weight:700;font-size:15px;line-height:1.08;border-top:1px solid var(--line)}
 .win .nm small{display:block;font-family:var(--sans);font-weight:500;font-size:var(--f0);letter-spacing:.12em;text-transform:uppercase;color:var(--mute);margin-top:4px}
@@ -142,6 +140,20 @@ h1 em{display:block;font-style:italic;color:var(--ink);font-size:var(--f5);line-
 .win.door.tix svg{stroke:var(--red)}
 .win.door .dl{font-family:var(--serif);font-weight:700;font-size:var(--f2);color:#fff;line-height:1.05;padding:0 6px}
 @media(min-width:1000px){.win .nm{font-size:var(--f2);padding:0 12px}.win.door .dl{font-size:var(--f3)}}
+
+/* ── a collected card: light, not a tick. A glowing frame, a slow sheen across the photo, a soft star seal with a red spark ── */
+.seal{position:absolute;z-index:3;right:8px;bottom:8px;width:30px;height:30px;pointer-events:none}
+.win.door>.seal{bottom:auto;top:9px;right:9px}
+.win.got{box-shadow:inset 0 0 0 1px rgba(255,255,255,.55),0 14px 44px -14px rgba(255,255,255,.42)}
+.win.got .n{background:rgba(255,255,255,.92);color:#060606;box-shadow:0 0 14px rgba(255,255,255,.45)}
+.win.got::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(115deg,transparent 42%,rgba(255,255,255,.15) 50%,transparent 58%) 0 0/260% 100%;animation:sheen 7s ease-in-out infinite}
+@keyframes sheen{0%{background-position:120% 0}55%,100%{background-position:-60% 0}}
+.seal::before{content:"";position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle,rgba(230,43,30,.95) 0 10%,#fff 12% 20%,rgba(255,255,255,.5) 36%,rgba(255,255,255,.12) 62%,transparent 72%);filter:drop-shadow(0 0 7px rgba(255,255,255,.7));animation:seal 3.4s ease-in-out infinite}
+.seal::after{content:"";position:absolute;left:50%;top:50%;width:190%;height:190%;margin:-95% 0 0 -95%;background:radial-gradient(circle,#fff,rgba(255,255,255,.55) 40%,transparent 70%);clip-path:polygon(50% 0,56.5% 43.5%,100% 50%,56.5% 56.5%,50% 100%,43.5% 56.5%,0 50%,43.5% 43.5%);opacity:.9;animation:seal 3.4s ease-in-out infinite reverse}
+@keyframes seal{50%{transform:scale(.84);opacity:.7}}
+.seal.new{animation:sealIn 1.5s cubic-bezier(.2,.9,.3,1)}
+@keyframes sealIn{0%{transform:scale(0) rotate(-50deg);opacity:0}40%{transform:scale(2);opacity:1;filter:brightness(2.2)}100%{transform:none}}
+.idea .seal{position:relative;right:auto;bottom:auto;top:auto;display:inline-block;width:14px;height:14px;margin-right:7px;flex:none}
 
 /* ── the card: question, the metaidea above, the person, the words; laptop split 38.2 : 61.8 ── */
 #over{position:fixed;inset:0;z-index:90;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.86);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);padding:10px 10px 68px}
@@ -167,7 +179,8 @@ h1 em{display:block;font-style:italic;color:var(--ink);font-size:var(--f5);line-
 .idea .slot{position:relative;height:236px;width:100%}
 .idea figcaption{text-align:center;font-size:var(--f0);letter-spacing:.16em;text-transform:uppercase;color:var(--dim);margin-top:-4px}
 .idea figcaption b{color:var(--ink);font-weight:600}
-.idea figcaption .got{color:var(--red);margin-left:6px;opacity:0;transition:opacity .6s}
+.idea figcaption .got{display:inline-flex;align-items:center;margin-left:6px;color:#fff;opacity:0;transition:opacity .6s}
+.idea figcaption .got em{font-style:normal}
 .idea figcaption .got.on{opacity:1}
 .photo{position:relative;margin:0}
 .photo img{display:block;width:100%;aspect-ratio:1;object-fit:cover;object-position:50% 20%;border-radius:10px}
@@ -190,6 +203,16 @@ h1 em{display:block;font-style:italic;color:var(--ink);font-size:var(--f5);line-
 .pn button{flex:1;min-height:48px;border-radius:10px;border:0;background:rgba(255,255,255,.05);color:#e6dfdc;font:500 15px var(--sans);cursor:pointer;padding:8px 12px;text-align:left}
 .pn button:hover{background:rgba(255,255,255,.14)}
 .pn button:last-child{text-align:right}
+/* the answer cards under the name: each has its own Eidolon stage (phone: above the text · laptop: right, 38.2) */
+.ac{position:relative;overflow:hidden}
+.ef{position:relative;display:block;height:150px;margin:-6px -8px 2px;pointer-events:none}
+.ef canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.ef .efl{position:absolute;inset:0;background:radial-gradient(closest-side at 50% 50%,rgba(255,255,255,.09),transparent)}
+@media(min-width:860px){
+  .ac{display:grid;grid-template-columns:61.8fr 38.2fr;column-gap:var(--s3);align-content:center;min-height:196px}
+  .ac>*{grid-column:1}
+  .ac>.ef{grid-column:2;grid-row:1/span 6;height:auto;min-height:176px;margin:-10px -12px -10px 0}
+}
 @media(min-width:860px){
   .cbody{grid-template-columns:38.2fr 61.8fr;grid-template-areas:"q q" "ph idea" "ph say" "ph who" "give give" "more more" "pn pn";column-gap:var(--s5);padding:var(--s4) var(--s5) var(--s5);align-items:start}
   .q{grid-area:q}.photo{grid-area:ph}.idea{grid-area:idea}.say{grid-area:say;text-align:left;font-size:var(--f5)}.who{grid-area:who;text-align:left}
@@ -316,7 +339,7 @@ footer .gift b{color:var(--red);font-family:var(--tedf)}
 
 <div class="wrap">
   <section class="hero" aria-labelledby="h1">
-    <button class="stage" id="heroIdea" type="button" aria-label="Отвори лектора на тази метаидея"><span class="light"></span><span class="slot" id="heroSlot"></span><span class="cap rv" id="heroCap" style="--d:2.6s"></span></button>
+    <button class="stage" id="heroIdea" type="button" aria-label="Отвори лектора на тази идея"><span class="light"></span><span class="slot" id="heroSlot"></span><span class="cap rv" id="heroCap" style="--d:2.6s"></span></button>
     <div class="htx">
       <p class="kick rv" style="--d:1.3s"><b>28.11.2026</b> · Дом на киното · София</p>
       <h1 id="h1" class="ttl" style="--d:1.45s"><span class="t">TED<sup>x</sup></span><span class="s">Sofia</span><span class="y">2026</span><em>Смисълът да даваш</em></h1>
@@ -324,7 +347,7 @@ footer .gift b{color:var(--red);font-family:var(--tedf)}
       <div class="cd rv" style="--d:1.9s" data-cd aria-label="До началото"><div><b>--</b><i>дни</i></div><div><b>--</b><i>часа</i></div><div><b>--</b><i>минути</i></div><div><b>--</b><i>секунди</i></div></div>
       <div class="cta rv" style="--d:2.05s">
         <a class="btn p" href="https://epaygo.bg/3488443569">Билети</a>
-        <a class="btn s" href="#film"><svg viewBox="0 0 24 24"><path d="M7 4v16l13-8z"/></svg>Филмът · 3 мин</a>
+        <a class="btn s" href="#film"><svg viewBox="0 0 24 24"><path d="M7 4v16l13-8z"/></svg>Видео · 3 мин</a>
       </div>
     </div>
   </section>
@@ -333,13 +356,13 @@ footer .gift b{color:var(--red);font-family:var(--tedf)}
   <main class="grid" id="grid" aria-label="24 прозорчета"></main>
 
   <section class="sec" id="film" aria-labelledby="filmH">
-    <h2 id="filmH">Филмът <span>· адвентът на лекторите</span></h2>
-    <p class="lead">Три минути, 24 прозореца, един въпрос: какъв е смисълът да даваш?</p>
+    <h2 id="filmH">Видео <span>· адвентът на лекторите</span></h2>
+    <p class="lead">Интрото на TEDxSofia 2026: три минути, 24 прозореца, един въпрос. Какъв е смисълът да даваш?</p>
     <div class="film" id="filmBox">
       <video id="filmV" controls playsinline preload="metadata" poster="assets/film-poster.jpg" src="assets/advent-film.mp4"></video>
-      <button class="play" id="filmPlay" type="button"><i><svg viewBox="0 0 24 24"><path d="M7 4v16l13-8z"/></svg></i>Пусни филма</button>
+      <button class="play" id="filmPlay" type="button"><i><svg viewBox="0 0 24 24"><path d="M7 4v16l13-8z"/></svg></i>Пусни видеото</button>
     </div>
-    <div class="film-meta" id="filmMeta"><span><b id="filmLen">3:00</b> мин</span><span>20 лектори</span><span>24 прозореца</span></div>
+    <div class="film-meta" id="filmMeta"><span><b id="filmLen">3:00</b> мин видео</span><span>20 лектори</span><span>24 прозореца</span></div>
   </section>
 
   <section class="sec" id="tedx" aria-labelledby="tedxH"><h2 id="tedxH">какво е <span>TEDx</span>?</h2><div class="about" id="about"></div></section>

@@ -191,7 +191,7 @@ function init(canvas) {
     aDust[i * 3] = q * s * Math.cos(a); aDust[i * 3 + 1] = q * u; aDust[i * 3 + 2] = q * s * Math.sin(a) * 0.6; seed[i] = rn(); aHome[i * 3] = aDust[i * 3]; aHome[i * 3 + 1] = aDust[i * 3 + 1]; aHome[i * 3 + 2] = aDust[i * 3 + 2]; }
   geo = new THREE.BufferGeometry(); geo.setAttribute('position', new THREE.BufferAttribute(aDust, 3)); geo.setAttribute('aDust', new THREE.BufferAttribute(aDust, 3));
   geo.setAttribute('aHome', new THREE.BufferAttribute(aHome, 3)); geo.setAttribute('aSeed', new THREE.BufferAttribute(seed, 1)); geo.setAttribute('aCol', new THREE.BufferAttribute(aCol, 1)); aOrd = new Float32Array(MAXN); aOrd.set(seed); geo.setAttribute('aOrd', new THREE.BufferAttribute(aOrd, 1));
-  var pal = [[0.902, 0.169, 0.118], [1, 0.353, 0.278], [0.984, 0.984, 0.984], [1, 1, 1], [0.839, 0.133, 0.082], [0.953, 0.953, 0.953]].map(function (c) { return new THREE.Vector3(c[0], c[1], c[2]); });
+  var pal = [[0.902, 0.169, 0.118], [0.95, 0.30, 0.24], [0.30, 0.07, 0.07], [0.20, 0.05, 0.05], [0.78, 0.07, 0.06], [0.42, 0.10, 0.09]]   /* v3: a white page, so the light grains become deep ink-red (the post: red and dark on white) */.map(function (c) { return new THREE.Vector3(c[0], c[1], c[2]); });
   mat = new THREE.ShaderMaterial({ vertexShader: VS, fragmentShader: FS, transparent: true, depthWrite: false, depthTest: false, blending: THREE.CustomBlending, blendEquation: THREE.AddEquation, blendSrc: THREE.OneFactor, blendDst: THREE.OneMinusSrcAlphaFactor,
     uniforms: { uAssembly: { value: 0 }, uPres: { value: 0 }, uThr: { value: 0 }, uT: { value: 0 }, uPx: { value: 1 }, uScale: { value: 1 }, uBeat: { value: 0 }, uYaw: { value: 0 }, uCenter: { value: new THREE.Vector3() }, uTarget: { value: new THREE.Vector3() },
       uPtr: { value: new THREE.Vector3() }, uDustC: { value: new THREE.Vector3() }, uHole: { value: new THREE.Vector3() }, uDustS: { value: new THREE.Vector2(1, 1) }, uPal: { value: pal } } });
@@ -219,7 +219,7 @@ function frame(st, dt) {
   world(st.dcx === undefined ? st.cx : st.dcx, st.dcy === undefined ? st.cy : st.dcy, u.uDustC.value); if (st.hr) { world(st.hx, st.hy, u.uHole.value); u.uHole.value.z = st.hr * WPP; } else u.uHole.value.set(0, 0, 0);
   u.uDustS.value.set(st.dw * WPP, st.dh * WPP); u.uYaw.value = c.spin ? 0.5 * Math.sin(st.A * 0.35) + st.T * 0.1 : c.sway * Math.sin(st.A * 0.55 + 1);
   var hb = st.A * 1.25 % 1, atk = Math.min(1, hb / 0.07); atk = atk * atk * (3 - 2 * atk); u.uBeat.value = (c.beat ? 0.06 * (atk * Math.exp(-hb * 9) + 0.6 * Math.exp(-Math.pow((hb - 0.22) * 9, 2))) : 0.012 * Math.sin(st.A * 1.5)) * st.asm;
-  world(ptr.x, ptr.y, u.uPtr.value); u.uPtr.value.z = ptr.has ? ptr.swirl : 0;
+  world(ptr.x, ptr.y, u.uPtr.value); u.uPtr.value.z = 0;   /* v3: calm, the cursor does not stir the image */
   renderer.render(scene, camera);
 }
 /* probe: the same path as the vertex shader (forming part: no cursor, no throw), on the CPU, for a few grains → screen px. Measurement only. */

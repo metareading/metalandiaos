@@ -1,7 +1,7 @@
 /* landing.js · MET-2479 · TEDxSofia 2026 event landing (his pick B · Advent + the live site's navigation).
    Facts from tedxsofia.org (read 15.11, word for word, via the prototype); speakers from wall v2 (assets/speakers.js).
    The metaidea: one Eidolon cloud (assets/ideas.js); its canvas moves between the hero stage and the open card.
-   The opening: beads rush out of black space, light, the Eidolon forms, the page rises. The game: 24 cards, смисъл and даване. */
+   The opening: beads rush out of black space, light, the Eidolon forms, the page rises. The game (MET-2528): 60 answer cards under 20 speakers, read · answer · give on; your own card is the 25th; steps гост → търсач → дарител → цялото. */
 (function () {
 'use strict';
 var $ = function (s, r) { return (r || document).querySelector(s); };
@@ -55,54 +55,128 @@ for (i = 0; i < 24; i++) wins.push(DOOR_AT.indexOf(i) >= 0 ? { door: DOORS[di++]
 var SPK = []; wins.forEach(function (w, i) { if (w.p) SPK.push(i); });
 var key = function (w) { return w.p ? w.p.id : 'door-' + w.door.k; };
 
-/* ── the game: the visitor plays. 24 cards (one per window) · смисъл +1 when a speaker's metaidea is whole before you · даване +1 when you give a card on ── */
-var GKEY = 'tedxsofia26-game', G = { c: {}, g: {} };
-try { var sv = JSON.parse(localStorage.getItem(GKEY) || 'null'); if (sv && sv.c && sv.g) G = sv; } catch (e) {}
+/* ── the game (MET-2528 · T1). The board is the answer cards under each speaker (20 speakers, 60 cards, from 6 questions). One card offers 3 things, each once for points:
+   read (смисъл +1, after the card stays open as long as its length asks: 1 s per 15 words, at least 3 s) · your own answer to the same question (смисъл +1, kept in this browser) · give on (даване +1; giving again is allowed, no more points).
+   Your answers make your own card, the 25th beside the 24. Steps inside level 1: гост → търсач → дарител → цялото; the last one opens level 3, the hall on 28.11. No server: proof is honesty. ── */
+var GKEY = 'tedxsofia26-game';
+function blankG() { return { v: 2, c: {}, g: {}, r: {}, a: {}, ap: {}, gp: {} }; }   /* c, g: the records of the old game (windows collected, cards given), kept and still counted */
+var G = blankG();
+try { var sv = JSON.parse(localStorage.getItem(GKEY) || 'null'); if (sv && typeof sv === 'object') ['c', 'g', 'r', 'a', 'ap', 'gp'].forEach(function (k) { if (sv[k] && typeof sv[k] === 'object') G[k] = sv[k]; }); } catch (e) {}
 function saveG() { try { localStorage.setItem(GKEY, JSON.stringify(G)); } catch (e) {} }
-function nCards() { return wins.filter(function (w) { return G.c[key(w)]; }).length; }
-function nMean() { return wins.filter(function (w) { return w.p && G.c[w.p.id]; }).length; }
-function nGive() { return wins.filter(function (w) { return w.p && G.g[w.p.id]; }).length; }
-function role() { var c = nCards(), m = nMean(), g = nGive();
-  if (c >= wins.length) return ['цялото', 'Събра всичките 24 карти. Цялото е у теб: сега го дай нататък.'];
-  if (g) return ['дарител', 'Даваш нататък. Събери всичките 24 карти и цялото е у теб.'];
-  if (m) return ['търсач', 'Събираш смисъл. Дай една карта нататък и ставаш дарител.'];
-  return ['гост', 'Отвори прозорче и изчакай идеята да се събере: първата карта е твоя.']; }
-var QUEST = { 'гост': 'отвори прозорче · събери карта', 'търсач': 'дай карта нататък · стани дарител', 'дарител': 'събери всичките 24 карти', 'цялото': 'цялото е у теб · ела на 28.11' }, ROLES = ['гост', 'търсач', 'дарител', 'цялото'], roleWas = null;
-function hud() { var r = role()[0]; $('#gCards').textContent = nCards(); $('#gMean').textContent = nMean(); $('#gGive').textContent = nGive(); $('#gRole').textContent = r; $('#quest').textContent = QUEST[r];
+var CARDS = [], CBY = {}, READ = {}, TOTAL;
+P.forEach(function (p) { p.arts.forEach(function (a, k) { var c = { id: p.id + '-' + a.q, p: p, a: a, n: k + 1, need: Math.max(3, a.t.split(/\s+/).filter(Boolean).length / 15) }; CARDS.push(c); CBY[c.id] = c; }); });
+TOTAL = CARDS.length;
+function count(f) { return CARDS.filter(f).length; }
+function nRead() { return count(function (c) { return G.r[c.id]; }); }
+function nAns() { return count(function (c) { return G.a[c.id]; }); }
+function nGiv() { return count(function (c) { return G.gp[c.id]; }); }
+function isDone(c) { return !!(G.r[c.id] && G.ap[c.id] && G.gp[c.id]); }
+function nDone() { return count(isDone); }
+function legacy(o) { return wins.filter(function (w) { return w.p && o[w.p.id]; }).length; }
+function nMean() { return legacy(G.c) + nRead() + count(function (c) { return G.ap[c.id]; }); }
+function nGive() { return legacy(G.g) + nGiv(); }
+function badge(p) { return p.arts.length > 0 && p.arts.every(function (a) { return isDone(CBY[p.id + '-' + a.q]); }); }
+function got(w) { return !!(w.p && (badge(w.p) || G.c[w.p.id])); }
+function gave(w) { return !!(w.p && (G.g[w.p.id] || anyGiven(w.p))); }
+function anyGiven(p) { return p.arts.some(function (a) { return G.gp[p.id + '-' + a.q]; }); }
+function role() { var d = nDone(), m = nMean(), g = nGive();
+  if (d >= TOTAL) return ['цялото', 'Прочете, отговори и даде всичките ' + TOTAL + ' карти. Цялото е у теб.', 'Следва ниво 3: залата на 28.11.2026. Билетите те чакат.'];
+  if (g) return ['дарител', 'Даваш нататък.', 'Стани цялото: прочети, отговори и дай всичките ' + TOTAL + ' карти (' + d + ' са готови).'];
+  if (m) return ['търсач', 'Събираш смисъл.', 'Стани дарител: дай една карта нататък.'];
+  return ['гост', 'Още нямаш точка.', 'Стани търсач: прочети една карта докрай или напиши свой отговор.']; }
+var QUEST = { 'гост': 'прочети карта · напиши отговор · дай я нататък', 'търсач': 'дай карта нататък · стани дарител', 'дарител': 'довърши картите: прочети · отговори · дай', 'цялото': 'цялото е у теб · ела на 28.11' }, ROLES = ['гост', 'търсач', 'дарител', 'цялото'], roleWas = null;
+var TIX = 'https://epaygo.bg/3488443569';
+function hud() { var r = role()[0]; $('#gCards').textContent = nDone(); $('#gTot').textContent = TOTAL; $('#gMean').textContent = nMean(); $('#gGive').textContent = nGive(); $('#gRole').textContent = r;
+  if (r === 'цялото') $('#quest').innerHTML = '<a href="' + TIX + '">' + QUEST[r] + ' · билети</a>'; else $('#quest').textContent = QUEST[r];
   if (roleWas !== null && roleWas !== r && ROLES.indexOf(r) > ROLES.indexOf(roleWas)) { var e = $('#gRole'); if (e.animate) e.animate([{ transform: 'scale(1)' }, { transform: 'scale(1.618)', color: '#fff' }, { transform: 'scale(1)' }], { duration: 1000, easing: 'ease-out' });
-    setTimeout(function () { toast('нова роля: ' + r); if (r === 'цялото') profile(); }, 2700); }
-  roleWas = r; whole(); }
+    setTimeout(function () { toast('нова стъпка: ' + r); if (r === 'цялото' && over.classList.contains('on')) profile(); }, 1700); }
+  roleWas = r; ownTile(); whole(); }
 /* the whole again: the 24 windows as one small wall near the end of the page */
-function whole() { var e = $('#wall'); if (!e) return; e.innerHTML = wins.map(function (w, k) { var g = G.c[key(w)]; return '<button type="button" data-go="' + k + '" aria-label="Прозорец ' + (k + 1) + '"' + (g ? ' class="g' + (w.p ? '' : ' nop') + (w.p && G.g[w.p.id] ? ' gv' : '') + '"' + (w.p ? ' style="background-image:url(assets/img/t-' + w.p.id + '.jpg)"' : '') : '') + '>' + (k + 1) + '</button>'; }).join('');
-  var c = nCards(); $('#wholeSt').textContent = c >= wins.length ? 'Събра цялото: 24 от 24. Смисъл ' + nMean() + ' · даване ' + nGive() + '.' : c ? 'Събрани ' + c + ' от 24 карти · смисъл ' + nMean() + ' · даване ' + nGive() : 'Още няма събрани карти. Първата е на едно докосване.'; }
+function whole() { var e = $('#wall'); if (!e) return; e.innerHTML = wins.map(function (w, k) { var g = got(w); return '<button type="button" data-go="' + k + '" aria-label="Прозорец ' + (k + 1) + '"' + (g ? ' class="g' + (gave(w) ? ' gv' : '') + '"' + ' style="background-image:url(assets/img/t-' + w.p.id + '.jpg)"' : '') + '>' + (k + 1) + '</button>'; }).join('');
+  var d = nDone(); $('#wholeSt').textContent = d >= TOTAL ? 'Събра цялото: ' + TOTAL + ' от ' + TOTAL + ' карти. Смисъл ' + nMean() + ' · даване ' + nGive() + '.' : d ? 'Готови ' + d + ' от ' + TOTAL + ' карти · смисъл ' + nMean() + ' · даване ' + nGive() : 'Още няма готова карта. Първата е на едно докосване.'; }
 function plus(id, txt) { var b = $('#' + id); if (!b || !b.animate) return; var e = document.createElement('em'); e.className = 'plus'; e.textContent = txt || '+1'; b.parentNode.appendChild(e);
   e.animate([{ transform: 'translate(-50%,0)', opacity: 0 }, { transform: 'translate(-50%,-10px)', opacity: 1, offset: .25 }, { transform: 'translate(-50%,-42px)', opacity: 0 }], { duration: 1618, easing: 'ease-out' }).onfinish = function () { e.remove(); };
   b.animate([{ transform: 'scale(1)' }, { transform: 'scale(1.618)' }, { transform: 'scale(1)' }], { duration: 618, easing: 'ease-out' }); }
 var toastT = 0; function toast(t) { var e = $('#toast'); e.textContent = t; e.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(function () { e.classList.remove('on'); }, 2600); }
-function fly(from, img) { if (!from || !document.body.animate) return; var a = from.getBoundingClientRect(), z = $('#gCards').getBoundingClientRect(), e = document.createElement('div'); e.className = 'fly'; if (img) e.style.backgroundImage = 'url(' + img + ')';
-  e.style.left = (a.left + a.width / 2 - 21) + 'px'; e.style.top = (a.top + a.height / 2 - 34) + 'px'; document.body.appendChild(e);
-  var dx = z.left + z.width / 2 - (a.left + a.width / 2), dy = z.top + z.height / 2 - (a.top + a.height / 2);
-  e.animate([{ transform: 'translate(0,0) scale(.4) rotate(-8deg)', opacity: 0 }, { transform: 'translate(' + dx * .15 + 'px,-26px) scale(1.618) rotate(4deg)', opacity: 1, offset: .382 }, { transform: 'translate(' + dx + 'px,' + dy + 'px) scale(.3) rotate(0deg)', opacity: .9 }], { duration: 1000, easing: 'cubic-bezier(.4,0,.2,1)' }).onfinish = function () { e.remove(); }; }
 function sealIn(b, fresh) { if (b.querySelector('.seal')) return; var e = document.createElement('i'); e.className = 'seal' + (fresh ? ' new' : ''); e.setAttribute('aria-hidden', 'true'); (b.querySelector('.ph') || b).appendChild(e); }
-function markWin(i) { var b = $('.win[data-i="' + i + '"]'), w = wins[i]; if (b) { if (G.c[key(w)]) { b.classList.add('got'); sealIn(b, true); } if (w.p && G.g[w.p.id]) b.classList.add('gvn'); } }
-function collect(i, from) { var w = wins[i], k = key(w); if (G.c[k]) return false; G.c[k] = 1; saveG(); markWin(i); hud();
-  if (w.p) { fly(from, 'assets/img/t-' + w.p.id + '.jpg'); plus('gCards'); plus('gMean'); toast('+1 смисъл · картата „' + w.p.topic + '“ е твоя'); } else { plus('gCards'); }
-  if (nCards() === wins.length) setTimeout(function () { toast('24 от 24 · събра цялото'); }, 2800);
-  return true; }
+function markWin(i, fresh) { var b = $('.win[data-i="' + i + '"]'), w = wins[i]; if (!b || !w.p) return; b.classList.toggle('got', got(w)); b.classList.toggle('gvn', gave(w)); if (got(w)) sealIn(b, fresh); else { var s = b.querySelector('.seal'); if (s) s.remove(); } }
+/* a speaker badge comes when all of that speaker's answer cards are done */
+function badgeCheck(p, was) { if (was || !badge(p)) return; var i = wins.findIndex(function (w) { return w.p === p; }); markWin(i, true); pips(); toast('значка „' + p.topic + '“ е твоя'); var g = $('#gotMark'); if (g && openI === i) { g.classList.add('on'); $('em', g).textContent = 'значка'; } }
 function copy(t) { try { if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(t).catch(function () {}); return; } } catch (e) {}
   try { var a = document.createElement('textarea'); a.value = t; a.style.position = 'fixed'; a.style.opacity = '0'; document.body.appendChild(a); a.select(); document.execCommand('copy'); a.remove(); } catch (e) {} }
-function give(i, btn) { var p = wins[i].p, url = location.href.split('#')[0].split('?')[0] + '#w' + (i + 1), text = p.name + ' · „' + p.topic + '“ · TEDxSofia 2026 · Смисълът да даваш';
-  var done = function (msg) { var first = !G.g[p.id]; G.g[p.id] = 1; saveG(); markWin(i); hud(); if (first) plus('gGive'); btn.classList.add('done'); $('span', btn).textContent = 'Дадена · дай я пак'; toast((first ? '+1 даване · ' : '') + msg); };
-  if (navigator.share && /^https?:$/.test(location.protocol)) navigator.share({ title: 'TEDxSofia 2026', text: text, url: url }).then(function () { done('картата тръгна нататък'); }, function () {});
+function shareOut(text, url, done) { if (navigator.share && /^https?:$/.test(location.protocol)) navigator.share({ title: 'TEDxSofia 2026', text: text, url: url }).then(function () { done('картата тръгна нататък'); }, function () {});
   else { copy(text + ' ' + url); done('връзката е копирана: прати я на някого'); } }
+var pageUrl = function () { return location.href.split('#')[0].split('?')[0]; };
+var winOf = function (p) { return wins.findIndex(function (w) { return w.p === p; }); };
 
-$('#grid').innerHTML = wins.map(function (w, i) {
-  var got = (G.c[key(w)] ? ' got' : '') + (w.p && G.g[w.p.id] ? ' gvn' : '');
-  if (w.door) { var inner = (G.c[key(w)] ? '<i class="seal" aria-hidden="true"></i>' : '') + '<span class="n">' + (i + 1) + '</span><span class="ic"><svg viewBox="0 0 48 48">' + ICON[w.door.k] + '</svg><span class="dl">' + w.door.n + '</span></span>', cls = 'win door' + (w.door.k === 't' ? ' tix' : '') + got;
+/* the 3 things on one answer card (read · your answer · give on); the card's own text stays word for word from the speaker's data */
+function acHTML(c, k) { return '<li class="ac' + (c.a.q === 5 ? ' key' : '') + '" data-card="' + c.id + '">' + ef(c.a.q, k) + '<span class="ql">' + esc(c.a.ql) + '</span><p>' + esc(c.a.t) + '</p><div class="acx"></div><div class="share-row" data-slot="share" data-card="' + c.id + '"></div></li>'; }
+function acx(el) { var id = el.dataset.card, c = CBY[id], x = $('.acx', el), t0 = $('textarea', x), draft = t0 ? t0.value : null, hadFocus = t0 && document.activeElement === t0;
+  var rd = !!G.r[id], mine = G.a[id], gv = !!G.gp[id], ed = el.classList.contains('edit'), S = '<i class="seal" aria-hidden="true"></i>';
+  el.style.setProperty('--p', rd ? 1 : Math.min(1, (READ[id] || 0) / c.need));
+  x.innerHTML = '<div class="three">' +
+    '<span class="chip rd' + (rd ? ' on' : '') + '" data-t="read">' + (rd ? S + 'прочетена' : 'прочети докрай') + '</span>' +
+    '<button type="button" class="chip' + (G.ap[id] ? ' on' : '') + '" data-act="ans" aria-expanded="' + (ed ? 'true' : 'false') + '" data-t="answer">' + (G.ap[id] ? S : '') + (mine ? 'твоят отговор' : 'отговори и ти') + '</button>' +
+    '<button type="button" class="chip' + (gv ? ' on' : '') + '" data-act="give" data-t="give">' + (gv ? S + 'дадена · дай я пак' : 'дай нататък') + '</button></div>' +
+    (ed ? '<div class="mine"><textarea class="ta" maxlength="280" rows="3" aria-label="Твоят отговор на въпроса: ' + esc(c.a.ql) + '" placeholder="Твоят отговор на същия въпрос…"></textarea><div class="row"><button type="button" class="mini go" data-act="save">Запази</button><button type="button" class="mini" data-act="cancel">Откажи</button><small>Остава само в този браузър. Първият запис дава +1 смисъл.</small></div></div>'
+     : mine ? '<div class="mine"><p class="own-q">' + esc(mine) + '</p><div class="row"><button type="button" class="mini" data-act="ans">Промени</button><button type="button" class="mini" data-act="clear">Изчисти</button></div></div>' : '');
+  var ta = $('textarea', x); if (ta) { ta.value = draft !== null ? draft : (mine || ''); if (hadFocus) ta.focus({ preventScroll: true }); } }
+function allAcx() { card.querySelectorAll('.ac[data-card]').forEach(acx); }
+function readDone(id, el) { var c = CBY[id], was = badge(c.p); G.r[id] = 1; saveG(); hud(); plus('gMean'); toast('+1 смисъл · картата е прочетена'); if (el) acx(el); badgeCheck(c.p, was); }
+function saveAns(id, el) { var c = CBY[id], ta = $('textarea', el), v = ta ? ta.value.replace(/\s+/g, ' ').trim().slice(0, 280) : ''; if (v.length < 2) { toast('Напиши поне няколко думи'); return; }
+  var was = badge(c.p), first = !G.ap[id]; G.a[id] = v; G.ap[id] = 1; saveG(); el.classList.remove('edit'); hud(); if (first) plus('gMean'); toast((first ? '+1 смисъл · ' : '') + 'твоят отговор е запазен в този браузър'); acx(el); badgeCheck(c.p, was); }
+function clearAns(id, el) { delete G.a[id]; saveG(); el.classList.remove('edit'); hud(); toast('отговорът е изчистен · точката остава'); acx(el); }   /* clearing keeps the point already earned (US7) */
+function giveCard(id, el) { var c = CBY[id], i = winOf(c.p), url = pageUrl() + '#w' + (i + 1) + '-' + c.n, text = c.p.name + ' · ' + c.a.ql + ' „' + c.a.t + '“ · TEDxSofia 2026 · Смисълът да даваш';
+  shareOut(text, url, function (msg) { var was = badge(c.p), first = !G.gp[id]; G.gp[id] = 1; saveG(); hud(); markWin(i); if (first) plus('gGive'); toast((first ? '+1 даване · ' : '') + msg); if (el) acx(el); badgeCheck(c.p, was); }); }
+/* a read counts while ONE card is in focus long enough for its length: the card under the pointer or finger, else the visible card nearest the middle.
+   When a card is read the clock stops; the next card starts only after the visitor does something (scroll, tap, move, key), so cards never read themselves.
+   The clock also stops when the card is closed, off screen or the tab is hidden; progress is kept per card. */
+var tickT = 0, PTT = 0, doneAt = 0, focusId = null;
+function touched() { PTT = performance.now(); }
+['pointermove', 'pointerdown', 'keydown', 'wheel', 'touchmove'].forEach(function (n) { addEventListener(n, touched, { passive: true }); });
+setInterval(function () { var now = performance.now(), dt = Math.min(0.6, tickT ? (now - tickT) / 1000 : 0.25); tickT = now; if (!over.classList.contains('on') || document.hidden || openI < 0) { focusId = null; return; }
+  var cr = card.getBoundingClientRect(), tb = $('.top', card), top = cr.top + (tb ? tb.offsetHeight : 0), mid = (top + cr.bottom) / 2, best = null, bd = 1e9, under = null;
+  var seen = function (el) { var r = el.getBoundingClientRect(), v = Math.min(r.bottom, cr.bottom) - Math.max(r.top, top); return v >= Math.min(r.height, cr.bottom - top) * 0.6; };
+  var cur0 = focusId && $('.ac[data-card="' + focusId + '"]', card); if (cur0 && (G.r[focusId] || !seen(cur0))) cur0 = null;   /* the card in focus stays while it is unread and seen */
+  if (now - PTT < 4000) { var u = document.elementFromPoint(PT.x, PT.y); under = u && u.closest ? u.closest('.ac[data-card]') : null; if (under && (G.r[under.dataset.card] || !seen(under))) under = null; }
+  best = under || cur0;
+  if (!best && !(doneAt && PTT < doneAt)) card.querySelectorAll('.ac[data-card]').forEach(function (el) { if (G.r[el.dataset.card] || !seen(el)) return; var r = el.getBoundingClientRect(), d = Math.abs((r.top + r.bottom) / 2 - mid); if (d < bd) { bd = d; best = el; } });
+  if (best && doneAt && PTT < doneAt && best !== cur0) best = null;   /* a new card needs a fresh touch after the last read */
+  if (!best) { focusId = null; return; } var id = focusId = best.dataset.card; READ[id] = (READ[id] || 0) + dt; best.style.setProperty('--p', Math.min(1, READ[id] / CBY[id].need));
+  if (READ[id] >= CBY[id].need) { doneAt = performance.now(); focusId = null; readDone(id, best); } }, 250);
+
+/* the own card: the 25th. Your answers, your points, your badges; give it on, erase it with one button. Two slots stay empty for the next tickets: the share row (T2) and the dust (T3). */
+function ownCount() { return nAns(); }
+function ownTile() { var b = $('.win.own'); if (!b) return; $('#ownN', b).textContent = ownCount(); $('#ownS', b).textContent = role()[0]; b.classList.toggle('got', ownCount() > 0); }
+function ownCard() { if (!over.classList.contains('on')) back = document.activeElement; var r = role(), mine = CARDS.filter(function (c) { return G.a[c.id]; }), bd = P.filter(badge);
+  card.className = 'card prof ownc';
+  card.innerHTML = topBar(-1, 'твоята карта · 25') + '<div class="cbody"><p class="q" id="cardH">Твоята карта</p>' +
+    '<div class="dust-slot" data-slot="dust" id="ownDust" aria-hidden="true"></div>' +
+    '<p class="role-h">' + r[0] + '</p><p class="role-p">' + r[1] + ' ' + r[2] + '</p>' +
+    '<ol class="ladder">' + ROLES.map(function (x, k) { var at = ROLES.indexOf(r[0]); return '<li class="' + (k === at ? 'on' : k < at ? 'was' : '') + '">' + x + '</li>'; }).join('') + '<li class="lv3">ниво 3</li></ol>' +
+    '<div class="stats"><div><b>' + nMean() + '</b><i>смисъл</i></div><div class="gv"><b>' + nGive() + '</b><i>даване</i></div><div><b>' + nDone() + '<small> / ' + TOTAL + '</small></b><i>карти</i></div></div>' +
+    '<h3 class="oh">твоите отговори</h3>' + (mine.length ? '<ul class="own-list">' + mine.map(function (c) { return '<li><span class="ql">' + esc(c.a.ql) + '</span><p class="own-q">' + esc(G.a[c.id]) + '</p><button type="button" class="mini" data-go="' + winOf(c.p) + '" data-card="' + c.n + '">при ' + esc(c.p.name) + '</button></li>'; }).join('') + '</ul>'
+      : '<p class="empty">Още няма отговор. Отвори лектор, прочети една карта и напиши своя отговор под нея: той става първият на твоята карта.</p>') +
+    '<h3 class="oh">значки <small>' + bd.length + ' от ' + P.length + '</small></h3><div class="badges">' + wins.map(function (w, k) { if (!w.p) return ''; var g = got(w); return '<button type="button" data-go="' + k + '"' + (g ? ' class="g' + (gave(w) ? ' gv' : '') + '"' : '') + '>' + (g ? esc(w.p.topic) : k + 1) + '</button>'; }).join('') + '</div>' +
+    '<div class="share-row" data-slot="share" data-card="own"></div>' +
+    (r[0] === 'цялото' ? '<div class="next"><p>Цялото е у теб.<small>28.11.2026 · Дом на киното · София</small></p><a class="btn p" href="' + TIX + '">Билети</a></div>' : '') +
+    '<div class="own-act"><button type="button" class="btn gv" data-act="own-give"' + (mine.length ? '' : ' disabled') + '>' + HEART + '<span>Дай картата си нататък</span></button><button class="reset" type="button" data-act="erase" id="eraseBtn">изтрий картата и точките</button></div></div>';
+  slot = null; cur = null; killForms(); openI = -1; over.classList.add('on'); document.documentElement.style.overflow = 'hidden'; card.scrollTop = 0; wire(); history.replaceState(null, '', '#own');
+  card.dispatchEvent(new CustomEvent('landing:card', { detail: { kind: 'own' } })); }
+function ownGive() { var mine = CARDS.filter(function (c) { return G.a[c.id]; }); if (!mine.length) return; var url = pageUrl() + '#own', text = 'Моята карта · TEDxSofia 2026 · Смисълът да даваш' + mine.slice(0, 3).map(function (c) { return ' · ' + c.a.ql + ' „' + G.a[c.id] + '“'; }).join('');
+  shareOut(text, url, function (msg) { toast(msg); }); }   /* giving the own card gives no points: the points live on the answer cards */
+var eraseT = 0;
+function erase(btn) { if (!btn.classList.contains('arm')) { btn.classList.add('arm'); btn.textContent = 'натисни пак: изтривам картата и точките'; clearTimeout(eraseT); eraseT = setTimeout(function () { btn.classList.remove('arm'); btn.textContent = 'изтрий картата и точките'; }, 5000); return; }
+  clearTimeout(eraseT); G = blankG(); READ = {}; roleWas = null; saveG(); renderGrid(); hud(); if ($('.ownc', over)) ownCard(); else allAcx(); toast('картата и точките са изтрити'); }
+
+function renderGrid() { $('#grid').innerHTML = wins.map(function (w, i) {
+  var gs = (got(w) ? ' got' : '') + (gave(w) ? ' gvn' : '');
+  if (w.door) { var inner = '<span class="n">' + (i + 1) + '</span><span class="ic"><svg viewBox="0 0 48 48">' + ICON[w.door.k] + '</svg><span class="dl">' + w.door.n + '</span></span>', cls = 'win door' + (w.door.k === 't' ? ' tix' : '');
     return w.door.u ? '<a class="' + cls + '" style="--i:' + i + '" data-i="' + i + '" href="' + href(w.door.u) + '">' + inner + '</a>' : '<button class="' + cls + '" style="--i:' + i + '" type="button" data-i="' + i + '">' + inner + '</button>'; }
   var p = w.p; if (!p) return '';
-  return '<button class="win' + got + '" style="--i:' + i + '" type="button" data-i="' + i + '" aria-label="Прозорец ' + (i + 1) + ': ' + esc(p.name) + '"><span class="ph"><img src="assets/img/t-' + p.id + '.jpg" alt="" decoding="async">' + (G.c[key(w)] ? '<i class="seal" aria-hidden="true"></i>' : '') + '</span><span class="n">' + (i + 1) + '</span><span class="nm">' + esc(p.name) + '<small>' + esc(p.topic) + '</small></span></button>';
-}).join('');
+  return '<button class="win' + gs + '" style="--i:' + i + '" type="button" data-i="' + i + '" aria-label="Прозорец ' + (i + 1) + ': ' + esc(p.name) + '"><span class="ph"><img src="assets/img/t-' + p.id + '.jpg" alt="" decoding="async">' + (got(w) ? '<i class="seal" aria-hidden="true"></i>' : '') + '</span><span class="n">' + (i + 1) + '</span><span class="nm">' + esc(p.name) + '<small>' + esc(p.topic) + '</small></span></button>';
+}).join('') + '<button class="win own" style="--i:24" type="button" data-own="1" aria-label="Прозорец 25: твоята карта"><span class="ph"><span class="ow"><b id="ownN">0</b><small>отговора</small></span></span><span class="n">25</span><span class="nm">Твоята карта<small id="ownS">гост</small></span></button>'; }
+renderGrid();
 hud();
 
 /* ── the metaidea: one canvas, one cloud; it lives on the hero stage or in the open card ── */
@@ -121,7 +195,7 @@ function loop(now) {
   var w = fit.w, h = fit.h, age = Math.max(0, t - cur.t0), asm = ease(age / FORM), pres = ease(age / 0.5);
   if (cur.hold) { var left = cur.hold - age; if (left < FADE) asm = Math.min(asm, ease(left / FADE)); if (left <= 0) { nextHero(); return; } }
   asmNow = asm;
-  if (cur.card !== undefined && asm >= 0.999 && !cur.done) { cur.done = true; var gm = $('#gotMark'); if (collect(cur.card, slot) && gm) $('em', gm).textContent = 'нова карта'; if (gm) gm.classList.add('on'); pips(); }
+  if (cur.card !== undefined && asm >= 0.999 && !cur.done) { cur.done = true; pips(); }
   var r = Math.min(w, h) * 0.42, cx = w / 2, cy = h * 0.5;
   IDEA.frame({ id: cur.id, cx: cx, cy: cy, r: r, dcx: cx, dcy: cy, dw: w * 0.36, dh: h * 0.36, hr: 0, asm: asm, pres: pres, thr: 0, tx: cx, ty: cy, A: age, T: age }, dt);
 }
@@ -151,59 +225,69 @@ function formFrames(t, dt) { CF.forEach(function (f) { if (!f.on) return; var r 
 
 /* ── the card (the part): the question, the metaidea above, the person, the words below, never on the image; the 24 pips keep the whole in sight ── */
 var back = null, openI = -1, HEART = '<svg viewBox="0 0 24 24"><path d="M12 21s-8-5.2-8-11a4.6 4.6 0 0 1 8-3 4.6 4.6 0 0 1 8 3c0 5.8-8 11-8 11z"/></svg>';
-function pipsHTML(i) { return '<div class="pips" id="pips" aria-label="прозорец ' + (i + 1) + ' от 24">' + wins.map(function (w, k) { return '<i class="' + (w.door ? 'd ' : '') + (k === i ? 'c' : G.c[key(w)] ? 'g' : '') + '"></i>'; }).join('') + '</div>'; }
+function pipsHTML(i) { return '<div class="pips" id="pips" aria-label="прозорец ' + (i + 1) + ' от 24">' + wins.map(function (w, k) { return '<i class="' + (w.door ? 'd ' : '') + (k === i ? 'c' : got(w) ? 'g' : '') + '"></i>'; }).join('') + '</div>'; }
 function pips() { var e = $('#pips'); if (e && openI >= 0) e.outerHTML = pipsHTML(openI); }
 function topBar(i, label) { return '<div class="top">' + (i >= 0 ? pipsHTML(i) : '<p>' + label + '</p>') + '<button class="x" type="button" aria-label="Затвори">×</button></div>'; }
-function openW(i, noHash) {
+function openW(i, noHash, k) {
   var w = wins[i]; if (!w) return; if (!over.classList.contains('on')) back = document.activeElement;
-  if (w.door) { collect(i); if (w.door.card !== 'about') { location.href = href(w.door.u); return; }
+  if (w.door) { if (w.door.card !== 'about') { location.href = href(w.door.u); return; }
     card.className = 'card about-card';
     card.innerHTML = topBar(i) + '<div class="cbody"><h2 id="cardH" class="q" style="justify-content:flex-start">какво е TEDx?</h2><p style="font-family:var(--serif);font-style:italic;font-size:var(--f4);line-height:1.25">' + ABOUT_H + '</p>' + ABOUT.map(function (t) { return '<p>' + t + '</p>'; }).join('') + '<p><a class="btn s" href="' + L + '/kakvo-e-ted-tedx.html">Научи повече</a></p></div>';
     slot = null; cur = null; killForms();
   } else {
-    var p = w.p, pos = SPK.indexOf(i), pv = SPK[(pos + SPK.length - 1) % SPK.length], nx = SPK[(pos + 1) % SPK.length], gl = p.arts.filter(function (a) { return a.q === 5; })[0], had = G.c[p.id];
+    var p = w.p, pos = SPK.indexOf(i), pv = SPK[(pos + SPK.length - 1) % SPK.length], nx = SPK[(pos + 1) % SPK.length], cs = CARDS.filter(function (c) { return c.p === p; }).sort(function (a, b) { return (b.a.q === 5) - (a.a.q === 5); }), has = badge(p);
     card.className = 'card';
     card.innerHTML = topBar(i) +
       '<div class="cbody"><p class="q">' + esc(p.ql) + '</p>' +
-      (ok ? '<figure class="idea"><div class="slot" id="cardSlot"></div><figcaption>идея · <b>' + esc(p.topic) + '</b><span class="got' + (had ? ' on' : '') + '" id="gotMark"><i class="seal"></i><em>' + (had ? 'в колекцията' : '') + '</em></span></figcaption></figure>' : '') +
+      (ok ? '<figure class="idea"><div class="slot" id="cardSlot"></div><figcaption>идея · <b>' + esc(p.topic) + '</b><span class="got' + (has ? ' on' : '') + '" id="gotMark"><i class="seal"></i><em>' + (has ? 'значка' : '') + '</em></span></figcaption></figure>' : '') +
       '<figure class="photo"><img src="assets/img/' + p.id + '.jpg" alt="' + esc(p.name) + '">' + (p.credit ? '<figcaption>снимка: ' + esc(p.credit) + '</figcaption>' : '') + '</figure>' +
       '<p class="say">' + esc(p.shown) + '</p>' +
-      '<div class="who"><h2 id="cardH">' + esc(p.name) + '</h2><span class="badge">карта ' + (i + 1) + ' · ' + esc(p.topic) + '</span></div>' +
-      '<div class="give' + (ok ? ' ac' : '') + '">' + ef(5, 0) + (gl ? '<div><span class="ql">' + esc(gl.ql) + '</span><p>' + esc(gl.t) + '</p></div>' : '<div><span class="ql">Смисълът да даваш…</span><p>е и това: дай тази карта на някого.</p></div>') +
-      '<button class="btn gv' + (G.g[p.id] ? ' done' : '') + '" type="button" id="giveBtn">' + HEART + '<span>' + (G.g[p.id] ? 'Дадена · дай я пак' : 'Дай картата нататък') + '</span></button></div>' +
-      '<ul class="more">' + p.arts.filter(function (a) { return a.q !== 5; }).map(function (a, k) { return '<li' + (ok ? ' class="ac"' : '') + '>' + ef(a.q, k + 1) + '<span class="ql">' + esc(a.ql) + '</span><p>' + esc(a.t) + '</p></li>'; }).join('') + '</ul>' +
+      '<div class="who"><h2 id="cardH">' + esc(p.name) + '</h2><span class="badge">карта ' + (i + 1) + ' · ' + esc(p.topic) + '</span><div class="share-row" data-slot="share" data-card="' + p.id + '"></div></div>' +
+      '<ul class="more">' + cs.map(function (c, n) { return acHTML(c, n); }).join('') + '</ul>' +
       '<div class="pn"><button type="button" data-go="' + pv + '">← ' + esc(wins[pv].p.name) + '</button><button type="button" data-go="' + nx + '">' + esc(wins[nx].p.name) + ' →</button></div></div>';
-    $('#giveBtn').onclick = function () { give(i, this); };
-    if (ok) { place($('#cardSlot')); show(p.id, 0, i, 0.25); cardForms(); } else collect(i);
+    allAcx();
+    if (ok) { place($('#cardSlot')); show(p.id, 0, i, 0.25); cardForms(); }
+    if (k && p.arts[k - 1]) { var t = $('.ac[data-card="' + p.id + '-' + p.arts[k - 1].q + '"]', card); if (t) setTimeout(function () { t.scrollIntoView({ block: 'center' }); }, 60); }
   }
-  openI = i; over.classList.add('on'); document.documentElement.style.overflow = 'hidden'; card.scrollTop = 0; wire();
+  openI = i; doneAt = 0; focusId = null; over.classList.add('on'); document.documentElement.style.overflow = 'hidden'; if (!k) card.scrollTop = 0; wire();
   if (!noHash) history.replaceState(null, '', '#w' + (i + 1));
+  if (w.p) card.dispatchEvent(new CustomEvent('landing:card', { detail: { kind: 'speaker', index: i, id: w.p.id } }));
 }
-function wire() { $('.x', card).onclick = closeW; card.querySelectorAll('[data-go]').forEach(function (b) { b.onclick = function () { openW(+b.dataset.go); }; }); $('.x', card).focus({ preventScroll: true }); }
-/* the profile: who you are in the game, the 24 badges, the next level */
+function wire() { $('.x', card).onclick = closeW; card.querySelectorAll('[data-go]').forEach(function (b) { b.onclick = function () { openW(+b.dataset.go, false, b.dataset.card && +b.dataset.card); }; }); $('.x', card).focus({ preventScroll: true }); }
+card.addEventListener('scroll', touched, { passive: true });   /* a scroll in the card counts as the visitor's touch for the read clock */
+/* the actions inside the open card: one listener for the answer cards, the own card and the profile */
+card.addEventListener('click', function (e) { var b = e.target.closest('[data-act]'); if (!b) return; var act = b.dataset.act, el = b.closest('.ac');
+  if (act === 'ans') { el.classList.toggle('edit'); acx(el); var t = $('textarea', el); if (t) t.focus(); }
+  else if (act === 'cancel') { el.classList.remove('edit'); acx(el); }
+  else if (act === 'save') saveAns(el.dataset.card, el);
+  else if (act === 'clear') clearAns(el.dataset.card, el);
+  else if (act === 'give') giveCard(el.dataset.card, el);
+  else if (act === 'own-give') ownGive();
+  else if (act === 'erase') erase(b);
+  else if (act === 'own') ownCard(); });
+/* the profile: where you stand on the steps of level 1, the rules, the speaker badges, the next level */
 function profile() { if (!over.classList.contains('on')) back = document.activeElement; var r = role();
   card.className = 'card prof';
-  card.innerHTML = topBar(-1, 'твоят профил') + '<div class="cbody"><p class="q" id="cardH">Кой си ти?</p><ol class="ladder">' + ROLES.map(function (x, k) { var at = ROLES.indexOf(r[0]); return '<li class="' + (k === at ? 'on' : k < at ? 'was' : '') + '">' + x + '</li>'; }).join('') + '</ol><p class="role-h">' + r[0] + '</p><p class="role-p">' + r[1] + '</p>' +
-    '<div class="stats"><div><b>' + nCards() + '<small> / 24</small></b><i>карти</i></div><div><b>' + nMean() + '</b><i>смисъл</i></div><div class="gv"><b>' + nGive() + '</b><i>даване</i></div></div>' +
-    '<ul class="rules"><li><b>смисъл +1</b> · когато идеята на лектор се събере пред теб.</li><li><b>даване +1</b> · когато дадеш карта нататък.</li></ul>' +
-    '<div class="badges">' + wins.map(function (w, k) { var g = G.c[key(w)]; return '<button type="button" data-go="' + k + '"' + (g ? ' class="g' + (w.p && G.g[w.p.id] ? ' gv' : '') + '"' : '') + '>' + (g ? esc(w.p ? w.p.topic : w.door.n) : k + 1) + '</button>'; }).join('') + '</div>' +
-    '<div class="next"><p>Следващото ниво е залата.<small>28.11.2026 · Дом на киното · София</small></p><a class="btn p" href="https://epaygo.bg/3488443569">Билети</a></div>' +
-    '<button class="reset" type="button" id="resetG">започни играта отначало</button></div>';
+  card.innerHTML = topBar(-1, 'твоят профил') + '<div class="cbody"><p class="q" id="cardH">Кой си ти?</p><ol class="ladder">' + ROLES.map(function (x, k) { var at = ROLES.indexOf(r[0]); return '<li class="' + (k === at ? 'on' : k < at ? 'was' : '') + '">' + x + '</li>'; }).join('') + '<li class="lv3">ниво 3</li></ol><p class="role-h">' + r[0] + '</p><p class="role-p">' + r[1] + ' ' + r[2] + '</p>' +
+    '<div class="stats"><div><b>' + nMean() + '</b><i>смисъл</i></div><div class="gv"><b>' + nGive() + '</b><i>даване</i></div><div><b>' + nDone() + '<small> / ' + TOTAL + '</small></b><i>карти</i></div></div>' +
+    '<ul class="rules"><li><b>смисъл +1</b> · когато прочетеш картата докрай (колкото я държиш отворена, според дължината ѝ).</li><li><b>смисъл +1</b> · когато напишеш свой отговор под нея (остава само в този браузър).</li><li><b>даване +1</b> · когато дадеш картата нататък (веднъж за карта).</li><li><b>значка</b> · когато всички карти на един лектор са готови: прочетени, отговорени и дадени.</li></ul>' +
+    '<div class="badges">' + wins.map(function (w, k) { if (!w.p) return ''; var g = got(w); return '<button type="button" data-go="' + k + '"' + (g ? ' class="g' + (gave(w) ? ' gv' : '') + '"' : '') + '>' + (g ? esc(w.p.topic) : k + 1) + '</button>'; }).join('') + '</div>' +
+    '<div class="next"><p>' + (r[0] === 'цялото' ? 'Цялото е у теб: ела в залата.' : 'Следващото ниво е залата.') + '<small>28.11.2026 · Дом на киното · София</small></p><a class="btn p" href="' + TIX + '">Билети</a></div>' +
+    '<div class="own-act"><button type="button" class="btn s" data-act="own">Твоята карта · 25</button><button class="reset" type="button" data-act="erase" id="resetG">започни играта отначало</button></div></div>';
   slot = null; cur = null; killForms(); openI = -1; over.classList.add('on'); document.documentElement.style.overflow = 'hidden'; card.scrollTop = 0; wire();
-  $('#resetG').onclick = function () { G = { c: {}, g: {} }; saveG(); document.querySelectorAll('.win.got').forEach(function (b) { b.classList.remove('got', 'gvn'); }); hud(); profile(); };
 }
 $('#dock').addEventListener('click', profile);
 $('#wall').addEventListener('click', function (e) { var b = e.target.closest('button'); if (b) openW(+b.dataset.go); });
 function closeW() { if (!over.classList.contains('on')) return; over.classList.remove('on'); document.documentElement.style.overflow = ''; openI = -1; slot = null; cur = null; killForms();
   history.replaceState(null, '', location.pathname + location.search); heroCheck(); if (back && back.focus) back.focus({ preventScroll: true }); }
-$('#grid').addEventListener('click', function (e) { var b = e.target.closest('.win'); if (!b) return; if (b.tagName === 'A') { collect(+b.dataset.i); return; } openW(+b.dataset.i); });
+$('#grid').addEventListener('click', function (e) { var b = e.target.closest('.win'); if (!b) return; if (b.dataset.own) { ownCard(); return; } if (b.tagName === 'A') return; openW(+b.dataset.i); });
 over.addEventListener('click', function (e) { if (e.target === over) closeW(); });
-addEventListener('keydown', function (e) { if (!over.classList.contains('on')) return;
+addEventListener('keydown', function (e) { if (!over.classList.contains('on')) return; var typing = /^(TEXTAREA|INPUT)$/.test(e.target.tagName);
   if (e.key === 'Escape') closeW();
-  else if ((e.key === 'ArrowRight' || e.key === 'ArrowLeft') && wins[openI] && wins[openI].p) { var pos = SPK.indexOf(openI); openW(SPK[(pos + (e.key === 'ArrowRight' ? 1 : SPK.length - 1)) % SPK.length]); }
-  else if (e.key === 'Tab') { var f = card.querySelectorAll('button,a[href]'); if (!f.length) return; var a = f[0], z = f[f.length - 1];
+  else if (!typing && (e.key === 'ArrowRight' || e.key === 'ArrowLeft') && wins[openI] && wins[openI].p) { var pos = SPK.indexOf(openI); openW(SPK[(pos + (e.key === 'ArrowRight' ? 1 : SPK.length - 1)) % SPK.length]); }
+  else if (e.key === 'Tab') { var f = card.querySelectorAll('button:not([disabled]),a[href],textarea'); if (!f.length) return; var a = f[0], z = f[f.length - 1];
     if (e.shiftKey && document.activeElement === a) { e.preventDefault(); z.focus(); } else if (!e.shiftKey && document.activeElement === z) { e.preventDefault(); a.focus(); } } });
-function fromHash() { var m = /^#w(\d+)$/.exec(location.hash); if (m && wins[+m[1] - 1]) openW(+m[1] - 1, true); }
+function fromHash() { if (location.hash === '#own') { ownCard(); return; } var m = /^#w(\d+)(?:-(\d+))?$/.exec(location.hash); if (m && wins[+m[1] - 1]) openW(+m[1] - 1, true, m[2] && +m[2]); }
 addEventListener('hashchange', fromHash);
 
 /* ── the video (the 3-minute intro): plays in the page ── */
@@ -238,6 +322,8 @@ if (INTRO) { (function () { var r = $('#heroIdea').getBoundingClientRect(), b = 
 })($('#fx'));
 
 heroCheck(); fromHash();
-window.__landing = { open: openW, close: closeW, profile: profile, wins: wins.length, speakers: SPK.length, idea: ok, form: FORM,
-  state: function () { return { asm: asmNow, id: cur && cur.id, card: cur && cur.card, intro: INTRO }; }, game: function () { return { cards: nCards(), mean: nMean(), give: nGive(), role: role()[0] }; } };
+window.__landing = { open: openW, close: closeW, profile: profile, own: ownCard, erase: function () { var b = $('#eraseBtn'); if (!b) { ownCard(); b = $('#eraseBtn'); } erase(b); erase(b); }, wins: wins.length, speakers: SPK.length, cards: TOTAL, idea: ok, form: FORM,
+  state: function () { return { asm: asmNow, id: cur && cur.id, card: cur && cur.card, intro: INTRO }; },
+  game: function () { return { read: nRead(), answer: nAns(), give: nGiv(), mean: nMean(), giving: nGive(), step: role()[0], own: nAns() > 0 }; },
+  markGiven: function (id) { if (CBY[id] && !G.gp[id]) { var was = badge(CBY[id].p); G.gp[id] = 1; saveG(); hud(); markWin(winOf(CBY[id].p)); badgeCheck(CBY[id].p, was); } } };   /* for the share code of T2: a give through Facebook or Instagram counts like any give */
 })();

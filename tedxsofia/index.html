@@ -9,10 +9,10 @@
 <!--
   MET-2479 · the event landing for tedxsofia.org, built from his pick „B + keeping the old navigation from tedxsofia.org“.
   Rounds 4–6 (Fable 5.2): black space leads, red marks what matters; the page opens like a title sequence (beads out of black space, light, the Eidolon forms);
-  a role-play game (24 cards, смисъл and даване); whole → part → whole; layout, type and spacing on 1 : 1.618.
+  a role-play game (60 answer cards under 20 speakers, read · answer · give; your own card is the 25th; MET-2528); whole → part → whole; layout, type and spacing on 1 : 1.618.
   Static folder. Nothing loads from the web: every http(s) link here is one a person clicks.
   Speakers: assets/speakers.js + assets/img (from advent-speakers-v2 by tools/build.py). The Eidolon layer: assets/ideas.js (Eidolon, three.js r160, local).
-  Video: assets/advent-film.mp4 (web copy, 1080p).
+  Video: assets/advent-film.mp4 (linked, not copied).
 -->
 <style>
 /* the golden section: type 11 · 13 · 17 · 21 · 27.5 · 35 · 44.5 · 56.6 · 72 (17 × φ^n, half steps √φ) · space 6 · 10 · 16 · 26 · 42 · 68 · 110 (× φ) · splits 38.2 : 61.8 */
@@ -258,12 +258,58 @@ h1 em{display:block;font-style:italic;color:var(--ink);font-size:var(--f5);line-
 .next{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:var(--s2);padding-top:var(--s3);border-top:1px solid var(--line)}
 .next p{margin:0;font-family:var(--serif);font-size:var(--f3);line-height:1.2}
 .next small{display:block;font-family:var(--sans);font-size:var(--f1);color:var(--mute)}
-.ladder{display:flex;justify-content:center;align-items:center;gap:var(--s2);margin:0 0 var(--s3);padding:0;list-style:none;font-size:var(--f0);letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+.ladder{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:var(--s1) var(--s2);margin:0 0 var(--s3);padding:0;list-style:none;font-size:var(--f0);letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
 .ladder li+li::before{content:"→";margin-right:var(--s2);color:var(--dim)}
 .ladder li.on{color:#fff}
 .ladder li.was{color:var(--mute)}
 .badges button.gv::after{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--red);margin-left:5px;vertical-align:1px}
 .reset{display:block;margin:var(--s3) auto 0;background:none;border:0;color:var(--dim);font-size:var(--f1);text-decoration:underline;cursor:pointer}
+
+/* ── the answer cards: 3 things on each (MET-2528): read · your own answer · give on. The own card is the 25th. ── */
+.more li.key{box-shadow:inset 0 0 0 1px var(--line),inset 2px 0 0 var(--red)}
+.three{display:flex;flex-wrap:wrap;gap:var(--s1);margin:var(--s3) 0 0}
+.chip{position:relative;display:inline-flex;align-items:center;gap:7px;min-height:42px;padding:0 15px;border:0;border-radius:999px;background:none;color:var(--mute);font:600 13px/1 var(--sans);letter-spacing:.02em;white-space:nowrap;box-shadow:inset 0 0 0 1px var(--line2);overflow:hidden;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:box-shadow .3s,background .3s,color .3s}
+span.chip{cursor:default;box-shadow:inset 0 0 0 1px var(--line)}
+.chip.rd::before{content:"";position:absolute;left:0;top:0;bottom:0;width:calc(var(--p,0) * 100%);background:rgba(255,255,255,.16);transition:width .3s linear}
+.chip:not(span):hover,.chip:not(span):focus-visible{box-shadow:inset 0 0 0 1px #fff;color:#fff;outline:none}
+.chip.on{color:#fff;background:rgba(255,255,255,.07);box-shadow:inset 0 0 0 1px rgba(255,255,255,.6),0 0 20px -8px rgba(255,255,255,.55)}
+.chip.on::before{width:0}
+.chip .seal{position:relative;right:auto;bottom:auto;flex:none;width:14px;height:14px}
+.mine{margin-top:var(--s2)}
+.own-q{margin:0;padding:11px 14px;border-radius:10px;background:rgba(255,255,255,.055);font-family:var(--serif);font-style:italic;font-weight:600;font-size:var(--f3);line-height:1.22;color:#fff;overflow-wrap:anywhere}
+.own-q::before{content:"„";color:var(--red)}.own-q::after{content:"“";color:var(--red)}
+.ta{display:block;width:100%;min-height:92px;resize:vertical;border:0;border-radius:10px;padding:12px 14px;background:#151515;color:#fff;font:400 16px/1.4 var(--sans);box-shadow:inset 0 0 0 1px var(--line2)}
+.ta:focus{outline:none;box-shadow:inset 0 0 0 1px #fff}
+.ta::placeholder{color:var(--dim)}
+.mine .row{display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px;margin-top:6px}
+.mine .row small{flex-basis:100%;color:var(--dim);font-size:var(--f0);letter-spacing:.02em}
+.mini{border:0;background:none;color:var(--mute);font:600 14px/1 var(--sans);padding:12px 10px;margin-left:-10px;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.mini.go{color:#fff;text-decoration:none;background:var(--red);border-radius:999px;padding:12px 22px;margin-left:0}
+.mini:hover{color:#fff}
+.share-row:empty,.dust-slot:empty{margin:0}
+.share-row:empty{display:none}
+.who .share-row{margin-top:var(--s2)}
+.dust-slot{position:relative;height:150px;border-radius:10px;background:radial-gradient(closest-side at 50% 50%,rgba(230,43,30,.16),rgba(255,255,255,.04) 62%,transparent)}
+.dust-slot canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.win.own{box-shadow:inset 0 0 0 1px rgba(230,43,30,.6);background:linear-gradient(180deg,#160808,var(--coal))}
+.win.own:hover,.win.own:focus-visible{box-shadow:inset 0 0 0 1px var(--red),0 16px 42px -16px rgba(230,43,30,.5)}
+.win.own .ph{display:grid;place-items:center;background:radial-gradient(closest-side at 50% 50%,rgba(230,43,30,.3),rgba(255,255,255,.04) 68%,transparent)}
+.win.own .ow{text-align:center;line-height:1}
+.win.own .ow b{display:block;font:500 var(--f7)/1 var(--serif);font-variant-numeric:lining-nums}
+.win.own .ow small{display:block;margin-top:6px;font:600 var(--f0) var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--mute)}
+.win.own.got::after{display:none}
+.win.own .nm small{color:var(--red)}
+.ownc .cbody>*+*{margin-top:0}
+.ownc .oh{margin:var(--s3) 0 0;font:600 var(--f1) var(--sans);letter-spacing:.2em;text-transform:uppercase;color:var(--mute)}
+.ownc .oh small{color:var(--dim);letter-spacing:.06em;margin-left:6px}
+.own-list{list-style:none;margin:0;padding:0;display:grid;gap:var(--s2)}
+.own-list .ql{display:block;font-size:var(--f0);font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--mute);margin-bottom:5px}
+.own-list .mini{margin-left:-10px;font-size:13px}
+.empty{margin:0;color:var(--mute);max-width:52ch}
+.own-act{display:grid;gap:var(--s2);justify-items:center;margin-top:var(--s3)}
+.own-act .btn:disabled{opacity:.4;cursor:default}
+.reset.arm{color:var(--red);text-decoration:none;font-weight:600}
+.ladder li.lv3{color:var(--red)}
 
 /* ── the whole again: 24 windows in one look ── */
 .whole{text-align:center}
@@ -382,7 +428,7 @@ footer .gift b{color:var(--red);font-family:var(--tedf)}
 </div>
 
 <button class="dock" id="dock" type="button" aria-label="Твоят профил: карти, смисъл, даване">
-  <span class="dk"><svg viewBox="0 0 24 24"><path d="M7 3h10a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/></svg><b id="gCards">0</b>/24<span class="w"> карти</span></span>
+  <span class="dk"><svg viewBox="0 0 24 24"><path d="M7 3h10a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/></svg><b id="gCards">0</b>/<span id="gTot">60</span><span class="w"> карти</span></span>
   <span class="dk mn"><i></i><b id="gMean">0</b>смисъл</span>
   <span class="dk gv"><i></i><b id="gGive">0</b>даване</span>
   <span class="role" id="gRole">гост</span>
